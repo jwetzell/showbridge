@@ -1,0 +1,86 @@
+{
+  "network": {
+    "tcp": {
+      "port": 8000
+    },
+    "udp": {
+      "port": 8000
+    }
+  },
+  "osc": {
+    "triggers": [
+      {
+        "type": "osc-regex",
+        "params": {
+          "pattern": "^/test.*$",
+          "matchProperty": "address"
+        },
+        "actions": [
+          {
+            "type": "osc-forward",
+            "params": {
+              "host": "localhost",
+              "port": 9000,
+              "protocol": "udp"
+            },
+            "enabled": true
+          },
+          {
+            "type": "midi-output",
+            "params": {
+              "port": 0,
+              "data": [144, 60, 127]
+            },
+            "enabled": true
+          },
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      },
+      {
+        "type": "host",
+        "params": {
+          "host": "127.0.0.1"
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "midi": {
+    "triggers": [
+      {
+        "type": "midi-bytes-equals",
+        "params": {
+          "data": [144, 60, 100]
+        },
+        "actions": [
+          {
+            "type": "osc-output",
+            "params": {
+              "protocol": "udp",
+              "host": "127.0.0.1",
+              "port": 9000,
+              "address": "/test/address",
+              "args": [100, "testArg2"]
+            },
+            "enabled": true
+          },
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  }
+}
