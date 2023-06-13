@@ -10,8 +10,8 @@
       {
         "type": "regex",
         "params": {
-          "patterns": ["^/test.*$", "1"],
-          "properties": ["address", "args[0]"]
+          "patterns": ["^/test.*$"],
+          "properties": ["address"]
         },
         "actions": [
           {
