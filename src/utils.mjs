@@ -8,7 +8,7 @@ export function printMessage(msg, msgType) {
       const address = msg.address;
       table = [['message', 'value'], [address]];
       msg.args.forEach((arg, index) => {
-        table.push([index, arg.value]);
+        table.push([index, arg]);
       });
       break;
     case 'midi':
