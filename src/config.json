@@ -50,6 +50,13 @@
           {
             "type": "log",
             "enabled": false
+          },
+          {
+            "type": "shell",
+            "params": {
+              "_command": "echo ${msg.args[0]}"
+            },
+            "enabled": true
           }
         ],
         "enabled": true

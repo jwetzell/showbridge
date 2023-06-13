@@ -22,7 +22,8 @@
           { "$ref": "/action/log.schema.json" },
           { "$ref": "/action/midi-output.schema.json" },
           { "$ref": "/action/osc-output.schema.json" },
-          { "$ref": "/action/osc-forward.schema.json" }
+          { "$ref": "/action/osc-forward.schema.json" },
+          { "$ref": "/action/shell.schema.json" }
         ]
       }
     },

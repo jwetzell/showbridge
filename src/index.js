@@ -6,6 +6,7 @@ import * as net from 'net';
 import * as osc from 'osc-min';
 import * as midiUtils from './midi-utils.mjs';
 import * as utils from './utils.mjs';
+import { exec } from 'child_process';
 let configFile = 'src/config.json';
 
 if (process.argv.length === 3) {
@@ -278,6 +279,25 @@ function doAction(action, msg, messageType, trigger) {
     case 'log':
       console.log(`log action triggered from trigger ${trigger.type}`);
       utils.printMessage(msg, messageType);
+      break;
+    case 'shell':
+      let command = '';
+
+      try {
+        if (!!action.params._command) {
+          command = _.template(action.params._command)({ msg });
+        } else if (!!action.params.command) {
+          command = action.params.command;
+        } else {
+          console.error('shell action with no command configured');
+        }
+        if (command !== '') {
+          exec(command);
+        }
+      } catch (error) {
+        console.error('problem executing shell action');
+        console.error(error);
+      }
       break;
     default:
       console.log(`unhandled action type = ${action.type}`);
