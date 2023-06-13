@@ -1,7 +1,6 @@
-import terminalKitPackage from 'terminal-kit';
-const { terminal } = terminalKitPackage;
+const { terminal } = require('terminal-kit');
 
-export function printMessage(msg, msgType) {
+function printMessage(msg, msgType) {
   let table = [];
   switch (msgType) {
     case 'osc':
@@ -49,7 +48,7 @@ export function printMessage(msg, msgType) {
   });
 }
 
-export function printTriggers(triggers) {
+function printTriggers(triggers) {
   let table = [['type', 'params', 'actions', 'enabled']];
   triggers.forEach((trigger) => {
     table.push([trigger.type, JSON.stringify(trigger.params), JSON.stringify(trigger.actions), trigger.enabled]);
@@ -57,7 +56,7 @@ export function printTriggers(triggers) {
   terminal.table(table);
 }
 
-export function printMIDIOutputs(outputs) {
+function printMIDIOutputs(outputs) {
   let table = [['Port Number', 'Device Name']];
   outputs.forEach((output, index) => {
     table.push([index, output]);
@@ -67,7 +66,7 @@ export function printMIDIOutputs(outputs) {
   });
 }
 
-export function printMIDIInputs(inputs) {
+function printMIDIInputs(inputs) {
   let table = [['Port Number', 'Device Name']];
   inputs.forEach((input, index) => {
     table.push([index, input]);
@@ -76,3 +75,10 @@ export function printMIDIInputs(inputs) {
     fit: true,
   });
 }
+
+module.exports = {
+  printMIDIInputs,
+  printMIDIOutputs,
+  printMessage,
+  printTriggers,
+};

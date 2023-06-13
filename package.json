@@ -2,12 +2,13 @@
   "name": "oscee",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
-  "export": "src/index.js",
+  "main": "src/index.js",
+  "bin": "src/index.js",
   "scripts": {
     "pretty": "prettier --write src/*",
     "check-config": "ajv -s src/schema/config.schema.json -r 'src/schema/trigger/*.json' -r 'src/schema/action/*.json' -d src/config.json",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "package": "pkg ."
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +22,16 @@
   "devDependencies": {
     "ajv-cli": "^5.0.0",
     "nodemon": "^2.0.22",
+    "pkg": "^5.8.1",
     "prettier": "^2.8.8"
+  },
+  "pkg": {
+    "scripts": "src/*.js",
+    "targets": [
+      "node18-linux-x64",
+      "node18-macos-x64",
+      "node18-win-x64"
+    ],
+    "outputPath": "dist"
   }
 }

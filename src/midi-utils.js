@@ -1,4 +1,4 @@
-export function parseMIDIMessage(bytes) {
+function parseMIDIMessage(bytes) {
   const parsedMsg = {
     channel: bytes[0] & 0xf,
     bytes: bytes,
@@ -43,7 +43,7 @@ export function parseMIDIMessage(bytes) {
   return parsedMsg;
 }
 
-export function equals(msg, bytes) {
+function equals(msg, bytes) {
   for (let i = 0; i < msg.bytes.length; i++) {
     if (msg.bytes[i] !== bytes[i]) {
       return false;
@@ -51,3 +51,8 @@ export function equals(msg, bytes) {
   }
   return true;
 }
+
+module.exports = {
+  parseMIDIMessage,
+  equals,
+};
