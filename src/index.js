@@ -30,34 +30,32 @@ utils.printTriggers(config.osc.triggers);
 console.log('MIDI Trigger Summary');
 utils.printTriggers(config.midi.triggers);
 
-//TODO(jwetzell): add TCP support
 /** TCP SERVER */
-// const tcpServer = net.createServer();
-// tcpServer.on('connection', (conn) => {
-//   console.log(conn);
+const tcpServer = net.createServer();
+tcpServer.on('connection', (conn) => {
+  conn.on('data', onConnData);
 
-//   console.log(`new tcp connection from ${conn.remoteAddress}`);
+  function onConnData(msg) {
+    const oscMsg = osc.fromBuffer(msg);
+    console.log(oscMsg);
+    oscMsg.sender = {
+      protocol: 'tcp',
+      address: conn.remoteAddress,
+      port: conn.remotePort,
+    };
+    oscMsg.args = oscMsg.args.map((arg) => arg.value);
+    try {
+      processMessage(oscMsg, 'osc');
+    } catch (error) {
+      console.error('PROBLEM PROCESSING MESSAGE');
+      console.error(error);
+    }
+  }
+});
 
-//   conn.on('data', onConnData);
-//   conn.once('close', onConnClose);
-//   conn.on('error', onConnError);
-
-//   function onConnData(msg) {
-//     console.log(`connection data from ${conn.remoteAddress}:`);
-//   }
-
-//   function onConnClose() {
-//     console.log(`connection from ${conn.remoteAddress} closed`);
-//   }
-
-//   function onConnError(err) {
-//     console.log(`Connection ${conn.remoteAddress} error: ${err.message}`);
-//   }
-// });
-
-// tcpServer.listen(config.osc.tcp.port, () => {
-//   console.log(`tcp server listening on port ${tcpServer.address().port}`);
-// });
+tcpServer.listen(config.osc.tcp.port, () => {
+  console.log(`tcp server listening on port ${tcpServer.address().port}`);
+});
 
 /** UDP SERVER */
 const udpServer = udp.createSocket('udp4');
@@ -258,6 +256,7 @@ function doAction(action, msg, messageType, trigger) {
           args,
         });
 
+        //TODO(jwetzell): add TCP support
         if (action.params.protocol === 'udp') {
           udpServer.send(outBuff, action.params.port, action.params.host);
         }
