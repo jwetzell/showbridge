@@ -22,9 +22,11 @@ midiInput.openVirtualPort('oscee Input');
 
 printMIDIDevices();
 
+//TODO(jwetzell): make sure these are actually defined
 console.log('OSC Trigger Summary');
 utils.printTriggers(config.osc.triggers);
 
+//TODO(jwetzell): make sure these are actually defined
 console.log('MIDI Trigger Summary');
 utils.printTriggers(config.midi.triggers);
 
@@ -71,13 +73,23 @@ udpServer.bind(config.osc.udp.port, () => {
     };
 
     oscMsg.args = oscMsg.args.map((arg) => arg.value);
-    processMessage(oscMsg, 'osc');
+    try {
+      processMessage(oscMsg, 'osc');
+    } catch (error) {
+      console.error('PROBLEM PROCESSING MESSAGE');
+      console.error(error);
+    }
   });
 });
 
 midiInput.on('message', (deltaTime, msg) => {
   const parsedMIDI = midiUtils.parseMIDIMessage(msg);
-  processMessage(parsedMIDI, 'midi');
+  try {
+    processMessage(parsedMIDI, 'midi');
+  } catch (error) {
+    console.error('PROBLEM PROCESSING MESSAGE');
+    console.error(error);
+  }
 });
 
 /** Message Processing */
@@ -95,33 +107,47 @@ function processMessage(msg, messageType) {
       console.log(`unhandled message type = ${messageType}`);
   }
 
-  config[messageType].triggers.forEach((trigger) => {
-    if (!trigger.enabled) {
-      console.log('trigger disabled skipping...');
-      return;
-    }
-    switch (trigger.type) {
-      case 'osc-regex':
-        if (messageType === 'osc') {
-          const regex = new RegExp(trigger.params.pattern, 'g');
-          const matchPropertyValue = _.get(msg, trigger.params.matchProperty);
-          if (!matchPropertyValue) {
-            console.error('osc-regex is configured to look at a property that does not exist on this message.');
-            return;
-          }
+  for (let triggerIndex = 0; triggerIndex < config[messageType].triggers.length; triggerIndex++) {
+    let fire = false;
+    const trigger = config[messageType].triggers[triggerIndex];
 
-          if (regex.test(matchPropertyValue) && !!trigger.actions) {
-            trigger.actions.forEach((action) => doAction(action, msg, 'osc', trigger));
+    if (!trigger.enabled) {
+      console.log(`trigger ${triggerIndex}:${trigger.type} disabled skipping...`);
+      fire = false;
+      continue;
+    }
+
+    switch (trigger.type) {
+      case 'regex':
+        if (!!trigger.params) {
+          if (!!trigger.params.patterns && !!trigger.params.properties) {
+            if (trigger.params.patterns.length === trigger.params.properties.length) {
+              for (let i = 0; i < trigger.params.patterns.length; i++) {
+                const pattern = trigger.params.patterns[i];
+                const property = trigger.params.properties[i];
+
+                const regex = new RegExp(pattern, 'g');
+                const matchPropertyValue = _.get(msg, property);
+                if (!matchPropertyValue) {
+                  console.error('regex is configured to look at a property that does not exist on this message.');
+                  fire = false;
+                }
+
+                if (!regex.test(matchPropertyValue)) {
+                  fire = false;
+                }
+              }
+              // all properties match all patterns
+              fire = true;
+            }
           }
-        } else {
-          console.error('osc-regex trigger attempted on non-osc message type');
         }
         break;
       case 'host':
-        if (messageType === 'osc') {
+        if (!!msg.sender) {
           const host = trigger.params.host;
           if (msg.sender.address === trigger.params.host && trigger.actions) {
-            trigger.actions.forEach((action) => doAction(action, msg, 'osc', trigger));
+            fire = true;
           }
         } else {
           console.error('host trigger attempted on message type that does not have host information');
@@ -130,7 +156,7 @@ function processMessage(msg, messageType) {
       case 'midi-bytes-equals':
         if (messageType === 'midi') {
           if (midiUtils.equals(msg, trigger.params.data)) {
-            trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+            fire = true;
           }
         }
         break;
@@ -140,11 +166,11 @@ function processMessage(msg, messageType) {
             if (!!trigger.params.note) {
               //trigger params specify a note (the incoming message must match in order to fire actions)
               if (msg.note === trigger.params.note) {
-                trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+                fire = true;
               }
             } else {
               //no note specified always fire actions
-              trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+              fire = true;
             }
           }
         }
@@ -155,19 +181,26 @@ function processMessage(msg, messageType) {
             if (!!trigger.params.note) {
               //trigger params specify a note (the incoming message must match in order to fire actions)
               if (msg.note === trigger.params.note) {
-                trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+                fire = true;
               }
             } else {
               //no note specified always fire actions
-              trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+              fire = true;
             }
           }
         }
         break;
       default:
         console.log(`unhandled trigger type = ${trigger.type}`);
+        fire = false;
     }
-  });
+    if (fire) {
+      console.log(`trigger ${triggerIndex}:${trigger.type} fired`);
+      trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
+    } else {
+      console.log(`trigger ${triggerIndex}:${trigger.type} not fired`);
+    }
+  }
 }
 
 function doAction(action, msg, messageType, trigger) {
@@ -211,12 +244,13 @@ function doAction(action, msg, messageType, trigger) {
           action.params._args.forEach((arg) => {
             if (typeof arg === 'string') {
               const _arg = _.template(arg);
-              console.log(_arg({ msg }));
               args.push(_arg({ msg }));
             } else {
               args.push(arg);
             }
           });
+        } else if (!!action.params.args) {
+          args = action.params.args;
         }
 
         const outBuff = osc.toBuffer({
@@ -244,7 +278,6 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'log':
       console.log(`log action triggered from trigger ${trigger.type}`);
-      console.log(msg);
       utils.printMessage(msg, messageType);
       break;
     default:
