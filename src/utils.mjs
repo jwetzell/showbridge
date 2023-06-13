@@ -12,7 +12,36 @@ export function printMessage(msg, msgType) {
       });
       break;
     case 'midi':
-      table = [['MIDI byte1', 'MIDI byte2', 'MIDI byte3'], msg];
+      switch (msg.status) {
+        case 'note_on':
+          table.push(['status', 'note', 'velocity']);
+          table.push([msg.status, msg.note, msg.velocity]);
+          break;
+        case 'note_off':
+          table.push(['status', 'note', 'velocity']);
+          table.push([msg.status, msg.note, msg.velocity]);
+          break;
+        case 'polyphonic_aftertouch':
+          table.push(['status', 'note', 'pressure']);
+          table.push([msg.status, msg.note, msg.pressure]);
+          break;
+        case 'control_change':
+          table.push(['status', 'control', 'value']);
+          table.push([msg.status, msg.control, msg.value]);
+          break;
+        case 'program_change':
+          table.push(['status', 'program']);
+          table.push([msg.status, msg.program]);
+          break;
+        case 'channel_aftertouch':
+          table.push(['status', 'pressure']);
+          table.push([msg.status, msg.pressure]);
+          break;
+        case 'pitch_bend':
+          table.push(['status', 'value']);
+          table.push([msg.status, msg.value]);
+          break;
+      }
       break;
   }
   terminal.table(table, {

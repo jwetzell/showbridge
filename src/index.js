@@ -5,6 +5,7 @@ import * as utils from './utils.mjs';
 import * as http from 'http';
 import _ from 'lodash';
 import midi from 'midi';
+import * as midiUtils from './midi-utils.mjs';
 import { readFile } from 'fs/promises';
 let configFile = 'src/config.json';
 
@@ -20,8 +21,10 @@ const msgTypeSupportedTrigger = {
 };
 
 const midiOutput = new midi.Output();
+midiOutput.openVirtualPort('oscee Output');
+
 const midiInput = new midi.Input();
-midiInput.openVirtualPort('Test Input');
+midiInput.openVirtualPort('oscee Input');
 
 printMIDIDevices();
 
@@ -56,14 +59,14 @@ utils.printTriggers(config.midi.triggers);
 //   }
 // });
 
-// tcpServer.listen(config.network.tcp.port, () => {
+// tcpServer.listen(config.osc.tcp.port, () => {
 //   console.log(`tcp server listening on port ${tcpServer.address().port}`);
 // });
 
 /** UDP SERVER */
 const udpServer = udp.createSocket('udp4');
 
-udpServer.bind(config.network.udp.port, () => {
+udpServer.bind(config.osc.udp.port, () => {
   console.log(`udp server listening on port ${udpServer.address().port}`);
   udpServer.on('message', (msg, rinfo) => {
     processMessage(osc.fromBuffer(msg), 'osc', {
@@ -75,7 +78,8 @@ udpServer.bind(config.network.udp.port, () => {
 });
 
 midiInput.on('message', (deltaTime, msg) => {
-  processMessage(msg, 'midi', null);
+  const parsedMIDI = midiUtils.parseMIDIMessage(msg);
+  processMessage(parsedMIDI, 'midi', null);
 });
 
 /** Message Processing */
@@ -126,14 +130,24 @@ function processMessage(msg, messageType, msgInfo) {
         }
         break;
       case 'midi-bytes-equals':
-        if (msg.length === trigger.params.data.length) {
-          msg.forEach((byte, index) => {
-            if (byte !== trigger.params.data[index]) {
-              return;
-            }
-          });
-          //if we got this far the MIDI bytes match the trigger
-          trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+        if (messageType === 'midi') {
+          if (midiUtils.equals(msg, trigger.params.data)) {
+            trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+          }
+        }
+        break;
+      case 'midi-note-on':
+        if (messageType === 'midi' && msg.status === 'note_on') {
+          if (msg.note === trigger.params.note) {
+            trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+          }
+        }
+        break;
+      case 'midi-note-off':
+        if (messageType === 'midi' && msg.status === 'note_off') {
+          if (msg.note === trigger.params.note) {
+            trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+          }
         }
         break;
       default:
@@ -188,8 +202,10 @@ function doAction(action, msg, messageType, trigger) {
         console.log('error outputting midi');
         console.log(error);
       }
+      break;
     case 'log':
       console.log(`log action triggered from trigger ${trigger.type}`);
+      console.log(msg);
       utils.printMessage(msg, messageType);
       break;
     default:

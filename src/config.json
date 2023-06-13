@@ -1,13 +1,11 @@
 {
-  "network": {
+  "osc": {
     "tcp": {
       "port": 8000
     },
     "udp": {
       "port": 8000
-    }
-  },
-  "osc": {
+    },
     "triggers": [
       {
         "type": "osc-regex",
@@ -20,7 +18,7 @@
             "type": "osc-forward",
             "params": {
               "host": "localhost",
-              "port": 9000,
+              "port": 8001,
               "protocol": "udp"
             },
             "enabled": true
@@ -74,6 +72,32 @@
             },
             "enabled": true
           },
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      },
+      {
+        "type": "midi-note-on",
+        "params": {
+          "note": 60
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      },
+      {
+        "type": "midi-note-off",
+        "params": {
+          "note": 60
+        },
+        "actions": [
           {
             "type": "log",
             "enabled": true
