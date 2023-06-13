@@ -2,7 +2,6 @@ import * as net from 'net';
 import * as udp from 'dgram';
 import * as osc from 'osc-min';
 import * as utils from './utils.mjs';
-import * as http from 'http';
 import _ from 'lodash';
 import midi from 'midi';
 import * as midiUtils from './midi-utils.mjs';
@@ -14,11 +13,6 @@ if (process.argv.length === 3) {
 }
 
 const config = JSON.parse(await readFile(configFile));
-
-const msgTypeSupportedTrigger = {
-  osc: ['osc-regex', 'host'],
-  midi: ['midi-bytes-equal'],
-};
 
 const midiOutput = new midi.Output();
 midiOutput.openVirtualPort('oscee Output');
@@ -69,26 +63,30 @@ const udpServer = udp.createSocket('udp4');
 udpServer.bind(config.osc.udp.port, () => {
   console.log(`udp server listening on port ${udpServer.address().port}`);
   udpServer.on('message', (msg, rinfo) => {
-    processMessage(osc.fromBuffer(msg), 'osc', {
+    const oscMsg = osc.fromBuffer(msg);
+    oscMsg.sender = {
       protocol: 'udp',
       address: rinfo.address,
       port: rinfo.port,
-    });
+    };
+
+    oscMsg.args = oscMsg.args.map((arg) => arg.value);
+    processMessage(oscMsg, 'osc');
   });
 });
 
 midiInput.on('message', (deltaTime, msg) => {
   const parsedMIDI = midiUtils.parseMIDIMessage(msg);
-  processMessage(parsedMIDI, 'midi', null);
+  processMessage(parsedMIDI, 'midi');
 });
 
 /** Message Processing */
 
-function processMessage(msg, messageType, msgInfo) {
+function processMessage(msg, messageType) {
   //TODO(jwetzell): undefined checks
   switch (messageType) {
     case 'osc':
-      console.log(`osc message received from ${msgInfo.address}:${msgInfo.port} via ${msgInfo.protocol}`);
+      console.log(`osc message received from ${msg.sender.address}:${msg.sender.port} via ${msg.sender.protocol}`);
       break;
     case 'midi':
       console.log('midi message received');
@@ -122,7 +120,7 @@ function processMessage(msg, messageType, msgInfo) {
       case 'host':
         if (messageType === 'osc') {
           const host = trigger.params.host;
-          if (msgInfo.address === trigger.params.host && trigger.actions) {
+          if (msg.sender.address === trigger.params.host && trigger.actions) {
             trigger.actions.forEach((action) => doAction(action, msg, 'osc', trigger));
           }
         } else {
@@ -138,15 +136,31 @@ function processMessage(msg, messageType, msgInfo) {
         break;
       case 'midi-note-on':
         if (messageType === 'midi' && msg.status === 'note_on') {
-          if (msg.note === trigger.params.note) {
-            trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+          if (!!trigger.params) {
+            if (!!trigger.params.note) {
+              //trigger params specify a note (the incoming message must match in order to fire actions)
+              if (msg.note === trigger.params.note) {
+                trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+              }
+            } else {
+              //no note specified always fire actions
+              trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+            }
           }
         }
         break;
       case 'midi-note-off':
         if (messageType === 'midi' && msg.status === 'note_off') {
-          if (msg.note === trigger.params.note) {
-            trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+          if (!!trigger.params) {
+            if (!!trigger.params.note) {
+              //trigger params specify a note (the incoming message must match in order to fire actions)
+              if (msg.note === trigger.params.note) {
+                trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+              }
+            } else {
+              //no note specified always fire actions
+              trigger.actions.forEach((action) => doAction(action, msg, 'midi', trigger));
+            }
           }
         }
         break;
@@ -180,9 +194,34 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'osc-output':
       try {
+        let address = '';
+        if (!!action.params._address) {
+          const _address = _.template(action.params._address);
+          address = _address({ msg });
+        } else if (!!action.params.address) {
+          address = action.params.address;
+        } else {
+          console.error('either address or _address property need to be set for osc-output action');
+          return;
+        }
+
+        let args = [];
+
+        if (!!action.params._args) {
+          action.params._args.forEach((arg) => {
+            if (typeof arg === 'string') {
+              const _arg = _.template(arg);
+              console.log(_arg({ msg }));
+              args.push(_arg({ msg }));
+            } else {
+              args.push(arg);
+            }
+          });
+        }
+
         const outBuff = osc.toBuffer({
-          address: action.params.address,
-          args: action.params.args,
+          address,
+          args,
         });
 
         if (action.params.protocol === 'udp') {

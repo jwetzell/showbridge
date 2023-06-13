@@ -24,10 +24,13 @@
             "enabled": true
           },
           {
-            "type": "midi-output",
+            "type": "osc-output",
             "params": {
-              "port": 0,
-              "data": [144, 60, 127]
+              "host": "localhost",
+              "port": 8001,
+              "protocol": "udp",
+              "_address": "/proxied${msg.address}",
+              "_args": ["${msg.sender.address}:${msg.sender.port}", "${msg.args.join(',')}"]
             },
             "enabled": true
           },
@@ -62,13 +65,24 @@
         },
         "actions": [
           {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      },
+      {
+        "type": "midi-note-on",
+        "params": {},
+        "actions": [
+          {
             "type": "osc-output",
             "params": {
               "protocol": "udp",
               "host": "127.0.0.1",
               "port": 9000,
-              "address": "/test/address",
-              "args": [100, "testArg2"]
+              "addressTemplate": "/test/${msg.note}",
+              "args": [1]
             },
             "enabled": true
           },
@@ -80,24 +94,20 @@
         "enabled": true
       },
       {
-        "type": "midi-note-on",
-        "params": {
-          "note": 60
-        },
+        "type": "midi-note-off",
+        "params": {},
         "actions": [
           {
-            "type": "log",
+            "type": "osc-output",
+            "params": {
+              "protocol": "udp",
+              "host": "127.0.0.1",
+              "port": 9000,
+              "addressTemplate": "/test/${msg.note}",
+              "args": [0]
+            },
             "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
-        "type": "midi-note-off",
-        "params": {
-          "note": 60
-        },
-        "actions": [
+          },
           {
             "type": "log",
             "enabled": true
