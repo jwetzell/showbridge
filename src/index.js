@@ -1,11 +1,11 @@
-import * as net from 'net';
 import * as udp from 'dgram';
-import * as osc from 'osc-min';
-import * as utils from './utils.mjs';
+import { readFile } from 'fs/promises';
 import _ from 'lodash';
 import midi from 'midi';
+import * as net from 'net';
+import * as osc from 'osc-min';
 import * as midiUtils from './midi-utils.mjs';
-import { readFile } from 'fs/promises';
+import * as utils from './utils.mjs';
 let configFile = 'src/config.json';
 
 if (process.argv.length === 3) {
