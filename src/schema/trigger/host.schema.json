@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/trigger/host.schema.json",
+  "title": "Host Trigger",
+  "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+  "type": "object",
+  "allOf": [{ "$ref": "/trigger/base.schema.json" }],
+  "properties": {
+    "type": {
+      "const": "host"
+    },
+    "params": {
+      "description": "object containg the trigger type specific settings",
+      "type": "object",
+      "properties": {
+        "host": {
+          "description": "the hostname or address of the server to match incoming messages against",
+          "type": "string"
+        }
+      },
+      "required": ["host"],
+      "additionalProperties": false
+    }
+  }
+}

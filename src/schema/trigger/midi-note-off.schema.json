@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/trigger/midi-note-off.schema.json",
+  "title": "Midi Note Off Trigger",
+  "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+  "type": "object",
+  "allOf": [{ "$ref": "/trigger/base.schema.json" }],
+  "properties": {
+    "type": {
+      "const": "midi-note-off"
+    },
+    "params": {
+      "description": "object containg the trigger type specific settings",
+      "type": "object",
+      "properties": {
+        "note": {
+          "description": "the note value to match against incoming the messages",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "velocity": {
+          "description": "the velocity value to match against the incoming message",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    }
+  }
+}

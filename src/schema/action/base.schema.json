@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/action/base.schema.json",
+  "title": "Action",
+  "description": "something that gets done as a result of trigger firing",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "the type of action",
+      "type": "string"
+    },
+    "params": {
+      "description": "object containg the action type specific settings",
+      "type": "object"
+    },
+    "enabled": {
+      "description": "this property allows the action to be enabled or disabled",
+      "type": "boolean"
+    }
+  },
+  "required": ["type", "enabled"],
+  "additionalProperties": false
+}

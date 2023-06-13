@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "/trigger/base.schema.json",
+  "title": "Trigger",
+  "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "the type of trigger",
+      "type": "string"
+    },
+    "params": {
+      "description": "object containg the trigger type specific settings",
+      "type": "object"
+    },
+    "actions": {
+      "description": "an array of actions to be performed if this trigger is fired",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          { "$ref": "/action/log.schema.json" },
+          { "$ref": "/action/midi-output.schema.json" },
+          { "$ref": "/action/osc-output.schema.json" },
+          { "$ref": "/action/osc-forward.schema.json" }
+        ]
+      }
+    },
+    "enabled": {
+      "description": "this property allows the trigger to be enabled or disabled",
+      "type": "boolean"
+    }
+  },
+  "required": ["type", "params", "actions", "enabled"],
+  "additionalProperties": false
+}

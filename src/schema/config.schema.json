@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "config.schema.json",
+  "title": "Config",
+  "description": "oscee config",
+  "type": "object",
+  "properties": {
+    "osc": {
+      "description": "object representing the OSC configuration of oscee",
+      "type": "object",
+      "properties": {
+        "triggers": {
+          "description": "array of triggers",
+          "type": "array",
+          "items": {
+            "oneOf": [{ "$ref": "/trigger/regex.schema.json" }, { "$ref": "/trigger/host.schema.json" }]
+          }
+        }
+      }
+    },
+    "midi": {
+      "description": "object representing the MIDI configuration of oscee",
+      "type": "object",
+      "properties": {
+        "triggers": {
+          "description": "array of triggers",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "$ref": "/trigger/midi-bytes-equals.schema.json" },
+              { "$ref": "/trigger/midi-note-on.schema.json" },
+              { "$ref": "/trigger/midi-note-off.schema.json" }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": ["osc", "midi"],
+  "additionalProperties": false
+}
