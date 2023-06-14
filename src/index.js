@@ -4,9 +4,10 @@ const _ = require('lodash');
 const midi = require('midi');
 const net = require('net');
 const osc = require('osc-min');
-const midiUtils = require('./midi-utils.js');
-const utils = require('./utils.js');
 const { exec } = require('child_process');
+
+const midiUtils = require('./midi-utils.js');
+const printUtils = require('./print-utils.js');
 
 let config = {
   osc: {
@@ -61,11 +62,11 @@ printMIDIDevices();
 
 //TODO(jwetzell): make sure these are actually defined
 console.log('OSC Trigger Summary');
-utils.printTriggers(config.osc.triggers);
+printUtils.printTriggers(config.osc.triggers);
 
 //TODO(jwetzell): make sure these are actually defined
 console.log('MIDI Trigger Summary');
-utils.printTriggers(config.midi.triggers);
+printUtils.printTriggers(config.midi.triggers);
 
 /** TCP SERVER */
 const tcpServer = net.createServer();
@@ -314,7 +315,7 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'log':
       console.log(`log action triggered from trigger ${trigger.type}`);
-      utils.printMessage(msg, messageType);
+      printUtils.printMessage(msg, messageType);
       break;
     case 'shell':
       let command = '';
@@ -349,11 +350,11 @@ function printMIDIDevices() {
     inputs.push(midiInput.getPortName(i));
   }
   console.log('MIDI Inputs');
-  utils.printMIDIInputs(inputs);
+  printUtils.printMIDIInputs(inputs);
 
   for (let i = 0; i < midiOutput.getPortCount(); i++) {
     outputs.push(midiOutput.getPortName(i));
   }
   console.log('MIDI Outputs');
-  utils.printMIDIOutputs(outputs);
+  printUtils.printMIDIOutputs(outputs);
 }
