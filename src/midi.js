@@ -10,15 +10,15 @@ printMIDIDevices();
 
 /** Helpers */
 function printMIDIDevices() {
-  const outputs = [];
   const inputs = [];
-
+  
   for (let i = 0; i < input.getPortCount(); i++) {
     inputs.push(input.getPortName(i));
   }
   console.log('MIDI Inputs');
   console.log(inputs);
-
+  
+  const outputs = [];
   for (let i = 0; i < output.getPortCount(); i++) {
     outputs.push(output.getPortName(i));
   }

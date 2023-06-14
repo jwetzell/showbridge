@@ -3,8 +3,8 @@ const net = require('net');
 const osc = require('osc-min');
 const _ = require('lodash');
 const { exec } = require('child_process');
-const MidiMessage = require('./models/midi-message');
 const { readFileSync } = require('fs');
+const MidiMessage = require('./models/midi-message');
 const Config = require('./models/config');
 const midi = require('./midi.js');
 
