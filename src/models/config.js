@@ -1,8 +1,14 @@
-//TODO(jwetzell): config validation against schema
+const Ajv = require('ajv')
 const Trigger = require('./trigger');
+
+const validate = new Ajv().compile(require('../schema/config.schema.json'));
 
 class Config {
   constructor(configObj) {
+    if(!validate(configObj)){
+      console.error(validate.errors)
+      throw new Error("Invalid Config")
+    }
     this.osc = configObj.osc;
     this.midi = configObj.midi;
     //TODO(jwetzell): is there a better way to load this

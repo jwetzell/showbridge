@@ -17,7 +17,8 @@
             "oneOf": [{ "$ref": "#/definitions/TriggerHost" }, { "$ref": "#/definitions/TriggerRegex" }]
           }
         }
-      }
+      },
+      "required": ["triggers"]
     },
     "midi": {
       "description": "object representing the MIDI configuration of oscee",
@@ -36,7 +37,8 @@
             ]
           }
         }
-      }
+      },
+      "required": ["triggers"]
     }
   },
   "required": ["osc", "midi"],
