@@ -27,7 +27,6 @@ function printMIDIDevices() {
 }
 
 module.exports = {
-  printMIDIDevices,
   input,
   output,
 };
