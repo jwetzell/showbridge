@@ -20,11 +20,9 @@ if (process.argv.length === 3) {
   config = new Config(defaultConfig);
 }
 
-//TODO(jwetzell): make sure these are actually defined
 console.log('OSC Trigger Summary');
 console.log(config.osc.triggers);
 
-//TODO(jwetzell): make sure these are actually defined
 console.log('MIDI Trigger Summary');
 console.log(config.midi.triggers);
 
