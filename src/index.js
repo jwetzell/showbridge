@@ -190,7 +190,7 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'log':
       console.log(`log action triggered from trigger ${trigger.type}`);
-      printUtils.printMessage(msg, messageType);
+      console.log(msg);
       break;
     case 'shell':
       let command = '';
