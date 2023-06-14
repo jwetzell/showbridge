@@ -1,0 +1,14 @@
+{
+  "osc": {
+    "tcp": {
+      "port": 8000
+    },
+    "udp": {
+      "port": 8000
+    },
+    "triggers": []
+  },
+  "midi": {
+    "triggers": []
+  }
+}

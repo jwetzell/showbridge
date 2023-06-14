@@ -1,24 +1,32 @@
 const udp = require('dgram');
-const _ = require('lodash');
 const net = require('net');
 const osc = require('osc-min');
+const _ = require('lodash');
 const { exec } = require('child_process');
-const midiUtils = require('./midi-utils.js');
-const printUtils = require('./print-utils.js');
-const config = require('./config.js');
+const MidiMessage = require('./models/midi-message');
+const { readFileSync } = require('fs');
+const Config = require('./models/config');
+const midi = require('./midi.js');
 
+let config;
+//if there is an argument load it as the config
 if (process.argv.length === 3) {
   const configFile = process.argv[2];
-  config.load(configFile);
+  const configToLoad = JSON.parse(readFileSync(configFile));
+  config = new Config(configToLoad);
+} else {
+  //if not load a default
+  const defaultConfig = require('./config-default.json');
+  config = new Config(defaultConfig);
 }
 
 //TODO(jwetzell): make sure these are actually defined
 console.log('OSC Trigger Summary');
-printUtils.printTriggers(config.get().osc.triggers);
+console.log(config.osc.triggers);
 
 //TODO(jwetzell): make sure these are actually defined
 console.log('MIDI Trigger Summary');
-printUtils.printTriggers(config.get().midi.triggers);
+console.log(config.midi.triggers);
 
 /** TCP SERVER */
 const tcpServer = net.createServer();
@@ -43,14 +51,14 @@ tcpServer.on('connection', (conn) => {
   }
 });
 
-tcpServer.listen(config.get().osc.tcp.port, () => {
+tcpServer.listen(config.osc.tcp.port, () => {
   console.log(`tcp server listening on port ${tcpServer.address().port}`);
 });
 
 /** UDP SERVER */
 const udpServer = udp.createSocket('udp4');
 
-udpServer.bind(config.get().osc.udp.port, () => {
+udpServer.bind(config.osc.udp.port, () => {
   console.log(`udp server listening on port ${udpServer.address().port}`);
   udpServer.on('message', (msg, rinfo) => {
     const oscMsg = osc.fromBuffer(msg);
@@ -70,9 +78,9 @@ udpServer.bind(config.get().osc.udp.port, () => {
   });
 });
 
-midiUtils.input.on('message', (deltaTime, msg) => {
-  const parsedMIDI = midiUtils.parseMIDIMessage(msg);
+midi.input.on('message', (deltaTime, msg) => {
   try {
+    const parsedMIDI = new MidiMessage(msg);
     processMessage(parsedMIDI, 'midi');
   } catch (error) {
     console.error('PROBLEM PROCESSING MIDI MESSAGE');
@@ -94,95 +102,10 @@ function processMessage(msg, messageType) {
     default:
       console.log(`unhandled message type = ${messageType}`);
   }
-
-  for (let triggerIndex = 0; triggerIndex < config[messageType].triggers.length; triggerIndex++) {
-    let fire = false;
-    const trigger = config[messageType].triggers[triggerIndex];
-
-    if (!trigger.enabled) {
-      console.log(`trigger ${triggerIndex}:${trigger.type} disabled skipping...`);
-      fire = false;
-      continue;
-    }
-
-    switch (trigger.type) {
-      case 'regex':
-        if (!!trigger.params) {
-          if (!!trigger.params.patterns && !!trigger.params.properties) {
-            if (trigger.params.patterns.length === trigger.params.properties.length) {
-              for (let i = 0; i < trigger.params.patterns.length; i++) {
-                const pattern = trigger.params.patterns[i];
-                const property = trigger.params.properties[i];
-
-                const regex = new RegExp(pattern, 'g');
-                const matchPropertyValue = _.get(msg, property);
-                if (!matchPropertyValue) {
-                  console.error('regex is configured to look at a property that does not exist on this message.');
-                  fire = false;
-                }
-
-                if (!regex.test(matchPropertyValue)) {
-                  fire = false;
-                }
-              }
-              // all properties match all patterns
-              fire = true;
-            }
-          }
-        }
-        break;
-      case 'host':
-        if (!!msg.sender) {
-          const host = trigger.params.host;
-          if (msg.sender.address === trigger.params.host && trigger.actions) {
-            fire = true;
-          }
-        } else {
-          console.error('host trigger attempted on message type that does not have host information');
-        }
-        break;
-      case 'midi-bytes-equals':
-        if (messageType === 'midi') {
-          if (midiUtils.equals(msg, trigger.params.data)) {
-            fire = true;
-          }
-        }
-        break;
-      case 'midi-note-on':
-        if (messageType === 'midi' && msg.status === 'note_on') {
-          if (!!trigger.params) {
-            if (!!trigger.params.note) {
-              //trigger params specify a note (the incoming message must match in order to fire actions)
-              if (msg.note === trigger.params.note) {
-                fire = true;
-              }
-            } else {
-              //no note specified always fire actions
-              fire = true;
-            }
-          }
-        }
-        break;
-      case 'midi-note-off':
-        if (messageType === 'midi' && msg.status === 'note_off') {
-          if (!!trigger.params) {
-            if (!!trigger.params.note) {
-              //trigger params specify a note (the incoming message must match in order to fire actions)
-              if (msg.note === trigger.params.note) {
-                fire = true;
-              }
-            } else {
-              //no note specified always fire actions
-              fire = true;
-            }
-          }
-        }
-        break;
-      default:
-        console.log(`unhandled trigger type = ${trigger.type}`);
-        fire = false;
-    }
-    if (fire) {
+  const triggers = config[messageType].triggers;
+  for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
+    const trigger = triggers[triggerIndex];
+    if (trigger.shouldFire(msg, messageType)) {
       console.log(`trigger ${triggerIndex}:${trigger.type} fired`);
       trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
     } else {
@@ -257,9 +180,9 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'midi-output':
       try {
-        midiUtils.output.openPort(action.params.port);
-        midiUtils.output.sendMessage(action.params.data);
-        midiUtils.output.closePort(action.params.port);
+        midi.output.openPort(action.params.port);
+        midi.output.sendMessage(action.params.data);
+        midi.output.closePort(action.params.port);
       } catch (error) {
         console.log('error outputting midi');
         console.log(error);
