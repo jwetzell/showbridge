@@ -33,3 +33,6 @@
     - port: the midi port number to output this message on (see output table on program launch for list of output ports)
     - data: byte array of midi data [status, data1, data2]
 - log: action takes no params and will simply log the incoming message out useful for debugging triggers
+- shell:
+    - _command: JS literal template of shell command to run has access to msg properties
+    - command: shell command to run _command has priority
