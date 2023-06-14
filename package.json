@@ -6,7 +6,7 @@
   "bin": "src/index.js",
   "scripts": {
     "pretty": "prettier --write src/*",
-    "check-config": "ajv -s src/schema/config.schema.json -r 'src/schema/trigger/*.json' -r 'src/schema/action/*.json' -d src/config.json",
+    "check-config": "ajv -s src/schema/config.schema.json -d src/config-dev.json",
     "dev": "nodemon src/index.js src/config-dev.json",
     "package": "pkg . -t host"
   },

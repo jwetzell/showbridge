@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "config.schema.json",
+  "$id": "config",
   "title": "Config",
   "description": "oscee config",
   "type": "object",
@@ -13,7 +13,8 @@
           "description": "array of triggers",
           "type": "array",
           "items": {
-            "oneOf": [{ "$ref": "/trigger/regex.schema.json" }, { "$ref": "/trigger/host.schema.json" }]
+            "type": "object",
+            "oneOf": [{ "$ref": "#/definitions/TriggerHost" }, { "$ref": "#/definitions/TriggerRegex" }]
           }
         }
       }
@@ -26,10 +27,12 @@
           "description": "array of triggers",
           "type": "array",
           "items": {
+            "type": "object",
             "oneOf": [
-              { "$ref": "/trigger/midi-bytes-equals.schema.json" },
-              { "$ref": "/trigger/midi-note-on.schema.json" },
-              { "$ref": "/trigger/midi-note-off.schema.json" }
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerMidiBytesEqual" },
+              { "$ref": "#/definitions/TriggerMidiNoteOff" },
+              { "$ref": "#/definitions/TriggerMidiNoteOn" }
             ]
           }
         }
@@ -37,5 +40,367 @@
     }
   },
   "required": ["osc", "midi"],
-  "additionalProperties": false
+  "definitions": {
+    "ActionBase": {
+      "title": "Action",
+      "description": "something that gets done as a result of trigger firing",
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "the type of action",
+          "type": "string"
+        },
+        "params": {
+          "description": "object containg the action type specific settings",
+          "type": "object"
+        },
+        "enabled": {
+          "description": "this property allows the action to be enabled or disabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled"],
+      "additionalProperties": false
+    },
+    "ActionLog": {
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "title": "Log Action",
+      "description": "something that gets done as a result of trigger firing",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
+      "properties": {
+        "type": {
+          "const": "log"
+        },
+        "additionalProperties": false
+      }
+    },
+    "ActionMidiOutput": {
+      "title": "Midi Output Action",
+      "description": "something that gets done as a result of trigger firing",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
+      "properties": {
+        "type": {
+          "const": "midi-output"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object",
+          "properties": {
+            "port": {
+              "description": "the midi port number to output the message on",
+              "type": "number"
+            },
+            "data": {
+              "description": "midi data to be sent as an array of 3 bytes",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 127
+              },
+              "minItems": 2,
+              "maxItems": 3
+            }
+          },
+          "required": ["port", "data"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["params"]
+    },
+    "ActionOscForward": {
+      "title": "OSC Forward Action",
+      "description": "something that gets done as a result of trigger firing",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
+      "properties": {
+        "type": {
+          "const": "osc-forward"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object",
+          "properties": {
+            "host": {
+              "description": "the hostname or address of the server to forward OSC to",
+              "type": "string"
+            },
+            "port": {
+              "description": "the port to forward OSC to",
+              "type": "integer"
+            },
+            "protocol": {
+              "description": "the protocol to use when forwarding OSC",
+              "type": "string",
+              "enum": ["udp", "tcp"]
+            }
+          },
+          "required": ["host", "port", "protocol"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["params"]
+    },
+    "ActionOscOutput": {
+      "title": "OSC Output Action",
+      "description": "something that gets done as a result of trigger firing",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
+      "properties": {
+        "type": {
+          "const": "osc-output"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object",
+          "properties": {
+            "host": {
+              "description": "the hostname or address of the server to send OSC to",
+              "type": "string"
+            },
+            "port": {
+              "description": "the port to send OSC to",
+              "type": "integer"
+            },
+            "protocol": {
+              "description": "the protocol to use when sending OSC",
+              "type": "string",
+              "enum": ["udp", "tcp"]
+            },
+            "_address": {
+              "description": "JS template of the OSC address has access to the msg object to subsitute in properties of the message that triggered this action",
+              "type": "string"
+            },
+            "_args": {
+              "description": "array of args, strings will be ran through the templating engine same as the _address param",
+              "type": "array"
+            },
+            "address": {
+              "description": "hardcoded OSC address _address has priority",
+              "type": "string"
+            },
+            "args": {
+              "description": "hardcoded array of OSC args",
+              "type": "array"
+            }
+          },
+          "required": ["host", "port", "protocol"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["params"]
+    },
+    "ActionShell": {
+      "title": "Shell Command Action",
+      "description": "something that gets done as a result of trigger firing",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
+      "properties": {
+        "type": {
+          "const": "shell"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object",
+          "properties": {
+            "_command": {
+              "description": "JS literal template of the shell command will have access to the properties of the incoming message that triggered this action",
+              "type": "string"
+            },
+            "command": {
+              "description": "the shell command to run _command takes priority",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": ["params"]
+    },
+
+    "TriggerBase": {
+      "title": "Trigger",
+      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "the type of trigger",
+          "type": "string"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object"
+        },
+        "actions": {
+          "description": "an array of actions to be performed if this trigger is fired",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/ActionLog" },
+              { "$ref": "#/definitions/ActionMidiOutput" },
+              { "$ref": "#/definitions/ActionOscForward" },
+              { "$ref": "#/definitions/ActionOscOutput" },
+              { "$ref": "#/definitions/ActionShell" }
+            ]
+          }
+        },
+        "enabled": {
+          "description": "this property allows the trigger to be enabled or disabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "params", "actions", "enabled"],
+      "additionalProperties": false
+    },
+    "TriggerHost": {
+      "title": "Host Trigger",
+      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
+      "properties": {
+        "type": {
+          "const": "host"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object",
+          "properties": {
+            "host": {
+              "description": "the hostname or address of the server to match incoming messages against",
+              "type": "string"
+            }
+          },
+          "required": ["host"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "TriggerMidiBytesEqual": {
+      "title": "Midi Bytes Equals Trigger",
+      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
+      "properties": {
+        "type": {
+          "const": "midi-bytes-equals"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object",
+          "properties": {
+            "data": {
+              "description": "an array of 3 bytes that will be matched to the incoming message",
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 1,
+              "maxItems": 3
+            }
+          },
+          "required": ["data"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "TriggerMidiNoteOff": {
+      "title": "Midi Note Off Trigger",
+      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
+      "properties": {
+        "type": {
+          "const": "midi-note-off"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object",
+          "properties": {
+            "note": {
+              "description": "the note value to match against incoming the messages",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127
+            },
+            "velocity": {
+              "description": "the velocity value to match against the incoming message",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      }
+    },
+    "TriggerMidiNoteOn": {
+      "title": "Midi Note On Trigger",
+      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
+      "properties": {
+        "type": {
+          "const": "midi-note-on"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object",
+          "properties": {
+            "note": {
+              "description": "the note value to match against incoming the messages",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127
+            },
+            "velocity": {
+              "description": "the velocity value to match against the incoming message",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      }
+    },
+    "TriggerRegex": {
+      "title": "Regex Trigger",
+      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
+      "properties": {
+        "type": {
+          "const": "regex"
+        },
+        "params": {
+          "description": "object containg the trigger type specific settings",
+          "type": "object",
+          "properties": {
+            "patterns": {
+              "description": "an array of regex patterns",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "properties": {
+              "description": "an array of properties on the msg to match the regex patterns to 1:1",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["patterns", "properties"],
+          "additionalProperties": false
+        }
+      }
+    }
+  }
 }
