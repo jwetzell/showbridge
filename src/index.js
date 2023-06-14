@@ -5,7 +5,7 @@ const midi = require('midi');
 const net = require('net');
 const osc = require('osc-min');
 const midiUtils = require('./midi-utils.js');
-const utils = require('./utils.js');
+// const utils = require('./utils.js');
 const { exec } = require('child_process');
 // let configFile = 'src/config';
 

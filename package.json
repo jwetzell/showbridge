@@ -8,7 +8,7 @@
     "pretty": "prettier --write src/*",
     "check-config": "ajv -s src/schema/config.schema.json -r 'src/schema/trigger/*.json' -r 'src/schema/action/*.json' -d src/config.json",
     "dev": "nodemon src/index.js",
-    "package": "pkg ."
+    "package": "pkg . -t host"
   },
   "author": "",
   "license": "ISC",
@@ -27,11 +27,7 @@
   },
   "pkg": {
     "scripts": "src/*.js",
-    "targets": [
-      "node18-linux-x64",
-      "node18-macos-x64",
-      "node18-win-x64"
-    ],
+    "assets": ["node_modules/midi"],
     "outputPath": "dist"
   }
 }
