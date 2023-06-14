@@ -8,13 +8,48 @@ const midiUtils = require('./midi-utils.js');
 const utils = require('./utils.js');
 const { exec } = require('child_process');
 
-let configFile = 'src/config.json';
+let config = {
+  osc: {
+    tcp: {
+      port: 8000,
+    },
+    udp: {
+      port: 8000,
+    },
+    triggers: [
+      {
+        type: 'host',
+        params: {
+          host: '127.0.0.1',
+        },
+        actions: [
+          {
+            type: 'log',
+            enabled: true,
+          },
+          {
+            type: 'osc-forward',
+            params: {
+              host: 'localhost',
+              port: 8001,
+              protocol: 'udp',
+            },
+            enabled: true,
+          },
+        ],
+        enabled: true,
+      },
+    ],
+  },
+  midi: {
+    triggers: [],
+  },
+};
 
 if (process.argv.length === 3) {
-  configFile = process.argv[2];
+  const configFile = process.argv[2];
+  config = JSON.parse(readFileSync(configFile));
 }
-
-const config = JSON.parse(readFileSync(configFile));
 
 const midiOutput = new midi.Output();
 midiOutput.openVirtualPort('oscee Output');
