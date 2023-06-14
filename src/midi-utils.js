@@ -1,3 +1,13 @@
+const midi = require('midi');
+
+const output = new midi.Output();
+output.openVirtualPort('oscee Output');
+
+const input = new midi.Input();
+input.openVirtualPort('oscee Input');
+
+printMIDIDevices();
+
 function parseMIDIMessage(bytes) {
   const parsedMsg = {
     channel: bytes[0] & 0xf,
@@ -52,7 +62,28 @@ function equals(msg, bytes) {
   return true;
 }
 
+/** Helpers */
+function printMIDIDevices() {
+  const outputs = [];
+  const inputs = [];
+
+  for (let i = 0; i < input.getPortCount(); i++) {
+    inputs.push(input.getPortName(i));
+  }
+  console.log('MIDI Inputs');
+  console.log(inputs);
+
+  for (let i = 0; i < output.getPortCount(); i++) {
+    outputs.push(output.getPortName(i));
+  }
+  console.log('MIDI Outputs');
+  console.log(outputs);
+}
+
 module.exports = {
   parseMIDIMessage,
   equals,
+  printMIDIDevices,
+  input,
+  output,
 };

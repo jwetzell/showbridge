@@ -1,72 +1,24 @@
 const udp = require('dgram');
-const { readFileSync } = require('fs');
 const _ = require('lodash');
-const midi = require('midi');
 const net = require('net');
 const osc = require('osc-min');
 const { exec } = require('child_process');
-
 const midiUtils = require('./midi-utils.js');
 const printUtils = require('./print-utils.js');
-
-let config = {
-  osc: {
-    tcp: {
-      port: 8000,
-    },
-    udp: {
-      port: 8000,
-    },
-    triggers: [
-      {
-        type: 'host',
-        params: {
-          host: '127.0.0.1',
-        },
-        actions: [
-          {
-            type: 'log',
-            enabled: true,
-          },
-          {
-            type: 'osc-forward',
-            params: {
-              host: 'localhost',
-              port: 8001,
-              protocol: 'udp',
-            },
-            enabled: true,
-          },
-        ],
-        enabled: true,
-      },
-    ],
-  },
-  midi: {
-    triggers: [],
-  },
-};
+const config = require('./config.js');
 
 if (process.argv.length === 3) {
   const configFile = process.argv[2];
-  config = JSON.parse(readFileSync(configFile));
+  config.load(configFile);
 }
-
-const midiOutput = new midi.Output();
-midiOutput.openVirtualPort('oscee Output');
-
-const midiInput = new midi.Input();
-midiInput.openVirtualPort('oscee Input');
-
-printMIDIDevices();
 
 //TODO(jwetzell): make sure these are actually defined
 console.log('OSC Trigger Summary');
-printUtils.printTriggers(config.osc.triggers);
+printUtils.printTriggers(config.get().osc.triggers);
 
 //TODO(jwetzell): make sure these are actually defined
 console.log('MIDI Trigger Summary');
-printUtils.printTriggers(config.midi.triggers);
+printUtils.printTriggers(config.get().midi.triggers);
 
 /** TCP SERVER */
 const tcpServer = net.createServer();
@@ -91,14 +43,14 @@ tcpServer.on('connection', (conn) => {
   }
 });
 
-tcpServer.listen(config.osc.tcp.port, () => {
+tcpServer.listen(config.get().osc.tcp.port, () => {
   console.log(`tcp server listening on port ${tcpServer.address().port}`);
 });
 
 /** UDP SERVER */
 const udpServer = udp.createSocket('udp4');
 
-udpServer.bind(config.osc.udp.port, () => {
+udpServer.bind(config.get().osc.udp.port, () => {
   console.log(`udp server listening on port ${udpServer.address().port}`);
   udpServer.on('message', (msg, rinfo) => {
     const oscMsg = osc.fromBuffer(msg);
@@ -112,18 +64,18 @@ udpServer.bind(config.osc.udp.port, () => {
     try {
       processMessage(oscMsg, 'osc');
     } catch (error) {
-      console.error('PROBLEM PROCESSING MESSAGE');
+      console.error('PROBLEM PROCESSING OSC MESSAGE');
       console.error(error);
     }
   });
 });
 
-midiInput.on('message', (deltaTime, msg) => {
+midiUtils.input.on('message', (deltaTime, msg) => {
   const parsedMIDI = midiUtils.parseMIDIMessage(msg);
   try {
     processMessage(parsedMIDI, 'midi');
   } catch (error) {
-    console.error('PROBLEM PROCESSING MESSAGE');
+    console.error('PROBLEM PROCESSING MIDI MESSAGE');
     console.error(error);
   }
 });
@@ -305,9 +257,9 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'midi-output':
       try {
-        midiOutput.openPort(action.params.port);
-        midiOutput.sendMessage(action.params.data);
-        midiOutput.closePort(action.params.port);
+        midiUtils.output.openPort(action.params.port);
+        midiUtils.output.sendMessage(action.params.data);
+        midiUtils.output.closePort(action.params.port);
       } catch (error) {
         console.log('error outputting midi');
         console.log(error);
@@ -339,22 +291,4 @@ function doAction(action, msg, messageType, trigger) {
     default:
       console.log(`unhandled action type = ${action.type}`);
   }
-}
-
-/** Helpers */
-function printMIDIDevices() {
-  const outputs = [];
-  const inputs = [];
-
-  for (let i = 0; i < midiInput.getPortCount(); i++) {
-    inputs.push(midiInput.getPortName(i));
-  }
-  console.log('MIDI Inputs');
-  printUtils.printMIDIInputs(inputs);
-
-  for (let i = 0; i < midiOutput.getPortCount(); i++) {
-    outputs.push(midiOutput.getPortName(i));
-  }
-  console.log('MIDI Outputs');
-  printUtils.printMIDIOutputs(outputs);
 }
