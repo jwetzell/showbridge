@@ -1,19 +1,20 @@
 const udp = require('dgram');
-const { readFile } = require('fs');
+const { readFileSync } = require('fs');
 const _ = require('lodash');
 const midi = require('midi');
 const net = require('net');
 const osc = require('osc-min');
 const midiUtils = require('./midi-utils.js');
-// const utils = require('./utils.js');
+const utils = require('./utils.js');
 const { exec } = require('child_process');
-// let configFile = 'src/config';
 
-// if (process.argv.length === 3) {
-//   configFile = process.argv[2];
-// }
+let configFile = 'src/config.json';
 
-const config = require('./config');
+if (process.argv.length === 3) {
+  configFile = process.argv[2];
+}
+
+const config = JSON.parse(readFileSync(configFile));
 
 const midiOutput = new midi.Output();
 midiOutput.openVirtualPort('oscee Output');
@@ -25,11 +26,11 @@ printMIDIDevices();
 
 //TODO(jwetzell): make sure these are actually defined
 console.log('OSC Trigger Summary');
-// utils.printTriggers(config.osc.triggers);
+utils.printTriggers(config.osc.triggers);
 
 //TODO(jwetzell): make sure these are actually defined
 console.log('MIDI Trigger Summary');
-// utils.printTriggers(config.midi.triggers);
+utils.printTriggers(config.midi.triggers);
 
 /** TCP SERVER */
 const tcpServer = net.createServer();
@@ -278,7 +279,7 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'log':
       console.log(`log action triggered from trigger ${trigger.type}`);
-      // utils.printMessage(msg, messageType);
+      utils.printMessage(msg, messageType);
       break;
     case 'shell':
       let command = '';
@@ -313,11 +314,11 @@ function printMIDIDevices() {
     inputs.push(midiInput.getPortName(i));
   }
   console.log('MIDI Inputs');
-  // utils.printMIDIInputs(inputs);
+  utils.printMIDIInputs(inputs);
 
   for (let i = 0; i < midiOutput.getPortCount(); i++) {
     outputs.push(midiOutput.getPortName(i));
   }
   console.log('MIDI Outputs');
-  // utils.printMIDIOutputs(outputs);
+  utils.printMIDIOutputs(outputs);
 }

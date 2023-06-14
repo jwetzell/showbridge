@@ -1,0 +1,37 @@
+{
+  "osc": {
+    "tcp": {
+      "port": 8000
+    },
+    "udp": {
+      "port": 8000
+    },
+    "triggers": [
+      {
+        "type": "host",
+        "params": {
+          "host": "127.0.0.1"
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          },
+          {
+            "type": "osc-forward",
+            "params": {
+              "host": "localhost",
+              "port": 8001,
+              "protocol": "udp"
+            },
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "midi": {
+    "triggers": []
+  }
+}
