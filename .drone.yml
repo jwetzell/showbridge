@@ -11,7 +11,7 @@ steps:
   image: plugins/gitea-release
   settings:
     api_key: 
-        from_secret: GITEA_API_KEY
+        from_secret: API_KEY
     base_url:
-        from_secret: GITEA_URL
+        from_secret: URL
     files: dist/*
