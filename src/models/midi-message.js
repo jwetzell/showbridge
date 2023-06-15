@@ -49,5 +49,9 @@ class MidiMessage {
     }
     return true;
   }
+
+  toString() {
+    return `status: ${this.status} ch: ${this.channel} data: ${this.bytes.slice(1).join(' ')}`;
+  }
 }
 module.exports = MidiMessage;

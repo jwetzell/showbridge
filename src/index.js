@@ -5,10 +5,12 @@ const _ = require('lodash');
 const { exec } = require('child_process');
 const { readFileSync } = require('fs');
 const MidiMessage = require('./models/midi-message');
+const OscMessage = require('./models/osc-message');
 const Config = require('./models/config');
 const midi = require('./midi.js');
 
-let config;
+let config = {};
+
 //if there is an argument load it as the config
 if (process.argv.length === 3) {
   const configFile = process.argv[2];
@@ -33,14 +35,12 @@ tcpServer.on('connection', (conn) => {
 
   function onConnData(msg) {
     try {
-      const oscMsg = osc.fromBuffer(msg, true);
-      console.log(oscMsg);
-      oscMsg.sender = {
+      const oscMsg = new OscMessage(osc.fromBuffer(msg, true), {
         protocol: 'tcp',
         address: conn.remoteAddress,
         port: conn.remotePort,
-      };
-      oscMsg.args = oscMsg.args.map((arg) => arg.value);
+      });
+      console.log(oscMsg);
       processMessage(oscMsg, 'osc');
     } catch (error) {
       console.error('PROBLEM PROCESSING MESSAGE');
@@ -60,14 +60,12 @@ udpServer.bind(config.osc.udp.port, () => {
   console.log(`udp server listening on port ${udpServer.address().port}`);
   udpServer.on('message', (msg, rinfo) => {
     try {
-      const oscMsg = osc.fromBuffer(msg, true);
-      oscMsg.sender = {
+      const oscMsg = new OscMessage(osc.fromBuffer(msg, true), {
         protocol: 'udp',
         address: rinfo.address,
         port: rinfo.port,
-      };
-
-      oscMsg.args = oscMsg.args.map((arg) => arg.value);
+      });
+      console.log(oscMsg);
       processMessage(oscMsg, 'osc');
     } catch (error) {
       console.error('PROBLEM PROCESSING OSC MESSAGE');
@@ -187,8 +185,8 @@ function doAction(action, msg, messageType, trigger) {
       }
       break;
     case 'log':
-      console.log(`log action triggered from trigger ${trigger.type}`);
-      console.log(msg);
+      console.debug(`log action triggered from trigger ${trigger.type}`);
+      console.log(`${messageType}: ${msg}`);
       break;
     case 'shell':
       let command = '';
