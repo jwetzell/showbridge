@@ -32,15 +32,15 @@ tcpServer.on('connection', (conn) => {
   conn.on('data', onConnData);
 
   function onConnData(msg) {
-    const oscMsg = osc.fromBuffer(msg);
-    console.log(oscMsg);
-    oscMsg.sender = {
-      protocol: 'tcp',
-      address: conn.remoteAddress,
-      port: conn.remotePort,
-    };
-    oscMsg.args = oscMsg.args.map((arg) => arg.value);
     try {
+      const oscMsg = osc.fromBuffer(msg, true);
+      console.log(oscMsg);
+      oscMsg.sender = {
+        protocol: 'tcp',
+        address: conn.remoteAddress,
+        port: conn.remotePort,
+      };
+      oscMsg.args = oscMsg.args.map((arg) => arg.value);
       processMessage(oscMsg, 'osc');
     } catch (error) {
       console.error('PROBLEM PROCESSING MESSAGE');
@@ -59,15 +59,15 @@ const udpServer = udp.createSocket('udp4');
 udpServer.bind(config.osc.udp.port, () => {
   console.log(`udp server listening on port ${udpServer.address().port}`);
   udpServer.on('message', (msg, rinfo) => {
-    const oscMsg = osc.fromBuffer(msg);
-    oscMsg.sender = {
-      protocol: 'udp',
-      address: rinfo.address,
-      port: rinfo.port,
-    };
-
-    oscMsg.args = oscMsg.args.map((arg) => arg.value);
     try {
+      const oscMsg = osc.fromBuffer(msg, true);
+      oscMsg.sender = {
+        protocol: 'udp',
+        address: rinfo.address,
+        port: rinfo.port,
+      };
+
+      oscMsg.args = oscMsg.args.map((arg) => arg.value);
       processMessage(oscMsg, 'osc');
     } catch (error) {
       console.error('PROBLEM PROCESSING OSC MESSAGE');
