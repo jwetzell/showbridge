@@ -3,7 +3,7 @@ type: docker
 name: build and deploy
 steps:
 - name: build
-  image: node:18.16.0-alpine
+  image: node:18.16.0
   commands:
   - npm ci
   - npm run package
