@@ -8,10 +8,6 @@ platform:
   arch: amd64
 
 steps:
-  - name: package
+  - name: test
     commands:
-      - nvm install
-      - nvm use
-      - npm ci
-      - npm package
-      - ls dist
+      - ip addr
