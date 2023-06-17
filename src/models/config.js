@@ -1,13 +1,12 @@
 const Ajv = require('ajv');
 const Trigger = require('./trigger');
-
-const validate = new Ajv().compile(require('../schema/config.schema.json'));
+const schema = require('../schema/config.schema.json');
+const validate = new Ajv().compile(schema);
 
 class Config {
   constructor(configObj) {
     if (!validate(configObj)) {
-      console.error(validate.errors);
-      throw new Error('Invalid Config');
+      throw validate.errors;
     }
     this.osc = configObj.osc;
     this.midi = configObj.midi;
@@ -16,6 +15,10 @@ class Config {
     // setup triggers as actual Trigger objects
     this.osc.triggers = this.osc.triggers.map((trigger) => new Trigger(trigger));
     this.midi.triggers = this.midi.triggers.map((trigger) => new Trigger(trigger));
+  }
+
+  getSchema() {
+    return schema;
   }
 }
 

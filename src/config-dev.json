@@ -12,52 +12,23 @@
       {
         "type": "regex",
         "params": {
-          "patterns": ["^/test.*$"],
+          "patterns": ["^.*$"],
           "properties": ["address"]
         },
         "actions": [
           {
-            "type": "osc-forward",
+            "type": "osc-output",
             "params": {
+              "_address": "${msg.address}/${Math.floor(( msg.args[0] - 0 ) * ( 100 - 0 ) / ( 10 - 0 ) + 0)}",
+              "_args": ["${msg.args[0]}"],
               "host": "localhost",
-              "port": 8001,
+              "port": 8008,
               "protocol": "udp"
             },
             "enabled": true
           },
           {
-            "type": "osc-output",
-            "params": {
-              "host": "localhost",
-              "port": 8001,
-              "protocol": "udp",
-              "_address": "/proxied${msg.address}",
-              "_args": ["${msg.sender.address}:${msg.sender.port}", "${msg.args.join(',')}"]
-            },
-            "enabled": true
-          },
-          {
             "type": "log",
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
-        "type": "host",
-        "params": {
-          "host": "127.0.0.1"
-        },
-        "actions": [
-          {
-            "type": "log",
-            "enabled": true
-          },
-          {
-            "type": "shell",
-            "params": {
-              "_command": "echo ${msg.args[0]}"
-            },
             "enabled": true
           }
         ],
@@ -66,56 +37,6 @@
     ]
   },
   "midi": {
-    "triggers": [
-      {
-        "type": "midi-bytes-equals",
-        "params": {
-          "data": [144, 60, 100]
-        },
-        "actions": [
-          {
-            "type": "log",
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
-        "type": "midi-note-on",
-        "params": {},
-        "actions": [
-          {
-            "type": "osc-output",
-            "params": {
-              "protocol": "udp",
-              "host": "127.0.0.1",
-              "port": 8001,
-              "_address": "/test/${msg.note}",
-              "args": [1]
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
-        "type": "midi-note-off",
-        "params": {},
-        "actions": [
-          {
-            "type": "osc-output",
-            "params": {
-              "protocol": "udp",
-              "host": "127.0.0.1",
-              "port": 8001,
-              "_address": "/test/${msg.note}",
-              "args": [0]
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      }
-    ]
+    "triggers": []
   }
 }

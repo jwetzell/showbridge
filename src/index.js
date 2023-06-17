@@ -231,3 +231,32 @@ function doAction(action, msg, messageType, trigger) {
       logger.error(`unhandled action type = ${action.type}`);
   }
 }
+
+// API Server
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.post('/config', (req, res, next) => {
+  console.log(req.body);
+  try {
+    const configToUpdate = new Config(req.body);
+    config = configToUpdate;
+    logger.info('Config successfully updated.');
+    res.status(200).send({ msg: 'ok' });
+  } catch (error) {
+    res.status(400).send({ msg: 'invalid config', errors: error });
+  }
+});
+
+app.get('/config', (req, res) => {
+  res.send(config);
+});
+
+app.get('/config/schema', (req, res) => {
+  res.send(config.getSchema());
+});
+
+app.listen(3000, () => {
+  logger.debug(`api listening on port ${port}`);
+});
