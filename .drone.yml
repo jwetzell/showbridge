@@ -8,6 +8,10 @@ platform:
   arch: amd64
 
 steps:
-  - name: test
+  - name: package
     commands:
-      - echo hello world
+      - nvm install
+      - nvm use
+      - npm ci
+      - npm package
+      - ls dist
