@@ -72,7 +72,7 @@
     "ActionLog": {
       "$schema": "http://json-schema.org/draft-07/schema",
       "title": "Log Action",
-      "description": "something that gets done as a result of trigger firing",
+      "description": "This action logs out the incoming message",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
@@ -84,7 +84,7 @@
     },
     "ActionMidiOutput": {
       "title": "Midi Output Action",
-      "description": "something that gets done as a result of trigger firing",
+      "description": "This action will output MIDI using raw MIDI data byte array",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
@@ -92,7 +92,7 @@
           "const": "midi-output"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
+          "description": "MIDI output action params",
           "type": "object",
           "properties": {
             "port": {
@@ -119,7 +119,7 @@
     },
     "ActionOscForward": {
       "title": "OSC Forward Action",
-      "description": "something that gets done as a result of trigger firing",
+      "description": "This action will forward the incoming OSC to the configured address:port",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
@@ -127,7 +127,7 @@
           "const": "osc-forward"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
+          "description": "OSC forward action params",
           "type": "object",
           "properties": {
             "host": {
@@ -152,7 +152,7 @@
     },
     "ActionOscOutput": {
       "title": "OSC Output Action",
-      "description": "something that gets done as a result of trigger firing",
+      "description": "This action will send an OSC message to the configure address:port with the configured address and args",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
@@ -160,7 +160,7 @@
           "const": "osc-output"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
+          "description": "OSC output action params",
           "type": "object",
           "properties": {
             "host": {
@@ -201,7 +201,7 @@
     },
     "ActionShell": {
       "title": "Shell Command Action",
-      "description": "something that gets done as a result of trigger firing",
+      "description": "This command will execute the configure shell command on the system that is running oscee",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
@@ -209,7 +209,7 @@
           "const": "shell"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
+          "description": "Shell action params",
           "type": "object",
           "properties": {
             "_command": {
@@ -265,7 +265,7 @@
     },
     "TriggerHost": {
       "title": "Host Trigger",
-      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "description": "This trigger will match messages by the host that sent them",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
       "properties": {
@@ -273,7 +273,7 @@
           "const": "host"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
+          "description": "Host trigger params",
           "type": "object",
           "properties": {
             "host": {
@@ -288,7 +288,7 @@
     },
     "TriggerMidiBytesEqual": {
       "title": "Midi Bytes Equals Trigger",
-      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "description": "This trigger will match the incoming MIDI bytes to the one configured",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
       "properties": {
@@ -296,7 +296,7 @@
           "const": "midi-bytes-equals"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
+          "description": "MIDI bytes eqauls trigger params",
           "type": "object",
           "properties": {
             "data": {
@@ -316,7 +316,7 @@
     },
     "TriggerMidiNoteOff": {
       "title": "Midi Note Off Trigger",
-      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "description": "The trigger will match the incoming MIDI note off events",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
       "properties": {
@@ -324,7 +324,7 @@
           "const": "midi-note-off"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
+          "description": "MIDI note off trigger params",
           "type": "object",
           "properties": {
             "note": {
@@ -347,7 +347,7 @@
     },
     "TriggerMidiNoteOn": {
       "title": "Midi Note On Trigger",
-      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "description": "The trigger will match the incoming MIDI note on events",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
       "properties": {
@@ -355,7 +355,7 @@
           "const": "midi-note-on"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
+          "description": "MIDI note on trigger params",
           "type": "object",
           "properties": {
             "note": {
@@ -378,7 +378,7 @@
     },
     "TriggerRegex": {
       "title": "Regex Trigger",
-      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+      "description": "This trigger will match the incoming message properties to the regex patterns",
       "type": "object",
       "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
       "properties": {
@@ -386,7 +386,7 @@
           "const": "regex"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
+          "description": "Regex trigger params",
           "type": "object",
           "properties": {
             "patterns": {
