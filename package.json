@@ -31,7 +31,8 @@
   "pkg": {
     "scripts": "src/*.js",
     "assets": [
-      "node_modules/midi"
+      "node_modules/midi",
+      "node_modules/thread-stream"
     ]
   }
 }
