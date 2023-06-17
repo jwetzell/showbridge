@@ -1,0 +1,13 @@
+---
+kind: pipeline
+type: exec
+name: package
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: test
+    commands:
+      - echo hello world
