@@ -9,7 +9,7 @@
     "check-config": "ajv -s src/schema/config.schema.json -d src/config-dev.json",
     "dev": "nodemon src/index.js src/config-dev.json",
     "prepackage": "rimraf dist",
-    "package": "pkg . -t host -o \"dist/${npm_package_name}.$(echo ${npm_config_user_agent} | awk '{print $3}').v${npm_package_version}\""
+    "package": "node package.js"
   },
   "author": "",
   "license": "ISC",
