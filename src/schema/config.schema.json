@@ -5,6 +5,11 @@
   "description": "oscee config file schema",
   "type": "object",
   "properties": {
+    "logLevel": {
+      "description": "pino log level (https://getpino.io/#/docs/api?id=logger-level)",
+      "type": "number",
+      "enum": [10, 20, 30, 40, 50, 60]
+    },
     "osc": {
       "description": "object representing the OSC configuration of oscee",
       "type": "object",

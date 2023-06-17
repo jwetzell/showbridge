@@ -4,10 +4,17 @@ const osc = require('osc-min');
 const _ = require('lodash');
 const { exec } = require('child_process');
 const { readFileSync } = require('fs');
+const pino = require('pino');
 const MidiMessage = require('./models/midi-message');
 const OscMessage = require('./models/osc-message');
 const Config = require('./models/config');
 const midi = require('./midi.js');
+
+const logger = pino({
+  transport: {
+    target: 'pino-pretty',
+  },
+});
 
 let config = {};
 
@@ -22,11 +29,37 @@ if (process.argv.length === 3) {
   config = new Config(defaultConfig);
 }
 
-console.log('OSC Trigger Summary');
-console.log(config.osc.triggers);
+if (!!config.logLevel) {
+  logger.level = config.logLevel;
+} else {
+  logger.level = 10;
+}
 
-console.log('MIDI Trigger Summary');
-console.log(config.midi.triggers);
+printMIDIDevices();
+
+/** Helpers */
+function printMIDIDevices() {
+  const inputs = [];
+
+  for (let i = 0; i < midi.input.getPortCount(); i++) {
+    inputs.push(midi.input.getPortName(i));
+  }
+  logger.debug('MIDI Inputs');
+  logger.debug(inputs);
+
+  const outputs = [];
+  for (let i = 0; i < midi.output.getPortCount(); i++) {
+    outputs.push(midi.output.getPortName(i));
+  }
+  logger.debug('MIDI Outputs');
+  logger.debug(outputs);
+}
+
+logger.debug('OSC Trigger Summary');
+logger.debug(config.osc.triggers);
+
+logger.debug('MIDI Trigger Summary');
+logger.debug(config.midi.triggers);
 
 /** TCP SERVER */
 const tcpServer = net.createServer();
@@ -40,24 +73,23 @@ tcpServer.on('connection', (conn) => {
         address: conn.remoteAddress,
         port: conn.remotePort,
       });
-      console.log(oscMsg);
       processMessage(oscMsg, 'osc');
     } catch (error) {
-      console.error('PROBLEM PROCESSING MESSAGE');
-      console.error(error);
+      logger.error('PROBLEM PROCESSING MESSAGE');
+      logger.error(error);
     }
   }
 });
 
 tcpServer.listen(config.osc.tcp.port, () => {
-  console.log(`tcp server listening on port ${tcpServer.address().port}`);
+  logger.info(`tcp server listening on port ${tcpServer.address().port}`);
 });
 
 /** UDP SERVER */
 const udpServer = udp.createSocket('udp4');
 
 udpServer.bind(config.osc.udp.port, () => {
-  console.log(`udp server listening on port ${udpServer.address().port}`);
+  logger.info(`udp server listening on port ${udpServer.address().port}`);
   udpServer.on('message', (msg, rinfo) => {
     try {
       const oscMsg = new OscMessage(osc.fromBuffer(msg, true), {
@@ -65,11 +97,10 @@ udpServer.bind(config.osc.udp.port, () => {
         address: rinfo.address,
         port: rinfo.port,
       });
-      console.log(oscMsg);
       processMessage(oscMsg, 'osc');
     } catch (error) {
-      console.error('PROBLEM PROCESSING OSC MESSAGE');
-      console.error(error);
+      logger.error('PROBLEM PROCESSING OSC MESSAGE');
+      logger.error(error);
     }
   });
 });
@@ -79,40 +110,29 @@ midi.input.on('message', (deltaTime, msg) => {
     const parsedMIDI = new MidiMessage(msg);
     processMessage(parsedMIDI, 'midi');
   } catch (error) {
-    console.error('PROBLEM PROCESSING MIDI MESSAGE');
-    console.error(error);
+    logger.error('PROBLEM PROCESSING MIDI MESSAGE');
+    logger.error(error);
   }
 });
 
 /** Message Processing */
 
 function processMessage(msg, messageType) {
-  //TODO(jwetzell): undefined checks
-  switch (messageType) {
-    case 'osc':
-      console.log(`osc message received from ${msg.sender.address}:${msg.sender.port} via ${msg.sender.protocol}`);
-      break;
-    case 'midi':
-      console.log('midi message received');
-      break;
-    default:
-      console.log(`unhandled message type = ${messageType}`);
-  }
   const triggers = config[messageType].triggers;
   for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
     const trigger = triggers[triggerIndex];
     if (trigger.shouldFire(msg, messageType)) {
-      console.log(`trigger ${triggerIndex}:${trigger.type} fired`);
+      logger.debug(`trigger ${triggerIndex}:${trigger.type} fired`);
       trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
     } else {
-      console.log(`trigger ${triggerIndex}:${trigger.type} not fired`);
+      logger.debug(`trigger ${triggerIndex}:${trigger.type} not fired`);
     }
   }
 }
 
 function doAction(action, msg, messageType, trigger) {
   if (!action.enabled) {
-    console.log(`action: ${action.type} is disabled skipping...`);
+    logger.debug(`action: ${action.type} is disabled skipping...`);
     return;
   }
 
@@ -124,12 +144,12 @@ function doAction(action, msg, messageType, trigger) {
             const outBuff = osc.toBuffer(msg);
             udpServer.send(outBuff, action.params.port, action.params.host);
           } else {
-            console.error('what does osc-forward do if there was no input osc to forward?');
+            logger.error('what does osc-forward do if there was no input osc to forward?');
           }
         }
       } catch (error) {
-        console.log('error outputting osc');
-        console.log(error);
+        logger.error('error outputting osc');
+        logger.error(error);
       }
       break;
     case 'osc-output':
@@ -141,7 +161,7 @@ function doAction(action, msg, messageType, trigger) {
         } else if (!!action.params.address) {
           address = action.params.address;
         } else {
-          console.error('either address or _address property need to be set for osc-output action');
+          logger.error('either address or _address property need to be set for osc-output action');
           return;
         }
 
@@ -170,8 +190,8 @@ function doAction(action, msg, messageType, trigger) {
           udpServer.send(outBuff, action.params.port, action.params.host);
         }
       } catch (error) {
-        console.log('error outputting osc');
-        console.log(error);
+        logger.error('error outputting osc');
+        logger.error(error);
       }
       break;
     case 'midi-output':
@@ -180,13 +200,13 @@ function doAction(action, msg, messageType, trigger) {
         midi.output.sendMessage(action.params.data);
         midi.output.closePort(action.params.port);
       } catch (error) {
-        console.log('error outputting midi');
-        console.log(error);
+        logger.error('error outputting midi');
+        logger.error(error);
       }
       break;
     case 'log':
-      console.debug(`log action triggered from trigger ${trigger.type}`);
-      console.log(`${messageType}: ${msg}`);
+      logger.info(`log action triggered from trigger ${trigger.type}`);
+      logger.info(`${messageType}: ${msg}`);
       break;
     case 'shell':
       let command = '';
@@ -197,17 +217,17 @@ function doAction(action, msg, messageType, trigger) {
         } else if (!!action.params.command) {
           command = action.params.command;
         } else {
-          console.error('shell action with no command configured');
+          logger.error('shell action with no command configured');
         }
         if (command !== '') {
           exec(command);
         }
       } catch (error) {
-        console.error('problem executing shell action');
-        console.error(error);
+        logger.error('problem executing shell action');
+        logger.error(error);
       }
       break;
     default:
-      console.log(`unhandled action type = ${action.type}`);
+      logger.error(`unhandled action type = ${action.type}`);
   }
 }
