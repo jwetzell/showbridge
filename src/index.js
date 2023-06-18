@@ -4,11 +4,20 @@ const osc = require('osc-min');
 const _ = require('lodash');
 const { exec } = require('child_process');
 const { readFileSync } = require('fs');
+const path = require('path');
 const pino = require('pino');
 const MidiMessage = require('./models/midi-message');
 const OscMessage = require('./models/osc-message');
 const Config = require('./models/config');
 const midi = require('./midi.js');
+
+let servers = {
+  http: undefined,
+  osc: {
+    udp: undefined,
+    tcp: undefined,
+  },
+};
 
 const logger = pino({
   transport: {
@@ -62,48 +71,61 @@ logger.debug('MIDI Trigger Summary');
 logger.debug(config.midi.triggers);
 
 /** TCP SERVER */
-const tcpServer = net.createServer();
-tcpServer.on('connection', (conn) => {
-  conn.on('data', onConnData);
 
-  function onConnData(msg) {
-    try {
-      const oscMsg = new OscMessage(osc.fromBuffer(msg, true), {
-        protocol: 'tcp',
-        address: conn.remoteAddress,
-        port: conn.remotePort,
-      });
-      processMessage(oscMsg, 'osc');
-    } catch (error) {
-      logger.error('PROBLEM PROCESSING MESSAGE');
-      logger.error(error);
-    }
+reloadTcp();
+function reloadTcp() {
+  if (servers.osc.tcp) {
+    servers.osc.tcp.close();
   }
-});
+  servers.osc.tcp = net.createServer();
+  servers.osc.tcp.on('connection', (conn) => {
+    conn.on('data', onConnData);
 
-tcpServer.listen(config.osc.tcp.port, () => {
-  logger.info(`tcp server listening on port ${tcpServer.address().port}`);
-});
-
-/** UDP SERVER */
-const udpServer = udp.createSocket('udp4');
-
-udpServer.bind(config.osc.udp.port, () => {
-  logger.info(`udp server listening on port ${udpServer.address().port}`);
-  udpServer.on('message', (msg, rinfo) => {
-    try {
-      const oscMsg = new OscMessage(osc.fromBuffer(msg, true), {
-        protocol: 'udp',
-        address: rinfo.address,
-        port: rinfo.port,
-      });
-      processMessage(oscMsg, 'osc');
-    } catch (error) {
-      logger.error('PROBLEM PROCESSING OSC MESSAGE');
-      logger.error(error);
+    function onConnData(msg) {
+      try {
+        const oscMsg = new OscMessage(osc.fromBuffer(msg, true), {
+          protocol: 'tcp',
+          address: conn.remoteAddress,
+          port: conn.remotePort,
+        });
+        processMessage(oscMsg, 'osc');
+      } catch (error) {
+        logger.error('PROBLEM PROCESSING MESSAGE');
+        logger.error(error);
+      }
     }
   });
-});
+
+  servers.osc.tcp.listen(config.osc.tcp.port, () => {
+    logger.info(`tcp server setup on port ${servers.osc.tcp.address().port}`);
+  });
+}
+
+/** UDP SERVER */
+reloadUdp();
+
+function reloadUdp() {
+  if (servers.osc.udp) {
+    servers.osc.udp.close();
+  }
+  servers.osc.udp = udp.createSocket('udp4');
+  servers.osc.udp.bind(config.osc.udp.port, () => {
+    logger.info(`udp server setup on port ${servers.osc.udp.address().port}`);
+    servers.osc.udp.on('message', (msg, rinfo) => {
+      try {
+        const oscMsg = new OscMessage(osc.fromBuffer(msg, true), {
+          protocol: 'udp',
+          address: rinfo.address,
+          port: rinfo.port,
+        });
+        processMessage(oscMsg, 'osc');
+      } catch (error) {
+        logger.error('PROBLEM PROCESSING OSC MESSAGE');
+        logger.error(error);
+      }
+    });
+  });
+}
 
 midi.input.on('message', (deltaTime, msg) => {
   try {
@@ -142,7 +164,7 @@ function doAction(action, msg, messageType, trigger) {
         if (action.params.protocol === 'udp') {
           if (messageType === 'osc') {
             const outBuff = osc.toBuffer(msg);
-            udpServer.send(outBuff, action.params.port, action.params.host);
+            servers.osc.udp.send(outBuff, action.params.port, action.params.host);
           } else {
             logger.error('what does osc-forward do if there was no input osc to forward?');
           }
@@ -187,7 +209,7 @@ function doAction(action, msg, messageType, trigger) {
 
         //TODO(jwetzell): add TCP support
         if (action.params.protocol === 'udp') {
-          udpServer.send(outBuff, action.params.port, action.params.host);
+          servers.osc.udp.send(outBuff, action.params.port, action.params.host);
         }
       } catch (error) {
         logger.error('error outputting osc');
@@ -236,16 +258,25 @@ function doAction(action, msg, messageType, trigger) {
 const express = require('express');
 const app = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.post('/config', (req, res, next) => {
-  console.log(req.body);
   try {
     const configToUpdate = new Config(req.body);
     config = configToUpdate;
+    //TODO(jwetzell): detect errors reloading sockets
+    reloadUdp();
+    reloadTcp();
+    reloadHttp();
     logger.info('Config successfully updated.');
     res.status(200).send({ msg: 'ok' });
   } catch (error) {
-    res.status(400).send({ msg: 'invalid config', errors: error });
+    logger.error(error);
+    res.status(400).send({
+      msg: 'invalid config',
+      errorType: 'config_validation',
+      errors: error,
+    });
   }
 });
 
@@ -256,7 +287,12 @@ app.get('/config', (req, res) => {
 app.get('/config/schema', (req, res) => {
   res.send(config.getSchema());
 });
-
-app.listen(3000, () => {
-  logger.debug(`api listening on port ${port}`);
-});
+reloadHttp();
+function reloadHttp() {
+  if (servers.http) {
+    servers.http.close();
+  }
+  servers.http = app.listen(config.http.port, () => {
+    logger.info(`web interface listening on port ${config.http.port}`);
+  });
+}
