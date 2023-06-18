@@ -8,6 +8,7 @@ class Config {
     if (!validate(configObj)) {
       throw validate.errors;
     }
+    this.http = configObj.http;
     this.osc = configObj.osc;
     this.midi = configObj.midi;
     this.logLevel = configObj.logLevel;
