@@ -1,8 +1,9 @@
 {
   "$schema": "./schema/config.schema.json",
-  "logLevel": 10,
+  "logLevel": 30,
   "http": {
-    "port": 3000
+    "port": 3000,
+    "triggers": []
   },
   "osc": {
     "tcp": {
@@ -25,7 +26,7 @@
               "_address": "${msg.address}/${Math.floor(( msg.args[0] - 0 ) * ( 100 - 0 ) / ( 10 - 0 ) + 0)}",
               "_args": ["${msg.args[0]}"],
               "host": "localhost",
-              "port": 8008,
+              "port": 8001,
               "protocol": "udp"
             },
             "enabled": true

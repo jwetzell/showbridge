@@ -17,6 +17,14 @@
         "port": {
           "description": "the http port to listen on",
           "type": "number"
+        },
+        "triggers": {
+          "description": "array of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [{ "$ref": "#/definitions/TriggerHost" }, { "$ref": "#/definitions/TriggerRegex" }]
+          }
         }
       }
     },

@@ -16,6 +16,7 @@ class Config {
     // setup triggers as actual Trigger objects
     this.osc.triggers = this.osc.triggers.map((trigger) => new Trigger(trigger));
     this.midi.triggers = this.midi.triggers.map((trigger) => new Trigger(trigger));
+    this.http.triggers = this.http.triggers.map((trigger) => new Trigger(trigger));
   }
 
   getSchema() {

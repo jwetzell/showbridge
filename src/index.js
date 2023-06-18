@@ -8,6 +8,7 @@ const path = require('path');
 const pino = require('pino');
 const MidiMessage = require('./models/midi-message');
 const OscMessage = require('./models/osc-message');
+const HttpMessage = require('./models/http-message');
 const Config = require('./models/config');
 const midi = require('./midi.js');
 
@@ -63,6 +64,9 @@ function printMIDIDevices() {
   logger.debug('MIDI Outputs');
   logger.debug(outputs);
 }
+
+logger.debug('HTTP Trigger Summary');
+logger.debug(config.http.triggers);
 
 logger.debug('OSC Trigger Summary');
 logger.debug(config.osc.triggers);
@@ -140,14 +144,16 @@ midi.input.on('message', (deltaTime, msg) => {
 /** Message Processing */
 
 function processMessage(msg, messageType) {
-  const triggers = config[messageType].triggers;
-  for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
-    const trigger = triggers[triggerIndex];
-    if (trigger.shouldFire(msg, messageType)) {
-      logger.debug(`trigger ${triggerIndex}:${trigger.type} fired`);
-      trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
-    } else {
-      logger.debug(`trigger ${triggerIndex}:${trigger.type} not fired`);
+  const triggers = config[messageType]?.triggers;
+  if (triggers) {
+    for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
+      const trigger = triggers[triggerIndex];
+      if (trigger.shouldFire(msg, messageType)) {
+        logger.debug(`trigger ${triggerIndex}:${trigger.type} fired`);
+        trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
+      } else {
+        logger.debug(`trigger ${triggerIndex}:${trigger.type} not fired`);
+      }
     }
   }
 }
@@ -287,6 +293,17 @@ app.get('/config', (req, res) => {
 app.get('/config/schema', (req, res) => {
   res.send(config.getSchema());
 });
+
+app.get('/*', (req, res) => {
+  processMessage(new HttpMessage(req), 'http');
+  res.status(200).send({ msg: 'ok' });
+});
+
+app.post('/*', (req, res) => {
+  processMessage(new HttpMessage(req), 'http');
+  res.status(200).send({ msg: 'ok' });
+});
+
 reloadHttp();
 function reloadHttp() {
   if (servers.http) {
