@@ -1,15 +1,15 @@
 ---
 kind: pipeline
-name: generate-docs
+name: generate-schema-docs
 
 steps:
-  - name: generate docs
+  - name: generate schema docs
     image: python:3
     commands:
       - pip install json-schema-for-humans
       - mkdir -p out/docs
       - generate-schema-doc src/schema/config.schema.json out/docs/schema.html
-  - name: deploy
+  - name: deploy schema docs
     image: cschlosser/drone-ftps
     environment:
       FTP_USERNAME:

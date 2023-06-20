@@ -106,7 +106,7 @@
       "required": ["triggers"]
     }
   },
-  "required": ["osc", "midi"],
+  "required": ["http", "ws", "osc", "midi"],
   "definitions": {
     "ActionLog": {
       "$schema": "http://json-schema.org/draft-07/schema",
