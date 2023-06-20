@@ -263,6 +263,12 @@ function doAction(action, msg, messageType, trigger) {
 // API Server
 const express = require('express');
 const app = express();
+const server = require('http').createServer(app);
+const { Server } = require('ws');
+servers.ws = new Server({
+  server: server,
+});
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -304,12 +310,25 @@ app.post('/*', (req, res) => {
   res.status(200).send({ msg: 'ok' });
 });
 
+servers.ws.on('connection', (ws) => {
+  ws.on('message', (msgBuffer) => {
+    let msg = msgBuffer.toString();
+    try {
+      logger.debug('trying to parse incoming message as JSON');
+      msg = JSON.parse(msg);
+    } catch (error) {
+      logger.error('JSON parse failed leaving as string');
+    }
+    logger.debug(msg);
+  });
+});
+
 reloadHttp();
 function reloadHttp() {
   if (servers.http) {
     servers.http.close();
   }
-  servers.http = app.listen(config.http.params.port, () => {
+  servers.http = server.listen(config.http.params.port, () => {
     logger.info(`web interface listening on port ${config.http.params.port}`);
   });
 }
