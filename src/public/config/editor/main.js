@@ -14,6 +14,7 @@ document.addEventListener('keydown', (event) => {
 
 //load the current config
 $.get('/config', (data) => {
+  console.log(data);
   editor.set(data);
 });
 
