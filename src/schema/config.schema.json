@@ -15,11 +15,11 @@
       "type": "object",
       "properties": {
         "params": {
-          "description": "config for osc messages",
+          "description": "config for http messages",
           "type": "object",
           "properties": {
             "port": {
-              "description": "tcp port to listen on",
+              "description": "tcp port to listen on (this will be the same port used for websocket connections",
               "type": "number"
             }
           },
@@ -36,6 +36,21 @@
         }
       },
       "required": ["triggers", "params"]
+    },
+    "ws": {
+      "description": "object representing the WebSocket configuration of oscee",
+      "type": "object",
+      "properties": {
+        "triggers": {
+          "description": "array of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [{ "$ref": "#/definitions/TriggerHost" }, { "$ref": "#/definitions/TriggerRegex" }]
+          }
+        }
+      },
+      "required": ["triggers"]
     },
     "osc": {
       "description": "object representing the OSC configuration of oscee",

@@ -6,9 +6,10 @@ const { exec } = require('child_process');
 const { readFileSync } = require('fs');
 const path = require('path');
 const pino = require('pino');
-const MidiMessage = require('./models/midi-message');
-const OscMessage = require('./models/osc-message');
-const HttpMessage = require('./models/http-message');
+const MidiMessage = require('./models/message/midi-message');
+const OscMessage = require('./models/message/osc-message');
+const HttpMessage = require('./models/message/http-message');
+const WebSocketMessage = require('./models/message/websocket-message');
 const Config = require('./models/config');
 const midi = require('./midi.js');
 
@@ -310,16 +311,10 @@ app.post('/*', (req, res) => {
   res.status(200).send({ msg: 'ok' });
 });
 
-servers.ws.on('connection', (ws) => {
+servers.ws.on('connection', (ws, req) => {
   ws.on('message', (msgBuffer) => {
-    let msg = msgBuffer.toString();
-    try {
-      logger.debug('trying to parse incoming message as JSON');
-      msg = JSON.parse(msg);
-    } catch (error) {
-      logger.error('JSON parse failed leaving as string');
-    }
-    logger.debug(msg);
+    const msg = new WebSocketMessage(msgBuffer, req.connection);
+    processMessage(msg, 'ws');
   });
 });
 
