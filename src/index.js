@@ -319,7 +319,7 @@ servers.ws = new Server({
 });
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, './public')));
 
 app.post('/config', (req, res, next) => {
   try {
