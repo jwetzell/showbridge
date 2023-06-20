@@ -1,0 +1,12 @@
+---
+kind: pipeline
+name: generate-docs
+
+steps:
+  - name: generate docs
+    image: python:3
+    commands:
+      - pip install json-schema-for-humans
+      - mkdir out
+      - generate-schema-doc src/schema/config.schema.json out/schema.html
+      - cat out/schema.html
