@@ -11,6 +11,7 @@
       "enum": [10, 20, 30, 40, 50, 60]
     },
     "http": {
+      "title": "HTTP configuration",
       "description": "object representing the HTTP configuration of oscee",
       "type": "object",
       "properties": {
@@ -23,7 +24,6 @@
               "type": "number"
             }
           },
-          "additionalProperties": false,
           "required": ["port"]
         },
         "triggers": {
@@ -38,6 +38,7 @@
       "required": ["triggers", "params"]
     },
     "ws": {
+      "title": "WebSocket configuration",
       "description": "object representing the WebSocket configuration of oscee",
       "type": "object",
       "properties": {
@@ -53,6 +54,7 @@
       "required": ["triggers"]
     },
     "osc": {
+      "title": "OSC configuration",
       "description": "object representing the OSC configuration of oscee",
       "type": "object",
       "properties": {
@@ -69,7 +71,6 @@
               "type": "number"
             }
           },
-          "additionalProperties": false,
           "required": ["tcpPort", "udpPort"]
         },
         "triggers": {
@@ -84,6 +85,7 @@
       "required": ["triggers", "params"]
     },
     "midi": {
+      "title": "MIDI configuration",
       "description": "object representing the MIDI configuration of oscee",
       "type": "object",
       "properties": {
@@ -106,45 +108,26 @@
   },
   "required": ["osc", "midi"],
   "definitions": {
-    "ActionBase": {
-      "title": "Action",
-      "description": "something that gets done as a result of trigger firing",
+    "ActionLog": {
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "title": "Log Action",
+      "description": "This action logs out the incoming message",
       "type": "object",
       "properties": {
         "type": {
-          "description": "the type of action",
-          "type": "string"
-        },
-        "params": {
-          "description": "object containg the action type specific settings",
-          "type": "object"
+          "const": "log"
         },
         "enabled": {
           "description": "this property allows the action to be enabled or disabled",
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled"],
-      "additionalProperties": false
-    },
-    "ActionLog": {
-      "$schema": "http://json-schema.org/draft-07/schema",
-      "title": "Log Action",
-      "description": "This action logs out the incoming message",
-      "type": "object",
-      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
-      "properties": {
-        "type": {
-          "const": "log"
-        },
-        "additionalProperties": false
-      }
+      "required": ["type", "enabled"]
     },
     "ActionMidiOutput": {
       "title": "Midi Output Action",
       "description": "This action will output MIDI using raw MIDI data byte array",
       "type": "object",
-      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
         "type": {
           "const": "midi-output"
@@ -169,17 +152,19 @@
               "maxItems": 3
             }
           },
-          "required": ["port", "data"],
-          "additionalProperties": false
+          "required": ["port", "data"]
+        },
+        "enabled": {
+          "description": "this property allows the action to be enabled or disabled",
+          "type": "boolean"
         }
       },
-      "required": ["params"]
+      "required": ["type", "enabled", "params"]
     },
     "ActionOscForward": {
       "title": "OSC Forward Action",
       "description": "This action will forward the incoming OSC to the configured address:port",
       "type": "object",
-      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
         "type": {
           "const": "osc-forward"
@@ -202,17 +187,19 @@
               "enum": ["udp", "tcp"]
             }
           },
-          "required": ["host", "port", "protocol"],
-          "additionalProperties": false
+          "required": ["host", "port", "protocol"]
+        },
+        "enabled": {
+          "description": "this property allows the action to be enabled or disabled",
+          "type": "boolean"
         }
       },
-      "required": ["params"]
+      "required": ["type", "enabled", "params"]
     },
     "ActionOscOutput": {
       "title": "OSC Output Action",
       "description": "This action will send an OSC message to the configure address:port with the configured address and args",
       "type": "object",
-      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
         "type": {
           "const": "osc-output"
@@ -251,17 +238,19 @@
               "type": "array"
             }
           },
-          "required": ["host", "port", "protocol"],
-          "additionalProperties": false
+          "required": ["host", "port", "protocol"]
+        },
+        "enabled": {
+          "description": "this property allows the action to be enabled or disabled",
+          "type": "boolean"
         }
       },
-      "required": ["params"]
+      "required": ["type", "enabled", "params"]
     },
     "ActionShell": {
       "title": "Shell Command Action",
       "description": "This command will execute the configure shell command on the system that is running oscee",
       "type": "object",
-      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
         "type": {
           "const": "shell"
@@ -278,19 +267,20 @@
               "description": "the shell command to run _command takes priority",
               "type": "string"
             }
-          },
-          "required": [],
-          "additionalProperties": false
+          }
+        },
+        "enabled": {
+          "description": "this property allows the action to be enabled or disabled",
+          "type": "boolean"
         }
       },
-      "required": ["params"]
+      "required": ["type", "enabled", "params"]
     },
 
     "ActionHTTP": {
       "title": "Http Action",
       "description": "This command will make the configured http call",
       "type": "object",
-      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
       "properties": {
         "type": {
           "const": "http"
@@ -325,25 +315,34 @@
               "type": "string"
             }
           },
-          "required": ["method"],
-          "additionalProperties": false
+          "required": ["method"]
+        },
+        "enabled": {
+          "description": "this property allows the action to be enabled or disabled",
+          "type": "boolean"
         }
       },
-      "required": ["params"]
+      "required": ["type", "enabled", "params"]
     },
 
-    "TriggerBase": {
-      "title": "Trigger",
-      "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
+    "TriggerHost": {
+      "title": "Host Trigger",
+      "description": "This trigger will match messages by the host that sent them",
       "type": "object",
       "properties": {
         "type": {
-          "description": "the type of trigger",
-          "type": "string"
+          "const": "host"
         },
         "params": {
-          "description": "object containg the trigger type specific settings",
-          "type": "object"
+          "description": "Host trigger params",
+          "type": "object",
+          "properties": {
+            "host": {
+              "description": "the hostname or address of the server to match incoming messages against",
+              "type": "string"
+            }
+          },
+          "required": ["host"]
         },
         "actions": {
           "description": "an array of actions to be performed if this trigger is fired",
@@ -365,37 +364,12 @@
           "type": "boolean"
         }
       },
-      "required": ["type", "params", "actions", "enabled"],
-      "additionalProperties": false
-    },
-    "TriggerHost": {
-      "title": "Host Trigger",
-      "description": "This trigger will match messages by the host that sent them",
-      "type": "object",
-      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
-      "properties": {
-        "type": {
-          "const": "host"
-        },
-        "params": {
-          "description": "Host trigger params",
-          "type": "object",
-          "properties": {
-            "host": {
-              "description": "the hostname or address of the server to match incoming messages against",
-              "type": "string"
-            }
-          },
-          "required": ["host"],
-          "additionalProperties": false
-        }
-      }
+      "required": ["type", "enabled", "params"]
     },
     "TriggerMidiBytesEqual": {
       "title": "Midi Bytes Equals Trigger",
       "description": "This trigger will match the incoming MIDI bytes to the one configured",
       "type": "object",
-      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
       "properties": {
         "type": {
           "const": "midi-bytes-equals"
@@ -414,16 +388,33 @@
               "maxItems": 3
             }
           },
-          "required": ["data"],
-          "additionalProperties": false
+          "required": ["data"]
+        },
+        "actions": {
+          "description": "an array of actions to be performed if this trigger is fired",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/ActionLog" },
+              { "$ref": "#/definitions/ActionMidiOutput" },
+              { "$ref": "#/definitions/ActionOscOutput" },
+              { "$ref": "#/definitions/ActionShell" },
+              { "$ref": "#/definitions/ActionHTTP" }
+            ]
+          }
+        },
+        "enabled": {
+          "description": "this property allows the trigger to be enabled or disabled",
+          "type": "boolean"
         }
-      }
+      },
+      "required": ["type", "enabled", "params"]
     },
     "TriggerMidiNoteOff": {
       "title": "Midi Note Off Trigger",
       "description": "The trigger will match the incoming MIDI note off events",
       "type": "object",
-      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
       "properties": {
         "type": {
           "const": "midi-note-off"
@@ -444,17 +435,33 @@
               "minimum": 0,
               "maximum": 127
             }
-          },
-          "required": [],
-          "additionalProperties": false
+          }
+        },
+        "actions": {
+          "description": "an array of actions to be performed if this trigger is fired",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/ActionLog" },
+              { "$ref": "#/definitions/ActionMidiOutput" },
+              { "$ref": "#/definitions/ActionOscOutput" },
+              { "$ref": "#/definitions/ActionShell" },
+              { "$ref": "#/definitions/ActionHTTP" }
+            ]
+          }
+        },
+        "enabled": {
+          "description": "this property allows the trigger to be enabled or disabled",
+          "type": "boolean"
         }
-      }
+      },
+      "required": ["type", "enabled", "params"]
     },
     "TriggerMidiNoteOn": {
       "title": "Midi Note On Trigger",
       "description": "The trigger will match the incoming MIDI note on events",
       "type": "object",
-      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
       "properties": {
         "type": {
           "const": "midi-note-on"
@@ -475,17 +482,33 @@
               "minimum": 0,
               "maximum": 127
             }
-          },
-          "required": [],
-          "additionalProperties": false
+          }
+        },
+        "actions": {
+          "description": "an array of actions to be performed if this trigger is fired",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/ActionLog" },
+              { "$ref": "#/definitions/ActionMidiOutput" },
+              { "$ref": "#/definitions/ActionOscOutput" },
+              { "$ref": "#/definitions/ActionShell" },
+              { "$ref": "#/definitions/ActionHTTP" }
+            ]
+          }
+        },
+        "enabled": {
+          "description": "this property allows the trigger to be enabled or disabled",
+          "type": "boolean"
         }
-      }
+      },
+      "required": ["type", "enabled", "params"]
     },
     "TriggerRegex": {
       "title": "Regex Trigger",
       "description": "This trigger will match the incoming message properties to the regex patterns",
       "type": "object",
-      "allOf": [{ "$ref": "#/definitions/TriggerBase" }],
       "properties": {
         "type": {
           "const": "regex"
@@ -509,10 +532,29 @@
               }
             }
           },
-          "required": ["patterns", "properties"],
-          "additionalProperties": false
+          "required": ["patterns", "properties"]
+        },
+        "actions": {
+          "description": "an array of actions to be performed if this trigger is fired",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/ActionLog" },
+              { "$ref": "#/definitions/ActionMidiOutput" },
+              { "$ref": "#/definitions/ActionOscForward" },
+              { "$ref": "#/definitions/ActionOscOutput" },
+              { "$ref": "#/definitions/ActionShell" },
+              { "$ref": "#/definitions/ActionHTTP" }
+            ]
+          }
+        },
+        "enabled": {
+          "description": "this property allows the trigger to be enabled or disabled",
+          "type": "boolean"
         }
-      }
+      },
+      "required": ["type", "enabled", "params"]
     }
   }
 }
