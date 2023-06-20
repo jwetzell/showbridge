@@ -8,15 +8,13 @@ class Config {
     if (!validate(configObj)) {
       throw validate.errors;
     }
-    this.http = configObj.http;
-    this.osc = configObj.osc;
-    this.midi = configObj.midi;
+    const messageTypes = ['http', 'ws', 'osc', 'midi'];
+    messageTypes.forEach((messageType) => {
+      this[messageType] = configObj[messageType];
+      this[messageType].triggers = this[messageType].triggers.map((trigger) => new Trigger(trigger));
+    });
+
     this.logLevel = configObj.logLevel;
-    //TODO(jwetzell): is there a better way to load this
-    // setup triggers as actual Trigger objects
-    this.osc.triggers = this.osc.triggers.map((trigger) => new Trigger(trigger));
-    this.midi.triggers = this.midi.triggers.map((trigger) => new Trigger(trigger));
-    this.http.triggers = this.http.triggers.map((trigger) => new Trigger(trigger));
   }
 
   getSchema() {
