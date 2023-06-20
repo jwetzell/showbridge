@@ -14,9 +14,17 @@
       "description": "object representing the HTTP configuration of oscee",
       "type": "object",
       "properties": {
-        "port": {
-          "description": "the http port to listen on",
-          "type": "number"
+        "params": {
+          "description": "config for osc messages",
+          "type": "object",
+          "properties": {
+            "port": {
+              "description": "tcp port to listen on",
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "required": ["port"]
         },
         "triggers": {
           "description": "array of triggers",
@@ -26,12 +34,29 @@
             "oneOf": [{ "$ref": "#/definitions/TriggerHost" }, { "$ref": "#/definitions/TriggerRegex" }]
           }
         }
-      }
+      },
+      "required": ["triggers", "params"]
     },
     "osc": {
       "description": "object representing the OSC configuration of oscee",
       "type": "object",
       "properties": {
+        "params": {
+          "description": "config for osc messages",
+          "type": "object",
+          "properties": {
+            "tcpPort": {
+              "description": "tcp port to listen on",
+              "type": "number"
+            },
+            "udpPort": {
+              "description": "tcp port to listen on",
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "required": ["tcpPort", "udpPort"]
+        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",
@@ -41,7 +66,7 @@
           }
         }
       },
-      "required": ["triggers"]
+      "required": ["triggers", "params"]
     },
     "midi": {
       "description": "object representing the MIDI configuration of oscee",

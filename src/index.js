@@ -100,7 +100,7 @@ function reloadTcp() {
     }
   });
 
-  servers.osc.tcp.listen(config.osc.tcp.port, () => {
+  servers.osc.tcp.listen(config.osc.params.tcpPort, () => {
     logger.info(`tcp server setup on port ${servers.osc.tcp.address().port}`);
   });
 }
@@ -113,7 +113,7 @@ function reloadUdp() {
     servers.osc.udp.close();
   }
   servers.osc.udp = udp.createSocket('udp4');
-  servers.osc.udp.bind(config.osc.udp.port, () => {
+  servers.osc.udp.bind(config.osc.params.udpPort, () => {
     logger.info(`udp server setup on port ${servers.osc.udp.address().port}`);
     servers.osc.udp.on('message', (msg, rinfo) => {
       try {
@@ -309,7 +309,7 @@ function reloadHttp() {
   if (servers.http) {
     servers.http.close();
   }
-  servers.http = app.listen(config.http.port, () => {
-    logger.info(`web interface listening on port ${config.http.port}`);
+  servers.http = app.listen(config.http.params.port, () => {
+    logger.info(`web interface listening on port ${config.http.params.port}`);
   });
 }

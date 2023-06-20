@@ -2,15 +2,15 @@
   "$schema": "./schema/config.schema.json",
   "logLevel": 30,
   "http": {
-    "port": 3000,
+    "params": {
+      "port": 3000
+    },
     "triggers": []
   },
   "osc": {
-    "tcp": {
-      "port": 8000
-    },
-    "udp": {
-      "port": 8000
+    "params": {
+      "tcpPort": 8000,
+      "udpPort": 8000
     },
     "triggers": [
       {
