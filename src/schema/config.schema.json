@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "Config",
-  "title": "Config",
-  "description": "oscee config file schema",
+  "title": "Config File Schema",
+  "description": "oscee config JSON layout",
   "type": "object",
   "properties": {
     "logLevel": {
@@ -12,15 +12,13 @@
     },
     "http": {
       "title": "HTTP configuration",
-      "description": "object representing the HTTP configuration of oscee",
       "type": "object",
       "properties": {
         "params": {
-          "description": "config for http messages",
           "type": "object",
           "properties": {
             "port": {
-              "description": "tcp port to listen on (this will be the same port used for websocket connections",
+              "description": "TCP port to listen on (this will be the same port used for websocket connections",
               "type": "number"
             }
           },
@@ -31,7 +29,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "oneOf": [{ "$ref": "#/definitions/TriggerHost" }, { "$ref": "#/definitions/TriggerRegex" }]
+            "oneOf": [{ "$ref": "#/definitions/TriggerSender" }, { "$ref": "#/definitions/TriggerRegex" }]
           }
         }
       },
@@ -39,7 +37,6 @@
     },
     "ws": {
       "title": "WebSocket configuration",
-      "description": "object representing the WebSocket configuration of oscee",
       "type": "object",
       "properties": {
         "triggers": {
@@ -47,7 +44,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "oneOf": [{ "$ref": "#/definitions/TriggerHost" }, { "$ref": "#/definitions/TriggerRegex" }]
+            "oneOf": [{ "$ref": "#/definitions/TriggerSender" }, { "$ref": "#/definitions/TriggerRegex" }]
           }
         }
       },
@@ -55,19 +52,17 @@
     },
     "osc": {
       "title": "OSC configuration",
-      "description": "object representing the OSC configuration of oscee",
       "type": "object",
       "properties": {
         "params": {
-          "description": "config for osc messages",
           "type": "object",
           "properties": {
             "tcpPort": {
-              "description": "tcp port to listen on",
+              "description": "TCP port to listen on",
               "type": "number"
             },
             "udpPort": {
-              "description": "tcp port to listen on",
+              "description": "UDP port to listen on",
               "type": "number"
             }
           },
@@ -78,7 +73,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "oneOf": [{ "$ref": "#/definitions/TriggerHost" }, { "$ref": "#/definitions/TriggerRegex" }]
+            "oneOf": [{ "$ref": "#/definitions/TriggerSender" }, { "$ref": "#/definitions/TriggerRegex" }]
           }
         }
       },
@@ -86,7 +81,6 @@
     },
     "midi": {
       "title": "MIDI configuration",
-      "description": "object representing the MIDI configuration of oscee",
       "type": "object",
       "properties": {
         "triggers": {
@@ -118,7 +112,7 @@
           "const": "log"
         },
         "enabled": {
-          "description": "this property allows the action to be enabled or disabled",
+          "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
@@ -137,11 +131,11 @@
           "type": "object",
           "properties": {
             "port": {
-              "description": "the midi port number to output the message on",
+              "description": "MIDI port number to output the message on see oscee output on launch for port numbers",
               "type": "number"
             },
             "data": {
-              "description": "midi data to be sent as an array of 3 bytes",
+              "description": "MIDI data to be sent as an array of 3 bytes",
               "type": "array",
               "items": {
                 "type": "integer",
@@ -155,7 +149,7 @@
           "required": ["port", "data"]
         },
         "enabled": {
-          "description": "this property allows the action to be enabled or disabled",
+          "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
@@ -174,15 +168,15 @@
           "type": "object",
           "properties": {
             "host": {
-              "description": "the hostname or address of the server to forward OSC to",
+              "description": "Hostname or address of the server to forward OSC to",
               "type": "string"
             },
             "port": {
-              "description": "the port to forward OSC to",
+              "description": "Port to forward OSC to",
               "type": "integer"
             },
             "protocol": {
-              "description": "the protocol to use when forwarding OSC",
+              "description": "Protocol to use when forwarding OSC",
               "type": "string",
               "enum": ["udp", "tcp"]
             }
@@ -190,7 +184,7 @@
           "required": ["host", "port", "protocol"]
         },
         "enabled": {
-          "description": "this property allows the action to be enabled or disabled",
+          "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
@@ -209,39 +203,39 @@
           "type": "object",
           "properties": {
             "host": {
-              "description": "the hostname or address of the server to send OSC to",
+              "description": "Hostname or address of the server to send OSC to",
               "type": "string"
             },
             "port": {
-              "description": "the port to send OSC to",
+              "description": "Port to send OSC to",
               "type": "integer"
             },
             "protocol": {
-              "description": "the protocol to use when sending OSC",
+              "description": "Protocol to use when sending OSC",
               "type": "string",
-              "enum": ["udp", "tcp"]
+              "enum": ["udp"]
             },
             "_address": {
-              "description": "JS template of the OSC address has access to the msg object to subsitute in properties of the message that triggered this action",
+              "description": "JS template of the OSC address. Will have access to the msg object to subsitute in properties of the message that triggered this action",
               "type": "string"
             },
             "_args": {
-              "description": "array of args, strings will be ran through the templating engine same as the _address param",
+              "description": "Array of args. Strings will be ran through the templating engine same as the _address param",
               "type": "array"
             },
             "address": {
-              "description": "hardcoded OSC address _address has priority",
+              "description": "Hardcoded OSC address. _address has priority",
               "type": "string"
             },
             "args": {
-              "description": "hardcoded array of OSC args",
+              "description": "Hardcoded array of OSC args",
               "type": "array"
             }
           },
           "required": ["host", "port", "protocol"]
         },
         "enabled": {
-          "description": "this property allows the action to be enabled or disabled",
+          "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
@@ -249,7 +243,7 @@
     },
     "ActionShell": {
       "title": "Shell Command Action",
-      "description": "This command will execute the configure shell command on the system that is running oscee",
+      "description": "This action will execute the configured shell command on the system that is running oscee",
       "type": "object",
       "properties": {
         "type": {
@@ -260,17 +254,17 @@
           "type": "object",
           "properties": {
             "_command": {
-              "description": "JS literal template of the shell command will have access to the properties of the incoming message that triggered this action",
+              "description": "JS literal template of the shell command. Will have access to the properties of the incoming message that triggered this action",
               "type": "string"
             },
             "command": {
-              "description": "the shell command to run _command takes priority",
+              "description": "Shell command to run _command takes priority",
               "type": "string"
             }
           }
         },
         "enabled": {
-          "description": "this property allows the action to be enabled or disabled",
+          "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
@@ -278,7 +272,7 @@
     },
 
     "ActionHTTP": {
-      "title": "Http Action",
+      "title": "HTTP Action",
       "description": "This command will make the configured http call",
       "type": "object",
       "properties": {
@@ -295,19 +289,19 @@
               "enum": ["get", "post", "put", "delete", "patch", "GET", "POST", "PUT", "DELETE", "PATCH"]
             },
             "_url": {
-              "description": "JS literal template of the url will have access to the properties of the incoming message that triggered this action",
+              "description": "JS literal template of the url. Will have access to the properties of the incoming message that triggered this action",
               "type": "string"
             },
             "url": {
-              "description": "the url to call",
+              "description": "Url to call",
               "type": "string"
             },
             "_body": {
-              "description": "JS literal template of the body will have access to the properties of the incoming message that triggered this action",
+              "description": "JS literal template of the body. Will have access to the properties of the incoming message that triggered this action",
               "type": "string"
             },
             "body": {
-              "description": "the body to include with the request",
+              "description": "Body to include with the request",
               "type": "string"
             },
             "contentType": {
@@ -318,34 +312,34 @@
           "required": ["method"]
         },
         "enabled": {
-          "description": "this property allows the action to be enabled or disabled",
+          "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
       "required": ["type", "enabled", "params"]
     },
 
-    "TriggerHost": {
-      "title": "Host Trigger",
-      "description": "This trigger will match messages by the host that sent them",
+    "TriggerSender": {
+      "title": "Sender Trigger",
+      "description": "This trigger will match messages by sender",
       "type": "object",
       "properties": {
         "type": {
-          "const": "host"
+          "const": "sender"
         },
         "params": {
           "description": "Host trigger params",
           "type": "object",
           "properties": {
-            "host": {
-              "description": "the hostname or address of the server to match incoming messages against",
+            "address": {
+              "description": "Address of the server to match incoming messages against",
               "type": "string"
             }
           },
-          "required": ["host"]
+          "required": ["address"]
         },
         "actions": {
-          "description": "an array of actions to be performed if this trigger is fired",
+          "description": "Actions to be performed if this trigger is fired",
           "type": "array",
           "items": {
             "type": "object",
@@ -360,7 +354,7 @@
           }
         },
         "enabled": {
-          "description": "this property allows the trigger to be enabled or disabled",
+          "description": "Whether this trigger is enabled",
           "type": "boolean"
         }
       },
@@ -368,7 +362,7 @@
     },
     "TriggerMidiBytesEqual": {
       "title": "Midi Bytes Equals Trigger",
-      "description": "This trigger will match the incoming MIDI bytes to the one configured",
+      "description": "This trigger will match incoming MIDI messages bytes to the ones set in params property",
       "type": "object",
       "properties": {
         "type": {
@@ -379,7 +373,7 @@
           "type": "object",
           "properties": {
             "data": {
-              "description": "an array of 3 bytes that will be matched to the incoming message",
+              "description": "Array of 3 bytes that will be matched to the incoming message",
               "type": "array",
               "items": {
                 "type": "integer"
@@ -391,7 +385,7 @@
           "required": ["data"]
         },
         "actions": {
-          "description": "an array of actions to be performed if this trigger is fired",
+          "description": "Actions to be performed if this trigger is fired",
           "type": "array",
           "items": {
             "type": "object",
@@ -405,7 +399,7 @@
           }
         },
         "enabled": {
-          "description": "this property allows the trigger to be enabled or disabled",
+          "description": "Whether this trigger is enabled",
           "type": "boolean"
         }
       },
@@ -413,7 +407,7 @@
     },
     "TriggerMidiNoteOff": {
       "title": "Midi Note Off Trigger",
-      "description": "The trigger will match the incoming MIDI note off events",
+      "description": "The trigger will match incoming MIDI note off events",
       "type": "object",
       "properties": {
         "type": {
@@ -424,13 +418,13 @@
           "type": "object",
           "properties": {
             "note": {
-              "description": "the note value to match against incoming the messages",
+              "description": "Note value to match against incoming the messages",
               "type": "integer",
               "minimum": 0,
               "maximum": 127
             },
             "velocity": {
-              "description": "the velocity value to match against the incoming message",
+              "description": "Velocity value to match against the incoming message",
               "type": "integer",
               "minimum": 0,
               "maximum": 127
@@ -438,7 +432,7 @@
           }
         },
         "actions": {
-          "description": "an array of actions to be performed if this trigger is fired",
+          "description": "Actions to be performed if this trigger is fired",
           "type": "array",
           "items": {
             "type": "object",
@@ -452,7 +446,7 @@
           }
         },
         "enabled": {
-          "description": "this property allows the trigger to be enabled or disabled",
+          "description": "Whether this trigger is enabled",
           "type": "boolean"
         }
       },
@@ -460,7 +454,7 @@
     },
     "TriggerMidiNoteOn": {
       "title": "Midi Note On Trigger",
-      "description": "The trigger will match the incoming MIDI note on events",
+      "description": "The trigger will match incoming MIDI note on events",
       "type": "object",
       "properties": {
         "type": {
@@ -471,13 +465,13 @@
           "type": "object",
           "properties": {
             "note": {
-              "description": "the note value to match against incoming the messages",
+              "description": "note value to match against incoming the messages",
               "type": "integer",
               "minimum": 0,
               "maximum": 127
             },
             "velocity": {
-              "description": "the velocity value to match against the incoming message",
+              "description": "velocity value to match against the incoming message",
               "type": "integer",
               "minimum": 0,
               "maximum": 127
@@ -485,7 +479,7 @@
           }
         },
         "actions": {
-          "description": "an array of actions to be performed if this trigger is fired",
+          "description": "Actions to be performed if this trigger is fired",
           "type": "array",
           "items": {
             "type": "object",
@@ -499,7 +493,7 @@
           }
         },
         "enabled": {
-          "description": "this property allows the trigger to be enabled or disabled",
+          "description": "Whether this trigger is enabled",
           "type": "boolean"
         }
       },
@@ -535,7 +529,7 @@
           "required": ["patterns", "properties"]
         },
         "actions": {
-          "description": "an array of actions to be performed if this trigger is fired",
+          "description": "Array of actions to be performed if this trigger is fired",
           "type": "array",
           "items": {
             "type": "object",
@@ -550,7 +544,7 @@
           }
         },
         "enabled": {
-          "description": "this property allows the trigger to be enabled or disabled",
+          "description": "Whether this trigger is enabled",
           "type": "boolean"
         }
       },

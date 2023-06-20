@@ -45,10 +45,10 @@ class Trigger {
           }
         }
         break;
-      case 'host':
+      case 'sender':
         if (!!msg.sender) {
-          const host = this.params.host;
-          if (msg.sender.address === this.params.host && this.actions) {
+          const address = this.params.address;
+          if (msg.sender.address === this.params.address) {
             fire = true;
           }
         } else {
