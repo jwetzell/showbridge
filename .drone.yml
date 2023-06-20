@@ -7,8 +7,8 @@ steps:
     image: python:3
     commands:
       - pip install json-schema-for-humans
-      - mkdir -p out/docs
-      - generate-schema-doc --config link_to_reused_ref=false src/schema/config.schema.json out/docs/schema.html
+      - mkdir -p html/docs/schema
+      - generate-schema-doc --config link_to_reused_ref=false src/schema/config.schema.json html/docs/schema/index.html
   - name: deploy schema docs
     image: cschlosser/drone-ftps
     environment:
@@ -17,8 +17,8 @@ steps:
       FTP_PASSWORD:
         from_secret: ftp_password
       PLUGIN_HOSTNAME: ftp.jwetzell.com:21
-      PLUGIN_SRC_DIR: /out/docs
-      PLUGIN_DEST_DIR: /docs
+      PLUGIN_SRC_DIR: /html/docs/schema
+      PLUGIN_DEST_DIR: /docs/schema
       PLUGIN_SECURE: true
       PLUGIN_VERIFY: false
       PLUGIN_CLEAN_DIR: true

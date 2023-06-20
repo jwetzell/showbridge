@@ -102,6 +102,22 @@
   },
   "required": ["http", "ws", "osc", "midi"],
   "definitions": {
+    "ActionList": {
+      "description": "Actions to be performed if this trigger is fired",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          { "$ref": "#/definitions/ActionLog" },
+          { "$ref": "#/definitions/ActionMidiOutput" },
+          { "$ref": "#/definitions/ActionOscForward" },
+          { "$ref": "#/definitions/ActionOscOutput" },
+          { "$ref": "#/definitions/ActionShell" },
+          { "$ref": "#/definitions/ActionHTTP" }
+        ]
+      }
+    },
+
     "ActionLog": {
       "$schema": "http://json-schema.org/draft-07/schema",
       "title": "Log Action",
@@ -339,19 +355,7 @@
           "required": ["address"]
         },
         "actions": {
-          "description": "Actions to be performed if this trigger is fired",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/ActionLog" },
-              { "$ref": "#/definitions/ActionMidiOutput" },
-              { "$ref": "#/definitions/ActionOscForward" },
-              { "$ref": "#/definitions/ActionOscOutput" },
-              { "$ref": "#/definitions/ActionShell" },
-              { "$ref": "#/definitions/ActionHTTP" }
-            ]
-          }
+          "$ref": "#/definitions/ActionList"
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -385,18 +389,7 @@
           "required": ["data"]
         },
         "actions": {
-          "description": "Actions to be performed if this trigger is fired",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/ActionLog" },
-              { "$ref": "#/definitions/ActionMidiOutput" },
-              { "$ref": "#/definitions/ActionOscOutput" },
-              { "$ref": "#/definitions/ActionShell" },
-              { "$ref": "#/definitions/ActionHTTP" }
-            ]
-          }
+          "$ref": "#/definitions/ActionList"
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -432,18 +425,7 @@
           }
         },
         "actions": {
-          "description": "Actions to be performed if this trigger is fired",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/ActionLog" },
-              { "$ref": "#/definitions/ActionMidiOutput" },
-              { "$ref": "#/definitions/ActionOscOutput" },
-              { "$ref": "#/definitions/ActionShell" },
-              { "$ref": "#/definitions/ActionHTTP" }
-            ]
-          }
+          "$ref": "#/definitions/ActionList"
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -479,18 +461,7 @@
           }
         },
         "actions": {
-          "description": "Actions to be performed if this trigger is fired",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/ActionLog" },
-              { "$ref": "#/definitions/ActionMidiOutput" },
-              { "$ref": "#/definitions/ActionOscOutput" },
-              { "$ref": "#/definitions/ActionShell" },
-              { "$ref": "#/definitions/ActionHTTP" }
-            ]
-          }
+          "$ref": "#/definitions/ActionList"
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -529,19 +500,7 @@
           "required": ["patterns", "properties"]
         },
         "actions": {
-          "description": "Array of actions to be performed if this trigger is fired",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/ActionLog" },
-              { "$ref": "#/definitions/ActionMidiOutput" },
-              { "$ref": "#/definitions/ActionOscForward" },
-              { "$ref": "#/definitions/ActionOscOutput" },
-              { "$ref": "#/definitions/ActionShell" },
-              { "$ref": "#/definitions/ActionHTTP" }
-            ]
-          }
+          "$ref": "#/definitions/ActionList"
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
