@@ -8,7 +8,8 @@ steps:
     commands:
       - pip install json-schema-for-humans
       - mkdir -p out/docs
-      - generate-schema-doc src/schema/config.schema.json out/docs/schema.html
+      - generate-schema-doc --config link_to_reused_ref=false src/schema/config.schema.json out/docs/schema.html
+      - generate-schema-doc --config template_name=md src/schema/config.schema.json out/docs/schema.md
   - name: deploy schema docs
     image: cschlosser/drone-ftps
     environment:
