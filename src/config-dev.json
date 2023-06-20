@@ -1,11 +1,21 @@
 {
   "$schema": "./schema/config.schema.json",
-  "logLevel": 30,
+  "logLevel": 10,
   "http": {
     "params": {
       "port": 3000
     },
-    "triggers": []
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": ["^/midi/note_on$"],
+          "properties": ["originalUrl"]
+        },
+        "actions": [{ "type": "log", "enabled": true }],
+        "enabled": true
+      }
+    ]
   },
   "ws": {
     "triggers": []
@@ -44,6 +54,31 @@
     ]
   },
   "midi": {
-    "triggers": []
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": ["note_on"],
+          "properties": ["status"]
+        },
+        "enabled": true,
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          },
+          {
+            "type": "http",
+            "params": {
+              "method": "POST",
+              "_url": "http://localhost:3000/midi/${msg.status}",
+              "_body": "{\"note\":${msg.note}}",
+              "contentType": "json"
+            },
+            "enabled": true
+          }
+        ]
+      }
+    ]
   }
 }

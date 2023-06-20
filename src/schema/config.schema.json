@@ -286,6 +286,52 @@
       "required": ["params"]
     },
 
+    "ActionHTTP": {
+      "title": "Http Action",
+      "description": "This command will make the configured http call",
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/ActionBase" }],
+      "properties": {
+        "type": {
+          "const": "http"
+        },
+        "params": {
+          "description": "HTTP action params",
+          "type": "object",
+          "properties": {
+            "method": {
+              "description": "The HTTP method to use i.e GET, POST, PUT",
+              "type": "string",
+              "enum": ["get", "post", "put", "delete", "patch", "GET", "POST", "PUT", "DELETE", "PATCH"]
+            },
+            "_url": {
+              "description": "JS literal template of the url will have access to the properties of the incoming message that triggered this action",
+              "type": "string"
+            },
+            "url": {
+              "description": "the url to call",
+              "type": "string"
+            },
+            "_body": {
+              "description": "JS literal template of the body will have access to the properties of the incoming message that triggered this action",
+              "type": "string"
+            },
+            "body": {
+              "description": "the body to include with the request",
+              "type": "string"
+            },
+            "contentType": {
+              "description": "Content-Type header value mainly useful for POST/PUT/PATCH",
+              "type": "string"
+            }
+          },
+          "required": ["method"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["params"]
+    },
+
     "TriggerBase": {
       "title": "Trigger",
       "description": "trigger is an incoming message filter based on the type and the params messages can cause the trigger to fire its associated actions",
@@ -309,7 +355,8 @@
               { "$ref": "#/definitions/ActionMidiOutput" },
               { "$ref": "#/definitions/ActionOscForward" },
               { "$ref": "#/definitions/ActionOscOutput" },
-              { "$ref": "#/definitions/ActionShell" }
+              { "$ref": "#/definitions/ActionShell" },
+              { "$ref": "#/definitions/ActionHTTP" }
             ]
           }
         },

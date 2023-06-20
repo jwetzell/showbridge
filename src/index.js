@@ -12,6 +12,7 @@ const HttpMessage = require('./models/message/http-message');
 const WebSocketMessage = require('./models/message/websocket-message');
 const Config = require('./models/config');
 const midi = require('./midi.js');
+const superagent = require('superagent');
 
 let servers = {
   http: undefined,
@@ -164,6 +165,7 @@ function doAction(action, msg, messageType, trigger) {
     logger.debug(`action: ${action.type} is disabled skipping...`);
     return;
   }
+  logger.debug(`${action.type} action triggered from trigger ${trigger.type}`);
 
   switch (action.type) {
     case 'osc-forward':
@@ -217,6 +219,8 @@ function doAction(action, msg, messageType, trigger) {
         //TODO(jwetzell): add TCP support
         if (action.params.protocol === 'udp') {
           servers.osc.udp.send(outBuff, action.params.port, action.params.host);
+        } else {
+          logger.error(`unhandled osc output protocol = ${action.params.protocol}`);
         }
       } catch (error) {
         logger.error('error outputting osc');
@@ -234,7 +238,6 @@ function doAction(action, msg, messageType, trigger) {
       }
       break;
     case 'log':
-      logger.info(`log action triggered from trigger ${trigger.type}`);
       logger.info(`${messageType}: ${msg}`);
       break;
     case 'shell':
@@ -253,6 +256,51 @@ function doAction(action, msg, messageType, trigger) {
         }
       } catch (error) {
         logger.error('problem executing shell action');
+        logger.error(error);
+      }
+      break;
+    case 'http':
+      //TODO(jwetzell): add other http things like query parameters although they can just be included in the url field
+      let url = '';
+      let body = '';
+
+      try {
+        if (!!action.params._url) {
+          url = _.template(action.params._url)({ msg });
+        } else if (!!action.params.url) {
+          url = action.params.url;
+        } else {
+          logger.error('http action with no url configured');
+        }
+
+        if (!!action.params._body) {
+          body = _.template(action.params._body)({ msg });
+        } else if (!!action.params.body) {
+          body = action.params.body;
+        }
+
+        if (url !== '') {
+          const request = superagent(action.params.method, url);
+          if (action.params.contentType) {
+            request.type(action.params.contentType);
+          }
+
+          if (body !== '') {
+            request.send(body);
+          }
+
+          request.end((err, res) => {
+            if (!!err) {
+              logger.error(err);
+            } else {
+              logger.debug(`${action.params.method} request made to ${url}`);
+            }
+          });
+        } else {
+          logger.error('url is empty');
+        }
+      } catch (error) {
+        logger.error('problem executing http action');
         logger.error(error);
       }
       break;
