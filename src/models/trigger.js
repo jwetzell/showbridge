@@ -24,6 +24,7 @@ class Trigger {
         if (!!this.params) {
           if (!!this.params.patterns && !!this.params.properties) {
             if (this.params.patterns.length === this.params.properties.length) {
+              fire = true;
               for (let i = 0; i < this.params.patterns.length; i++) {
                 const pattern = this.params.patterns[i];
                 const property = this.params.properties[i];
@@ -33,14 +34,14 @@ class Trigger {
                 if (!matchPropertyValue) {
                   console.error('regex is configured to look at a property that does not exist on this message.');
                   fire = false;
+                  break;
                 }
 
                 if (!regex.test(matchPropertyValue)) {
                   fire = false;
+                  break;
                 }
               }
-              // all properties match all patterns
-              fire = true;
             }
           }
         }
