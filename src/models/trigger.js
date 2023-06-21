@@ -24,6 +24,7 @@ class Trigger {
         if (!!this.params) {
           if (!!this.params.patterns && !!this.params.properties) {
             if (this.params.patterns.length === this.params.properties.length) {
+              // assume the regex will pass
               fire = true;
               for (let i = 0; i < this.params.patterns.length; i++) {
                 const pattern = this.params.patterns[i];
@@ -33,11 +34,13 @@ class Trigger {
                 const matchPropertyValue = _.get(msg, property);
                 if (!matchPropertyValue) {
                   console.error('regex is configured to look at a property that does not exist on this message.');
+                  //bad property config = no fire and since all must match we can stop here
                   fire = false;
                   break;
                 }
 
                 if (!regex.test(matchPropertyValue)) {
+                  //property value doesn't fit regex = no fire and since all must match we can stop here
                   fire = false;
                   break;
                 }
