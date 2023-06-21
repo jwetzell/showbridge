@@ -11,7 +11,8 @@ const OscMessage = require('./models/message/osc-message');
 const HttpMessage = require('./models/message/http-message');
 const WebSocketMessage = require('./models/message/websocket-message');
 const Config = require('./models/config');
-const midi = require('./midi.js');
+const midi = require('midi');
+
 const superagent = require('superagent');
 
 let servers = {
@@ -21,6 +22,15 @@ let servers = {
     tcp: undefined,
   },
 };
+
+let devices = {
+  midi: {
+    input: new midi.Input(),
+    output: new midi.Output(),
+  },
+};
+
+devices.midi.input.openVirtualPort();
 
 const logger = pino({
   transport: {
@@ -53,15 +63,15 @@ printMIDIDevices();
 function printMIDIDevices() {
   const inputs = [];
 
-  for (let i = 0; i < midi.input.getPortCount(); i++) {
-    inputs.push(midi.input.getPortName(i));
+  for (let i = 0; i < devices.midi.input.getPortCount(); i++) {
+    inputs.push(devices.midi.input.getPortName(i));
   }
   logger.debug('MIDI Inputs');
   logger.debug(inputs);
 
   const outputs = [];
-  for (let i = 0; i < midi.output.getPortCount(); i++) {
-    outputs.push(midi.output.getPortName(i));
+  for (let i = 0; i < devices.midi.output.getPortCount(); i++) {
+    outputs.push(devices.midi.output.getPortName(i));
   }
   logger.debug('MIDI Outputs');
   logger.debug(outputs);
@@ -133,7 +143,7 @@ function reloadUdp() {
   });
 }
 
-midi.input.on('message', (deltaTime, msg) => {
+devices.midi.input.on('message', (deltaTime, msg) => {
   try {
     const parsedMIDI = new MidiMessage(msg);
     processMessage(parsedMIDI, 'midi');
@@ -229,9 +239,9 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'midi-output':
       try {
-        midi.output.openPort(action.params.port);
-        midi.output.sendMessage(action.params.data);
-        midi.output.closePort(action.params.port);
+        devices.midi.output.openPort(action.params.port);
+        devices.midi.output.sendMessage(action.params.data);
+        devices.midi.output.closePort(action.params.port);
       } catch (error) {
         logger.error('error outputting midi');
         logger.error(error);
