@@ -30,7 +30,8 @@ let devices = {
   },
 };
 
-devices.midi.input.openVirtualPort();
+devices.midi.input.openVirtualPort('oscee Input');
+devices.midi.output.openVirtualPort('oscee Output');
 
 const logger = pino({
   transport: {
