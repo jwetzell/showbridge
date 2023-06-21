@@ -17,10 +17,6 @@ class HttpMessage {
     }
   }
 
-  getMessage() {
-    return this.msg;
-  }
-
   toString() {
     return `${this.msg.originalUrl}`;
   }

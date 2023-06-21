@@ -16,10 +16,6 @@ class WebSocketMessage {
     }
   }
 
-  getMessage() {
-    return this.msg;
-  }
-
   toString() {
     return `${this.msg}`;
   }
