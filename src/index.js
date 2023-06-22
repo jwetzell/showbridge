@@ -1,9 +1,9 @@
 // communication
-const udp = require('dgram');
-const net = require('net');
-const midi = require('midi');
 const osc = require('osc-min');
 const superagent = require('superagent');
+const UDPServer = require('./servers/udp-server');
+const TCPServer = require('./servers/tcp-server');
+const MIDIServer = require('./servers/midi-server');
 
 // utils
 const path = require('path');
@@ -12,8 +12,6 @@ const { exec } = require('child_process');
 const { readFileSync } = require('fs');
 
 // messages
-const MidiMessage = require('./models/message/midi-message');
-const OscMessage = require('./models/message/osc-message');
 const HttpMessage = require('./models/message/http-message');
 const WebSocketMessage = require('./models/message/websocket-message');
 const Config = require('./models/config');
@@ -28,19 +26,13 @@ const { Server } = require('ws');
 let servers = {
   http: undefined,
   osc: {
-    udp: undefined,
-    tcp: undefined,
+    udp: new UDPServer(),
+    tcp: new TCPServer(),
   },
   ws: new Server({
     server,
   }),
-};
-
-let devices = {
-  midi: {
-    input: undefined,
-    output: undefined,
-  },
+  midi: new MIDIServer(),
 };
 
 let config = {};
@@ -71,88 +63,19 @@ reloadHttp();
 
 /** TCP SERVER */
 function reloadTcp() {
-  if (servers.osc.tcp) {
-    servers.osc.tcp.close();
-  }
-  servers.osc.tcp = net.createServer();
-  servers.osc.tcp.on('connection', (conn) => {
-    conn.on('data', onConnData);
-
-    function onConnData(msg) {
-      try {
-        const oscMsg = new OscMessage(osc.fromBuffer(msg, true), {
-          protocol: 'tcp',
-          address: conn.remoteAddress,
-          port: conn.remotePort,
-        });
-        processMessage(oscMsg, 'osc');
-      } catch (error) {
-        console.error('PROBLEM PROCESSING MESSAGE');
-        console.error(error);
-      }
-    }
-  });
-
-  servers.osc.tcp.listen(config.osc.params.tcpPort, () => {
-    console.info(`tcp server setup on port ${servers.osc.tcp.address().port}`);
-  });
+  servers.osc.tcp.reload(config.osc.params.tcpPort);
+  servers.osc.tcp.eventEmitter.on('message', processMessage);
 }
 
 /** UDP SERVER */
 function reloadUdp() {
-  if (servers.osc.udp) {
-    servers.osc.udp.close();
-  }
-  servers.osc.udp = udp.createSocket('udp4');
-  servers.osc.udp.bind(config.osc.params.udpPort, () => {
-    console.info(`udp server setup on port ${servers.osc.udp.address().port}`);
-    servers.osc.udp.on('message', (msg, rinfo) => {
-      try {
-        const oscMsg = new OscMessage(osc.fromBuffer(msg, true), {
-          protocol: 'udp',
-          address: rinfo.address,
-          port: rinfo.port,
-        });
-        processMessage(oscMsg, 'osc');
-      } catch (error) {
-        console.error('PROBLEM PROCESSING OSC MESSAGE');
-        console.error(error);
-      }
-    });
-  });
+  servers.osc.udp.reload(config.osc.params.udpPort);
+  servers.osc.udp.eventEmitter.on('message', processMessage);
 }
 
 function reloadMidi() {
-  devices.midi.input = new midi.Input();
-  devices.midi.output = new midi.Output();
-
-  devices.midi.input.openVirtualPort('oscee Input');
-  devices.midi.output.openVirtualPort('oscee Output');
-
-  devices.midi.input.on('message', (deltaTime, msg) => {
-    try {
-      const parsedMIDI = new MidiMessage(msg);
-      processMessage(parsedMIDI, 'midi');
-    } catch (error) {
-      console.error('PROBLEM PROCESSING MIDI MESSAGE');
-      console.error(error);
-    }
-  });
-
-  const inputs = [];
-
-  for (let i = 0; i < devices.midi.input.getPortCount(); i++) {
-    inputs.push(devices.midi.input.getPortName(i));
-  }
-  console.debug('MIDI Inputs');
-  console.debug(inputs);
-
-  const outputs = [];
-  for (let i = 0; i < devices.midi.output.getPortCount(); i++) {
-    outputs.push(devices.midi.output.getPortName(i));
-  }
-  console.debug('MIDI Outputs');
-  console.debug(outputs);
+  servers.midi.reload();
+  servers.midi.eventEmitter.on('message', processMessage);
 }
 
 // Express Server
