@@ -8,10 +8,12 @@ class Config {
     if (!validate(configObj)) {
       throw validate.errors;
     }
-    const messageTypes = ['http', 'ws', 'osc', 'midi'];
+    const messageTypes = ['http', 'ws', 'osc', 'midi', 'tcp', 'udp'];
     messageTypes.forEach((messageType) => {
-      this[messageType] = configObj[messageType];
-      this[messageType].triggers = this[messageType].triggers.map((trigger) => new Trigger(trigger));
+      if (configObj[messageType]) {
+        this[messageType] = configObj[messageType];
+        this[messageType].triggers = this[messageType]?.triggers.map((trigger) => new Trigger(trigger));
+      }
     });
   }
 

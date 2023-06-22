@@ -16,15 +16,14 @@ const { readFileSync } = require('fs');
 const Config = require('./models/config');
 
 // express
-const app = require('express')();
+const express = require('express');
+const app = express();
 const server = require('http').createServer(app);
 
 let servers = {
   http: new HTTPServer(server, app),
-  osc: {
-    udp: new UDPServer(),
-    tcp: new TCPServer(),
-  },
+  udp: new UDPServer(),
+  tcp: new TCPServer(),
   ws: new WebSocketServer(server),
   midi: new MIDIServer(),
 };
@@ -41,6 +40,8 @@ if (process.argv.length === 3) {
   config = new Config(defaultConfig);
 }
 
+servers.http.setConfig(config);
+
 console.debug('HTTP Trigger Summary');
 console.debug(config.http.triggers);
 
@@ -53,66 +54,29 @@ console.debug(config.midi.triggers);
 console.debug('MIDI Trigger Summary');
 console.debug(config.midi.triggers);
 
-reloadTCP();
-reloadUDP();
-reloadMIDI();
-reloadHTTP();
-loadWebSocket();
+servers.tcp.on('message', processMessage);
+servers.udp.on('message', processMessage);
+servers.midi.on('message', processMessage);
+servers.ws.on('message', processMessage);
 
-/** TCP SERVER */
-function reloadTCP() {
-  servers.osc.tcp.reload(config.osc.params.tcpPort);
-  servers.osc.tcp.on('message', processMessage);
-}
-
-/** UDP SERVER */
-function reloadUDP() {
-  servers.osc.udp.reload(config.osc.params.udpPort);
-  servers.osc.udp.on('message', processMessage);
-}
-
-function reloadMIDI() {
-  servers.midi.reload();
-  servers.midi.on('message', processMessage);
-}
-
-app.post('/config', (req, res, next) => {
+servers.http.on('message', processMessage);
+servers.http.on('reload', (updatedConfig) => {
   try {
-    const configToUpdate = new Config(req.body);
-    config = configToUpdate;
-    //TODO(jwetzell): detect errors reloading sockets
-    reloadUDP();
-    reloadTCP();
-    reloadHTTP();
-    console.info('Config successfully updated.');
-    res.status(200).send({ msg: 'ok' });
+    config = updatedConfig;
+    reloadServers();
+    console.log('Config updated successfully');
   } catch (error) {
-    console.error(error);
-    res.status(400).send({
-      msg: 'invalid config',
-      errorType: 'config_validation',
-      errors: error,
-    });
+    console.error('Problem applying new config');
   }
 });
 
-app.get('/config', (req, res) => {
-  res.send(config);
-});
+reloadServers();
 
-app.get('/config/schema', (req, res) => {
-  res.send(config.getSchema());
-});
-
-function reloadHTTP() {
-  servers.http.reload(config.http.params.port);
-  servers.http.on('message', processMessage);
-}
-
-function loadWebSocket() {
-  if (servers.ws) {
-    servers.ws.on('message', processMessage);
-  }
+function reloadServers() {
+  servers.tcp.reload(config.tcp.params);
+  servers.udp.reload(config.udp.params);
+  servers.http.reload(config.http.params);
+  servers.midi.reload();
 }
 
 /** Message Processing */
@@ -122,10 +86,7 @@ function processMessage(msg, messageType) {
     for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
       const trigger = triggers[triggerIndex];
       if (trigger.shouldFire(msg, messageType)) {
-        console.debug(`trigger ${triggerIndex}:${trigger.type} fired`);
         trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
-      } else {
-        console.debug(`trigger ${triggerIndex}:${trigger.type} not fired`);
       }
     }
   }
@@ -137,18 +98,25 @@ function doAction(action, msg, messageType, trigger) {
     console.debug(`action: ${action.type} is disabled skipping...`);
     return;
   }
-  console.debug(`${action.type} action triggered from trigger ${trigger.type}`);
-
   switch (action.type) {
-    case 'osc-forward':
+    case 'forward':
       try {
-        if (action.params.protocol === 'udp') {
-          if (messageType === 'osc') {
-            const outBuff = msg.getBuffer();
-            servers.osc.udp.send(outBuff, action.params.port, action.params.host);
+        let msgToForward;
+        if (messageType === 'osc') {
+          msgToForward = msg.getBuffer();
+        } else if (messageType === 'udp' || messageType === 'tcp') {
+          msgToForward = msg.bytes;
+        }
+
+        if (msgToForward) {
+          //TODO(jwetzell): implement TCP
+          if (action.params.protocol === 'udp') {
+            servers.udp.send(msgToForward, action.params.port, action.params.host);
           } else {
-            console.error('what does osc-forward do if there was no input osc to forward?');
+            console.error(`unhandled foward protocol = ${action.params.protocol}`);
           }
+        } else {
+          console.error('this is not a forwardable message type');
         }
       } catch (error) {
         console.error('error outputting osc');
@@ -190,7 +158,7 @@ function doAction(action, msg, messageType, trigger) {
 
         //TODO(jwetzell): add TCP support
         if (action.params.protocol === 'udp') {
-          servers.osc.udp.send(outBuff, action.params.port, action.params.host);
+          servers.udp.send(outBuff, action.params.port, action.params.host);
         } else {
           console.error(`unhandled osc output protocol = ${action.params.protocol}`);
         }
@@ -202,7 +170,7 @@ function doAction(action, msg, messageType, trigger) {
     case 'midi-output':
       try {
         // TODO(jwetzell): see if there is a way to switch ports when outputting
-        servers.midi.output.sendMessage(action.params.data);
+        servers.midi.output.sendMessage(action.params.bytes);
       } catch (error) {
         console.error('error outputting midi');
         console.error(error);

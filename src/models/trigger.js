@@ -59,11 +59,15 @@ class Trigger {
           console.error('host trigger attempted on message type that does not have host information');
         }
         break;
-      case 'midi-bytes-equals':
-        if (messageType === 'midi') {
-          if (msg.equals(this.params.data)) {
+      case 'bytes-equal':
+        if (msg.bytes) {
+          //good we are looking at a message that has bytes
+          const bytesToMatch = Uint8Array.from(this.params.bytes);
+          if (_.isEqual(msg.bytes, bytesToMatch)) {
             fire = true;
           }
+        } else {
+          console.error('bytes equality check attempted on msg that does not have bytes');
         }
         break;
       case 'midi-note-on':

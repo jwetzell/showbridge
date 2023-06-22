@@ -9,13 +9,21 @@
     "triggers": []
   },
   "osc": {
-    "params": {
-      "tcpPort": 8000,
-      "udpPort": 8000
-    },
     "triggers": []
   },
   "midi": {
+    "triggers": []
+  },
+  "udp": {
+    "params": {
+      "port": 8000
+    },
+    "triggers": []
+  },
+  "tcp": {
+    "params": {
+      "port": 8000
+    },
     "triggers": []
   }
 }

@@ -49,30 +49,20 @@
       "title": "OSC configuration",
       "type": "object",
       "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "tcpPort": {
-              "description": "TCP port to listen on",
-              "type": "number"
-            },
-            "udpPort": {
-              "description": "UDP port to listen on",
-              "type": "number"
-            }
-          },
-          "required": ["tcpPort", "udpPort"]
-        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",
           "items": {
             "type": "object",
-            "oneOf": [{ "$ref": "#/definitions/TriggerSender" }, { "$ref": "#/definitions/TriggerRegex" }]
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerBytesEqual" }
+            ]
           }
         }
       },
-      "required": ["triggers", "params"]
+      "required": ["triggers"]
     },
     "midi": {
       "title": "MIDI configuration",
@@ -85,7 +75,7 @@
             "type": "object",
             "oneOf": [
               { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerMIDIBytesEqual" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
               { "$ref": "#/definitions/TriggerMIDINoteOff" },
               { "$ref": "#/definitions/TriggerMIDINoteOn" }
             ]
@@ -93,9 +83,67 @@
         }
       },
       "required": ["triggers"]
+    },
+    "tcp": {
+      "title": "TCP configuration",
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "description": "TCP port to listen on",
+              "type": "number"
+            }
+          },
+          "required": ["port"]
+        },
+        "triggers": {
+          "description": "array of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" }
+            ]
+          }
+        }
+      },
+      "required": ["triggers", "params"]
+    },
+    "udp": {
+      "title": "UDP configuration",
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "description": "UDP port to listen on",
+              "type": "number"
+            }
+          },
+          "required": ["port"]
+        },
+        "triggers": {
+          "description": "array of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" }
+            ]
+          }
+        }
+      },
+      "required": ["triggers", "params"]
     }
   },
-  "required": ["http", "ws", "osc", "midi"],
+  "required": ["http", "ws", "osc", "midi", "tcp", "udp"],
   "definitions": {
     "ActionList": {
       "description": "Actions to be performed if this trigger is fired",
@@ -141,7 +189,7 @@
           "description": "MIDI output action params",
           "type": "object",
           "properties": {
-            "data": {
+            "bytes": {
               "description": "MIDI data to be sent as an array of 3 bytes",
               "type": "array",
               "items": {
@@ -153,7 +201,7 @@
               "maxItems": 3
             }
           },
-          "required": ["data"]
+          "required": ["bytes"]
         },
         "enabled": {
           "description": "Whether this action is enabled",
@@ -163,15 +211,15 @@
       "required": ["type", "enabled", "params"]
     },
     "ActionOscForward": {
-      "title": "OSC Forward Action",
+      "title": "Forward Action",
       "description": "This action will forward the incoming OSC to the configured address:port",
       "type": "object",
       "properties": {
         "type": {
-          "const": "osc-forward"
+          "const": "forward"
         },
         "params": {
-          "description": "OSC forward action params",
+          "description": "forward action params",
           "type": "object",
           "properties": {
             "host": {
@@ -179,11 +227,11 @@
               "type": "string"
             },
             "port": {
-              "description": "Port to forward OSC to",
+              "description": "Port to forward msg to",
               "type": "integer"
             },
             "protocol": {
-              "description": "Protocol to use when forwarding OSC",
+              "description": "Protocol to use when forwarding msg",
               "type": "string",
               "enum": ["udp", "tcp"]
             }
@@ -355,29 +403,29 @@
       },
       "required": ["type", "enabled", "params"]
     },
-    "TriggerMIDIBytesEqual": {
-      "title": "MIDI Bytes Equals Trigger",
-      "description": "This trigger will match incoming MIDI messages bytes to the ones set in params property",
+    "TriggerBytesEqual": {
+      "title": "Bytes Equal Trigger",
+      "description": "This trigger will match incoming messages bytes to the ones set in params property",
       "type": "object",
       "properties": {
         "type": {
-          "const": "midi-bytes-equals"
+          "const": "bytes-equal"
         },
         "params": {
-          "description": "MIDI bytes eqauls trigger params",
+          "description": "bytes equal trigger params",
           "type": "object",
           "properties": {
-            "data": {
+            "bytes": {
               "description": "Array of 3 bytes that will be matched to the incoming message",
               "type": "array",
               "items": {
-                "type": "integer"
-              },
-              "minItems": 1,
-              "maxItems": 3
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 255
+              }
             }
           },
-          "required": ["data"]
+          "required": ["bytes"]
         },
         "actions": {
           "$ref": "#/definitions/ActionList"

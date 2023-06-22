@@ -14,5 +14,9 @@ class OscMessage {
   getBuffer() {
     return osc.toBuffer(this.msg);
   }
+
+  get bytes() {
+    return Uint8Array.from(this.getBuffer());
+  }
 }
 module.exports = OscMessage;

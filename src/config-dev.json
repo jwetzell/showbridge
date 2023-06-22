@@ -20,11 +20,20 @@
     "triggers": []
   },
   "osc": {
-    "params": {
-      "tcpPort": 8000,
-      "udpPort": 8000
-    },
     "triggers": [
+      {
+        "type": "bytes-equal",
+        "params": {
+          "bytes": [47, 116, 101, 115, 116, 49, 0, 0, 44, 0, 0, 0]
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      },
       {
         "type": "regex",
         "params": {
@@ -33,18 +42,7 @@
         },
         "actions": [
           {
-            "type": "osc-output",
-            "params": {
-              "_address": "${msg.address}/${Math.floor(( msg.args[0] - 0 ) * ( 100 - 0 ) / ( 10 - 0 ) + 0)}",
-              "_args": ["${msg.args[0]}"],
-              "host": "localhost",
-              "port": 8001,
-              "protocol": "udp"
-            },
-            "enabled": true
-          },
-          {
-            "type": "osc-forward",
+            "type": "forward",
             "params": {
               "host": "localhost",
               "port": 8001,
@@ -88,11 +86,60 @@
           {
             "type": "midi-output",
             "params": {
-              "data": [144, 60, 100]
+              "bytes": [144, 60, 100]
             },
             "enabled": true
           }
         ]
+      }
+    ]
+  },
+  "tcp": {
+    "params": {
+      "port": 8000
+    },
+    "triggers": [
+      {
+        "type": "sender",
+        "params": {
+          "address": "127.0.0.1"
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "udp": {
+    "params": {
+      "port": 8000
+    },
+    "triggers": [
+      {
+        "type": "sender",
+        "params": {
+          "address": "127.0.0.1"
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          },
+          {
+            "type": "forward",
+            "params": {
+              "host": "127.0.0.1",
+              "port": 8002,
+              "protocol": "udp"
+            },
+            "enabled": true
+          }
+        ],
+        "enabled": true
       }
     ]
   }
