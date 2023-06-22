@@ -35,6 +35,10 @@ class TCPServer {
       console.info(`tcp server setup on port ${this.server.address().port}`);
     });
   }
+
+  on(eventName, listener) {
+    this.eventEmitter.on(eventName, listener);
+  }
 }
 
 module.exports = TCPServer;

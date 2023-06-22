@@ -64,18 +64,18 @@ reloadHttp();
 /** TCP SERVER */
 function reloadTcp() {
   servers.osc.tcp.reload(config.osc.params.tcpPort);
-  servers.osc.tcp.eventEmitter.on('message', processMessage);
+  servers.osc.tcp.on('message', processMessage);
 }
 
 /** UDP SERVER */
 function reloadUdp() {
   servers.osc.udp.reload(config.osc.params.udpPort);
-  servers.osc.udp.eventEmitter.on('message', processMessage);
+  servers.osc.udp.on('message', processMessage);
 }
 
 function reloadMidi() {
   servers.midi.reload();
-  servers.midi.eventEmitter.on('message', processMessage);
+  servers.midi.on('message', processMessage);
 }
 
 // Express Server

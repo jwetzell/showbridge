@@ -36,6 +36,10 @@ class UDPServer {
       this.server.send(msg, port, host);
     }
   }
+
+  on(eventName, listener) {
+    this.eventEmitter.on(eventName, listener);
+  }
 }
 
 module.exports = UDPServer;

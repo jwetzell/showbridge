@@ -38,6 +38,10 @@ class MIDIServer {
     console.debug('MIDI Outputs');
     console.debug(outputs);
   }
+
+  on(eventName, listener) {
+    this.eventEmitter.on(eventName, listener);
+  }
 }
 
 module.exports = MIDIServer;
