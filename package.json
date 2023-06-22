@@ -31,7 +31,6 @@
   "pkg": {
     "assets": [
       "node_modules/midi",
-      "node_modules/thread-stream",
       "src/public/**/*"
     ]
   }
