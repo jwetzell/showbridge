@@ -1,6 +1,6 @@
 const events = require('events');
 const midi = require('midi');
-const MidiMessage = require('../models/message/midi-message');
+const MIDIMessage = require('../models/message/midi-message');
 
 class MIDIServer {
   constructor() {
@@ -15,7 +15,7 @@ class MIDIServer {
 
     this.input.on('message', (deltaTime, msg) => {
       try {
-        const parsedMIDI = new MidiMessage(msg);
+        const parsedMIDI = new MIDIMessage(msg);
         this.eventEmitter.emit('message', parsedMIDI, 'midi');
       } catch (error) {
         console.error('PROBLEM PROCESSING MIDI MESSAGE');

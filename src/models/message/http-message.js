@@ -1,4 +1,4 @@
-class HttpMessage {
+class HTTPMessage {
   constructor(request) {
     this.msg = request;
 
@@ -21,4 +21,4 @@ class HttpMessage {
     return `${this.msg.originalUrl}`;
   }
 }
-module.exports = HttpMessage;
+module.exports = HTTPMessage;

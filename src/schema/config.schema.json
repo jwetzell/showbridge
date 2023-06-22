@@ -85,9 +85,9 @@
             "type": "object",
             "oneOf": [
               { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerMidiBytesEqual" },
-              { "$ref": "#/definitions/TriggerMidiNoteOff" },
-              { "$ref": "#/definitions/TriggerMidiNoteOn" }
+              { "$ref": "#/definitions/TriggerMIDIBytesEqual" },
+              { "$ref": "#/definitions/TriggerMIDINoteOff" },
+              { "$ref": "#/definitions/TriggerMIDINoteOn" }
             ]
           }
         }
@@ -104,7 +104,7 @@
         "type": "object",
         "oneOf": [
           { "$ref": "#/definitions/ActionLog" },
-          { "$ref": "#/definitions/ActionMidiOutput" },
+          { "$ref": "#/definitions/ActionMIDIOutput" },
           { "$ref": "#/definitions/ActionOscForward" },
           { "$ref": "#/definitions/ActionOscOutput" },
           { "$ref": "#/definitions/ActionShell" },
@@ -129,8 +129,8 @@
       },
       "required": ["type", "enabled"]
     },
-    "ActionMidiOutput": {
-      "title": "Midi Output Action",
+    "ActionMIDIOutput": {
+      "title": "MIDI Output Action",
       "description": "This action will output MIDI using raw MIDI data byte array",
       "type": "object",
       "properties": {
@@ -355,8 +355,8 @@
       },
       "required": ["type", "enabled", "params"]
     },
-    "TriggerMidiBytesEqual": {
-      "title": "Midi Bytes Equals Trigger",
+    "TriggerMIDIBytesEqual": {
+      "title": "MIDI Bytes Equals Trigger",
       "description": "This trigger will match incoming MIDI messages bytes to the ones set in params property",
       "type": "object",
       "properties": {
@@ -389,8 +389,8 @@
       },
       "required": ["type", "enabled", "params"]
     },
-    "TriggerMidiNoteOff": {
-      "title": "Midi Note Off Trigger",
+    "TriggerMIDINoteOff": {
+      "title": "MIDI Note Off Trigger",
       "description": "The trigger will match incoming MIDI note off events",
       "type": "object",
       "properties": {
@@ -425,8 +425,8 @@
       },
       "required": ["type", "enabled", "params"]
     },
-    "TriggerMidiNoteOn": {
-      "title": "Midi Note On Trigger",
+    "TriggerMIDINoteOn": {
+      "title": "MIDI Note On Trigger",
       "description": "The trigger will match incoming MIDI note on events",
       "type": "object",
       "properties": {

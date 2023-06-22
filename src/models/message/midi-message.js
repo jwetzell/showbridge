@@ -1,4 +1,4 @@
-class MidiMessage {
+class MIDIMessage {
   constructor(bytes) {
     this.channel = bytes[0] & 0xf;
     this.bytes = bytes;
@@ -54,4 +54,4 @@ class MidiMessage {
     return `status: ${this.status} ch: ${this.channel} data: ${this.bytes.slice(1).join(' ')}`;
   }
 }
-module.exports = MidiMessage;
+module.exports = MIDIMessage;

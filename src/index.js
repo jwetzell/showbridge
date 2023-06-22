@@ -4,34 +4,28 @@ const superagent = require('superagent');
 const UDPServer = require('./servers/udp-server');
 const TCPServer = require('./servers/tcp-server');
 const MIDIServer = require('./servers/midi-server');
+const WebSocketServer = require('./servers/websocket-server');
+const HTTPServer = require('./servers/http-server');
 
 // utils
-const path = require('path');
 const _ = require('lodash');
 const { exec } = require('child_process');
 const { readFileSync } = require('fs');
 
-// messages
-const HttpMessage = require('./models/message/http-message');
-const WebSocketMessage = require('./models/message/websocket-message');
+// config
 const Config = require('./models/config');
 
-// express and websocket
-const express = require('express');
-const cors = require('cors');
-const app = express();
+// express
+const app = require('express')();
 const server = require('http').createServer(app);
-const { Server } = require('ws');
 
 let servers = {
-  http: undefined,
+  http: new HTTPServer(server, app),
   osc: {
     udp: new UDPServer(),
     tcp: new TCPServer(),
   },
-  ws: new Server({
-    server,
-  }),
+  ws: new WebSocketServer(server),
   midi: new MIDIServer(),
 };
 
@@ -56,41 +50,40 @@ console.debug(config.osc.triggers);
 console.debug('MIDI Trigger Summary');
 console.debug(config.midi.triggers);
 
-reloadTcp();
-reloadUdp();
-reloadMidi();
-reloadHttp();
+console.debug('MIDI Trigger Summary');
+console.debug(config.midi.triggers);
+
+reloadTCP();
+reloadUDP();
+reloadMIDI();
+reloadHTTP();
+loadWebSocket();
 
 /** TCP SERVER */
-function reloadTcp() {
+function reloadTCP() {
   servers.osc.tcp.reload(config.osc.params.tcpPort);
   servers.osc.tcp.on('message', processMessage);
 }
 
 /** UDP SERVER */
-function reloadUdp() {
+function reloadUDP() {
   servers.osc.udp.reload(config.osc.params.udpPort);
   servers.osc.udp.on('message', processMessage);
 }
 
-function reloadMidi() {
+function reloadMIDI() {
   servers.midi.reload();
   servers.midi.on('message', processMessage);
 }
-
-// Express Server
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, './public')));
 
 app.post('/config', (req, res, next) => {
   try {
     const configToUpdate = new Config(req.body);
     config = configToUpdate;
     //TODO(jwetzell): detect errors reloading sockets
-    reloadUdp();
-    reloadTcp();
-    reloadHttp();
+    reloadUDP();
+    reloadTCP();
+    reloadHTTP();
     console.info('Config successfully updated.');
     res.status(200).send({ msg: 'ok' });
   } catch (error) {
@@ -111,30 +104,15 @@ app.get('/config/schema', (req, res) => {
   res.send(config.getSchema());
 });
 
-app.get('/*', (req, res) => {
-  processMessage(new HttpMessage(req), 'http');
-  res.status(200).send({ msg: 'ok' });
-});
+function reloadHTTP() {
+  servers.http.reload(config.http.params.port);
+  servers.http.on('message', processMessage);
+}
 
-app.post('/*', (req, res) => {
-  processMessage(new HttpMessage(req), 'http');
-  res.status(200).send({ msg: 'ok' });
-});
-
-servers.ws.on('connection', (ws, req) => {
-  ws.on('message', (msgBuffer) => {
-    const msg = new WebSocketMessage(msgBuffer, req.connection);
-    processMessage(msg, 'ws');
-  });
-});
-
-function reloadHttp() {
-  if (servers.http) {
-    servers.http.close();
+function loadWebSocket() {
+  if (servers.ws) {
+    servers.ws.on('message', processMessage);
   }
-  servers.http = server.listen(config.http.params.port, () => {
-    console.info(`web interface listening on port ${config.http.params.port}`);
-  });
 }
 
 /** Message Processing */
