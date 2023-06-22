@@ -6,7 +6,6 @@
   "bin": "src/index.js",
   "scripts": {
     "pretty": "prettier --write src/*",
-    "check-config": "ajv -s src/schema/config.schema.json -d src/config-dev.json",
     "dev": "nodemon src/index.js src/config-dev.json",
     "prepackage": "rimraf dist",
     "package": "node package.js"
@@ -20,20 +19,16 @@
     "lodash": "^4.17.21",
     "midi": "^2.0.0",
     "osc-min": "^1.1.2",
-    "pino": "^8.14.1",
-    "pino-pretty": "^10.0.0",
     "superagent": "^8.0.9",
     "ws": "^8.13.0"
   },
   "devDependencies": {
-    "ajv-cli": "^5.0.0",
     "nodemon": "^2.0.22",
     "pkg": "^5.8.1",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.1"
   },
   "pkg": {
-    "scripts": "src/*.js",
     "assets": [
       "node_modules/midi",
       "node_modules/thread-stream",

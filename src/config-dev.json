@@ -1,6 +1,5 @@
 {
   "$schema": "./schema/config.schema.json",
-  "logLevel": 10,
   "http": {
     "params": {
       "port": 3000
@@ -38,6 +37,15 @@
             "params": {
               "_address": "${msg.address}/${Math.floor(( msg.args[0] - 0 ) * ( 100 - 0 ) / ( 10 - 0 ) + 0)}",
               "_args": ["${msg.args[0]}"],
+              "host": "localhost",
+              "port": 8001,
+              "protocol": "udp"
+            },
+            "enabled": true
+          },
+          {
+            "type": "osc-forward",
+            "params": {
               "host": "localhost",
               "port": 8001,
               "protocol": "udp"
