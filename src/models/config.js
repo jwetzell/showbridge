@@ -13,8 +13,6 @@ class Config {
       this[messageType] = configObj[messageType];
       this[messageType].triggers = this[messageType].triggers.map((trigger) => new Trigger(trigger));
     });
-
-    this.logLevel = configObj.logLevel;
   }
 
   getSchema() {
