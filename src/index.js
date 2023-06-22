@@ -86,7 +86,10 @@ function processMessage(msg, messageType) {
     for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
       const trigger = triggers[triggerIndex];
       if (trigger.shouldFire(msg, messageType)) {
+        console.debug(`${messageType}-trigger-${triggerIndex}: fired`);
         trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
+      } else {
+        console.debug(`${messageType}-trigger-${triggerIndex}: not fired`);
       }
     }
   }
@@ -98,6 +101,7 @@ function doAction(action, msg, messageType, trigger) {
     console.debug(`action: ${action.type} is disabled skipping...`);
     return;
   }
+  console.debug(`action: ${action.type} triggered from ${trigger.type}`);
   switch (action.type) {
     case 'forward':
       try {
@@ -165,6 +169,11 @@ function doAction(action, msg, messageType, trigger) {
       } catch (error) {
         console.error('error outputting osc');
         console.error(error);
+      }
+      break;
+    case 'udp-output':
+      if (action.params.bytes) {
+        servers.udp.send(Buffer.from(action.params.bytes), action.params.port, action.params.host);
       }
       break;
     case 'midi-output':

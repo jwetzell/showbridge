@@ -22,19 +22,6 @@
   "osc": {
     "triggers": [
       {
-        "type": "bytes-equal",
-        "params": {
-          "bytes": [47, 116, 101, 115, 116, 49, 0, 0, 44, 0, 0, 0]
-        },
-        "actions": [
-          {
-            "type": "log",
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
         "type": "regex",
         "params": {
           "patterns": ["^.*$"],
@@ -42,11 +29,11 @@
         },
         "actions": [
           {
-            "type": "forward",
+            "type": "udp-output",
             "params": {
               "host": "localhost",
-              "port": 8001,
-              "protocol": "udp"
+              "port": 8002,
+              "bytes": [104, 101, 108, 108, 111]
             },
             "enabled": true
           },

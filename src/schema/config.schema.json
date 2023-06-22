@@ -155,6 +155,7 @@
           { "$ref": "#/definitions/ActionMIDIOutput" },
           { "$ref": "#/definitions/ActionOscForward" },
           { "$ref": "#/definitions/ActionOscOutput" },
+          { "$ref": "#/definitions/ActionUDPOutput" },
           { "$ref": "#/definitions/ActionShell" },
           { "$ref": "#/definitions/ActionHTTP" }
         ]
@@ -288,6 +289,43 @@
             }
           },
           "required": ["host", "port", "protocol"]
+        },
+        "enabled": {
+          "description": "Whether this action is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"]
+    },
+    "ActionUDPOutput": {
+      "title": "UDP Output Action",
+      "description": "This action will send a UDP packet to the configured address:port with the configured contents",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "udp-output"
+        },
+        "params": {
+          "description": "OSC output action params",
+          "type": "object",
+          "properties": {
+            "host": {
+              "description": "Hostname or address of the server to send OSC to",
+              "type": "string"
+            },
+            "port": {
+              "description": "Port to send OSC to",
+              "type": "integer"
+            },
+            "bytes": {
+              "description": "bytes to send",
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": ["host", "port", "bytes"]
         },
         "enabled": {
           "description": "Whether this action is enabled",
