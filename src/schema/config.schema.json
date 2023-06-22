@@ -141,23 +141,19 @@
           "description": "MIDI output action params",
           "type": "object",
           "properties": {
-            "port": {
-              "description": "MIDI port number to output the message on see oscee output on launch for port numbers",
-              "type": "number"
-            },
             "data": {
               "description": "MIDI data to be sent as an array of 3 bytes",
               "type": "array",
               "items": {
                 "type": "integer",
                 "minimum": 0,
-                "maximum": 127
+                "maximum": 255
               },
               "minItems": 2,
               "maxItems": 3
             }
           },
-          "required": ["port", "data"]
+          "required": ["data"]
         },
         "enabled": {
           "description": "Whether this action is enabled",

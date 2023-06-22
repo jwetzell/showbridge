@@ -223,9 +223,8 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'midi-output':
       try {
-        devices.midi.output.openPort(action.params.port);
-        devices.midi.output.sendMessage(action.params.data);
-        devices.midi.output.closePort(action.params.port);
+        // TODO(jwetzell): see if there is a way to switch ports when outputting
+        servers.midi.output.sendMessage(action.params.data);
       } catch (error) {
         console.error('error outputting midi');
         console.error(error);

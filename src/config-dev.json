@@ -84,6 +84,13 @@
               "contentType": "json"
             },
             "enabled": true
+          },
+          {
+            "type": "midi-output",
+            "params": {
+              "data": [144, 60, 100]
+            },
+            "enabled": true
           }
         ]
       }
