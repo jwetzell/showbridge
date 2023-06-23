@@ -2,7 +2,7 @@ const events = require('events');
 const net = require('net');
 const osc = require('osc-min');
 const slip = require('slip');
-const OscMessage = require('../models/message/osc-message');
+const OSCMessage = require('../models/message/osc-message');
 const TCPMessage = require('../models/message/tcp-message');
 class TCPServer {
   constructor() {
@@ -24,7 +24,7 @@ class TCPServer {
         };
         try {
           //TODO(jwetzell): SLIP decoding
-          const oscMsg = new OscMessage(osc.fromBuffer(msg, true), sender);
+          const oscMsg = new OSCMessage(osc.fromBuffer(msg, true), sender);
           this.eventEmitter.emit('message', oscMsg, 'osc');
         } catch (error) {
           const tcpMsg = new TCPMessage(msg, sender);

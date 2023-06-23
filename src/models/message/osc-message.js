@@ -1,5 +1,5 @@
 const osc = require('osc-min');
-class OscMessage {
+class OSCMessage {
   constructor(oscMsg, sender) {
     this.msg = oscMsg;
     this.address = oscMsg.address;
@@ -19,4 +19,4 @@ class OscMessage {
     return Uint8Array.from(this.getBuffer());
   }
 }
-module.exports = OscMessage;
+module.exports = OSCMessage;

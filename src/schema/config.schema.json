@@ -153,8 +153,8 @@
         "oneOf": [
           { "$ref": "#/definitions/ActionLog" },
           { "$ref": "#/definitions/ActionMIDIOutput" },
-          { "$ref": "#/definitions/ActionOscForward" },
-          { "$ref": "#/definitions/ActionOscOutput" },
+          { "$ref": "#/definitions/ActionOSCForward" },
+          { "$ref": "#/definitions/ActionOSCOutput" },
           { "$ref": "#/definitions/ActionUDPOutput" },
           { "$ref": "#/definitions/ActionTCPOutput" },
           { "$ref": "#/definitions/ActionShell" },
@@ -212,7 +212,7 @@
       },
       "required": ["type", "enabled", "params"]
     },
-    "ActionOscForward": {
+    "ActionOSCForward": {
       "title": "Forward Action",
       "description": "This action will forward the incoming OSC to the configured address:port",
       "type": "object",
@@ -247,7 +247,7 @@
       },
       "required": ["type", "enabled", "params"]
     },
-    "ActionOscOutput": {
+    "ActionOSCOutput": {
       "title": "OSC Output Action",
       "description": "This action will send an OSC message to the configure address:port with the configured address and args",
       "type": "object",

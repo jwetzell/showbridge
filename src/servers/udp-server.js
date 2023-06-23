@@ -1,7 +1,7 @@
 const events = require('events');
 const udp = require('dgram');
 const osc = require('osc-min');
-const OscMessage = require('../models/message/osc-message');
+const OSCMessage = require('../models/message/osc-message');
 const UDPMessage = require('../models/message/udp-message');
 
 class UDPServer {
@@ -23,7 +23,7 @@ class UDPServer {
           port: rinfo.port,
         };
         try {
-          const oscMsg = new OscMessage(osc.fromBuffer(msg, true), sender);
+          const oscMsg = new OSCMessage(osc.fromBuffer(msg, true), sender);
           this.eventEmitter.emit('message', oscMsg, 'osc');
         } catch (error) {
           console.error(error);
