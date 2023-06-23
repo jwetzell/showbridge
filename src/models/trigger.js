@@ -51,7 +51,6 @@ class Trigger {
         break;
       case 'sender':
         if (!!msg.sender) {
-          const address = this.params.address;
           if (msg.sender.address === this.params.address) {
             fire = true;
           }
