@@ -29,11 +29,13 @@
         },
         "actions": [
           {
-            "type": "udp-output",
+            "type": "osc-output",
             "params": {
+              "address": "/cue/3/start",
+              "args": [],
               "host": "localhost",
-              "port": 8002,
-              "bytes": [104, 101, 108, 108, 111]
+              "port": 53000,
+              "protocol": "tcp"
             },
             "enabled": true
           },
@@ -89,11 +91,20 @@
       {
         "type": "sender",
         "params": {
-          "address": "127.0.0.1"
+          "address": "::1"
         },
         "actions": [
           {
             "type": "log",
+            "enabled": true
+          },
+          {
+            "type": "forward",
+            "params": {
+              "host": "localhost",
+              "port": 8002,
+              "protocol": "udp"
+            },
             "enabled": true
           }
         ],

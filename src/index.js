@@ -113,9 +113,15 @@ function doAction(action, msg, messageType, trigger) {
         }
 
         if (msgToForward) {
-          //TODO(jwetzell): implement TCP
           if (action.params.protocol === 'udp') {
             servers.udp.send(msgToForward, action.params.port, action.params.host);
+          } else if (action.params.protocol === 'tcp') {
+            servers.tcp.send(
+              msgToForward,
+              action.params.port,
+              action.params.host,
+              messageType === 'osc' ? true : false
+            );
           } else {
             console.error(`unhandled foward protocol = ${action.params.protocol}`);
           }
@@ -160,9 +166,10 @@ function doAction(action, msg, messageType, trigger) {
           args,
         });
 
-        //TODO(jwetzell): add TCP support
         if (action.params.protocol === 'udp') {
           servers.udp.send(outBuff, action.params.port, action.params.host);
+        } else if (action.params.protocol === 'tcp') {
+          servers.tcp.send(outBuff, action.params.port, action.params.host, true);
         } else {
           console.error(`unhandled osc output protocol = ${action.params.protocol}`);
         }
@@ -172,8 +179,15 @@ function doAction(action, msg, messageType, trigger) {
       }
       break;
     case 'udp-output':
+      //TODO(jwetzell): add support for things other than just int byte array
       if (action.params.bytes) {
         servers.udp.send(Buffer.from(action.params.bytes), action.params.port, action.params.host);
+      }
+      break;
+    case 'tcp-output':
+      //TODO(jwetzell): add support for things other than just int byte array
+      if (action.params.bytes) {
+        servers.tcp.send(Buffer.from(action.params.bytes), action.params.port, action.params.host, action.params.slip);
       }
       break;
     case 'midi-output':

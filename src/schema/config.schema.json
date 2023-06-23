@@ -156,6 +156,7 @@
           { "$ref": "#/definitions/ActionOscForward" },
           { "$ref": "#/definitions/ActionOscOutput" },
           { "$ref": "#/definitions/ActionUDPOutput" },
+          { "$ref": "#/definitions/ActionTCPOutput" },
           { "$ref": "#/definitions/ActionShell" },
           { "$ref": "#/definitions/ActionHTTP" }
         ]
@@ -269,7 +270,7 @@
             "protocol": {
               "description": "Protocol to use when sending OSC",
               "type": "string",
-              "enum": ["udp"]
+              "enum": ["udp", "tcp"]
             },
             "_address": {
               "description": "JS template of the OSC address. Will have access to the msg object to subsitute in properties of the message that triggered this action",
@@ -306,15 +307,15 @@
           "const": "udp-output"
         },
         "params": {
-          "description": "OSC output action params",
+          "description": "UDP output action params",
           "type": "object",
           "properties": {
             "host": {
-              "description": "Hostname or address of the server to send OSC to",
+              "description": "Hostname or address of the server to send UDP packet to",
               "type": "string"
             },
             "port": {
-              "description": "Port to send OSC to",
+              "description": "Port to send UDP packet to",
               "type": "integer"
             },
             "bytes": {
@@ -326,6 +327,47 @@
             }
           },
           "required": ["host", "port", "bytes"]
+        },
+        "enabled": {
+          "description": "Whether this action is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"]
+    },
+    "ActionTCPOutput": {
+      "title": "TCP Output Action",
+      "description": "This action will send a TCP packet to the configured address:port with the configured contents",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "tcp-output"
+        },
+        "params": {
+          "description": "TCP output action params",
+          "type": "object",
+          "properties": {
+            "host": {
+              "description": "Hostname or address of the server to send TCP packet to",
+              "type": "string"
+            },
+            "port": {
+              "description": "Port to send TCP packet to",
+              "type": "integer"
+            },
+            "slip": {
+              "description": "whether to SLIP encode the TCP bytes",
+              "type": "boolean"
+            },
+            "bytes": {
+              "description": "bytes to send",
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": ["host", "port", "slip", "bytes"]
         },
         "enabled": {
           "description": "Whether this action is enabled",
