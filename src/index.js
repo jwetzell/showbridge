@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // communication
 const osc = require('osc-min');
 const superagent = require('superagent');
