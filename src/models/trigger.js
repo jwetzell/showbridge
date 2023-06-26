@@ -72,14 +72,13 @@ class Trigger {
       case 'midi-note-on':
         if (messageType === 'midi' && msg.status === 'note_on') {
           if (!!this.params) {
-            if (!!this.params.note) {
-              //trigger params specify a note (the incoming message must match in order to fire actions)
-              if (msg.note === this.params.note) {
-                fire = true;
-              }
-            } else {
-              //no note specified always fire actions
-              fire = true;
+            fire = true;
+            if (!!this.params.note && this.params.note !== msg.note) {
+              fire = false;
+            }
+
+            if (!!this.params.velocity && this.params.velocity !== msg.velocity) {
+              fire = false;
             }
           }
         }
@@ -87,14 +86,13 @@ class Trigger {
       case 'midi-note-off':
         if (messageType === 'midi' && msg.status === 'note_off') {
           if (!!this.params) {
-            if (!!this.params.note) {
-              //trigger params specify a note (the incoming message must match in order to fire actions)
-              if (msg.note === this.params.note) {
-                fire = true;
-              }
-            } else {
-              //no note specified always fire actions
-              fire = true;
+            fire = true;
+            if (!!this.params.note && this.params.note !== msg.note) {
+              fire = false;
+            }
+
+            if (!!this.params.velocity && this.params.velocity !== msg.velocity) {
+              fire = false;
             }
           }
         }
