@@ -24,3 +24,23 @@ steps:
       PLUGIN_SECURE: true
       PLUGIN_VERIFY: false
       PLUGIN_CLEAN_DIR: true
+---
+kind: pipeline
+name: NPM publish
+trigger:
+  event:
+    - tag
+steps:
+  - name: set version
+    image: node:18.16.1-alpine
+    commands:
+      - npm version ${DRONE_TAG}
+  - name: npm publish
+    image: plugins/npm
+    settings:
+      username:
+        from_secret: npm_username
+      password:
+        from_secret: npm_password
+      email:
+        from_secret: npm_email
