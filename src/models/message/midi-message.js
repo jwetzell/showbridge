@@ -1,7 +1,7 @@
 class MIDIMessage {
   constructor(bytes) {
     this.channel = bytes[0] & 0xf;
-    this.bytes = bytes;
+    this.bytes = Uint8Array.from(bytes);
 
     switch (bytes[0] >> 4) {
       case 8: //note off
