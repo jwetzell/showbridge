@@ -214,7 +214,7 @@
     },
     "ActionForward": {
       "title": "Forward Action",
-      "description": "This action will forward the incoming OSC to the configured address:port",
+      "description": "This action will forward the incoming message to the configured destination",
       "type": "object",
       "properties": {
         "type": {
