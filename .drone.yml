@@ -1,7 +1,9 @@
 ---
 kind: pipeline
 name: generate-schema-docs
-
+trigger:
+  branch:
+    - master
 steps:
   - name: generate schema docs
     image: python:3
