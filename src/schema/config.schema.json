@@ -153,7 +153,7 @@
         "oneOf": [
           { "$ref": "#/definitions/ActionLog" },
           { "$ref": "#/definitions/ActionMIDIOutput" },
-          { "$ref": "#/definitions/ActionOSCForward" },
+          { "$ref": "#/definitions/ActionForward" },
           { "$ref": "#/definitions/ActionOSCOutput" },
           { "$ref": "#/definitions/ActionUDPOutput" },
           { "$ref": "#/definitions/ActionTCPOutput" },
@@ -212,7 +212,7 @@
       },
       "required": ["type", "enabled", "params"]
     },
-    "ActionOSCForward": {
+    "ActionForward": {
       "title": "Forward Action",
       "description": "This action will forward the incoming OSC to the configured address:port",
       "type": "object",
@@ -225,7 +225,7 @@
           "type": "object",
           "properties": {
             "host": {
-              "description": "Hostname or address of the server to forward OSC to",
+              "description": "Hostname or address of the server to forward message to",
               "type": "string"
             },
             "port": {
