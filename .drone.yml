@@ -3,7 +3,7 @@ kind: pipeline
 name: generate-schema-docs
 trigger:
   branch:
-    - master
+    - main
 steps:
   - name: generate schema docs
     image: python:3
@@ -28,13 +28,12 @@ steps:
 kind: pipeline
 name: NPM publish
 trigger:
-  event:
-    - tag
+  branch:
+    - main
 steps:
   - name: install_and_package
     image: node:18.16.1-alpine
     commands:
-      - npm version ${DRONE_TAG}
       - npm ci
       - npm run package
   - name: release
@@ -47,10 +46,3 @@ steps:
       draft: true
     depends_on:
       - install_and_package
-  - name: npm publish
-    image: plugins/npm
-    settings:
-      token:
-        from_secret: npm_token
-    depends_on:
-      - release
