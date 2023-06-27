@@ -31,7 +31,7 @@ trigger:
   event:
     - tag
 steps:
-  - name: install and package
+  - name: install_and_package
     image: node:18.16.1-alpine
     commands:
       - npm version ${DRONE_TAG}
@@ -45,6 +45,8 @@ steps:
       base_url: https://git.jwetzell.com
       files: dist/bin/*
       draft: true
+    depends_on:
+      - install_and_package
   - name: npm publish
     image: plugins/npm
     settings:
