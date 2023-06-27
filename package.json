@@ -7,7 +7,7 @@
   "scripts": {
     "pretty": "prettier --write src/*",
     "dev": "nodemon src/index.js src/config-dev.json",
-    "prepackage": "rimraf dist",
+    "prepackage": "rimraf dist && ncc build src/index.js -o dist && uglifyjs -cm -o dist/index.min.js -- dist/index.js",
     "package": "node package.js"
   },
   "author": "",
@@ -24,15 +24,17 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
+    "@vercel/ncc": "^0.36.1",
     "nodemon": "^2.0.22",
     "pkg": "^5.8.1",
     "prettier": "^2.8.8",
-    "rimraf": "^5.0.1"
+    "rimraf": "^5.0.1",
+    "uglify-js": "^3.17.4"
   },
   "pkg": {
     "assets": [
-      "node_modules/midi",
-      "src/public/**/*"
+      "dist/build",
+      "dist/public"
     ]
   }
 }

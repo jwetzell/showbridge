@@ -1,7 +1,7 @@
 const { exec } = require('pkg');
 const packageInfo = require('./package.json');
 const os = require('os');
-let output = `dist/${packageInfo.name}`;
+let output = `dist/bin/${packageInfo.name}`;
 const version = `.v${packageInfo.version}`;
 
 switch (os.type()) {
@@ -19,4 +19,4 @@ switch (os.type()) {
     process.exit(1);
 }
 
-exec(['.', '--target', 'host', '--output', output]);
+exec(['dist/index.min.js', '--target', 'host', '--output', output, '-c', 'package.json', '-C', 'GZip']);
