@@ -3,7 +3,7 @@ kind: pipeline
 name: generate-schema-docs
 trigger:
   branch:
-    - master
+    - main
 steps:
   - name: generate schema docs
     image: python:3
@@ -30,6 +30,8 @@ name: NPM publish
 trigger:
   event:
     - tag
+  branch:
+    - master
 steps:
   - name: install_and_package
     image: node:18.16.1-alpine
