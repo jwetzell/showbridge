@@ -24,33 +24,3 @@ steps:
       PLUGIN_SECURE: true
       PLUGIN_VERIFY: false
       PLUGIN_CLEAN_DIR: true
----
-kind: pipeline
-name: NPM publish
-trigger:
-  event:
-    - tag
-steps:
-  - name: install_and_package
-    image: node:18.16.1-alpine
-    commands:
-      - npm version ${DRONE_TAG}
-      - npm ci
-      - npm run package
-  - name: release
-    image: plugins/gitea-release
-    settings:
-      api_key:
-        from_secret: gitea_api_key
-      base_url: https://git.jwetzell.com
-      files: dist/bin/*
-      draft: true
-    depends_on:
-      - install_and_package
-  - name: npm publish
-    image: plugins/npm
-    settings:
-      token:
-        from_secret: npm_token
-    depends_on:
-      - release
