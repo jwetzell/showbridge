@@ -31,7 +31,7 @@ trigger:
   event:
     - tag
   branch:
-    - master
+    - main
 steps:
   - name: install_and_package
     image: node:18.16.1-alpine
