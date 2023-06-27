@@ -30,8 +30,6 @@ name: NPM publish
 trigger:
   event:
     - tag
-  branch:
-    - main
 steps:
   - name: install_and_package
     image: node:18.16.1-alpine
