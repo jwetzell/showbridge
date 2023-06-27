@@ -19,4 +19,4 @@ switch (os.type()) {
     process.exit(1);
 }
 
-exec(['dist/index.min.js', '--target', 'host', '--output', output, '-c', 'package.json', '-C', 'GZip']);
+exec(['.', '--target', 'host', '--output', output, '-C', 'GZip']);

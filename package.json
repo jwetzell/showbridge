@@ -7,17 +7,17 @@
   "scripts": {
     "pretty": "prettier --write src/*",
     "dev": "nodemon src/index.js src/config-dev.json",
-    "prepackage": "rimraf dist && ncc build src/index.js -o dist && uglifyjs -cm -o dist/index.min.js -- dist/index.js",
+    "prepackage": "rimraf dist",
     "package": "node package.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@julusian/midi": "^3.0.1",
     "ajv": "^8.12.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
-    "midi": "^2.0.0",
     "osc-min": "^1.1.2",
     "slip": "^1.0.2",
     "superagent": "^8.0.9",
@@ -33,8 +33,8 @@
   },
   "pkg": {
     "assets": [
-      "dist/build",
-      "dist/public"
+      "src/public",
+      "node_modules/@julusian/midi"
     ]
   }
 }
