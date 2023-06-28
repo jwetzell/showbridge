@@ -24,17 +24,14 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.36.1",
     "nodemon": "^2.0.22",
     "pkg": "^5.8.1",
     "prettier": "^2.8.8",
-    "rimraf": "^5.0.1",
-    "uglify-js": "^3.17.4"
+    "rimraf": "^5.0.1"
   },
   "pkg": {
     "assets": [
-      "src/public",
-      "node_modules/@julusian/midi"
+      "src/public"
     ]
   }
 }
