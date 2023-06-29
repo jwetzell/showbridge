@@ -97,6 +97,30 @@ class Trigger {
           }
         }
         break;
+      case 'midi-control-change':
+        if (messageType === 'midi' && msg.status === 'control_change') {
+          if (!!this.params) {
+            fire = true;
+            if (!!this.params.control && this.params.control !== msg.control) {
+              fire = false;
+            }
+
+            if (!!this.params.value && this.params.value !== msg.value) {
+              fire = false;
+            }
+          }
+        }
+        break;
+      case 'midi-program-change':
+        if (messageType === 'midi' && msg.status === 'program_change') {
+          if (!!this.params) {
+            fire = true;
+            if (!!this.params.program && this.params.program !== msg.program) {
+              fire = false;
+            }
+          }
+        }
+        break;
       default:
         console.log(`unhandled trigger type = ${this.type}`);
         fire = false;

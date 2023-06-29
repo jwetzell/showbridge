@@ -64,11 +64,8 @@
   "midi": {
     "triggers": [
       {
-        "type": "regex",
-        "params": {
-          "patterns": ["note_on"],
-          "properties": ["status"]
-        },
+        "type": "midi-control-change",
+        "params": {},
         "enabled": true,
         "actions": [
           {

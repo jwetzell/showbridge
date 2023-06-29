@@ -77,7 +77,9 @@
               { "$ref": "#/definitions/TriggerRegex" },
               { "$ref": "#/definitions/TriggerBytesEqual" },
               { "$ref": "#/definitions/TriggerMIDINoteOff" },
-              { "$ref": "#/definitions/TriggerMIDINoteOn" }
+              { "$ref": "#/definitions/TriggerMIDINoteOn" },
+              { "$ref": "#/definitions/TriggerMIDIControlChange" },
+              { "$ref": "#/definitions/TriggerMIDIProgramChange" }
             ]
           }
         }
@@ -613,6 +615,72 @@
             },
             "velocity": {
               "description": "velocity value to match against the incoming message",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127
+            }
+          }
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"]
+    },
+    "TriggerMIDIControlChange": {
+      "title": "MIDI Control Change Trigger",
+      "description": "The trigger will match incoming MIDI control events",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "midi-control-change"
+        },
+        "params": {
+          "description": "MIDI control change trigger params",
+          "type": "object",
+          "properties": {
+            "control": {
+              "description": "control number to match against incoming the messages",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127
+            },
+            "value": {
+              "description": "control value to match against the incoming message",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127
+            }
+          }
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"]
+    },
+    "TriggerMIDIProgramChange": {
+      "title": "MIDI Program Change Trigger",
+      "description": "The trigger will match incoming MIDI program events",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "midi-program-change"
+        },
+        "params": {
+          "description": "MIDI program change trigger params",
+          "type": "object",
+          "properties": {
+            "program": {
+              "description": "program number to match against incoming the messages",
               "type": "integer",
               "minimum": 0,
               "maximum": 127
