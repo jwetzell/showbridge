@@ -28,14 +28,18 @@ class MIDIServer {
       inputs.push(this.input.getPortName(i));
     }
     console.debug('MIDI Inputs');
-    console.debug(inputs);
+    inputs.forEach((input, i) => {
+      console.debug(`${i}: ${input}`);
+    });
 
     const outputs = [];
     for (let i = 0; i < this.output.getPortCount(); i++) {
       outputs.push(this.output.getPortName(i));
     }
     console.debug('MIDI Outputs');
-    console.debug(outputs);
+    outputs.forEach((output, i) => {
+      console.debug(`${i}: ${output}`);
+    });
   }
 
   on(eventName, listener) {
