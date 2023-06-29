@@ -1,5 +1,5 @@
 {
-  "$schema": "./schema/config.schema.json",
+  "$schema": "../schema/config.schema.json",
   "http": {
     "params": {
       "port": 3000
@@ -8,10 +8,23 @@
       {
         "type": "regex",
         "params": {
-          "patterns": ["^/midi/note_on$"],
+          "patterns": ["^/send/udp$"],
           "properties": ["originalUrl"]
         },
-        "actions": [{ "type": "log", "enabled": true }],
+        "actions": [
+          { "type": "log", "enabled": true },
+          {
+            "type": "osc-output",
+            "params": {
+              "host": "127.0.0.1",
+              "address": "/udp/input",
+              "_args": ["${vars['udp_msg']}"],
+              "port": 8001,
+              "protocol": "udp"
+            },
+            "enabled": true
+          }
+        ],
         "enabled": true
       }
     ]
@@ -60,23 +73,6 @@
         "actions": [
           {
             "type": "log",
-            "enabled": true
-          },
-          {
-            "type": "http",
-            "params": {
-              "method": "POST",
-              "_url": "http://localhost:3000/midi/${msg.status}",
-              "_body": "{\"note\":${msg.note}}",
-              "contentType": "json"
-            },
-            "enabled": true
-          },
-          {
-            "type": "midi-output",
-            "params": {
-              "bytes": [144, 60, 100]
-            },
             "enabled": true
           }
         ]
@@ -128,11 +124,10 @@
             "enabled": true
           },
           {
-            "type": "forward",
+            "type": "store",
             "params": {
-              "host": "127.0.0.1",
-              "port": 8002,
-              "protocol": "udp"
+              "key": "udp_msg",
+              "_value": "${msg}"
             },
             "enabled": true
           }

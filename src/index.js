@@ -30,6 +30,8 @@ let servers = {
   midi: new MIDIServer(),
 };
 
+const vars = {};
+
 let config = {};
 //if there is an argument load it as the config
 if (process.argv.length === 3) {
@@ -38,7 +40,7 @@ if (process.argv.length === 3) {
   config = new Config(configToLoad);
 } else {
   //if not load a default
-  const defaultConfig = require('./config-default.json');
+  const defaultConfig = require('./config/default.json');
   config = new Config(defaultConfig);
 }
 
@@ -140,7 +142,7 @@ function doAction(action, msg, messageType, trigger) {
         let address = '';
         if (!!action.params._address) {
           const _address = _.template(action.params._address);
-          address = _address({ msg });
+          address = _address({ msg, vars });
         } else if (!!action.params.address) {
           address = action.params.address;
         } else {
@@ -154,7 +156,7 @@ function doAction(action, msg, messageType, trigger) {
           action.params._args.forEach((arg) => {
             if (typeof arg === 'string') {
               const _arg = _.template(arg);
-              args.push(_arg({ msg }));
+              args.push(_arg({ msg, vars }));
             } else {
               args.push(arg);
             }
@@ -209,7 +211,7 @@ function doAction(action, msg, messageType, trigger) {
 
       try {
         if (!!action.params._command) {
-          command = _.template(action.params._command)({ msg });
+          command = _.template(action.params._command)({ msg, vars });
         } else if (!!action.params.command) {
           command = action.params.command;
         } else {
@@ -230,7 +232,7 @@ function doAction(action, msg, messageType, trigger) {
 
       try {
         if (!!action.params._url) {
-          url = _.template(action.params._url)({ msg });
+          url = _.template(action.params._url)({ msg, vars });
         } else if (!!action.params.url) {
           url = action.params.url;
         } else {
@@ -238,7 +240,7 @@ function doAction(action, msg, messageType, trigger) {
         }
 
         if (!!action.params._body) {
-          body = _.template(action.params._body)({ msg });
+          body = _.template(action.params._body)({ msg, vars });
         } else if (!!action.params.body) {
           body = action.params.body;
         }
@@ -265,6 +267,33 @@ function doAction(action, msg, messageType, trigger) {
         }
       } catch (error) {
         console.error('problem executing http action');
+        console.error(error);
+      }
+      break;
+    case 'store':
+      let value;
+      let key;
+
+      try {
+        if (!!action.params._value) {
+          value = _.template(action.params._value)({ msg, vars });
+        } else if (!!action.params.value) {
+          value = action.params.value;
+        } else {
+          console.error('store action with no value configured');
+        }
+
+        if (!!action.params._key) {
+          key = _.template(action.params._key)({ msg, vars });
+        } else if (!!action.params.key) {
+          key = action.params.key;
+        } else {
+          console.error('store action with no key configured');
+        }
+
+        vars[key] = value;
+        console.log(vars);
+      } catch (error) {
         console.error(error);
       }
       break;

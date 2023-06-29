@@ -6,9 +6,9 @@
   "bin": "src/index.js",
   "scripts": {
     "pretty": "prettier --write src/*",
-    "dev": "nodemon src/index.js src/config-dev.json",
+    "dev": "nodemon src/index.js src/config/dev.json",
     "prepackage": "rimraf dist",
-    "package": "pkg . -C Brotli"
+    "package": "pkg . -C GZip"
   },
   "author": "",
   "license": "ISC",

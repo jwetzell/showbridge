@@ -152,6 +152,7 @@
         "type": "object",
         "oneOf": [
           { "$ref": "#/definitions/ActionLog" },
+          { "$ref": "#/definitions/ActionStore" },
           { "$ref": "#/definitions/ActionMIDIOutput" },
           { "$ref": "#/definitions/ActionForward" },
           { "$ref": "#/definitions/ActionOSCOutput" },
@@ -171,6 +172,45 @@
       "properties": {
         "type": {
           "const": "log"
+        },
+        "enabled": {
+          "description": "Whether this action is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled"]
+    },
+    "ActionStore": {
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "title": "Store Action",
+      "description": "This action stores the configured value in a global vars object. Which will be made available when templating things.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "store"
+        },
+        "params": {
+          "description": "Store action params",
+          "type": "object",
+          "properties": {
+            "_key": {
+              "description": "key of the variable to store ran through templating",
+              "type": "string"
+            },
+            "key": {
+              "description": "key of the variable to store",
+              "type": "string"
+            },
+            "_value": {
+              "description": "value of the variable to store ran through templating",
+              "type": "string"
+            },
+            "value": {
+              "description": "value of the variable to store",
+              "type": "string"
+            }
+          },
+          "required": []
         },
         "enabled": {
           "description": "Whether this action is enabled",
