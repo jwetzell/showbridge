@@ -18,7 +18,8 @@ steps:
         from_secret: ftp_username
       FTP_PASSWORD:
         from_secret: ftp_password
-      PLUGIN_HOSTNAME: ftp.jwetzell.com:21
+      PLUGIN_HOSTNAME:
+        from_secret: ftp_hostname
       PLUGIN_SRC_DIR: /html/docs/schema/config
       PLUGIN_DEST_DIR: /docs/schema/config
       PLUGIN_SECURE: true
