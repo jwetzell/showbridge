@@ -30,9 +30,6 @@
     "rimraf": "^5.0.1"
   },
   "pkg": {
-    "assets": [
-      "src/public"
-    ],
     "targets": [
       "node18-linux-x64",
       "node18-win-x64",

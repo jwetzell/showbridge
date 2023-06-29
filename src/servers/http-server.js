@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const HTTPMessage = require('../models/message/http-message');
 const Config = require('../models/config');
+
 class HTTPServer {
   constructor(server, app) {
     this.eventEmitter = new events.EventEmitter();
@@ -14,7 +15,6 @@ class HTTPServer {
     // Express Server
     app.use(cors());
     app.use(express.json());
-    app.use(express.static(path.join(__dirname, '../public')));
 
     app.get('/config', (req, res) => {
       res.send(this.config);
