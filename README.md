@@ -17,7 +17,11 @@
 - midi-note-off
     - note: optional note value 0-127 to match the incoming note off message to. if excluded all incoming notes will fire this trigger
     - velocity: optional note velocity to match the incoming note off message to
-
+- midi-control-change
+    - control: optional control number 0-127 to match the incoming message to
+    - value: optional control value 0-127 to match the incoming message to
+- midi-program-change
+    - program: optional program number 0-127 to match the incoming message to
 
 ## Actions
 - forward
