@@ -17,7 +17,8 @@
               "type": "number"
             }
           },
-          "required": ["port"]
+          "required": ["port"],
+          "additionalProperties": false
         },
         "triggers": {
           "description": "array of triggers",
@@ -98,7 +99,8 @@
               "type": "number"
             }
           },
-          "required": ["port"]
+          "required": ["port"],
+          "additionalProperties": false
         },
         "triggers": {
           "description": "array of triggers",
@@ -127,7 +129,8 @@
               "type": "number"
             }
           },
-          "required": ["port"]
+          "required": ["port"],
+          "additionalProperties": false
         },
         "triggers": {
           "description": "array of triggers",
@@ -180,7 +183,8 @@
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled"]
+      "required": ["type", "enabled"],
+      "additionalProperties": false
     },
     "ActionStore": {
       "$schema": "http://json-schema.org/draft-07/schema",
@@ -211,14 +215,16 @@
               "description": "value of the variable to store",
               "type": "string"
             }
-          }
+          },
+          "additionalProperties": false
         },
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
-      "required": ["type", "params", "enabled"]
+      "required": ["type", "params", "enabled"],
+      "additionalProperties": false
     },
     "ActionMIDIOutput": {
       "title": "MIDI Output Action",
@@ -244,14 +250,16 @@
               "maxItems": 3
             }
           },
-          "required": ["bytes"]
+          "required": ["bytes"],
+          "additionalProperties": false
         },
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "ActionForward": {
       "title": "Forward Action",
@@ -279,14 +287,16 @@
               "enum": ["udp", "tcp"]
             }
           },
-          "required": ["host", "port", "protocol"]
+          "required": ["host", "port", "protocol"],
+          "additionalProperties": false
         },
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "ActionOSCOutput": {
       "title": "OSC Output Action",
@@ -330,14 +340,16 @@
               "type": "array"
             }
           },
-          "required": ["host", "port", "protocol"]
+          "required": ["host", "port", "protocol"],
+          "additionalProperties": false
         },
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "ActionUDPOutput": {
       "title": "UDP Output Action",
@@ -380,14 +392,16 @@
               "type": "string"
             }
           },
-          "required": ["host", "port"]
+          "required": ["host", "port"],
+          "additionalProperties": false
         },
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "ActionTCPOutput": {
       "title": "TCP Output Action",
@@ -434,14 +448,16 @@
               "type": "string"
             }
           },
-          "required": ["host", "port", "slip"]
+          "required": ["host", "port", "slip"],
+          "additionalProperties": false
         },
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "ActionShell": {
       "title": "Shell Command Action",
@@ -463,14 +479,16 @@
               "description": "Shell command to run _command takes priority",
               "type": "string"
             }
-          }
+          },
+          "additionalProperties": false
         },
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
 
     "ActionHTTP": {
@@ -511,14 +529,16 @@
               "type": "string"
             }
           },
-          "required": ["method"]
+          "required": ["method"],
+          "additionalProperties": false
         },
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
 
     "TriggerSender": {
@@ -538,7 +558,8 @@
               "type": "string"
             }
           },
-          "required": ["address"]
+          "required": ["address"],
+          "additionalProperties": false
         },
         "actions": {
           "$ref": "#/definitions/ActionList"
@@ -548,7 +569,8 @@
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "TriggerBytesEqual": {
       "title": "Bytes Equal Trigger",
@@ -572,7 +594,8 @@
               }
             }
           },
-          "required": ["bytes"]
+          "required": ["bytes"],
+          "additionalProperties": false
         },
         "actions": {
           "$ref": "#/definitions/ActionList"
@@ -582,7 +605,8 @@
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "TriggerMIDINoteOff": {
       "title": "MIDI Note Off Trigger",
@@ -608,7 +632,8 @@
               "minimum": 0,
               "maximum": 127
             }
-          }
+          },
+          "additionalProperties": false
         },
         "actions": {
           "$ref": "#/definitions/ActionList"
@@ -618,7 +643,8 @@
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "TriggerMIDINoteOn": {
       "title": "MIDI Note On Trigger",
@@ -644,7 +670,8 @@
               "minimum": 0,
               "maximum": 127
             }
-          }
+          },
+          "additionalProperties": false
         },
         "actions": {
           "$ref": "#/definitions/ActionList"
@@ -654,7 +681,8 @@
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "TriggerMIDIControlChange": {
       "title": "MIDI Control Change Trigger",
@@ -680,7 +708,8 @@
               "minimum": 0,
               "maximum": 127
             }
-          }
+          },
+          "additionalProperties": false
         },
         "actions": {
           "$ref": "#/definitions/ActionList"
@@ -690,7 +719,8 @@
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "TriggerMIDIProgramChange": {
       "title": "MIDI Program Change Trigger",
@@ -710,7 +740,8 @@
               "minimum": 0,
               "maximum": 127
             }
-          }
+          },
+          "additionalProperties": false
         },
         "actions": {
           "$ref": "#/definitions/ActionList"
@@ -720,7 +751,8 @@
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     },
     "TriggerRegex": {
       "title": "Regex Trigger",
@@ -759,7 +791,8 @@
           "type": "boolean"
         }
       },
-      "required": ["type", "enabled", "params"]
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
     }
   }
 }
