@@ -26,7 +26,6 @@ class UDPServer {
           const oscMsg = new OSCMessage(osc.fromBuffer(msg, true), sender);
           this.eventEmitter.emit('message', oscMsg, 'osc');
         } catch (error) {
-          console.error(error);
           const udpMsg = new UDPMessage(msg, sender);
           this.eventEmitter.emit('message', udpMsg, 'udp');
         }
