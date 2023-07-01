@@ -127,6 +127,16 @@
               "_value": "${msg}"
             },
             "enabled": true
+          },
+          {
+            "type": "tcp-output",
+            "params": {
+              "host": "127.0.0.1",
+              "port": 8001,
+              "slip": false,
+              "hex": "0x68, 0x69"
+            },
+            "enabled": true
           }
         ],
         "enabled": true

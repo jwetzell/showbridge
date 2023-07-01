@@ -183,16 +183,47 @@ function doAction(action, msg, messageType, trigger) {
       }
       break;
     case 'udp-output':
-      //TODO(jwetzell): add support for things other than just int byte array
+      let udpSend;
+
       if (action.params.bytes) {
-        servers.udp.send(Buffer.from(action.params.bytes), action.params.port, action.params.host);
+        udpSend = Buffer.from(action.params.bytes);
+      } else if (action.params.hex) {
+        let msgBytes = [];
+        // clean hex string
+        let hex = action.params.hex.replaceAll(' ', '').replaceAll('0x', '').replaceAll(',', '');
+        for (let c = 0; c < hex.length; c += 2) {
+          msgBytes.push(parseInt(hex.substr(c, 2), 16));
+        }
+        udpSend = Buffer.from(msgBytes);
+      } else if (action.params._string) {
+        const _string = _.template(action.params._string);
+        udpSend = _string({ msg, vars });
+      } else if (action.params.string) {
+        udpSend = action.params.string;
       }
+
+      servers.udp.send(udpSend, action.params.port, action.params.host);
       break;
     case 'tcp-output':
-      //TODO(jwetzell): add support for things other than just int byte array
+      let tcpSend;
+
       if (action.params.bytes) {
-        servers.tcp.send(Buffer.from(action.params.bytes), action.params.port, action.params.host, action.params.slip);
+        tcpSend = Buffer.from(action.params.bytes);
+      } else if (action.params.hex) {
+        let msgBytes = [];
+        // clean hex string
+        let hex = action.params.hex.replaceAll(' ', '').replaceAll('0x', '').replaceAll(',', '');
+        for (let c = 0; c < hex.length; c += 2) {
+          msgBytes.push(parseInt(hex.substr(c, 2), 16));
+        }
+        tcpSend = Buffer.from(msgBytes);
+      } else if (action.params._string) {
+        const _string = _.template(action.params._string);
+        tcpSend = _string({ msg, vars });
+      } else if (action.params.string) {
+        tcpSend = action.params.string;
       }
+      servers.tcp.send(tcpSend, action.params.port, action.params.host, action.params.slip);
       break;
     case 'midi-output':
       try {
@@ -292,7 +323,6 @@ function doAction(action, msg, messageType, trigger) {
         }
 
         vars[key] = value;
-        console.log(vars);
       } catch (error) {
         console.error(error);
       }
