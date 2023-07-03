@@ -1,9 +1,8 @@
 # oscee
 
-### Simple OSC/MIDI router /s
+### *Simple OSC/MIDI router _/s_
 
 ## Triggers
-
 - regex
     - patterns: a list of regex patterns as strings
     - properties: a list of properties to test with their respective patterns, must be 1:1 
@@ -40,12 +39,28 @@
     - host: address of the server to send the message to,
     - port: port (number) to udp message on,
     - bytes: hardcoded array of byte values i.e [0, 100, 200] to send over UDP
+    - hex: hex string (i.e 6869, 68 69 , 0x68 0x69, etc) to turn into bytes and send
+    - _string: templated string to send
+    - string: static string to send
 - tcp-output
     - host: address of the server to send the message to,
     - port: port (number) to tcp message on,
     - bytes: hardcoded array of byte values i.e [0, 100, 200] to send over UDP
+    - hex: hex string (i.e 6869, 68 69 , 0x68 0x69, etc) to turn into bytes and send
+    - _string: templated string to send
+    - string: static string to send
 - midi-output
-    - bytes: byte array of midi data [status, data1, data2]
+    - bytes: byte array of midi data [status + channel, data1, data2]
+    - status: midi status (i.e note_on, note_off, program_change, etc.)
+    - note: note value (note_off,, note_on, polyphonic_aftertouch)
+    - velocity: velocity value (note_off, note_on)
+    - control: control number (control_change)
+    - program: program number (program_change)
+    - pressure: pressure value (polyphonic_aftertouch, channel_aftertouch)
+    - value: value (control_change, pitch_bend)
+- delay
+    - duration: time in ms to wait befor executing the defined actions
+    - actions: array of actions to execute
 - log: action takes no params and will simply log the incoming message out useful for debugging triggers
 - shell:
     - _command: JS literal template of shell command to run has access to msg properties
