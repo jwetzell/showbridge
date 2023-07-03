@@ -11,6 +11,7 @@
     - good idea to start with [default.json](src/config/default.json)
 - Run
     - `oscee config.json`
+    - if no config file is specified then [default.json](src/config/default.json) will be used 
 
 ## Triggers
 - regex
