@@ -530,38 +530,88 @@
         "params": {
           "description": "UDP output action params",
           "type": "object",
-          "properties": {
-            "host": {
-              "description": "Hostname or address of the server to send UDP packet to",
-              "type": "string"
+          "oneOf": [
+            {
+              "title": "UDP Bytes",
+              "properties": {
+                "host": {
+                  "description": "Hostname or address of the server to send UDP packet to",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "Port to send UDP packet to",
+                  "type": "integer"
+                },
+                "bytes": {
+                  "description": "bytes to send",
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              "required": ["host", "port", "bytes"],
+              "additionalProperties": false
             },
-            "port": {
-              "description": "Port to send UDP packet to",
-              "type": "integer"
+            {
+              "title": "UDP Hex",
+              "properties": {
+                "host": {
+                  "description": "Hostname or address of the server to send UDP packet to",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "Port to send UDP packet to",
+                  "type": "integer"
+                },
+                "hex": {
+                  "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
+                  "type": "string",
+                  "pattern": "^[0-9A-Fa-f\\sx,]+$"
+                }
+              },
+              "required": ["host", "port", "hex"],
+              "additionalProperties": false
             },
-            "bytes": {
-              "description": "bytes to send",
-              "type": "array",
-              "items": {
-                "type": "number"
-              }
+            {
+              "title": "UDP Template String",
+              "properties": {
+                "host": {
+                  "description": "Hostname or address of the server to send UDP packet to",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "Port to send UDP packet to",
+                  "type": "integer"
+                },
+                "_string": {
+                  "description": "string to send ran through templating engine",
+                  "type": "string"
+                }
+              },
+              "required": ["host", "port", "_string"],
+              "additionalProperties": false
             },
-            "hex": {
-              "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
-              "type": "string",
-              "pattern": "^[0-9A-Fa-f\\sx,]+$"
-            },
-            "_string": {
-              "description": "string to send ran through templating engine",
-              "type": "string"
-            },
-            "string": {
-              "description": "string to send",
-              "type": "string"
+            {
+              "title": "UDP Static String",
+              "properties": {
+                "host": {
+                  "description": "Hostname or address of the server to send UDP packet to",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "Port to send UDP packet to",
+                  "type": "integer"
+                },
+                "string": {
+                  "description": "string to send",
+                  "type": "string"
+                }
+              },
+              "required": ["host", "port", "string"],
+              "additionalProperties": false
             }
-          },
-          "required": ["host", "port"],
-          "additionalProperties": false
+          ]
         },
         "enabled": {
           "description": "Whether this action is enabled",
@@ -582,42 +632,105 @@
         "params": {
           "description": "TCP output action params",
           "type": "object",
-          "properties": {
-            "host": {
-              "description": "Hostname or address of the server to send TCP packet to",
-              "type": "string"
+          "properties": {},
+          "oneOf": [
+            {
+              "title": "TCP Bytes",
+              "properties": {
+                "host": {
+                  "description": "Hostname or address of the server to send TCP packet to",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "Port to send TCP packet to",
+                  "type": "integer"
+                },
+                "slip": {
+                  "description": "whether to SLIP encode the TCP bytes",
+                  "type": "boolean"
+                },
+                "bytes": {
+                  "description": "bytes to send",
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              "required": ["host", "port", "slip", "bytes"],
+              "additionalProperties": false
             },
-            "port": {
-              "description": "Port to send TCP packet to",
-              "type": "integer"
+            {
+              "title": "TCP Hex",
+              "properties": {
+                "host": {
+                  "description": "Hostname or address of the server to send TCP packet to",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "Port to send TCP packet to",
+                  "type": "integer"
+                },
+                "slip": {
+                  "description": "whether to SLIP encode the TCP bytes",
+                  "type": "boolean"
+                },
+                "hex": {
+                  "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
+                  "type": "string",
+                  "pattern": "^[0-9A-Fa-f\\sx,]+$"
+                }
+              },
+              "required": ["host", "port", "slip", "hex"],
+              "additionalProperties": false
             },
-            "slip": {
-              "description": "whether to SLIP encode the TCP bytes",
-              "type": "boolean"
+            {
+              "title": "TCP Template String",
+              "properties": {
+                "host": {
+                  "description": "Hostname or address of the server to send TCP packet to",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "Port to send TCP packet to",
+                  "type": "integer"
+                },
+                "slip": {
+                  "description": "whether to SLIP encode the TCP bytes",
+                  "type": "boolean"
+                },
+                "_string": {
+                  "description": "string to send ran through templating engine",
+                  "type": "string"
+                }
+              },
+              "required": ["host", "port", "slip", "_string"],
+              "additionalProperties": false
             },
-            "bytes": {
-              "description": "bytes to send",
-              "type": "array",
-              "items": {
-                "type": "number"
-              }
-            },
-            "hex": {
-              "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
-              "type": "string",
-              "pattern": "^[0-9A-Fa-f\\sx,]+$"
-            },
-            "_string": {
-              "description": "string to send ran through templating engine",
-              "type": "string"
-            },
-            "string": {
-              "description": "string to send",
-              "type": "string"
+            {
+              "title": "TCP Static String",
+              "properties": {
+                "host": {
+                  "description": "Hostname or address of the server to send TCP packet to",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "Port to send TCP packet to",
+                  "type": "integer"
+                },
+                "slip": {
+                  "description": "whether to SLIP encode the TCP bytes",
+                  "type": "boolean"
+                },
+                "string": {
+                  "description": "string to send",
+                  "type": "string"
+                }
+              },
+              "required": ["host", "port", "slip", "string"],
+              "additionalProperties": false
             }
-          },
-          "required": ["host", "port", "slip"],
-          "additionalProperties": false
+          ]
         },
         "enabled": {
           "description": "Whether this action is enabled",
@@ -638,16 +751,28 @@
         "params": {
           "description": "Shell action params",
           "type": "object",
-          "properties": {
-            "_command": {
-              "description": "JS literal template of the shell command. Will have access to the properties of the incoming message that triggered this action",
-              "type": "string"
+          "oneOf": [
+            {
+              "title": "Template Command",
+              "properties": {
+                "_command": {
+                  "description": "JS literal template of the shell command. Will have access to the properties of the incoming message that triggered this action",
+                  "type": "string"
+                }
+              },
+              "required": ["_command"]
             },
-            "command": {
-              "description": "Shell command to run _command takes priority",
-              "type": "string"
+            {
+              "title": "Static Command",
+              "properties": {
+                "command": {
+                  "description": "Shell command to run _command takes priority",
+                  "type": "string"
+                }
+              },
+              "required": ["command"]
             }
-          },
+          ],
           "additionalProperties": false
         },
         "enabled": {

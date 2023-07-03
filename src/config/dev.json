@@ -129,11 +129,12 @@
             "enabled": true
           },
           {
-            "type": "midi-output",
+            "type": "tcp-output",
             "params": {
-              "status": "pitch_bend",
-              "channel": 1,
-              "value": 1500
+              "host": "127.0.0.1",
+              "port": 8001,
+              "slip": true,
+              "string": "test"
             },
             "enabled": true
           }
