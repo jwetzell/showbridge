@@ -8,7 +8,7 @@ class Config {
     if (!validate(configObj)) {
       throw validate.errors;
     }
-    const messageTypes = ['http', 'ws', 'osc', 'midi', 'tcp', 'udp'];
+    const messageTypes = ['http', 'ws', 'osc', 'midi', 'tcp', 'udp', 'mqtt'];
     messageTypes.forEach((messageType) => {
       if (configObj[messageType]) {
         this[messageType] = configObj[messageType];

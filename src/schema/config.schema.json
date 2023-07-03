@@ -154,9 +154,42 @@
         }
       },
       "required": ["triggers", "params"]
+    },
+    "mqtt": {
+      "title": "MQTT configuration",
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object",
+          "properties": {
+            "broker": {
+              "description": "mqtt broker url",
+              "type": "string"
+            },
+            "topics": {
+              "description": "list of topics to subscribe to",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["broker", "topics"],
+          "additionalProperties": false
+        },
+        "triggers": {
+          "description": "array of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [{ "$ref": "#/definitions/TriggerRegex" }]
+          }
+        }
+      },
+      "required": ["triggers", "params"]
     }
   },
-  "required": ["http", "ws", "osc", "midi", "tcp", "udp"],
+  "required": ["http", "ws", "osc", "midi", "tcp", "udp", "mqtt"],
   "definitions": {
     "ActionList": {
       "description": "Actions to be performed if this trigger is fired",
@@ -173,7 +206,8 @@
           { "$ref": "#/definitions/ActionTCPOutput" },
           { "$ref": "#/definitions/ActionShell" },
           { "$ref": "#/definitions/ActionHTTP" },
-          { "$ref": "#/definitions/ActionDelay" }
+          { "$ref": "#/definitions/ActionDelay" },
+          { "$ref": "#/definitions/ActionMQTTOutput" }
         ]
       }
     },
@@ -826,7 +860,6 @@
       "required": ["type", "enabled", "params"],
       "additionalProperties": false
     },
-
     "ActionHTTP": {
       "title": "HTTP Action",
       "description": "This command will make the configured http call",
@@ -905,6 +938,44 @@
         }
       },
       "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "ActionMQTTOutput": {
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "title": "MQTT Output Action",
+      "description": "This action publishes an MQTT message",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "mqtt-output"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "_topic": {
+              "description": "the templated MQTT topic to publish the message to",
+              "type": "string"
+            },
+            "topic": {
+              "description": "the static MQTT topic to publish the message to",
+              "type": "string"
+            },
+            "_payload": {
+              "description": "the templated payload of the mqtt message",
+              "type": "string"
+            },
+            "payload": {
+              "description": "the static payload of the mqtt message",
+              "type": "string"
+            }
+          }
+        },
+        "enabled": {
+          "description": "Whether this action is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "params", "enabled"],
       "additionalProperties": false
     },
 
