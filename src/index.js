@@ -128,7 +128,7 @@ function doAction(action, msg, messageType, trigger) {
               messageType === 'osc' ? true : false
             );
           } else {
-            console.error(`unhandled foward protocol = ${action.params.protocol}`);
+            console.error(`unhandled forward protocol = ${action.params.protocol}`);
           }
         } else {
           console.error('this is not a forwardable message type');
@@ -333,6 +333,13 @@ function doAction(action, msg, messageType, trigger) {
         vars[key] = value;
       } catch (error) {
         console.error(error);
+      }
+      break;
+    case 'delay':
+      if (action.params.duration && action.params.actions) {
+        setTimeout(() => {
+          action.params.actions.forEach((action) => doAction(action, msg, messageType, trigger));
+        }, action.params.duration);
       }
       break;
     default:

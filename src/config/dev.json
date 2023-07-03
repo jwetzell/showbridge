@@ -123,21 +123,15 @@
             "enabled": true
           },
           {
-            "type": "store",
+            "type": "delay",
             "params": {
-              "key": "udp_msg",
-              "_value": "${msg}"
-            },
-            "enabled": true
-          },
-          {
-            "type": "midi-output",
-            "params": {
-              "status": "note_on",
-              "channel": 1,
-              "note": 60,
-              "velocity": 100,
-              "duration": 250
+              "duration": 1000,
+              "actions": [
+                {
+                  "type": "log",
+                  "enabled": true
+                }
+              ]
             },
             "enabled": true
           }

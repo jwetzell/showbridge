@@ -172,7 +172,8 @@
           { "$ref": "#/definitions/ActionUDPOutput" },
           { "$ref": "#/definitions/ActionTCPOutput" },
           { "$ref": "#/definitions/ActionShell" },
-          { "$ref": "#/definitions/ActionHTTP" }
+          { "$ref": "#/definitions/ActionHTTP" },
+          { "$ref": "#/definitions/ActionDelay" }
         ]
       }
     },
@@ -865,6 +866,37 @@
             }
           },
           "required": ["method"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this action is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "ActionDelay": {
+      "title": "Delay Action",
+      "description": "This action will execute the configured actions after the configured amount of time",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "delay"
+        },
+        "params": {
+          "description": "delay action params",
+          "type": "object",
+          "properties": {
+            "duration": {
+              "description": "time in ms to wait before executing the configured actions",
+              "type": "number"
+            },
+            "actions": {
+              "$ref": "#/definitions/ActionList"
+            }
+          },
+          "required": ["duration", "actions"],
           "additionalProperties": false
         },
         "enabled": {
