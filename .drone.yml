@@ -32,7 +32,7 @@ trigger:
   event:
     - tag
 steps:
-  - name: set_version
+  - name: set version
     image: node:18.16.1-alpine
     commands:
       - npm version ${DRONE_TAG}
@@ -41,4 +41,3 @@ steps:
     settings:
       token:
         from_secret: npm_token
-    depends_on: set_version
