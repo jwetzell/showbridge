@@ -58,8 +58,14 @@ console.debug(config.osc.triggers);
 console.debug('MIDI Trigger Summary');
 console.debug(config.midi.triggers);
 
-console.debug('MIDI Trigger Summary');
-console.debug(config.midi.triggers);
+console.debug('UDP Trigger Summary');
+console.debug(config.udp.triggers);
+
+console.debug('TCP Trigger Summary');
+console.debug(config.tcp.triggers);
+
+console.debug('MQTT Trigger Summary');
+console.debug(config.mqtt.triggers);
 
 servers.tcp.on('message', processMessage);
 servers.udp.on('message', processMessage);
