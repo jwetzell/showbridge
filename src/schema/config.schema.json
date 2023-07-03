@@ -292,7 +292,7 @@
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
-                  "enum": ["polyphonic_aftertouch"]
+                  "const": "polyphonic_aftertouch"
                 },
                 "channel": {
                   "description": "MIDI channel number",
@@ -313,7 +313,7 @@
                   "maximum": 127
                 }
               },
-              "required": ["channel", "note", "pressure"],
+              "required": ["status", "channel", "note", "pressure"],
               "additionalProperties": false
             },
             {
@@ -322,7 +322,7 @@
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
-                  "enum": ["control_change"]
+                  "const": "control_change"
                 },
                 "channel": {
                   "description": "MIDI channel number",
@@ -343,7 +343,7 @@
                   "maximum": 127
                 }
               },
-              "required": ["control", "value"],
+              "required": ["status", "control", "value"],
               "additionalProperties": false
             },
             {
@@ -352,7 +352,7 @@
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
-                  "enum": ["program_change"]
+                  "const": "program_change"
                 },
                 "channel": {
                   "description": "MIDI channel number",
@@ -367,7 +367,7 @@
                   "maximum": 127
                 }
               },
-              "required": ["program"],
+              "required": ["status", "program"],
               "additionalProperties": false
             },
             {
@@ -376,7 +376,7 @@
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
-                  "enum": ["channel_aftertouch"]
+                  "const": "channel_aftertouch"
                 },
                 "channel": {
                   "description": "MIDI channel number",
@@ -391,7 +391,7 @@
                   "maximum": 127
                 }
               },
-              "required": ["pressure"],
+              "required": ["status", "pressure"],
               "additionalProperties": false
             },
             {
@@ -400,7 +400,7 @@
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
-                  "enum": ["pitch_bend"]
+                  "const": "pitch_bend"
                 },
                 "channel": {
                   "description": "MIDI channel number",
@@ -415,7 +415,7 @@
                   "maximum": 16383
                 }
               },
-              "required": ["value"],
+              "required": ["status", "value"],
               "additionalProperties": false
             }
           ],
