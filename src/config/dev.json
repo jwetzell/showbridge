@@ -136,7 +136,8 @@
               "status": "note_on",
               "channel": 1,
               "note": 60,
-              "velocity": 100
+              "velocity": 100,
+              "duration": 250
             },
             "enabled": true
           }

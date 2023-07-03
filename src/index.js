@@ -231,6 +231,12 @@ function doAction(action, msg, messageType, trigger) {
         // TODO(jwetzell): see if there is a way to switch ports when outputting
         const midiToSend = MIDIMessage.parseActionParams(action.params);
         servers.midi.output.sendMessage(Buffer.from(midiToSend.bytes));
+        if (action.params.duration) {
+          const noteOffMsg = MIDIMessage.parseActionParams({ ...action.params, status: 'note_off' });
+          setTimeout(() => {
+            servers.midi.output.sendMessage(Buffer.from(noteOffMsg.bytes));
+          }, action.params.duration);
+        }
       } catch (error) {
         console.error('error outputting midi');
         console.error(error);

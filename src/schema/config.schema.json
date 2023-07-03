@@ -265,12 +265,12 @@
               "additionalProperties": false
             },
             {
-              "title": "MIDI Note Message",
+              "title": "MIDI Note Off Message",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
-                  "enum": ["note_off", "note_on"]
+                  "const": "note_off"
                 },
                 "channel": {
                   "description": "MIDI channel number",
@@ -291,7 +291,41 @@
                   "maximum": 127
                 }
               },
-              "required": ["channel", "note", "velocity"],
+              "required": ["status", "channel", "note", "velocity"],
+              "additionalProperties": false
+            },
+            {
+              "title": "MIDI Note On Message",
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "const": "note_on"
+                },
+                "channel": {
+                  "description": "MIDI channel number",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 16
+                },
+                "note": {
+                  "description": "MIDI note value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                },
+                "velocity": {
+                  "description": "MIDI velocity value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                },
+                "duration": {
+                  "description": "duration (ms) if set then a MIDI note off will be sent after the duration time",
+                  "type": "number"
+                }
+              },
+              "required": ["status", "channel", "note", "velocity"],
               "additionalProperties": false
             },
             {
