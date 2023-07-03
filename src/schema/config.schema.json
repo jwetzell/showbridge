@@ -240,6 +240,7 @@
           "properties": {},
           "oneOf": [
             {
+              "title": "MIDI Bytes",
               "properties": {
                 "bytes": {
                   "description": "MIDI data to be sent as an array of 3 bytes",
@@ -256,6 +257,7 @@
               "additionalProperties": false
             },
             {
+              "title": "MIDI Note Message",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -285,6 +287,7 @@
               "additionalProperties": false
             },
             {
+              "title": "MIDI Polyphonic Aftertouch",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -314,6 +317,7 @@
               "additionalProperties": false
             },
             {
+              "title": "MIDI Control Change",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -343,6 +347,7 @@
               "additionalProperties": false
             },
             {
+              "title": "MIDI Program Change",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -366,11 +371,12 @@
               "additionalProperties": false
             },
             {
+              "title": "MIDI Channel Aftertouch",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
-                  "enum": ["channel_aftertouch", "pitch_bend"]
+                  "enum": ["channel_aftertouch"]
                 },
                 "channel": {
                   "description": "MIDI channel number",
@@ -389,6 +395,7 @@
               "additionalProperties": false
             },
             {
+              "title": "MIDI Pitch Bend",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
