@@ -27,5 +27,12 @@
       "port": 8000
     },
     "triggers": []
+  },
+  "mqtt": {
+    "params": {
+      "broker": "",
+      "topics": []
+    },
+    "triggers": []
   }
 }

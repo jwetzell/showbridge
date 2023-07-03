@@ -8,6 +8,7 @@ const TCPServer = require('./servers/tcp-server');
 const MIDIServer = require('./servers/midi-server');
 const WebSocketServer = require('./servers/websocket-server');
 const HTTPServer = require('./servers/http-server');
+const MQTTServer = require('./servers/mqtt-server');
 const MIDIMessage = require('./models/message/midi-message');
 
 // utils
@@ -29,6 +30,7 @@ let servers = {
   tcp: new TCPServer(),
   ws: new WebSocketServer(server),
   midi: new MIDIServer(),
+  mqtt: new MQTTServer(),
 };
 
 const vars = {};
@@ -56,13 +58,20 @@ console.debug(config.osc.triggers);
 console.debug('MIDI Trigger Summary');
 console.debug(config.midi.triggers);
 
-console.debug('MIDI Trigger Summary');
-console.debug(config.midi.triggers);
+console.debug('UDP Trigger Summary');
+console.debug(config.udp.triggers);
+
+console.debug('TCP Trigger Summary');
+console.debug(config.tcp.triggers);
+
+console.debug('MQTT Trigger Summary');
+console.debug(config.mqtt.triggers);
 
 servers.tcp.on('message', processMessage);
 servers.udp.on('message', processMessage);
 servers.midi.on('message', processMessage);
 servers.ws.on('message', processMessage);
+servers.mqtt.on('message', processMessage);
 
 servers.http.on('message', processMessage);
 servers.http.on('reload', (updatedConfig) => {
@@ -82,6 +91,7 @@ function reloadServers() {
   servers.udp.reload(config.udp.params);
   servers.http.reload(config.http.params);
   servers.midi.reload();
+  servers.mqtt.reload(config.mqtt.params);
 }
 
 /** Message Processing */
@@ -342,6 +352,25 @@ function doAction(action, msg, messageType, trigger) {
         }, action.params.duration);
       }
       break;
+    case 'mqtt-output':
+      let topic;
+      let payload;
+
+      if (action.params._topic) {
+        topic = _.template(action.params._topic)({ msg, vars });
+      } else if (action.params.topic) {
+        topic = action.params.topic;
+      }
+
+      if (action.params._payload) {
+        payload = _.template(action.params._payload)({ msg, vars });
+      } else if (action.params.payload) {
+        payload = action.params.payload;
+      }
+
+      if (topic && payload) {
+        servers.mqtt.send(topic, payload);
+      }
     default:
       console.error(`unhandled action type = ${action.type}`);
   }

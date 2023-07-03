@@ -134,8 +134,33 @@
               ]
             },
             "enabled": true
+          },
+          {
+            "type": "mqtt-output",
+            "params": {
+              "topic": "testtopic/1",
+              "payload": "hello"
+            },
+            "enabled": true
           }
         ],
+        "enabled": true
+      }
+    ]
+  },
+  "mqtt": {
+    "params": {
+      "broker": "mqtt://localhost:1883",
+      "topics": ["test/#"]
+    },
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": ["^.*$"],
+          "properties": ["topic"]
+        },
+        "actions": [{ "type": "log", "enabled": true }],
         "enabled": true
       }
     ]
