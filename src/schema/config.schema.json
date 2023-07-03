@@ -237,21 +237,182 @@
         "params": {
           "description": "MIDI output action params",
           "type": "object",
-          "properties": {
-            "bytes": {
-              "description": "MIDI data to be sent as an array of 3 bytes",
-              "type": "array",
-              "items": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 255
+          "properties": {},
+          "oneOf": [
+            {
+              "properties": {
+                "bytes": {
+                  "description": "MIDI data to be sent as an array of 3 bytes",
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 255
+                  },
+                  "minItems": 2,
+                  "maxItems": 3
+                }
               },
-              "minItems": 2,
-              "maxItems": 3
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "enum": ["note_off", "note_on"]
+                },
+                "channel": {
+                  "description": "MIDI channel number",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 16
+                },
+                "note": {
+                  "description": "MIDI note value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                },
+                "velocity": {
+                  "description": "MIDI velocity value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                }
+              },
+              "required": ["channel", "note", "velocity"],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "enum": ["polyphonic_aftertouch"]
+                },
+                "channel": {
+                  "description": "MIDI channel number",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 16
+                },
+                "note": {
+                  "description": "MIDI note value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                },
+                "pressure": {
+                  "description": "MIDI pressure value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                }
+              },
+              "required": ["channel", "note", "pressure"],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "enum": ["control_change"]
+                },
+                "channel": {
+                  "description": "MIDI channel number",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 16
+                },
+                "control": {
+                  "description": "MIDI control value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                },
+                "value": {
+                  "description": "MIDI value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                }
+              },
+              "required": ["control", "value"],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "enum": ["program_change"]
+                },
+                "channel": {
+                  "description": "MIDI channel number",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 16
+                },
+                "program": {
+                  "description": "MIDI program value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                }
+              },
+              "required": ["program"],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "enum": ["channel_aftertouch", "pitch_bend"]
+                },
+                "channel": {
+                  "description": "MIDI channel number",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 16
+                },
+                "pressure": {
+                  "description": "MIDI pressure value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 127
+                }
+              },
+              "required": ["pressure"],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "enum": ["pitch_bend"]
+                },
+                "channel": {
+                  "description": "MIDI channel number",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 16
+                },
+                "value": {
+                  "description": "MIDI value",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 16383
+                }
+              },
+              "required": ["value"],
+              "additionalProperties": false
             }
-          },
-          "required": ["bytes"],
-          "additionalProperties": false
+          ],
+          "required": []
         },
         "enabled": {
           "description": "Whether this action is enabled",

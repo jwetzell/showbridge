@@ -64,7 +64,7 @@
   "midi": {
     "triggers": [
       {
-        "type": "midi-control-change",
+        "type": "midi-note-on",
         "params": {},
         "enabled": true,
         "actions": [
@@ -129,12 +129,11 @@
             "enabled": true
           },
           {
-            "type": "tcp-output",
+            "type": "midi-output",
             "params": {
-              "host": "127.0.0.1",
-              "port": 8001,
-              "slip": false,
-              "hex": "0x68, 0x69"
+              "status": "pitch_bend",
+              "channel": 1,
+              "value": 1500
             },
             "enabled": true
           }

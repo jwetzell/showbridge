@@ -1,6 +1,6 @@
 class MIDIMessage {
   constructor(bytes) {
-    this.channel = bytes[0] & 0xf;
+    this.channel = (bytes[0] & 0xf) + 1;
     this.bytes = Uint8Array.from(bytes);
 
     switch (bytes[0] >> 4) {
@@ -52,6 +52,88 @@ class MIDIMessage {
 
   toString() {
     return `status: ${this.status} ch: ${this.channel} data: ${this.bytes.slice(1).join(' ')}`;
+  }
+
+  static parseActionParams(params) {
+    //TODO(jwetzell): throw errors when parsing goes wrong
+    if (params.bytes) {
+      return new MIDIMessage(params.bytes);
+    } else {
+      const midiBytes = [];
+      const midiStatusMap = {
+        note_off: 8,
+        note_on: 9,
+        polyphonic_aftertouch: 10,
+        control_change: 11,
+        program_change: 12,
+        channel_aftertouch: 13,
+        pitch_bend: 14,
+      };
+
+      midiBytes[0] = (midiStatusMap[params.status] << 4) ^ (params.channel - 1);
+      switch (params.status) {
+        case 'note_off':
+          if (params.note && params.velocity) {
+            midiBytes[1] = params.note;
+            midiBytes[2] = params.velocity;
+          } else {
+            console.error('note_off must include both note and velocity params');
+          }
+          break;
+        case 'note_on':
+          if (params.note && params.velocity) {
+            midiBytes[1] = params.note;
+            midiBytes[2] = params.velocity;
+          } else {
+            console.error('note_on must include both note and velocity params');
+          }
+          break;
+        case 'polyphonic_aftertouch':
+          if (params.note && params.pressure) {
+            midiBytes[1] = params.note;
+            midiBytes[2] = params.pressure;
+          } else {
+            console.error('polyphonic_aftertouch must include both note and pressure params');
+          }
+          break;
+        case 'control_change':
+          if (params.control && params.value) {
+            midiBytes[1] = params.control;
+            midiBytes[2] = params.value;
+          } else {
+            console.error('control_change must include both control and value params');
+          }
+          break;
+        case 'program_change':
+          if (params.program) {
+            midiBytes[1] = params.program;
+          } else {
+            console.error('program_change must include program params');
+          }
+          break;
+        case 'channel_aftertouch':
+          if (params.pressure) {
+            midiBytes[1] = params.pressure;
+          } else {
+            console.error('channel_aftertouch must include pressure param');
+          }
+          break;
+        case 'pitch_bend':
+          if (params.value && params.value <= 16383) {
+            const lsb = params.value & 0x7f;
+            const msb = (params.value >> 7) & 0x7f;
+
+            midiBytes[1] = lsb;
+            midiBytes[2] = msb;
+          } else {
+            console.error('pitch_bend must include value param and be less than or equal to 16383');
+          }
+          break;
+        default:
+          console.error(`unhandled midi status: ${params.status}`);
+      }
+      return new MIDIMessage(midiBytes);
+    }
   }
 }
 module.exports = MIDIMessage;

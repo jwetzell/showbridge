@@ -8,6 +8,7 @@ const TCPServer = require('./servers/tcp-server');
 const MIDIServer = require('./servers/midi-server');
 const WebSocketServer = require('./servers/websocket-server');
 const HTTPServer = require('./servers/http-server');
+const MIDIMessage = require('./models/message/midi-message');
 
 // utils
 const _ = require('lodash');
@@ -228,7 +229,8 @@ function doAction(action, msg, messageType, trigger) {
     case 'midi-output':
       try {
         // TODO(jwetzell): see if there is a way to switch ports when outputting
-        servers.midi.output.sendMessage(action.params.bytes);
+        const midiToSend = MIDIMessage.parseActionParams(action.params);
+        servers.midi.output.sendMessage(Buffer.from(midiToSend.bytes));
       } catch (error) {
         console.error('error outputting midi');
         console.error(error);
