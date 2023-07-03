@@ -77,7 +77,7 @@ class MIDIMessage {
             midiBytes[1] = params.note;
             midiBytes[2] = params.velocity;
           } else {
-            console.error('note_off must include both note and velocity params');
+            throw new Error('note_off must include both note and velocity params');
           }
           break;
         case 'note_on':
@@ -85,7 +85,7 @@ class MIDIMessage {
             midiBytes[1] = params.note;
             midiBytes[2] = params.velocity;
           } else {
-            console.error('note_on must include both note and velocity params');
+            throw new Error('note_on must include both note and velocity params');
           }
           break;
         case 'polyphonic_aftertouch':
@@ -93,7 +93,7 @@ class MIDIMessage {
             midiBytes[1] = params.note;
             midiBytes[2] = params.pressure;
           } else {
-            console.error('polyphonic_aftertouch must include both note and pressure params');
+            throw new Error('polyphonic_aftertouch must include both note and pressure params');
           }
           break;
         case 'control_change':
@@ -101,21 +101,21 @@ class MIDIMessage {
             midiBytes[1] = params.control;
             midiBytes[2] = params.value;
           } else {
-            console.error('control_change must include both control and value params');
+            throw new Error('control_change must include both control and value params');
           }
           break;
         case 'program_change':
           if (params.program) {
             midiBytes[1] = params.program;
           } else {
-            console.error('program_change must include program params');
+            throw new Error('program_change must include program params');
           }
           break;
         case 'channel_aftertouch':
           if (params.pressure) {
             midiBytes[1] = params.pressure;
           } else {
-            console.error('channel_aftertouch must include pressure param');
+            throw new Error('channel_aftertouch must include pressure param');
           }
           break;
         case 'pitch_bend':
@@ -126,7 +126,7 @@ class MIDIMessage {
             midiBytes[1] = lsb;
             midiBytes[2] = msb;
           } else {
-            console.error('pitch_bend must include value param and be less than or equal to 16383');
+            throw new Error('pitch_bend must include value param and be less than or equal to 16383');
           }
           break;
         default:
