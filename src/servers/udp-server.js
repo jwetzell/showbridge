@@ -14,23 +14,29 @@ class UDPServer {
       this.server.close();
     }
     this.server = udp.createSocket('udp4');
-    this.server.bind(params.port, () => {
-      console.info(`udp server setup on port ${this.server.address().port}`);
-      this.server.on('message', (msg, rinfo) => {
-        const sender = {
-          protocol: 'udp',
-          address: rinfo.address,
-          port: rinfo.port,
-        };
-        try {
-          const oscMsg = new OSCMessage(osc.fromBuffer(msg, true), sender);
-          this.eventEmitter.emit('message', oscMsg, 'osc');
-        } catch (error) {
-          const udpMsg = new UDPMessage(msg, sender);
-          this.eventEmitter.emit('message', udpMsg, 'udp');
-        }
-      });
-    });
+    this.server.bind(
+      {
+        address: params.address,
+        port: params.port,
+      },
+      () => {
+        console.info(`udp server setup on port ${this.server.address().address}:${this.server.address().port}`);
+        this.server.on('message', (msg, rinfo) => {
+          const sender = {
+            protocol: 'udp',
+            address: rinfo.address,
+            port: rinfo.port,
+          };
+          try {
+            const oscMsg = new OSCMessage(osc.fromBuffer(msg, true), sender);
+            this.eventEmitter.emit('message', oscMsg, 'osc');
+          } catch (error) {
+            const udpMsg = new UDPMessage(msg, sender);
+            this.eventEmitter.emit('message', udpMsg, 'udp');
+          }
+        });
+      }
+    );
   }
 
   send(msg, port, host) {

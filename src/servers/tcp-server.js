@@ -11,6 +11,7 @@ class TCPServer {
   }
 
   reload(params) {
+    console.log(params);
     if (this.server) {
       this.server.close();
     }
@@ -33,9 +34,15 @@ class TCPServer {
       });
     });
 
-    this.server.listen(params.port, () => {
-      console.info(`tcp server setup on port ${this.server.address().port}`);
-    });
+    this.server.listen(
+      {
+        host: params.address,
+        port: params.port,
+      },
+      () => {
+        console.info(`tcp server setup on port ${this.server.address().address}:${this.server.address().port}`);
+      }
+    );
   }
 
   send(msg, port, host, slipEncode) {

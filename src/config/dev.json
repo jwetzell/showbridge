@@ -78,6 +78,7 @@
   },
   "tcp": {
     "params": {
+      "address": "0.0.0.0",
       "port": 8000
     },
     "triggers": [
@@ -107,6 +108,7 @@
   },
   "udp": {
     "params": {
+      "address": "0.0.0.0",
       "port": 8000
     },
     "triggers": [
@@ -129,12 +131,12 @@
             "enabled": true
           },
           {
-            "type": "tcp-output",
+            "type": "midi-output",
             "params": {
-              "host": "127.0.0.1",
-              "port": 8001,
-              "slip": true,
-              "string": "test"
+              "status": "note_on",
+              "channel": 1,
+              "note": 60,
+              "velocity": 100
             },
             "enabled": true
           }

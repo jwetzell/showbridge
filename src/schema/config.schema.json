@@ -94,6 +94,10 @@
         "params": {
           "type": "object",
           "properties": {
+            "address": {
+              "description": "Address to listen on defaults to 0.0.0.0",
+              "type": "string"
+            },
             "port": {
               "description": "TCP port to listen on",
               "type": "number"
@@ -124,6 +128,10 @@
         "params": {
           "type": "object",
           "properties": {
+            "address": {
+              "description": "Address to listen on defaults to 0.0.0.0",
+              "type": "string"
+            },
             "port": {
               "description": "UDP port to listen on",
               "type": "number"
