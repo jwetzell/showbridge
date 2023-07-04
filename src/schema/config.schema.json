@@ -362,10 +362,6 @@
                   "type": "number",
                   "minimum": 0,
                   "maximum": 127
-                },
-                "duration": {
-                  "description": "duration (ms) if set then a MIDI note off will be sent after the duration time",
-                  "type": "number"
                 }
               },
               "required": ["status", "channel", "note", "velocity"],

@@ -181,15 +181,16 @@ function doAction(action, msg, messageType, trigger) {
       let udpSend;
 
       if (action.params.bytes) {
-        udpSend = Buffer.from(action.params.bytes);
+        udpSend = action.params.bytes;
       } else if (action.params.hex) {
-        udpSend = Buffer.from(hexToBytes(action.params.hex));
+        udpSend = hexToBytes(action.params.hex);
       } else {
         // check for string or _string
         udpSend = resolveTemplatedProperty(action.params, 'string', { msg, vars });
       }
+
       if (udpSend) {
-        servers.udp.send(udpSend, action.params.port, action.params.host);
+        servers.udp.send(Buffer.from(udpSend), action.params.port, action.params.host);
       } else {
         console.error('udp-output has nothing to send');
       }
@@ -198,16 +199,16 @@ function doAction(action, msg, messageType, trigger) {
       let tcpSend;
 
       if (action.params.bytes) {
-        tcpSend = Buffer.from(action.params.bytes);
+        tcpSend = action.params.bytes;
       } else if (action.params.hex) {
-        tcpSend = Buffer.from(hexToBytes(action.params.hex));
+        tcpSend = hexToBytes(action.params.hex);
       } else {
         // check for string or _string
         tcpSend = resolveTemplatedProperty(action.params, 'string', { msg, vars });
       }
 
       if (tcpSend) {
-        servers.tcp.send(tcpSend, action.params.port, action.params.host, action.params.slip);
+        servers.tcp.send(Buffer.from(tcpSend), action.params.port, action.params.host, action.params.slip);
       } else {
         console.error('tcp-output has nothing to send');
       }
@@ -216,12 +217,8 @@ function doAction(action, msg, messageType, trigger) {
       try {
         // TODO(jwetzell): see if there is a way to switch ports when outputting
         const midiToSend = MIDIMessage.parseActionParams(action.params);
-        servers.midi.output.sendMessage(Buffer.from(midiToSend.bytes));
-        if (action.params.duration) {
-          const noteOffMsg = MIDIMessage.parseActionParams({ ...action.params, status: 'note_off' });
-          setTimeout(() => {
-            servers.midi.output.sendMessage(Buffer.from(noteOffMsg.bytes));
-          }, action.params.duration);
+        if (midiToSend) {
+          servers.midi.output.sendMessage(Buffer.from(midiToSend.bytes));
         }
       } catch (error) {
         console.error('error outputting midi');
