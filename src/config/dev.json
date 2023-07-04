@@ -150,7 +150,7 @@
   },
   "mqtt": {
     "params": {
-      "broker": "mqtt://localhost:1883",
+      "broker": "",
       "topics": ["test/#"]
     },
     "triggers": [
