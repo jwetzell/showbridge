@@ -11,7 +11,7 @@ class MQTTServer {
     if (this.client) {
       this.client.end();
     }
-    if (params.broker !== '') {
+    if (params.broker !== '' && params.topics) {
       if (params.username && params.password) {
         this.client = mqtt.connect(params.broker, {
           username: params.username,
@@ -27,11 +27,13 @@ class MQTTServer {
 
       this.client.on('connect', () => {
         console.log(`mqtt client connected to ${params.broker}`);
-        this.client.subscribe(params.topics, (err) => {
-          if (err) {
-            console.error(err);
-          }
-        });
+        if (params.topics?.length > 0) {
+          this.client.subscribe(params.topics, (err) => {
+            if (err) {
+              console.error(err);
+            }
+          });
+        }
       });
 
       this.client.on('message', (topic, message) => {
