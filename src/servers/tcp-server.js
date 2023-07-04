@@ -11,7 +11,6 @@ class TCPServer {
   }
 
   reload(params) {
-    console.log(params);
     if (this.server) {
       this.server.close();
     }
