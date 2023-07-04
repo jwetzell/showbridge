@@ -166,6 +166,14 @@
               "description": "mqtt broker url",
               "type": "string"
             },
+            "username": {
+              "description": "username for mqtt broker",
+              "type": "string"
+            },
+            "password": {
+              "description": "password for mqtt broker",
+              "type": "string"
+            },
             "topics": {
               "description": "list of topics to subscribe to",
               "type": "array",

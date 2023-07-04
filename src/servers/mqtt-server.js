@@ -12,7 +12,18 @@ class MQTTServer {
       this.client.end();
     }
     if (params.broker !== '') {
-      this.client = mqtt.connect(params.broker);
+      if (params.username && params.password) {
+        this.client = mqtt.connect(params.broker, {
+          username: params.username,
+          password: params.password,
+        });
+      } else {
+        this.client = mqtt.connect(params.broker);
+      }
+
+      this.client.on('error', (err) => {
+        console.error(err);
+      });
 
       this.client.on('connect', () => {
         console.log(`mqtt client connected to ${params.broker}`);
