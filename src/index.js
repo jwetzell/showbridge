@@ -15,6 +15,7 @@ const MIDIMessage = require('./models/message/midi-message');
 const _ = require('lodash');
 const { exec } = require('child_process');
 const { readFileSync } = require('fs');
+const { resolveTemplatedProperty, hexToBytes } = require('./utils/helper');
 
 // config
 const Config = require('./models/config');
@@ -150,31 +151,14 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'osc-output':
       try {
-        let address = '';
-        if (!!action.params._address) {
-          const _address = _.template(action.params._address);
-          address = _address({ msg, vars });
-        } else if (!!action.params.address) {
-          address = action.params.address;
-        } else {
+        const address = resolveTemplatedProperty(action.params, 'address', { msg, vars });
+
+        if (!address) {
           console.error('either address or _address property need to be set for osc-output action');
           return;
         }
 
-        let args = [];
-
-        if (!!action.params._args) {
-          action.params._args.forEach((arg) => {
-            if (typeof arg === 'string') {
-              const _arg = _.template(arg);
-              args.push(_arg({ msg, vars }));
-            } else {
-              args.push(arg);
-            }
-          });
-        } else if (!!action.params.args) {
-          args = action.params.args;
-        }
+        const args = resolveTemplatedProperty(action.params, 'args', { msg, vars });
 
         const outBuff = osc.toBuffer({
           address,
@@ -199,21 +183,16 @@ function doAction(action, msg, messageType, trigger) {
       if (action.params.bytes) {
         udpSend = Buffer.from(action.params.bytes);
       } else if (action.params.hex) {
-        let msgBytes = [];
-        // clean hex string
-        let hex = action.params.hex.replaceAll(' ', '').replaceAll('0x', '').replaceAll(',', '');
-        for (let c = 0; c < hex.length; c += 2) {
-          msgBytes.push(parseInt(hex.substr(c, 2), 16));
-        }
-        udpSend = Buffer.from(msgBytes);
-      } else if (action.params._string) {
-        const _string = _.template(action.params._string);
-        udpSend = _string({ msg, vars });
-      } else if (action.params.string) {
-        udpSend = action.params.string;
+        udpSend = Buffer.from(hexToBytes(action.params.hex));
+      } else {
+        // check for string or _string
+        udpSend = resolveTemplatedProperty(action.params, 'string', { msg, vars });
       }
-
-      servers.udp.send(udpSend, action.params.port, action.params.host);
+      if (udpSend) {
+        servers.udp.send(udpSend, action.params.port, action.params.host);
+      } else {
+        console.error('udp-output has nothing to send');
+      }
       break;
     case 'tcp-output':
       let tcpSend;
@@ -221,20 +200,17 @@ function doAction(action, msg, messageType, trigger) {
       if (action.params.bytes) {
         tcpSend = Buffer.from(action.params.bytes);
       } else if (action.params.hex) {
-        let msgBytes = [];
-        // clean hex string
-        let hex = action.params.hex.replaceAll(' ', '').replaceAll('0x', '').replaceAll(',', '');
-        for (let c = 0; c < hex.length; c += 2) {
-          msgBytes.push(parseInt(hex.substr(c, 2), 16));
-        }
-        tcpSend = Buffer.from(msgBytes);
-      } else if (action.params._string) {
-        const _string = _.template(action.params._string);
-        tcpSend = _string({ msg, vars });
-      } else if (action.params.string) {
-        tcpSend = action.params.string;
+        tcpSend = Buffer.from(hexToBytes(action.params.hex));
+      } else {
+        // check for string or _string
+        tcpSend = resolveTemplatedProperty(action.params, 'string', { msg, vars });
       }
-      servers.tcp.send(tcpSend, action.params.port, action.params.host, action.params.slip);
+
+      if (tcpSend) {
+        servers.tcp.send(tcpSend, action.params.port, action.params.host, action.params.slip);
+      } else {
+        console.error('tcp-output has nothing to send');
+      }
       break;
     case 'midi-output':
       try {
@@ -256,17 +232,9 @@ function doAction(action, msg, messageType, trigger) {
       console.info(`${messageType}: ${msg}`);
       break;
     case 'shell':
-      let command = '';
-
       try {
-        if (!!action.params._command) {
-          command = _.template(action.params._command)({ msg, vars });
-        } else if (!!action.params.command) {
-          command = action.params.command;
-        } else {
-          console.error('shell action with no command configured');
-        }
-        if (command !== '') {
+        const command = resolveTemplatedProperty(action.params, 'command', { msg, vars });
+        if (command && command !== '') {
           exec(command);
         }
       } catch (error) {
@@ -276,25 +244,11 @@ function doAction(action, msg, messageType, trigger) {
       break;
     case 'http':
       //TODO(jwetzell): add other http things like query parameters although they can just be included in the url field
-      let url = '';
-      let body = '';
-
       try {
-        if (!!action.params._url) {
-          url = _.template(action.params._url)({ msg, vars });
-        } else if (!!action.params.url) {
-          url = action.params.url;
-        } else {
-          console.error('http action with no url configured');
-        }
+        const url = resolveTemplatedProperty(action.params, 'url', { msg, vars });
+        const body = resolveTemplatedProperty(action.params, 'body', { msg, vars });
 
-        if (!!action.params._body) {
-          body = _.template(action.params._body)({ msg, vars });
-        } else if (!!action.params.body) {
-          body = action.params.body;
-        }
-
-        if (url !== '') {
+        if (url && url !== '') {
           const request = superagent(action.params.method, url);
           if (action.params.contentType) {
             request.type(action.params.contentType);
@@ -320,27 +274,15 @@ function doAction(action, msg, messageType, trigger) {
       }
       break;
     case 'store':
-      let value;
-      let key;
-
       try {
-        if (!!action.params._value) {
-          value = _.template(action.params._value)({ msg, vars });
-        } else if (!!action.params.value) {
-          value = action.params.value;
-        } else {
-          console.error('store action with no value configured');
-        }
+        const value = resolveTemplatedProperty(action.params, 'value', { msg, vars });
+        const key = resolveTemplatedProperty(action.params, 'key', { msg, vars });
 
-        if (!!action.params._key) {
-          key = _.template(action.params._key)({ msg, vars });
-        } else if (!!action.params.key) {
-          key = action.params.key;
+        if (key && value) {
+          vars[key] = value;
         } else {
-          console.error('store action with no key configured');
+          console.error('store action missing a key or value');
         }
-
-        vars[key] = value;
       } catch (error) {
         console.error(error);
       }
@@ -353,23 +295,13 @@ function doAction(action, msg, messageType, trigger) {
       }
       break;
     case 'mqtt-output':
-      let topic;
-      let payload;
-
-      if (action.params._topic) {
-        topic = _.template(action.params._topic)({ msg, vars });
-      } else if (action.params.topic) {
-        topic = action.params.topic;
-      }
-
-      if (action.params._payload) {
-        payload = _.template(action.params._payload)({ msg, vars });
-      } else if (action.params.payload) {
-        payload = action.params.payload;
-      }
+      const topic = resolveTemplatedProperty(action.params, 'topic', { msg, vars });
+      const payload = resolveTemplatedProperty(action.params, 'payload', { msg, vars });
 
       if (topic && payload) {
         servers.mqtt.send(topic, payload);
+      } else {
+        console.error('mqtt-output missing either topic or payload');
       }
     default:
       console.error(`unhandled action type = ${action.type}`);
