@@ -845,7 +845,8 @@
                   "type": "string"
                 }
               },
-              "required": ["_command"]
+              "required": ["_command"],
+              "additionalProperties": false
             },
             {
               "title": "Static Command",
@@ -855,10 +856,10 @@
                   "type": "string"
                 }
               },
-              "required": ["command"]
+              "required": ["command"],
+              "additionalProperties": false
             }
-          ],
-          "additionalProperties": false
+          ]
         },
         "enabled": {
           "description": "Whether this action is enabled",
