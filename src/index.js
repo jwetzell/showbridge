@@ -8,7 +8,7 @@ const TCPServer = require('./servers/tcp-server');
 const MIDIServer = require('./servers/midi-server');
 const WebSocketServer = require('./servers/websocket-server');
 const HTTPServer = require('./servers/http-server');
-const MQTTServer = require('./servers/mqtt-server');
+const MQTTClient = require('./servers/mqtt-client');
 const MIDIMessage = require('./models/message/midi-message');
 
 // utils
@@ -31,7 +31,7 @@ let servers = {
   tcp: new TCPServer(),
   ws: new WebSocketServer(server),
   midi: new MIDIServer(),
-  mqtt: new MQTTServer(),
+  mqtt: new MQTTClient(),
 };
 
 const vars = {};

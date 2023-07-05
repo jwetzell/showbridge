@@ -2,7 +2,7 @@ const events = require('events');
 const mqtt = require('mqtt');
 const MQTTMessage = require('../models/message/mqtt-message');
 
-class MQTTServer {
+class MQTTClient {
   constructor() {
     this.eventEmitter = new events.EventEmitter();
   }
@@ -56,4 +56,4 @@ class MQTTServer {
   }
 }
 
-module.exports = MQTTServer;
+module.exports = MQTTClient;
