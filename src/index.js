@@ -258,8 +258,6 @@ function doAction(action, msg, messageType, trigger) {
           request.end((err, res) => {
             if (!!err) {
               console.error(err);
-            } else {
-              console.debug(`${action.params.method} request made to ${url}`);
             }
           });
         } else {

@@ -4,9 +4,7 @@ function resolveTemplatedProperty(params, property, data) {
   if (params[`_${property}`]) {
     const templatedProperty = params[`_${property}`];
     if (Array.isArray(templatedProperty)) {
-      console.log('templatedProperty is an array');
       const processedOutput = [];
-
       templatedProperty.forEach((item) => {
         //only template string types
         if (typeof item === 'string') {
