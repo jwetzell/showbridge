@@ -8,20 +8,12 @@
       {
         "type": "regex",
         "params": {
-          "patterns": ["^/send/udp$"],
+          "patterns": [".*"],
           "properties": ["originalUrl"]
         },
         "actions": [
-          { "type": "log", "enabled": true },
           {
-            "type": "osc-output",
-            "params": {
-              "host": "127.0.0.1",
-              "address": "/udp/input",
-              "_args": ["${vars['udp_msg']}"],
-              "port": 8001,
-              "protocol": "udp"
-            },
+            "type": "log",
             "enabled": true
           }
         ],
@@ -37,23 +29,20 @@
       {
         "type": "regex",
         "params": {
-          "patterns": ["^.*$"],
+          "patterns": ["^/test/.*$"],
           "properties": ["address"]
         },
         "actions": [
           {
-            "type": "osc-output",
-            "params": {
-              "address": "/cue/3/start",
-              "args": [],
-              "host": "localhost",
-              "port": 53000,
-              "protocol": "tcp"
-            },
+            "type": "log",
             "enabled": true
           },
           {
-            "type": "log",
+            "type": "http",
+            "params": {
+              "url": "http://localhost:3000/test",
+              "method": "GET"
+            },
             "enabled": true
           }
         ],
@@ -62,19 +51,7 @@
     ]
   },
   "midi": {
-    "triggers": [
-      {
-        "type": "midi-note-on",
-        "params": {},
-        "enabled": true,
-        "actions": [
-          {
-            "type": "log",
-            "enabled": true
-          }
-        ]
-      }
-    ]
+    "triggers": []
   },
   "tcp": {
     "params": {
@@ -85,7 +62,7 @@
       {
         "type": "sender",
         "params": {
-          "address": "::1"
+          "address": "127.0.0.1"
         },
         "actions": [
           {
@@ -93,11 +70,13 @@
             "enabled": true
           },
           {
-            "type": "forward",
+            "type": "osc-output",
             "params": {
               "host": "localhost",
-              "port": 8002,
-              "protocol": "udp"
+              "_address": "/test/${msg}",
+              "_args": [1, "${msg}"],
+              "protocol": "udp",
+              "port": 8000
             },
             "enabled": true
           }
@@ -115,7 +94,7 @@
       {
         "type": "sender",
         "params": {
-          "address": "127.0.0.1"
+          "address": "10.0.0.94"
         },
         "actions": [
           {
@@ -123,23 +102,11 @@
             "enabled": true
           },
           {
-            "type": "delay",
+            "type": "forward",
             "params": {
-              "duration": 1000,
-              "actions": [
-                {
-                  "type": "log",
-                  "enabled": true
-                }
-              ]
-            },
-            "enabled": true
-          },
-          {
-            "type": "mqtt-output",
-            "params": {
-              "topic": "testtopic/1",
-              "payload": "hello"
+              "host": "127.0.0.1",
+              "port": 8000,
+              "protocol": "tcp"
             },
             "enabled": true
           }
