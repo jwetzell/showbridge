@@ -1,8 +1,11 @@
 const _ = require('lodash');
 
 function resolveTemplatedProperty(params, property, data) {
-  if (params[`_${property}`]) {
+  if (params.hasOwnProperty(`_${property}`)) {
+    //if we have a template versin of the property
     const templatedProperty = params[`_${property}`];
+
+    // process arrays items one by one
     if (Array.isArray(templatedProperty)) {
       const processedOutput = [];
       templatedProperty.forEach((item) => {
@@ -14,10 +17,12 @@ function resolveTemplatedProperty(params, property, data) {
         }
       });
       return processedOutput;
-    } else {
+    } else if (typeof templatedProperty === 'string') {
       return _.template(templatedProperty)(data);
+    } else {
+      return templatedProperty;
     }
-  } else if (params[property]) {
+  } else if (params.hasOwnProperty(property)) {
     return params[property];
   } else {
     return undefined;
