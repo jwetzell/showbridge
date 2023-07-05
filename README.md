@@ -76,3 +76,36 @@
 - shell:
     - _command: JS literal template of shell command to run has access to msg properties
     - command: shell command to run _command has priority
+
+## Message Properties
+
+For templating purposes (any property starting with an underscore _) every message has some properties that might be good to know about
+
+- http
+    - originalUrl: express.js req.originalUrl
+    - baseUrl: express.js req.baseUrl
+    - path: express.js req.path
+    - body: express.js req.body
+- midi
+    - status: midi status i.e. note_on, note_off, program_change, control_change
+    - channel: midi channel 1-16
+    - note: midi note 1-127
+    - velocity: midi velocity 1-127
+    - pressure: midi pressure 1-127
+    - control: midi control number 1-127
+    - value: value portion of control change and pitch_bend 
+    - program: program number 1- 127
+- mqtt
+    - payload: the contents of the MQTT message either an object if parsable JSON or the raw contents as a string
+    - topic: the topic of the published MQTT message
+    - payloadType: json or text describing the type of the payload property
+- osc
+    - address: address of the incoming osc message /an/osc/address
+    - addressParts: an array of address i.e. ["an","osc","address"] 
+    - args: array of args of the incoming osc message [0,"1",2.0]
+- tcp
+    - msg: TCP packet received as Buffer
+- udp
+    - msg: UDP packet received as Buffer
+- websocket
+    - msg: ws message content (if this is JSON it will be parsed into an object)
