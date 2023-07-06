@@ -11,17 +11,20 @@ class MQTTClient {
     if (this.client) {
       this.client.end();
     }
+    const connectionOptions = {
+      reconnectPeriod: 0,
+    };
+
     if (params.broker !== '' && params.topics) {
       if (params.username && params.password) {
-        this.client = mqtt.connect(params.broker, {
-          username: params.username,
-          password: params.password,
-        });
-      } else {
-        this.client = mqtt.connect(params.broker);
+        connectionOptions.username = params.username;
+        connectionOptions.password = params.password;
       }
 
+      this.client = mqtt.connect(params.broker, connectionOptions);
+
       this.client.on('error', (err) => {
+        console.error(`MQTT: problem connecting to broker ${params.broker}`);
         console.error(err);
       });
 
@@ -40,8 +43,6 @@ class MQTTClient {
         const mqttMsg = new MQTTMessage(message, topic);
         this.eventEmitter.emit('message', mqttMsg, 'mqtt');
       });
-    } else {
-      console.log('MQTT: no broker configured');
     }
   }
 
