@@ -72,7 +72,7 @@ class MIDIMessage {
     midiBytes[0] = (midiStatusMap[obj.status] << 4) ^ (obj.channel - 1);
     switch (obj.status) {
       case 'note_off':
-        if (obj.note && obj.velocity) {
+        if (obj.hasOwnProperty('note') && obj.hasOwnProperty('velocity')) {
           midiBytes[1] = obj.note;
           midiBytes[2] = obj.velocity;
         } else {
@@ -80,7 +80,7 @@ class MIDIMessage {
         }
         break;
       case 'note_on':
-        if (obj.note && obj.velocity) {
+        if (obj.hasOwnProperty('note') && obj.hasOwnProperty('velocity')) {
           midiBytes[1] = obj.note;
           midiBytes[2] = obj.velocity;
         } else {
@@ -88,7 +88,7 @@ class MIDIMessage {
         }
         break;
       case 'polyphonic_aftertouch':
-        if (obj.note && obj.pressure) {
+        if (obj.hasOwnProperty('note') && obj.hasOwnProperty('pressure')) {
           midiBytes[1] = obj.note;
           midiBytes[2] = obj.pressure;
         } else {
@@ -96,7 +96,7 @@ class MIDIMessage {
         }
         break;
       case 'control_change':
-        if (obj.control && obj.value) {
+        if (obj.hasOwnProperty('control') && obj.hasOwnProperty('vallue')) {
           midiBytes[1] = obj.control;
           midiBytes[2] = obj.value;
         } else {
@@ -104,21 +104,21 @@ class MIDIMessage {
         }
         break;
       case 'program_change':
-        if (obj.program) {
+        if (obj.hasOwnProperty('program')) {
           midiBytes[1] = obj.program;
         } else {
           throw new Error('program_change must include program params');
         }
         break;
       case 'channel_aftertouch':
-        if (obj.pressure) {
+        if (obj.hasOwnProperty('pressure')) {
           midiBytes[1] = obj.pressure;
         } else {
           throw new Error('channel_aftertouch must include pressure param');
         }
         break;
       case 'pitch_bend':
-        if (obj.value && obj.value <= 16383) {
+        if (obj.hasOwnProperty('value') && obj.value <= 16383) {
           const lsb = obj.value & 0x7f;
           const msb = (obj.value >> 7) & 0x7f;
 
