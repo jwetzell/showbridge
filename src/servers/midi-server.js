@@ -10,6 +10,8 @@ class MIDIServer {
     this.input.openVirtualPort('oscee Input');
     this.output.openVirtualPort('oscee Output');
 
+    this.inputs = [];
+
     this.input.on('message', (deltaTime, msg) => {
       try {
         const parsedMIDI = new MIDIMessage(msg);
@@ -21,25 +23,29 @@ class MIDIServer {
     });
   }
 
-  reload() {
-    const inputs = [];
+  reload(params) {
+    //TODO(jwetzell): look into better way to reload ports
+    this.inputs.forEach((input) => input.closePort());
+    this.inputs = [];
 
+    //TODO(jwetzell): find a way to detect midi device changes
     for (let i = 0; i < this.input.getPortCount(); i++) {
-      inputs.push(this.input.getPortName(i));
-    }
-    console.debug('MIDI Inputs');
-    inputs.forEach((input, i) => {
-      console.debug(`${i}: ${input}`);
-    });
+      if (!this.input.getPortName(i).includes('oscee')) {
+        const midiInput = new midi.Input();
+        midiInput.openPort(i);
+        midiInput.on('message', (deltaTime, msg) => {
+          try {
+            const parsedMIDI = new MIDIMessage(msg);
+            this.eventEmitter.emit('message', parsedMIDI, 'midi');
+          } catch (error) {
+            console.error('PROBLEM PROCESSING MIDI MESSAGE');
+            console.error(error);
+          }
+        });
 
-    const outputs = [];
-    for (let i = 0; i < this.output.getPortCount(); i++) {
-      outputs.push(this.output.getPortName(i));
+        this.inputs.push(midiInput);
+      }
     }
-    console.debug('MIDI Outputs');
-    outputs.forEach((output, i) => {
-      console.debug(`${i}: ${output}`);
-    });
   }
 
   on(eventName, listener) {
