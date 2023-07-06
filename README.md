@@ -82,6 +82,7 @@
 For templating purposes (any property starting with an underscore _) every message has some properties that might be good to know about
 
 - http
+    - msg: the express.js request object
     - originalUrl: express.js req.originalUrl
     - baseUrl: express.js req.baseUrl
     - path: express.js req.path
@@ -100,6 +101,7 @@ For templating purposes (any property starting with an underscore _) every messa
     - topic: the topic of the published MQTT message
     - payloadType: json or text describing the type of the payload property
 - osc
+    - msg: the original OSC message from osc-min
     - address: address of the incoming osc message /an/osc/address
     - addressParts: an array of address i.e. ["an","osc","address"] 
     - args: array of args of the incoming osc message [0,"1",2.0]
