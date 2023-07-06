@@ -5,8 +5,10 @@ const MIDIMessage = require('../models/message/midi-message');
 class MIDIServer {
   constructor() {
     this.eventEmitter = new events.EventEmitter();
+
     this.virtualInput = new midi.Input();
     this.virtualOutput = new midi.Output();
+
     this.virtualInput.openVirtualPort('oscee Input');
     this.virtualOutput.openVirtualPort('oscee Output');
 
@@ -15,7 +17,7 @@ class MIDIServer {
         const parsedMIDI = new MIDIMessage(msg);
         this.eventEmitter.emit('message', parsedMIDI, 'midi');
       } catch (error) {
-        console.error('PROBLEM PROCESSING MIDI MESSAGE');
+        console.error('MIDI: problem processing MIDI message!');
         console.error(error);
       }
     });

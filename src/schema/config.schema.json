@@ -515,6 +515,54 @@
               },
               "required": ["status", "value"],
               "additionalProperties": false
+            },
+            {
+              "title": "MIDI Start",
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "const": "start"
+                }
+              },
+              "required": ["status"],
+              "additionalProperties": false
+            },
+            {
+              "title": "MIDI Continue",
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "const": "continue"
+                }
+              },
+              "required": ["status"],
+              "additionalProperties": false
+            },
+            {
+              "title": "MIDI Stop",
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "const": "stop"
+                }
+              },
+              "required": ["status"],
+              "additionalProperties": false
+            },
+            {
+              "title": "MIDI Reset",
+              "properties": {
+                "status": {
+                  "description": "MIDI status value",
+                  "type": "string",
+                  "const": "reset"
+                }
+              },
+              "required": ["status"],
+              "additionalProperties": false
             }
           ],
           "required": []

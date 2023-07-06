@@ -54,7 +54,14 @@
     "params": {
       "inputs": [0]
     },
-    "triggers": []
+    "triggers": [
+      {
+        "type": "midi-note-on",
+        "params": {},
+        "actions": [{ "type": "log", "enabled": true }],
+        "enabled": true
+      }
+    ]
   },
   "tcp": {
     "params": {
