@@ -39,7 +39,7 @@ class TCPServer {
         port: params.port,
       },
       () => {
-        console.info(`tcp server setup on port ${this.server.address().address}:${this.server.address().port}`);
+        console.info(`TCP: server setup on port ${this.server.address().address}:${this.server.address().port}`);
       }
     );
   }

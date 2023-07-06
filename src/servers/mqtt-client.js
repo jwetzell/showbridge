@@ -26,7 +26,7 @@ class MQTTClient {
       });
 
       this.client.on('connect', () => {
-        console.log(`mqtt client connected to ${params.broker}`);
+        console.log(`MQTT: client connected to ${params.broker}`);
         if (params.topics?.length > 0) {
           this.client.subscribe(params.topics, (err) => {
             if (err) {
@@ -41,7 +41,7 @@ class MQTTClient {
         this.eventEmitter.emit('message', mqttMsg, 'mqtt');
       });
     } else {
-      console.log('no mqtt broker configured');
+      console.log('MQTT: no broker configured');
     }
   }
 

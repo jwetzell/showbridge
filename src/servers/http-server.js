@@ -60,7 +60,7 @@ class HTTPServer {
       this.server.close();
     }
     this.server = this.httpServer.listen(params.port, () => {
-      console.info(`web interface listening on port ${params.port}`);
+      console.info(`HTTP: web interface listening on port ${params.port}`);
     });
   }
 
