@@ -69,23 +69,6 @@
       "title": "MIDI configuration",
       "type": "object",
       "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "inputs": {
-              "description": "Address to listen on defaults to 0.0.0.0",
-              "type": "array",
-              "items": {
-                "oneOf": [
-                  { "description": "name of the midi input", "type": "string" },
-                  { "description": "index of the midi input", "type": "integer" }
-                ]
-              }
-            }
-          },
-          "required": ["inputs"],
-          "additionalProperties": false
-        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",
@@ -102,7 +85,8 @@
           }
         }
       },
-      "required": ["triggers", "params"]
+      "required": ["triggers"],
+      "additionalProperties": false
     },
     "tcp": {
       "title": "TCP configuration",
@@ -1128,6 +1112,10 @@
           "description": "MIDI note off trigger params",
           "type": "object",
           "properties": {
+            "port": {
+              "description": "name of the MIDI port to match against incoming messages",
+              "type": "string"
+            },
             "note": {
               "description": "Note value to match against incoming the messages",
               "type": "integer",
@@ -1166,6 +1154,10 @@
           "description": "MIDI note on trigger params",
           "type": "object",
           "properties": {
+            "port": {
+              "description": "name of the MIDI port to match against incoming messages",
+              "type": "string"
+            },
             "note": {
               "description": "note value to match against incoming the messages",
               "type": "integer",
@@ -1204,6 +1196,10 @@
           "description": "MIDI control change trigger params",
           "type": "object",
           "properties": {
+            "port": {
+              "description": "name of the MIDI port to match against incoming messages",
+              "type": "string"
+            },
             "control": {
               "description": "control number to match against incoming the messages",
               "type": "integer",
@@ -1242,6 +1238,10 @@
           "description": "MIDI program change trigger params",
           "type": "object",
           "properties": {
+            "port": {
+              "description": "name of the MIDI port to match against incoming messages",
+              "type": "string"
+            },
             "program": {
               "description": "program number to match against incoming the messages",
               "type": "integer",

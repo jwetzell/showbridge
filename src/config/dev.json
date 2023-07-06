@@ -51,13 +51,12 @@
     ]
   },
   "midi": {
-    "params": {
-      "inputs": [0]
-    },
     "triggers": [
       {
         "type": "midi-note-on",
-        "params": {},
+        "params": {
+          "port": "virtual"
+        },
         "actions": [{ "type": "log", "enabled": true }],
         "enabled": true
       }

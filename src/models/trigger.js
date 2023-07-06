@@ -73,11 +73,16 @@ class Trigger {
         if (messageType === 'midi' && msg.status === 'note_on') {
           if (!!this.params) {
             fire = true;
-            if (!!this.params.note && this.params.note !== msg.note) {
+
+            if (this.params.hasOwnProperty('port') && this.params.port !== msg.port) {
               fire = false;
             }
 
-            if (!!this.params.velocity && this.params.velocity !== msg.velocity) {
+            if (this.params.hasOwnProperty('note') && this.params.note !== msg.note) {
+              fire = false;
+            }
+
+            if (this.params.hasOwnProperty('velocity') && this.params.velocity !== msg.velocity) {
               fire = false;
             }
           }
@@ -87,11 +92,16 @@ class Trigger {
         if (messageType === 'midi' && msg.status === 'note_off') {
           if (!!this.params) {
             fire = true;
-            if (!!this.params.note && this.params.note !== msg.note) {
+
+            if (this.params.hasOwnProperty('port') && this.params.port !== msg.port) {
               fire = false;
             }
 
-            if (!!this.params.velocity && this.params.velocity !== msg.velocity) {
+            if (this.params.hasOwnProperty('note') && this.params.note !== msg.note) {
+              fire = false;
+            }
+
+            if (this.params.hasOwnProperty('velocity') && this.params.velocity !== msg.velocity) {
               fire = false;
             }
           }
@@ -101,11 +111,16 @@ class Trigger {
         if (messageType === 'midi' && msg.status === 'control_change') {
           if (!!this.params) {
             fire = true;
-            if (!!this.params.control && this.params.control !== msg.control) {
+
+            if (this.params.hasOwnProperty('port') && this.params.port !== msg.port) {
               fire = false;
             }
 
-            if (!!this.params.value && this.params.value !== msg.value) {
+            if (this.params.hasOwnProperty('control') && this.params.control !== msg.control) {
+              fire = false;
+            }
+
+            if (this.params.hasOwnProperty('value') && this.params.value !== msg.value) {
               fire = false;
             }
           }
@@ -115,7 +130,12 @@ class Trigger {
         if (messageType === 'midi' && msg.status === 'program_change') {
           if (!!this.params) {
             fire = true;
-            if (!!this.params.program && this.params.program !== msg.program) {
+
+            if (this.params.hasOwnProperty('port') && this.params.port !== msg.port) {
+              fire = false;
+            }
+
+            if (this.params.hasOwnProperty('program') && this.params.program !== msg.program) {
               fire = false;
             }
           }

@@ -14,59 +14,44 @@ class MIDIServer {
 
     this.virtualInput.on('message', (deltaTime, msg) => {
       try {
-        const parsedMIDI = new MIDIMessage(msg);
+        const parsedMIDI = new MIDIMessage(msg, 'virtual');
         this.eventEmitter.emit('message', parsedMIDI, 'midi');
       } catch (error) {
         console.error('MIDI: problem processing MIDI message!');
         console.error(error);
       }
     });
+
+    this.inputs = [];
   }
 
-  reload(params) {
+  reload() {
     //TODO(jwetzell): look into better way to reload inputs
-    const inputMap = this.inputMap;
+    //TODO(jwetzell): consider letting the user configure the inputs that are loaded
+    this.inputs.forEach((input) => {
+      if (input.isPortOpen()) {
+        input.closePort();
+      }
+    });
 
-    //TODO(jwetzell): find a way to detect midi device changes
-    if (params.hasOwnProperty('inputs')) {
-      params.inputs.forEach((requestedMidiInput) => {
-        const midiInput = new midi.Input();
-        if (inputMap.hasOwnProperty(requestedMidiInput)) {
-          if (typeof requestedMidiInput === 'number') {
-            //midi input by index
-            midiInput.openPort(requestedMidiInput);
-            requestedMidiInput = inputMap[requestedMidiInput];
-          } else {
-            //midi input by name
-            midiInput.openPort(inputMap[requestedMidiInput]);
+    this.inputs = [];
+
+    for (let index = 0; index < this.virtualInput.getPortCount(); index++) {
+      if (!this.virtualInput.getPortName(index).includes('oscee')) {
+        const input = new midi.Input();
+        input.openPort(index);
+        input.on('message', (deltaTime, msg) => {
+          try {
+            const parsedMIDI = new MIDIMessage(msg, this.virtualInput.getPortName(index));
+            this.eventEmitter.emit('message', parsedMIDI, 'midi');
+          } catch (error) {
+            console.error('MIDI: problem processing MIDI message!');
+            console.error(error);
           }
-          console.log(`MIDI: setting up input - ${requestedMidiInput}`);
-          midiInput.on('message', (deltaTime, msg) => {
-            try {
-              const parsedMIDI = new MIDIMessage(msg);
-              this.eventEmitter.emit('message', parsedMIDI, 'midi');
-            } catch (error) {
-              console.error('MIDI: problem processing MIDI message!');
-              console.error(error);
-            }
-          });
-        } else {
-          console.error(`MIDI: no midi device found with name - ${midiInputName}`);
-        }
-      });
+        });
+      }
     }
-  }
-
-  get inputMap() {
-    const input = new midi.Input();
-    const inputMap = {};
-
-    for (let i = 0; i < input.getPortCount(); i++) {
-      const midiInputName = input.getPortName(i);
-      inputMap[midiInputName] = i;
-      inputMap[i] = midiInputName;
-    }
-    return inputMap;
+    //TODO(jwetzell): find a way to detect midi device changes
   }
 
   get outputMap() {

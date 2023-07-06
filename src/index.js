@@ -92,7 +92,7 @@ function reloadServers() {
   servers.tcp.reload(config.tcp.params);
   servers.udp.reload(config.udp.params);
   servers.http.reload(config.http.params);
-  servers.midi.reload(config.midi.params);
+  servers.midi.reload();
   servers.mqtt.reload(config.mqtt.params);
 }
 

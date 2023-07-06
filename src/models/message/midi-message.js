@@ -1,6 +1,6 @@
 class MIDIMessage {
-  constructor(bytes) {
-    console.log(bytes);
+  constructor(bytes, port) {
+    this.port = port;
 
     switch (bytes[0] >> 4) {
       case 0x8: //note off
@@ -58,14 +58,13 @@ class MIDIMessage {
             this.status = 'reset';
             break;
           default:
-            console.log('unhandled sysex status: ' + bytes[0]);
+            console.log('MIDI: unhandled sysex status: ' + bytes[0]);
         }
         break;
 
       default:
-        console.log('unhandled midi status: ' + bytes[0]);
+        console.log('MIDI: unhandled status: ' + bytes[0]);
     }
-    console.log(this);
   }
 
   equals(bytes) {
@@ -187,9 +186,9 @@ class MIDIMessage {
 
   static parseActionParams(params) {
     if (params.bytes) {
-      return new MIDIMessage(params.bytes);
+      return new MIDIMessage(params.bytes, 'virtual');
     } else {
-      return new MIDIMessage(MIDIMessage.objectToBytes(params));
+      return new MIDIMessage(MIDIMessage.objectToBytes(params), 'virtual');
     }
   }
 }

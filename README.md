@@ -88,7 +88,8 @@ For templating purposes (any property starting with an underscore _) every messa
     - path: express.js req.path
     - body: express.js req.body
 - midi
-    - status: midi status i.e. note_on, note_off, program_change, control_change
+    - port: the name of the midi port that the message came in on
+    - status: midi status i.e. note_on, note_off, program_change, control_change, etc.
     - channel: midi channel 1-16
     - note: midi note 1-127
     - velocity: midi velocity 1-127
