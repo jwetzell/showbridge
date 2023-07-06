@@ -3,7 +3,7 @@ const udp = require('dgram');
 const osc = require('osc-min');
 const OSCMessage = require('../models/message/osc-message');
 const UDPMessage = require('../models/message/udp-message');
-
+const { logger } = require('../utils/helper');
 class UDPServer {
   constructor() {
     this.eventEmitter = new events.EventEmitter();
@@ -20,7 +20,7 @@ class UDPServer {
         port: params.port,
       },
       () => {
-        console.info(`UDP: server setup on port ${this.server.address().address}:${this.server.address().port}`);
+        logger.info(`UDP: server setup on port ${this.server.address().address}:${this.server.address().port}`);
         this.server.on('message', (msg, rinfo) => {
           const sender = {
             protocol: 'udp',

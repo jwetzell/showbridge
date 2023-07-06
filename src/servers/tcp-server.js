@@ -4,6 +4,7 @@ const osc = require('osc-min');
 const slip = require('slip');
 const OSCMessage = require('../models/message/osc-message');
 const TCPMessage = require('../models/message/tcp-message');
+const { logger } = require('../utils/helper');
 class TCPServer {
   constructor() {
     this.eventEmitter = new events.EventEmitter();
@@ -33,13 +34,17 @@ class TCPServer {
       });
     });
 
+    this.server.on('error', (err) => {
+      logger.error(`TCP: problem starting TCP server: ${err.message}`);
+    });
+
     this.server.listen(
       {
         host: params.address,
         port: params.port,
       },
       () => {
-        console.info(`TCP: server setup on port ${this.server.address().address}:${this.server.address().port}`);
+        logger.info(`TCP: server setup on port ${this.server.address().address}:${this.server.address().port}`);
       }
     );
   }
@@ -58,7 +63,7 @@ class TCPServer {
       });
 
       this.sockets[host][port].on('error', (err) => {
-        console.error(err);
+        logger.error(err);
         this.sockets[host][port].destroy();
         this.sockets[host][port] = undefined;
       });

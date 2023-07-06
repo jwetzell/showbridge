@@ -1,6 +1,7 @@
 const events = require('events');
 const midi = require('@julusian/midi');
 const MIDIMessage = require('../models/message/midi-message');
+const { logger } = require('../utils/helper');
 
 class MIDIServer {
   constructor() {
@@ -17,8 +18,8 @@ class MIDIServer {
         const parsedMIDI = new MIDIMessage(msg, 'virtual');
         this.eventEmitter.emit('message', parsedMIDI, 'midi');
       } catch (error) {
-        console.error('MIDI: problem processing MIDI message!');
-        console.error(error);
+        logger.error('MIDI: problem processing MIDI message!');
+        logger.error(error);
       }
     });
 
@@ -45,8 +46,8 @@ class MIDIServer {
             const parsedMIDI = new MIDIMessage(msg, this.virtualInput.getPortName(index));
             this.eventEmitter.emit('message', parsedMIDI, 'midi');
           } catch (error) {
-            console.error('MIDI: problem processing MIDI message!');
-            console.error(error);
+            logger.error('MIDI: problem processing MIDI message!');
+            logger.error(error);
           }
         });
       }

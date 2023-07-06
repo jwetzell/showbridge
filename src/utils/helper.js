@@ -1,5 +1,4 @@
 const _ = require('lodash');
-
 function resolveTemplatedProperty(params, property, data) {
   if (params.hasOwnProperty(`_${property}`)) {
     //if we have a template versin of the property
@@ -38,7 +37,10 @@ function hexToBytes(hex) {
   return bytes;
 }
 
+const logger = require('pino')();
+
 module.exports = {
   resolveTemplatedProperty,
   hexToBytes,
+  logger,
 };

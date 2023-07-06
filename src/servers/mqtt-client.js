@@ -1,6 +1,7 @@
 const events = require('events');
 const mqtt = require('mqtt');
 const MQTTMessage = require('../models/message/mqtt-message');
+const { logger } = require('../utils/helper');
 
 class MQTTClient {
   constructor() {
@@ -24,16 +25,16 @@ class MQTTClient {
       this.client = mqtt.connect(params.broker, connectionOptions);
 
       this.client.on('error', (err) => {
-        console.error(`MQTT: problem connecting to broker ${params.broker}`);
-        console.error(err);
+        logger.error(`MQTT: problem connecting to broker ${params.broker}`);
+        logger.error(err);
       });
 
       this.client.on('connect', () => {
-        console.log(`MQTT: client connected to ${params.broker}`);
+        logger.info(`MQTT: client connected to ${params.broker}`);
         if (params.topics?.length > 0) {
           this.client.subscribe(params.topics, (err) => {
             if (err) {
-              console.error(err);
+              logger.error(err);
             }
           });
         }

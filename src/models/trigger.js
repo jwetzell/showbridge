@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const Action = require('./action');
+const { logger } = require('../utils/helper');
 
 class Trigger {
   constructor(triggerObj) {
@@ -33,7 +34,7 @@ class Trigger {
                 const regex = new RegExp(pattern, 'g');
                 const matchPropertyValue = _.get(msg, property);
                 if (!matchPropertyValue) {
-                  console.error('regex is configured to look at a property that does not exist on this message.');
+                  logger.error('regex is configured to look at a property that does not exist on this message.');
                   //bad property config = no fire and since all must match we can stop here
                   fire = false;
                   break;
@@ -55,7 +56,7 @@ class Trigger {
             fire = true;
           }
         } else {
-          console.error('host trigger attempted on message type that does not have host information');
+          logger.error('host trigger attempted on message type that does not have host information');
         }
         break;
       case 'bytes-equal':
@@ -66,7 +67,7 @@ class Trigger {
             fire = true;
           }
         } else {
-          console.error('bytes equality check attempted on msg that does not have bytes');
+          logger.error('bytes equality check attempted on msg that does not have bytes');
         }
         break;
       case 'midi-note-on':
@@ -142,7 +143,7 @@ class Trigger {
         }
         break;
       default:
-        console.log(`unhandled trigger type = ${this.type}`);
+        logger.error(`unhandled trigger type = ${this.type}`);
         fire = false;
     }
     return fire;

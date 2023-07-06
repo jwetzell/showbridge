@@ -16,6 +16,7 @@ const _ = require('lodash');
 const { exec } = require('child_process');
 const { readFileSync } = require('fs');
 const { resolveTemplatedProperty, hexToBytes } = require('./utils/helper');
+const { logger } = require('./utils/helper');
 
 // config
 const Config = require('./models/config');
@@ -51,23 +52,23 @@ if (process.argv.length === 3) {
 servers.http.setConfig(config);
 
 //TODO(jwetzell): find a way to print these out nicely
-// console.debug('HTTP Trigger Summary');
-// console.debug(config.http.triggers);
+// logger.debug('HTTP Trigger Summary');
+// logger.debug(config.http.triggers);
 
-// console.debug('OSC Trigger Summary');
-// console.debug(config.osc.triggers);
+// logger.debug('OSC Trigger Summary');
+// logger.debug(config.osc.triggers);
 
-// console.debug('MIDI Trigger Summary');
-// console.debug(config.midi.triggers);
+// logger.debug('MIDI Trigger Summary');
+// logger.debug(config.midi.triggers);
 
-// console.debug('UDP Trigger Summary');
-// console.debug(config.udp.triggers);
+// logger.debug('UDP Trigger Summary');
+// logger.debug(config.udp.triggers);
 
-// console.debug('TCP Trigger Summary');
-// console.debug(config.tcp.triggers);
+// logger.debug('TCP Trigger Summary');
+// logger.debug(config.tcp.triggers);
 
-// console.debug('MQTT Trigger Summary');
-// console.debug(config.mqtt.triggers);
+// logger.debug('MQTT Trigger Summary');
+// logger.debug(config.mqtt.triggers);
 
 servers.tcp.on('message', processMessage);
 servers.udp.on('message', processMessage);
@@ -80,17 +81,17 @@ servers.http.on('reload', (updatedConfig) => {
   try {
     config = updatedConfig;
     reloadServers();
-    console.log('Config updated successfully');
+    logger.log('Config updated successfully');
   } catch (error) {
-    console.error('Problem applying new config');
+    logger.error('Problem applying new config');
   }
 });
 
 reloadServers();
 
 function reloadServers() {
-  servers.tcp.reload(config.tcp.params);
   servers.udp.reload(config.udp.params);
+  servers.tcp.reload(config.tcp.params);
   servers.http.reload(config.http.params);
   servers.midi.reload();
   servers.mqtt.reload(config.mqtt.params);
@@ -103,10 +104,10 @@ function processMessage(msg, messageType) {
     for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
       const trigger = triggers[triggerIndex];
       if (trigger.shouldFire(msg, messageType)) {
-        console.debug(`${messageType}-trigger-${triggerIndex}: fired`);
+        logger.debug(`${messageType}-trigger-${triggerIndex}: fired`);
         trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
       } else {
-        console.debug(`${messageType}-trigger-${triggerIndex}: not fired`);
+        logger.debug(`${messageType}-trigger-${triggerIndex}: not fired`);
       }
     }
   }
@@ -115,10 +116,10 @@ function processMessage(msg, messageType) {
 // Action
 function doAction(action, msg, messageType, trigger) {
   if (!action.enabled) {
-    console.debug(`action: ${action.type} is disabled skipping...`);
+    logger.debug(`action: ${action.type} is disabled skipping...`);
     return;
   }
-  console.debug(`action: ${action.type} triggered from ${trigger.type}`);
+  logger.debug(`action: ${action.type} triggered from ${trigger.type}`);
   switch (action.type) {
     case 'forward':
       try {
@@ -140,14 +141,14 @@ function doAction(action, msg, messageType, trigger) {
               messageType === 'osc' ? true : false
             );
           } else {
-            console.error(`unhandled forward protocol = ${action.params.protocol}`);
+            logger.error(`unhandled forward protocol = ${action.params.protocol}`);
           }
         } else {
-          console.error('this is not a forwardable message type');
+          logger.error('this is not a forwardable message type');
         }
       } catch (error) {
-        console.error('error outputting osc');
-        console.error(error);
+        logger.error('error outputting osc');
+        logger.error(error);
       }
       break;
     case 'osc-output':
@@ -155,7 +156,7 @@ function doAction(action, msg, messageType, trigger) {
         const address = resolveTemplatedProperty(action.params, 'address', { msg, vars });
 
         if (!address) {
-          console.error('either address or _address property need to be set for osc-output action');
+          logger.error('either address or _address property need to be set for osc-output action');
           return;
         }
 
@@ -171,11 +172,11 @@ function doAction(action, msg, messageType, trigger) {
         } else if (action.params.protocol === 'tcp') {
           servers.tcp.send(outBuff, action.params.port, action.params.host, true);
         } else {
-          console.error(`unhandled osc output protocol = ${action.params.protocol}`);
+          logger.error(`unhandled osc output protocol = ${action.params.protocol}`);
         }
       } catch (error) {
-        console.error('error outputting osc');
-        console.error(error);
+        logger.error('error outputting osc');
+        logger.error(error);
       }
       break;
     case 'udp-output':
@@ -193,7 +194,7 @@ function doAction(action, msg, messageType, trigger) {
       if (udpSend) {
         servers.udp.send(Buffer.from(udpSend), action.params.port, action.params.host);
       } else {
-        console.error('udp-output has nothing to send');
+        logger.error('udp-output has nothing to send');
       }
       break;
     case 'tcp-output':
@@ -211,7 +212,7 @@ function doAction(action, msg, messageType, trigger) {
       if (tcpSend) {
         servers.tcp.send(Buffer.from(tcpSend), action.params.port, action.params.host, action.params.slip);
       } else {
-        console.error('tcp-output has nothing to send');
+        logger.error('tcp-output has nothing to send');
       }
       break;
     case 'midi-output':
@@ -222,12 +223,12 @@ function doAction(action, msg, messageType, trigger) {
           servers.midi.send(Buffer.from(midiToSend.bytes));
         }
       } catch (error) {
-        console.error('error outputting midi');
-        console.error(error);
+        logger.error('error outputting midi');
+        logger.error(error);
       }
       break;
     case 'log':
-      console.info(`${messageType}: ${msg}`);
+      logger.info(`${messageType}: ${msg}`);
       break;
     case 'shell':
       try {
@@ -236,8 +237,8 @@ function doAction(action, msg, messageType, trigger) {
           exec(command);
         }
       } catch (error) {
-        console.error('problem executing shell action');
-        console.error(error);
+        logger.error('problem executing shell action');
+        logger.error(error);
       }
       break;
     case 'http':
@@ -258,15 +259,15 @@ function doAction(action, msg, messageType, trigger) {
 
           request.end((err, res) => {
             if (!!err) {
-              console.error(err);
+              logger.error(err);
             }
           });
         } else {
-          console.error('url is empty');
+          logger.error('url is empty');
         }
       } catch (error) {
-        console.error('problem executing http action');
-        console.error(error);
+        logger.error('problem executing http action');
+        logger.error(error);
       }
       break;
     case 'store':
@@ -277,10 +278,10 @@ function doAction(action, msg, messageType, trigger) {
         if (key && value) {
           vars[key] = value;
         } else {
-          console.error('store action missing a key or value');
+          logger.error('store action missing a key or value');
         }
       } catch (error) {
-        console.error(error);
+        logger.error(error);
       }
       break;
     case 'delay':
@@ -297,9 +298,9 @@ function doAction(action, msg, messageType, trigger) {
       if (topic && payload) {
         servers.mqtt.send(topic, payload);
       } else {
-        console.error('mqtt-output missing either topic or payload');
+        logger.error('mqtt-output missing either topic or payload');
       }
     default:
-      console.error(`unhandled action type = ${action.type}`);
+      logger.error(`unhandled action type = ${action.type}`);
   }
 }

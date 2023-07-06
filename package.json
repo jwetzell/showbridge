@@ -6,7 +6,7 @@
   "bin": "src/index.js",
   "scripts": {
     "pretty": "prettier --write src/*",
-    "dev": "nodemon src/index.js src/config/dev.json",
+    "dev": "nodemon src/index.js src/config/dev.json | pino-pretty",
     "prepackage": "rimraf dist",
     "package": "pkg . -C GZip"
   },
@@ -20,12 +20,14 @@
     "lodash": "^4.17.21",
     "mqtt": "^4.3.7",
     "osc-min": "^1.1.2",
+    "pino": "^8.14.1",
     "slip": "^1.0.2",
     "superagent": "^8.0.9",
     "ws": "^8.13.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22",
+    "pino-pretty": "^10.0.1",
     "pkg": "^5.8.1",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.1"

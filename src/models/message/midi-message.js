@@ -1,3 +1,5 @@
+const { logger } = require('../../utils/helper');
+
 class MIDIMessage {
   constructor(bytes, port) {
     this.port = port;
@@ -58,12 +60,12 @@ class MIDIMessage {
             this.status = 'reset';
             break;
           default:
-            console.log('MIDI: unhandled sysex status: ' + bytes[0]);
+            logger.error('MIDI: unhandled sysex status: ' + bytes[0]);
         }
         break;
 
       default:
-        console.log('MIDI: unhandled status: ' + bytes[0]);
+        logger.error('MIDI: unhandled status: ' + bytes[0]);
     }
   }
 
@@ -179,7 +181,7 @@ class MIDIMessage {
         midiBytes[0] = midiStatusMap[obj.status];
         break;
       default:
-        console.error(`MIDI: unhandled status: ${obj.status}`);
+        logger.error(`MIDI: unhandled status: ${obj.status}`);
     }
     return midiBytes;
   }
