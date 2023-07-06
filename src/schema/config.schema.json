@@ -69,6 +69,23 @@
       "title": "MIDI configuration",
       "type": "object",
       "properties": {
+        "params": {
+          "type": "object",
+          "properties": {
+            "inputs": {
+              "description": "Address to listen on defaults to 0.0.0.0",
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  { "description": "name of the midi input", "type": "string" },
+                  { "description": "index of the midi input", "type": "integer" }
+                ]
+              }
+            }
+          },
+          "required": ["inputs"],
+          "additionalProperties": false
+        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",
@@ -85,7 +102,7 @@
           }
         }
       },
-      "required": ["triggers"]
+      "required": ["triggers", "params"]
     },
     "tcp": {
       "title": "TCP configuration",

@@ -13,6 +13,9 @@
     "triggers": []
   },
   "midi": {
+    "params": {
+      "inputs": []
+    },
     "triggers": [
       {
         "type": "midi-note-on",

@@ -50,23 +50,24 @@ if (process.argv.length === 3) {
 
 servers.http.setConfig(config);
 
-console.debug('HTTP Trigger Summary');
-console.debug(config.http.triggers);
+//TODO(jwetzell): find a way to print these out nicely
+// console.debug('HTTP Trigger Summary');
+// console.debug(config.http.triggers);
 
-console.debug('OSC Trigger Summary');
-console.debug(config.osc.triggers);
+// console.debug('OSC Trigger Summary');
+// console.debug(config.osc.triggers);
 
-console.debug('MIDI Trigger Summary');
-console.debug(config.midi.triggers);
+// console.debug('MIDI Trigger Summary');
+// console.debug(config.midi.triggers);
 
-console.debug('UDP Trigger Summary');
-console.debug(config.udp.triggers);
+// console.debug('UDP Trigger Summary');
+// console.debug(config.udp.triggers);
 
-console.debug('TCP Trigger Summary');
-console.debug(config.tcp.triggers);
+// console.debug('TCP Trigger Summary');
+// console.debug(config.tcp.triggers);
 
-console.debug('MQTT Trigger Summary');
-console.debug(config.mqtt.triggers);
+// console.debug('MQTT Trigger Summary');
+// console.debug(config.mqtt.triggers);
 
 servers.tcp.on('message', processMessage);
 servers.udp.on('message', processMessage);
@@ -91,7 +92,7 @@ function reloadServers() {
   servers.tcp.reload(config.tcp.params);
   servers.udp.reload(config.udp.params);
   servers.http.reload(config.http.params);
-  servers.midi.reload();
+  servers.midi.reload(config.midi.params);
   servers.mqtt.reload(config.mqtt.params);
 }
 
@@ -218,7 +219,7 @@ function doAction(action, msg, messageType, trigger) {
         // TODO(jwetzell): see if there is a way to switch ports when outputting
         const midiToSend = MIDIMessage.parseActionParams(action.params);
         if (midiToSend) {
-          servers.midi.output.sendMessage(Buffer.from(midiToSend.bytes));
+          servers.midi.send(Buffer.from(midiToSend.bytes));
         }
       } catch (error) {
         console.error('error outputting midi');

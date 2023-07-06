@@ -51,6 +51,9 @@
     ]
   },
   "midi": {
+    "params": {
+      "inputs": [0]
+    },
     "triggers": []
   },
   "tcp": {
