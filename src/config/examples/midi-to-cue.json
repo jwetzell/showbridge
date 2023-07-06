@@ -1,0 +1,64 @@
+{
+  "$schema": "../../schema/config.schema.json",
+  "http": {
+    "params": {
+      "port": 3000
+    },
+    "triggers": []
+  },
+  "ws": {
+    "triggers": []
+  },
+  "osc": {
+    "triggers": []
+  },
+  "midi": {
+    "triggers": [
+      {
+        "type": "midi-note-on",
+        "params": {
+          "velocity": 127
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          },
+          {
+            "type": "osc-output",
+            "params": {
+              "host": "127.0.0.1",
+              "protocol": "udp",
+              "_address": "/cue/${msg.note}/go",
+              "_args": [],
+              "port": 53000
+            },
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "tcp": {
+    "params": {
+      "address": "0.0.0.0",
+      "port": 8000
+    },
+    "triggers": []
+  },
+  "udp": {
+    "params": {
+      "address": "0.0.0.0",
+      "port": 8000
+    },
+    "triggers": []
+  },
+  "mqtt": {
+    "params": {
+      "broker": "",
+      "topics": []
+    },
+    "triggers": []
+  }
+}
