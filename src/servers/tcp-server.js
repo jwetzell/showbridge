@@ -59,7 +59,7 @@ class TCPServer {
     if (this.sockets[host][port] === undefined) {
       this.sockets[host][port] = new net.Socket();
       this.sockets[host][port].connect(port, host, () => {
-        this.sockets[host][port].write(msgToSend);
+        logger.debug(`TCP: connected to client`);
       });
 
       this.sockets[host][port].on('error', (err) => {
@@ -67,9 +67,8 @@ class TCPServer {
         this.sockets[host][port].destroy();
         this.sockets[host][port] = undefined;
       });
-    } else {
-      this.sockets[host][port].write(msgToSend);
     }
+    this.sockets[host][port].write(msgToSend);
   }
 
   on(eventName, listener) {

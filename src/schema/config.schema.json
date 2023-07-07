@@ -230,6 +230,9 @@
         "type": {
           "const": "log"
         },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
+        },
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean"
@@ -246,6 +249,9 @@
       "properties": {
         "type": {
           "const": "store"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
         },
         "params": {
           "description": "Store action params",
@@ -285,6 +291,9 @@
       "properties": {
         "type": {
           "const": "midi-output"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
         },
         "params": {
           "description": "MIDI output action params",
@@ -567,6 +576,9 @@
         "type": {
           "const": "forward"
         },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
+        },
         "params": {
           "description": "forward action params",
           "type": "object",
@@ -603,6 +615,9 @@
       "properties": {
         "type": {
           "const": "osc-output"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
         },
         "params": {
           "description": "OSC output action params",
@@ -656,6 +671,9 @@
       "properties": {
         "type": {
           "const": "udp-output"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
         },
         "params": {
           "description": "UDP output action params",
@@ -758,6 +776,9 @@
       "properties": {
         "type": {
           "const": "tcp-output"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
         },
         "params": {
           "description": "TCP output action params",
@@ -878,6 +899,9 @@
         "type": {
           "const": "shell"
         },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
+        },
         "params": {
           "description": "Shell action params",
           "type": "object",
@@ -921,6 +945,9 @@
       "properties": {
         "type": {
           "const": "http"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
         },
         "params": {
           "description": "HTTP action params",
@@ -971,6 +998,9 @@
         "type": {
           "const": "delay"
         },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
+        },
         "params": {
           "description": "delay action params",
           "type": "object",
@@ -1002,6 +1032,9 @@
       "properties": {
         "type": {
           "const": "mqtt-output"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
         },
         "params": {
           "type": "object",
@@ -1296,6 +1329,254 @@
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+
+    "TransformList": {
+      "description": "Transforms to be performed",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          { "$ref": "#/definitions/TransformScale" },
+          { "$ref": "#/definitions/TransformRound" },
+          { "$ref": "#/definitions/TransformFloor" },
+          { "$ref": "#/definitions/TransformLog" },
+          { "$ref": "#/definitions/TransformPower" },
+          { "$ref": "#/definitions/TransformMap" },
+          { "$ref": "#/definitions/TransformTemplate" }
+        ]
+      }
+    },
+
+    "TransformScale": {
+      "title": "Scale Transform",
+      "description": "This tranform will scale the incoming message property",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "scale"
+        },
+        "params": {
+          "description": "Scale transform params",
+          "type": "object",
+          "properties": {
+            "property": {
+              "description": "the property of the incoming message to scale",
+              "type": "string"
+            },
+            "inRange": {
+              "description": "the range of the incoming numbers i.e [0,100]",
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "outRange": {
+              "description": "the range of the outgoing numbers i.e [1,10]",
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "required": ["property", "inRange", "outRange"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this tranform is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "TransformRound": {
+      "title": "Round Transform",
+      "description": "This transform will round the incoming message property",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "round"
+        },
+        "params": {
+          "description": "Round transform params",
+          "type": "object",
+          "properties": {
+            "property": {
+              "description": "the property of the incoming message to round",
+              "type": "string"
+            }
+          },
+          "required": ["property"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this tranform is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "TransformFloor": {
+      "title": "Floor Transform",
+      "description": "This transform will floor the incoming message property",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "floor"
+        },
+        "params": {
+          "description": "Floor transform params",
+          "type": "object",
+          "properties": {
+            "property": {
+              "description": "the property of the incoming message to floor",
+              "type": "string"
+            }
+          },
+          "required": ["property"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this tranform is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "TransformLog": {
+      "title": "Log Transform",
+      "description": "This transform will take the log of the incoming message property",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "log"
+        },
+        "params": {
+          "description": "Log transform params",
+          "type": "object",
+          "properties": {
+            "property": {
+              "description": "the property of the incoming message",
+              "type": "string"
+            },
+            "base": {
+              "description": "the log base",
+              "type": "number"
+            }
+          },
+          "required": ["property", "base"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this tranform is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "TransformPower": {
+      "title": "Power Transform",
+      "description": "This transform will take the configured power of the incoming message property",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "power"
+        },
+        "params": {
+          "description": "Power transform params",
+          "type": "object",
+          "properties": {
+            "property": {
+              "description": "the property of the incoming message that will be used as the base of the exponent",
+              "type": "string"
+            },
+            "exponent": {
+              "description": "the exponent to raise the property value to",
+              "type": "number"
+            }
+          },
+          "required": ["property", "exponent"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this tranform is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "TransformMap": {
+      "title": "Map Transform",
+      "description": "This transform will map the incoming message property",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "map"
+        },
+        "params": {
+          "description": "map transform params",
+          "type": "object",
+          "properties": {
+            "property": {
+              "description": "the property of the incoming message to map",
+              "type": "string"
+            },
+            "map": {
+              "description": "key:value object to lookup the property value in and the resulting value to map it to",
+              "type": "object"
+            }
+          },
+          "required": ["property", "map"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this tranform is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "TransformTemplate": {
+      "title": "Template Transform",
+      "description": "This transform will template the incoming message property",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "template"
+        },
+        "params": {
+          "description": "Template transform params",
+          "type": "object",
+          "properties": {
+            "property": {
+              "description": "the property of the incoming message to populate",
+              "type": "string"
+            },
+            "template": {
+              "description": "the template whose result will replace the property value. will have access to the msg object",
+              "type": "string"
+            }
+          },
+          "required": ["property", "template"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this tranform is enabled",
           "type": "boolean"
         }
       },

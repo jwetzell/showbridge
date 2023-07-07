@@ -1,24 +1,34 @@
 class HTTPMessage {
-  constructor(request) {
-    this.msg = request;
-
-    // extract some key request properties
-    this.originalUrl = request.originalUrl;
-    this.baseUrl = request.baseUrl;
-    this.path = request.path;
-    this.body = request.body;
+  constructor(msg) {
+    this.msg = msg;
 
     this.sender = {
       protocol: 'tcp',
-      address: request.headers['x-forwarded-for'] || request.connection.remoteAddress,
+      address: msg.headers['x-forwarded-for'] || msg.connection.remoteAddress,
     };
     if (this.sender.address.substr(0, 7) == '::ffff:') {
       this.sender.address = this.sender.address.substr(7);
     }
   }
 
+  get originalUrl() {
+    return this.msg.originalUrl;
+  }
+
+  get baseUrl() {
+    return this.msg.baseUrl;
+  }
+
+  get path() {
+    return this.msg.path;
+  }
+
+  get body() {
+    return this.msg.body;
+  }
+
   toString() {
-    return `${this.msg.originalUrl}`;
+    return `${this.originalUrl}`;
   }
 }
 module.exports = HTTPMessage;
