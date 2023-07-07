@@ -81,7 +81,7 @@ servers.http.on('reload', (updatedConfig) => {
   try {
     config = updatedConfig;
     reloadServers();
-    logger.log('Config updated successfully');
+    logger.info('Config updated successfully');
   } catch (error) {
     logger.error('Problem applying new config');
   }
@@ -114,21 +114,18 @@ function processMessage(msg, messageType) {
 }
 
 // Action
-function doAction(action, msg, messageType, trigger) {
+function doAction(action, _msg, messageType, trigger) {
   if (!action.enabled) {
     logger.debug(`action: ${action.type} is disabled skipping...`);
     return;
   }
   logger.debug(`action: ${action.type} triggered from ${trigger.type}`);
+
+  const msg = action.getTransformedMessage(_msg, vars);
   switch (action.type) {
     case 'forward':
       try {
-        let msgToForward;
-        if (messageType === 'osc') {
-          msgToForward = msg.getBuffer();
-        } else if (messageType === 'udp' || messageType === 'tcp') {
-          msgToForward = msg.bytes;
-        }
+        let msgToForward = msg.bytes;
 
         if (msgToForward) {
           if (action.params.protocol === 'udp') {
