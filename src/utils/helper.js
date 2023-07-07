@@ -37,7 +37,12 @@ function hexToBytes(hex) {
   return bytes;
 }
 
-const logger = require('pino')();
+const pino = require('pino');
+const transport = pino.transport({
+  target: 'pino-pretty',
+  options: { destination: 1 },
+});
+const logger = pino(transport);
 
 module.exports = {
   resolveTemplatedProperty,
