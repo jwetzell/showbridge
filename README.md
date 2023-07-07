@@ -110,16 +110,19 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
     - property: the path to the property in the incoming msg object
     - template: the template that will be evaluated and then set as the value of the msg.property
 
+
+## Templating
+Alright there is a lot of referencing to templating. There is no secret sauce it is simply [lodash templating](https://lodash.com/docs/4.17.15#template) can think of it 
 ## Message Properties
 
 For templating purposes (any property starting with an underscore _) every message has some properties that might be good to know about
 
-- http
+- **http**
     - originalUrl: express.js req.originalUrl
     - baseUrl: express.js req.baseUrl
     - path: express.js req.path
     - body: express.js req.body
-- midi
+- **midi**
     - port: the name of the midi port that the message came in on
     - status: midi status i.e. note_on, note_off, program_change, control_change, etc.
     - channel: midi channel 1-16
@@ -130,19 +133,19 @@ For templating purposes (any property starting with an underscore _) every messa
     - value: value portion of control change and pitch_bend 
     - program: program number 1- 127
     - bytes: the 3 MIDI data bytes
-- mqtt
+- **mqtt**
     - payload: the contents of the MQTT message either an object if parsable JSON or the raw contents as a string
     - topic: the topic of the published MQTT message
-- osc
+- **osc**
     - address: address of the incoming osc message /an/osc/address
     - addressParts: an array of address i.e. ["an","osc","address"] 
     - args: array of args of the incoming osc message [0,"1",2.0]
     - bytes: the osc message as bytes
-- tcp
+- **tcp**
     - bytes: UInt8Array of the TCP packet
     - string: string representation of the TCP packet
-- udp
+- **udp**
     - bytes: UInt8Array of the UDP packet
     - string: string representation of the UDP packet
-- websocket
+- **websocket**
     - payload: ws message content (if this is JSON it will be parsed into an object)
