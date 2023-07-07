@@ -38,6 +38,9 @@
       "node18-win-x64",
       "node18-macos-x64"
     ],
-    "outputPath": "dist/bin"
+    "outputPath": "dist/bin",
+    "assets": [
+      "node_modules/thread-stream"
+    ]
   }
 }
