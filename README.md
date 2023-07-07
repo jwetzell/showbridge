@@ -77,12 +77,33 @@
     - _command: JS literal template of shell command to run has access to msg properties
     - command: shell command to run _command has priority
 
+## Transforms
+- scale:
+    - property: the path to the property in the incoming msg object
+    - inRange: the range of values for the incoming msg.property value i.e [0,100]
+    - outRange: the range of values to scale msg.property value into [1,10]
+- round:    
+    - property: the path to the property in the incoming msg object
+- floor:
+    - property: the path to the property in the incoming msg object
+- log:
+    - property: the path to the property in the incoming msg object
+    - base: the base of the log
+- power:
+    - property: the path to the property in the incoming msg object
+    - exponent: the exponent to raise the value of msg.property to
+- map:
+    - property: the path to the property in the incoming msg object
+    - map: an object representing a mapping between incoming msg.property values and their output i.e {"MON":"Monday"} so if msg.property === "MON" then msg.property will be set to "Monday" and passed along
+- template:
+    - property: the path to the property in the incoming msg object
+    - template: the template that will be evaluated and then set as the value of the msg.property
+
 ## Message Properties
 
 For templating purposes (any property starting with an underscore _) every message has some properties that might be good to know about
 
 - http
-    - msg: the express.js request object
     - originalUrl: express.js req.originalUrl
     - baseUrl: express.js req.baseUrl
     - path: express.js req.path
@@ -97,18 +118,20 @@ For templating purposes (any property starting with an underscore _) every messa
     - control: midi control number 1-127
     - value: value portion of control change and pitch_bend 
     - program: program number 1- 127
+    - bytes: the 3 MIDI data bytes
 - mqtt
     - payload: the contents of the MQTT message either an object if parsable JSON or the raw contents as a string
     - topic: the topic of the published MQTT message
-    - payloadType: json or text describing the type of the payload property
 - osc
-    - msg: the original OSC message from osc-min
     - address: address of the incoming osc message /an/osc/address
     - addressParts: an array of address i.e. ["an","osc","address"] 
     - args: array of args of the incoming osc message [0,"1",2.0]
+    - bytes: the osc message as bytes
 - tcp
-    - msg: TCP packet received as Buffer
+    - bytes: UInt8Array of the TCP packet
+    - string: string representation of the TCP packet
 - udp
-    - msg: UDP packet received as Buffer
+    - bytes: UInt8Array of the UDP packet
+    - string: string representation of the UDP packet
 - websocket
-    - msg: ws message content (if this is JSON it will be parsed into an object)
+    - payload: ws message content (if this is JSON it will be parsed into an object)
