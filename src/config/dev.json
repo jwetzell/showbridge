@@ -103,7 +103,7 @@
       {
         "type": "sender",
         "params": {
-          "address": "10.0.0.94"
+          "address": "127.0.0.1"
         },
         "actions": [
           {
@@ -114,7 +114,7 @@
             "type": "forward",
             "params": {
               "host": "127.0.0.1",
-              "port": 8000,
+              "port": 8001,
               "protocol": "tcp"
             },
             "enabled": true

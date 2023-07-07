@@ -67,6 +67,11 @@ class TCPServer {
         this.sockets[host][port].destroy();
         this.sockets[host][port] = undefined;
       });
+
+      this.sockets[host][port].on('close', () => {
+        logger.debug('TCP: disconnected from client');
+        delete this.sockets[host][port];
+      });
     }
     this.sockets[host][port].write(msgToSend);
   }
