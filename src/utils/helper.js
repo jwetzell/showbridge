@@ -10,7 +10,11 @@ function resolveTemplatedProperty(params, property, data) {
       templatedProperty.forEach((item) => {
         //only template string types
         if (typeof item === 'string') {
-          processedOutput.push(_.template(item)(data));
+          let templateResult = _.template(item)(data);
+          if (parseFloat(templateResult)) {
+            templateResult = parseFloat(templateResult);
+          }
+          processedOutput.push(templateResult);
         } else {
           processedOutput.push(item);
         }
