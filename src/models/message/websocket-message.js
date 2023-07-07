@@ -1,10 +1,6 @@
 class WebSocketMessage {
-  constructor(msgBuffer, connection) {
-    try {
-      this.msg = JSON.parse(msgBuffer.toString());
-    } catch (error) {
-      this.msg = msgBuffer.toString();
-    }
+  constructor(msg, connection) {
+    this.msg = msg;
 
     // extract some key request properties
     this.sender = {
@@ -17,7 +13,22 @@ class WebSocketMessage {
   }
 
   toString() {
-    return `${this.msg}`;
+    if (typeof this.payload === 'object') {
+      return JSON.stringify(this.payload);
+    }
+    return `${this.payload}`;
+  }
+
+  get payload() {
+    try {
+      return JSON.parse(this.msg.toString());
+    } catch (error) {
+      return this.msg.toString();
+    }
+  }
+
+  set payload(payload) {
+    this.msg = Buffer.from(payload);
   }
 }
 module.exports = WebSocketMessage;

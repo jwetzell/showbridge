@@ -1,15 +1,23 @@
 class MQTTMessage {
   constructor(msg, topic) {
-    this.bytes = msg;
-
-    try {
-      this.payload = JSON.parse(msg.toString());
-      this.payloadType = 'json';
-    } catch (err) {
-      this.payload = msg.toString();
-      this.payloadType = 'text';
-    }
+    this.msg = msg;
     this.topic = topic;
+  }
+
+  get payload() {
+    try {
+      return JSON.parse(this.msg.toString());
+    } catch (err) {
+      return this.msg.toString();
+    }
+  }
+
+  set payload(payload) {
+    this.msg = Buffer.from(payload);
+  }
+
+  get bytes() {
+    return Uint8Array.from(this.msg);
   }
 
   toString() {

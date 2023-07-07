@@ -8,11 +8,23 @@ class TCPMessage {
   }
 
   toString() {
-    return `${this.msg}`;
+    return this.string;
   }
 
   get bytes() {
     return Uint8Array.from(this.msg);
+  }
+
+  set bytes(bytes) {
+    this.msg = bytes;
+  }
+
+  get string() {
+    return this.msg.toString();
+  }
+
+  set string(string) {
+    this.msg = Buffer.from(string);
   }
 }
 module.exports = TCPMessage;

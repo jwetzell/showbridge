@@ -60,12 +60,12 @@ class MIDIMessage {
             this.status = 'reset';
             break;
           default:
-            logger.error('MIDI: unhandled sysex status: ' + bytes[0]);
+            logger.error('MIDI: unhandled sysex status = ' + bytes[0]);
         }
         break;
 
       default:
-        logger.error('MIDI: unhandled status: ' + bytes[0]);
+        logger.error('MIDI: unhandled status = ' + bytes[0]);
     }
   }
 
@@ -82,6 +82,7 @@ class MIDIMessage {
     return `status: ${this.status} ch: ${this.channel} data: ${this.bytes.slice(1).join(' ')}`;
   }
 
+  //TODO(jwetzell) it would be nice to update an instance bytes object as properties are updated via getters/setters like other message types
   get bytes() {
     return MIDIMessage.objectToBytes(this);
   }
@@ -181,7 +182,7 @@ class MIDIMessage {
         midiBytes[0] = midiStatusMap[obj.status];
         break;
       default:
-        logger.error(`MIDI: unhandled status: ${obj.status}`);
+        logger.error(`MIDI: unhandled status = ${obj.status}`);
     }
     return midiBytes;
   }
