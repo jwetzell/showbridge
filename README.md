@@ -5,6 +5,7 @@
 ### How to use
 - Install
     - prebuilt binaries (coming soon)
+    - build from source: clone and run `npm install && npm run package` to build binaries located at `dist/bin`
     - via npm: `npm install -g oscee`
 - Create config file
     - sorry, this is the worst part [JSON Schema](https://oscee.jwetzell.com/docs/schema/config)
