@@ -214,6 +214,7 @@ function doAction(action, _msg, messageType, trigger) {
       break;
     case 'midi-output':
       try {
+        // TODO(jwetzell): add templating to midi-output
         // TODO(jwetzell): see if there is a way to switch ports when outputting
         const midiToSend = MIDIMessage.parseActionParams(action.params);
         if (midiToSend) {

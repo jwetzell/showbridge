@@ -76,12 +76,16 @@ class Transform {
           break;
         case 'template':
           if (propertyValue !== undefined) {
-            let newValue = _.template(this.params.template)({ msg, vars });
-            // try to convert it to a number if it is one
-            if (parseFloat(newValue) !== NaN) {
-              newValue = parseFloat(newValue);
+            try {
+              let newValue = _.template(this.params.template)({ msg, vars });
+              // try to convert it to a number if it is one
+              if (parseFloat(newValue) !== NaN) {
+                newValue = parseFloat(newValue);
+              }
+              _.set(msg, this.params.property, newValue);
+            } catch (error) {
+              logger.error(`Transform: problem templating property - ${error}`);
             }
-            _.set(msg, this.params.property, newValue);
           }
           break;
 
