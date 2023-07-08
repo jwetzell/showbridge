@@ -10,7 +10,7 @@ class UDPServer {
   }
 
   reload(params) {
-    if (this.server) {
+    if (this.server !== undefined) {
       this.server.close();
     }
     this.server = udp.createSocket('udp4');
@@ -40,7 +40,7 @@ class UDPServer {
   }
 
   send(msg, port, host) {
-    if (this.server) {
+    if (this.server !== undefined) {
       this.server.send(msg, port, host);
     }
   }

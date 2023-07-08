@@ -12,7 +12,6 @@ class Transform {
   transform(msg, vars) {
     if (!this.enabled) {
       logger.info(`transform: ${action.type} is disabled skipping...`);
-
       return;
     }
 
@@ -22,15 +21,19 @@ class Transform {
 
       switch (this.type) {
         case 'scale':
-          if (propertyValue !== undefined && typeof propertyValue === 'number') {
-            const inRange = this.params.inRange;
-            const outRange = this.params.outRange;
+          if (propertyValue !== undefined) {
+            if (typeof propertyValue === 'number') {
+              const inRange = this.params.inRange;
+              const outRange = this.params.outRange;
 
-            const scaledValue =
-              ((propertyValue - inRange[0]) * (outRange[1] - outRange[0])) / (inRange[1] - inRange[0]) + outRange[0];
-            _.set(msg, this.params.property, scaledValue);
+              const scaledValue =
+                ((propertyValue - inRange[0]) * (outRange[1] - outRange[0])) / (inRange[1] - inRange[0]) + outRange[0];
+              _.set(msg, this.params.property, scaledValue);
+            } else {
+              logger.error('transform: scale only works on number values');
+            }
           } else {
-            logger.error('transform: scale only works on number values');
+            logger.error(`transform: scale transform could not find msg property = ${this.params.property}`);
           }
           break;
         case 'round':
@@ -41,14 +44,18 @@ class Transform {
               logger.error('transform: round only works on numbers');
             }
           } else {
-            logger.error('transform: transform is configured to look at a property that cannot be found');
+            logger.error(`transform: round transform could not find msg property = ${this.params.property}`);
           }
           break;
         case 'floor':
-          if (propertyValue !== undefined && typeof propertyValue === 'number') {
-            _.set(msg, this.params.property, Math.floor(propertyValue));
+          if (propertyValue !== undefined) {
+            if (typeof propertyValue === 'number') {
+              _.set(msg, this.params.property, Math.floor(propertyValue));
+            } else {
+              logger.error('transform: floor only works on numbers');
+            }
           } else {
-            logger.error('transform: floor only works on numbers');
+            logger.error(`transform: floor transform could not find msg property = ${this.params.property}`);
           }
           break;
         case 'map':
@@ -58,19 +65,27 @@ class Transform {
           }
           break;
         case 'power':
-          if (typeof propertyValue === 'number') {
-            const newValue = Math.pow(propertyValue, this.params.power);
-            _.set(msg, this.params.property, newValue);
+          if (propertyValue !== undefined) {
+            if (typeof propertyValue === 'number') {
+              const newValue = Math.pow(propertyValue, this.params.power);
+              _.set(msg, this.params.property, newValue);
+            } else {
+              logger.error('transform: power can only operate on numbers');
+            }
           } else {
-            logger.error('transform: power can only operate on numbers');
+            logger.error(`transform: power transform could not find msg property = ${this.params.property}`);
           }
           break;
         case 'log':
-          if (propertyValue !== undefined && typeof propertyValue === 'number') {
-            const newValue = Math.log(propertyValue) / Math.log(this.params.base);
-            _.set(msg, this.params.property, newValue);
+          if (propertyValue !== undefined) {
+            if (typeof propertyValue === 'number') {
+              const newValue = Math.log(propertyValue) / Math.log(this.params.base);
+              _.set(msg, this.params.property, newValue);
+            } else {
+              logger.error('transform: log can only operate on numbers');
+            }
           } else {
-            logger.error('transform: log can only operate on numbers');
+            logger.error(`transform: log transform could not find msg property = ${this.params.property}`);
           }
           break;
         case 'template':
@@ -84,6 +99,7 @@ class Transform {
               _.set(msg, this.params.property, newValue);
             } catch (error) {
               logger.error(`transform: problem templating property - ${error}`);
+              throw error;
             }
           }
           break;

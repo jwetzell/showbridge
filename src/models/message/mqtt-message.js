@@ -7,7 +7,7 @@ class MQTTMessage {
   get payload() {
     try {
       return JSON.parse(this.msg.toString());
-    } catch (err) {
+    } catch (error) {
       return this.msg.toString();
     }
   }

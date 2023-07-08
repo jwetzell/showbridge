@@ -12,7 +12,7 @@ class TCPServer {
   }
 
   reload(params) {
-    if (this.server) {
+    if (this.server !== undefined) {
       this.server.close();
     }
     this.server = net.createServer();
@@ -34,8 +34,8 @@ class TCPServer {
       });
     });
 
-    this.server.on('error', (err) => {
-      logger.error(`tcp: problem starting TCP server: ${err.message}`);
+    this.server.on('error', (error) => {
+      logger.error(`tcp: problem starting TCP server - ${error}`);
     });
 
     this.server.listen(
@@ -62,9 +62,8 @@ class TCPServer {
         logger.debug(`tcp: connected to client`);
       });
 
-      this.sockets[host][port].on('error', (err) => {
-        logger.error('tcp: client error');
-        logger.error(err);
+      this.sockets[host][port].on('error', (error) => {
+        logger.error(`tcp: client error - ${error}`);
         this.sockets[host][port].destroy();
         this.sockets[host][port] = undefined;
       });

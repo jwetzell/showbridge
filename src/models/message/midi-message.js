@@ -188,7 +188,7 @@ class MIDIMessage {
   }
 
   static parseActionParams(params) {
-    if (params.bytes) {
+    if (params.bytes !== undefined) {
       return new MIDIMessage(params.bytes, 'virtual');
     } else {
       return new MIDIMessage(MIDIMessage.objectToBytes(params), 'virtual');

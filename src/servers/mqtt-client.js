@@ -9,32 +9,31 @@ class MQTTClient {
   }
 
   reload(params) {
-    if (this.client) {
+    if (this.client !== undefined) {
       this.client.end();
     }
     const connectionOptions = {
       reconnectPeriod: 0,
     };
 
-    if (params.broker !== '' && params.topics) {
-      if (params.username && params.password) {
+    if (params.broker !== undefined && params.broker !== '' && params.topics) {
+      if (params.hasOwnProperty('username') && params.hasOwnProperty('password')) {
         connectionOptions.username = params.username;
         connectionOptions.password = params.password;
       }
 
       this.client = mqtt.connect(params.broker, connectionOptions);
 
-      this.client.on('error', (err) => {
-        logger.error(`mqtt: problem connecting to broker ${params.broker}`);
-        logger.error(err);
+      this.client.on('error', (error) => {
+        logger.error(`mqtt: problem connecting to broker ${params.broker} - ${error}`);
       });
 
       this.client.on('connect', () => {
         logger.info(`mqtt: client connected to ${params.broker}`);
         if (params.topics?.length > 0) {
-          this.client.subscribe(params.topics, (err) => {
-            if (err) {
-              logger.error(err);
+          this.client.subscribe(params.topics, (error) => {
+            if (error) {
+              logger.error(`mqtt: problem subscribing to topics ${params.topics} - ${error}`);
             }
           });
         }
@@ -48,7 +47,7 @@ class MQTTClient {
   }
 
   send(topic, payload) {
-    if (this.client) {
+    if (this.client !== undefined) {
       this.client.publish(topic, Buffer.from(payload));
     }
   }

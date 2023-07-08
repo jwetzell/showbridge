@@ -55,21 +55,21 @@ class HTTPServer {
       res.status(200).send({ msg: 'ok' });
     });
 
-    this.httpServer.on('clientError', (err, socket) => {
-      throw err;
+    this.httpServer.on('clientError', (error, socket) => {
+      throw error;
     });
   }
 
   reload(params) {
-    if (this.server) {
+    if (this.server !== undefined) {
       this.server.close();
     }
     try {
       this.server = this.httpServer.listen(params.port, () => {
         logger.info(`http: web interface listening on port ${params.port}`);
       });
-    } catch (err) {
-      logger.error(err);
+    } catch (error) {
+      logger.info(`http: problem launching server - ${error}`);
     }
   }
 

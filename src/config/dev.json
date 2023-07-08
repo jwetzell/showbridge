@@ -57,7 +57,29 @@
         "params": {
           "port": "virtual"
         },
-        "actions": [{ "type": "log", "enabled": true }],
+        "actions": [
+          { "type": "log", "enabled": true },
+          {
+            "type": "midi-output",
+            "params": {
+              "status": "note_on",
+              "note": 1,
+              "channel": 1,
+              "velocity": 127
+            },
+            "transforms": [
+              {
+                "type": "template",
+                "params": {
+                  "property": "note",
+                  "template": "${msg.note}"
+                },
+                "enabled": true
+              }
+            ],
+            "enabled": true
+          }
+        ],
         "enabled": true
       }
     ]

@@ -33,7 +33,7 @@ class Trigger {
 
                 const regex = new RegExp(pattern, 'g');
                 const matchPropertyValue = _.get(msg, property);
-                if (!matchPropertyValue) {
+                if (matchPropertyValue === undefined) {
                   logger.error(
                     'trigger: regex is configured to look at a property that does not exist on this message.'
                   );
@@ -48,12 +48,14 @@ class Trigger {
                   break;
                 }
               }
+            } else {
+              logger.error('trigger: regex trigger requires a 1:1 between patterns and properties');
             }
           }
         }
         break;
       case 'sender':
-        if (!!msg.sender) {
+        if (msg.hasOwnProperty('sender')) {
           if (msg.sender.address === this.params.address) {
             fire = true;
           }
@@ -62,7 +64,7 @@ class Trigger {
         }
         break;
       case 'bytes-equal':
-        if (msg.bytes) {
+        if (msg.bytes !== undefined) {
           //good we are looking at a message that has bytes
           const bytesToMatch = Uint8Array.from(this.params.bytes);
           if (_.isEqual(msg.bytes, bytesToMatch)) {
