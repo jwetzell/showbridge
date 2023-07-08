@@ -34,7 +34,9 @@ class Trigger {
                 const regex = new RegExp(pattern, 'g');
                 const matchPropertyValue = _.get(msg, property);
                 if (!matchPropertyValue) {
-                  logger.error('regex is configured to look at a property that does not exist on this message.');
+                  logger.error(
+                    'trigger: regex is configured to look at a property that does not exist on this message.'
+                  );
                   //bad property config = no fire and since all must match we can stop here
                   fire = false;
                   break;
@@ -56,7 +58,7 @@ class Trigger {
             fire = true;
           }
         } else {
-          logger.error('host trigger attempted on message type that does not have host information');
+          logger.error('trigger: host trigger attempted on message type that does not have host information');
         }
         break;
       case 'bytes-equal':
@@ -67,7 +69,7 @@ class Trigger {
             fire = true;
           }
         } else {
-          logger.error('bytes equality check attempted on msg that does not have bytes');
+          logger.error('trigger: bytes equality check attempted on msg that does not have bytes');
         }
         break;
       case 'midi-note-on':
@@ -143,7 +145,7 @@ class Trigger {
         }
         break;
       default:
-        logger.error(`unhandled trigger type = ${this.type}`);
+        logger.error(`trigger: unhandled trigger type = ${this.type}`);
         fire = false;
     }
     return fire;

@@ -60,12 +60,12 @@ class MIDIMessage {
             this.status = 'reset';
             break;
           default:
-            logger.error('MIDI: unhandled sysex status = ' + bytes[0]);
+            logger.error('midi: unhandled sysex status = ' + bytes[0]);
         }
         break;
 
       default:
-        logger.error('MIDI: unhandled status = ' + bytes[0]);
+        logger.error('midi: unhandled status = ' + bytes[0]);
     }
   }
 
@@ -182,7 +182,7 @@ class MIDIMessage {
         midiBytes[0] = midiStatusMap[obj.status];
         break;
       default:
-        logger.error(`MIDI: unhandled status = ${obj.status}`);
+        logger.error(`midi: unhandled status = ${obj.status}`);
     }
     return midiBytes;
   }

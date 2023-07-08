@@ -20,7 +20,7 @@ class UDPServer {
         port: params.port,
       },
       () => {
-        logger.info(`UDP: server setup on port ${this.server.address().address}:${this.server.address().port}`);
+        logger.info(`udp: server setup on port ${this.server.address().address}:${this.server.address().port}`);
         this.server.on('message', (msg, rinfo) => {
           const sender = {
             protocol: 'udp',

@@ -66,7 +66,7 @@ class HTTPServer {
     }
     try {
       this.server = this.httpServer.listen(params.port, () => {
-        logger.info(`HTTP: web interface listening on port ${params.port}`);
+        logger.info(`http: web interface listening on port ${params.port}`);
       });
     } catch (err) {
       logger.error(err);

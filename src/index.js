@@ -138,13 +138,13 @@ function doAction(action, _msg, messageType, trigger) {
               messageType === 'osc' ? true : false
             );
           } else {
-            logger.error(`unhandled forward protocol = ${action.params.protocol}`);
+            logger.error(`action: unhandled forward protocol = ${action.params.protocol}`);
           }
         } else {
-          logger.error('this is not a forwardable message type');
+          logger.error('action: this is not a forwardable message type');
         }
       } catch (error) {
-        logger.error('error outputting osc');
+        logger.error('action: error outputting osc');
         logger.error(error);
       }
       break;
@@ -153,7 +153,7 @@ function doAction(action, _msg, messageType, trigger) {
         const address = resolveTemplatedProperty(action.params, 'address', { msg, vars });
 
         if (!address) {
-          logger.error('either address or _address property need to be set for osc-output action');
+          logger.error('action: either address or _address property need to be set for osc-output action');
           return;
         }
 
@@ -169,10 +169,10 @@ function doAction(action, _msg, messageType, trigger) {
         } else if (action.params.protocol === 'tcp') {
           servers.tcp.send(outBuff, action.params.port, action.params.host, true);
         } else {
-          logger.error(`unhandled osc output protocol = ${action.params.protocol}`);
+          logger.error(`action: unhandled osc output protocol = ${action.params.protocol}`);
         }
       } catch (error) {
-        logger.error('error outputting osc');
+        logger.error('action: error outputting osc');
         logger.error(error);
       }
       break;
@@ -191,7 +191,7 @@ function doAction(action, _msg, messageType, trigger) {
       if (udpSend) {
         servers.udp.send(Buffer.from(udpSend), action.params.port, action.params.host);
       } else {
-        logger.error('udp-output has nothing to send');
+        logger.error('action: udp-output has nothing to send');
       }
       break;
     case 'tcp-output':
@@ -209,7 +209,7 @@ function doAction(action, _msg, messageType, trigger) {
       if (tcpSend) {
         servers.tcp.send(Buffer.from(tcpSend), action.params.port, action.params.host, action.params.slip);
       } else {
-        logger.error('tcp-output has nothing to send');
+        logger.error('action: tcp-output has nothing to send');
       }
       break;
     case 'midi-output':
@@ -221,7 +221,7 @@ function doAction(action, _msg, messageType, trigger) {
           servers.midi.send(Buffer.from(midiToSend.bytes));
         }
       } catch (error) {
-        logger.error('error outputting midi');
+        logger.error('action: error outputting midi');
         logger.error(error);
       }
       break;
@@ -235,7 +235,7 @@ function doAction(action, _msg, messageType, trigger) {
           exec(command);
         }
       } catch (error) {
-        logger.error('problem executing shell action');
+        logger.error('action: problem executing shell action');
         logger.error(error);
       }
       break;
@@ -261,10 +261,10 @@ function doAction(action, _msg, messageType, trigger) {
             }
           });
         } else {
-          logger.error('url is empty');
+          logger.error('action: url is empty');
         }
       } catch (error) {
-        logger.error('problem executing http action');
+        logger.error('action: problem executing http action');
         logger.error(error);
       }
       break;
@@ -276,7 +276,7 @@ function doAction(action, _msg, messageType, trigger) {
         if (key && value) {
           vars[key] = value;
         } else {
-          logger.error('store action missing a key or value');
+          logger.error('action: store action missing a key or value');
         }
       } catch (error) {
         logger.error(error);
@@ -296,9 +296,9 @@ function doAction(action, _msg, messageType, trigger) {
       if (topic && payload) {
         servers.mqtt.send(topic, payload);
       } else {
-        logger.error('mqtt-output missing either topic or payload');
+        logger.error('action: mqtt-output missing either topic or payload');
       }
     default:
-      logger.error(`unhandled action type = ${action.type}`);
+      logger.error(`action: unhandled action type = ${action.type}`);
   }
 }

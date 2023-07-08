@@ -35,7 +35,7 @@ class TCPServer {
     });
 
     this.server.on('error', (err) => {
-      logger.error(`TCP: problem starting TCP server: ${err.message}`);
+      logger.error(`tcp: problem starting TCP server: ${err.message}`);
     });
 
     this.server.listen(
@@ -44,7 +44,7 @@ class TCPServer {
         port: params.port,
       },
       () => {
-        logger.info(`TCP: server setup on port ${this.server.address().address}:${this.server.address().port}`);
+        logger.info(`tcp: server setup on port ${this.server.address().address}:${this.server.address().port}`);
       }
     );
   }
@@ -59,17 +59,18 @@ class TCPServer {
     if (this.sockets[host][port] === undefined) {
       this.sockets[host][port] = new net.Socket();
       this.sockets[host][port].connect(port, host, () => {
-        logger.debug(`TCP: connected to client`);
+        logger.debug(`tcp: connected to client`);
       });
 
       this.sockets[host][port].on('error', (err) => {
+        logger.error('tcp: client error');
         logger.error(err);
         this.sockets[host][port].destroy();
         this.sockets[host][port] = undefined;
       });
 
       this.sockets[host][port].on('close', () => {
-        logger.debug('TCP: disconnected from client');
+        logger.debug('tcp: disconnected from client');
         delete this.sockets[host][port];
       });
     }

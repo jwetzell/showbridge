@@ -18,7 +18,7 @@ class MIDIServer {
         const parsedMIDI = new MIDIMessage(msg, 'virtual');
         this.eventEmitter.emit('message', parsedMIDI, 'midi');
       } catch (error) {
-        logger.error('MIDI: problem processing MIDI message!');
+        logger.error('midi: problem processing MIDI message!');
         logger.error(error);
       }
     });
@@ -46,7 +46,7 @@ class MIDIServer {
             const parsedMIDI = new MIDIMessage(msg, this.virtualInput.getPortName(index));
             this.eventEmitter.emit('message', parsedMIDI, 'midi');
           } catch (error) {
-            logger.error('MIDI: problem processing MIDI message!');
+            logger.error('midi: problem processing MIDI message!');
             logger.error(error);
           }
         });

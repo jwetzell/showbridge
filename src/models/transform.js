@@ -16,7 +16,7 @@ class Transform {
       return;
     }
 
-    logger.info(`transform: before ${this.type} = ${msg}`);
+    logger.debug(`transform: before ${this.type} = ${msg}`);
     if (this.params && this.params.hasOwnProperty('property')) {
       const propertyValue = _.get(msg, this.params.property);
 
@@ -59,7 +59,6 @@ class Transform {
           break;
         case 'power':
           if (typeof propertyValue === 'number') {
-            logger.info(propertyValue);
             const newValue = Math.pow(propertyValue, this.params.power);
             _.set(msg, this.params.property, newValue);
           } else {
@@ -84,18 +83,18 @@ class Transform {
               }
               _.set(msg, this.params.property, newValue);
             } catch (error) {
-              logger.error(`Transform: problem templating property - ${error}`);
+              logger.error(`transform: problem templating property - ${error}`);
             }
           }
           break;
 
         default:
-          logger.error(`Transform: unhandled transform type = ${this.type}`);
+          logger.error(`transform: unhandled transform type = ${this.type}`);
       }
     } else {
       logger.error('transform: transform does not seem to be configured correctly');
     }
-    logger.info(`Transform: after ${this.type} = ${msg}`);
+    logger.debug(`transform: after ${this.type} = ${msg}`);
   }
 }
 module.exports = Transform;
