@@ -27,22 +27,13 @@
   "osc": {
     "triggers": [
       {
-        "type": "regex",
+        "type": "osc-address",
         "params": {
-          "patterns": ["^/test/.*$"],
-          "properties": ["address"]
+          "address": "/midi/*"
         },
         "actions": [
           {
             "type": "log",
-            "enabled": true
-          },
-          {
-            "type": "http",
-            "params": {
-              "url": "http://localhost:3000/test",
-              "method": "GET"
-            },
             "enabled": true
           }
         ],
