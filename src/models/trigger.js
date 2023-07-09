@@ -146,6 +146,20 @@ class Trigger {
           }
         }
         break;
+      case 'osc-address':
+        if (messageType === 'osc') {
+          if (!!this.params && this.params.address !== undefined) {
+            //NOTE(jwetzell) convert osc wildcard into regex
+            const regexString = `^${this.params.address.replaceAll('*', '[^/]+').replaceAll('?', '.')}$`;
+            const addressRegex = new RegExp(regexString);
+            if (addressRegex.test(msg.address)) {
+              fire = true;
+            }
+          }
+        } else {
+          logger.error('trigger: osc-address only works with osc messages');
+        }
+        break;
       default:
         logger.error(`trigger: unhandled trigger type = ${this.type}`);
         fire = false;

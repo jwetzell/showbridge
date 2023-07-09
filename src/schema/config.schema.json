@@ -58,7 +58,8 @@
             "oneOf": [
               { "$ref": "#/definitions/TriggerSender" },
               { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerBytesEqual" }
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerOSCAddress" }
             ]
           }
         }
@@ -1063,6 +1064,38 @@
         }
       },
       "required": ["type", "params", "enabled"],
+      "additionalProperties": false
+    },
+
+    "TriggerOSCAddress": {
+      "title": "OSC Address Trigger",
+      "description": "This trigger will match osc messages by address",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "osc-address"
+        },
+        "params": {
+          "description": "OSC trigger params",
+          "type": "object",
+          "properties": {
+            "address": {
+              "description": "OSC Address to match supports * and ? wildcards per OSC spec",
+              "type": "string"
+            }
+          },
+          "required": ["address"],
+          "additionalProperties": false
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled", "params"],
       "additionalProperties": false
     },
 
