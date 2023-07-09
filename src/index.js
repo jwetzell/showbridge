@@ -103,11 +103,15 @@ function processMessage(msg, messageType) {
   if (triggers !== undefined && triggers.length > 0) {
     for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
       const trigger = triggers[triggerIndex];
-      if (trigger.shouldFire(msg, messageType)) {
-        logger.debug(`${messageType}-trigger-${triggerIndex}: fired`);
-        trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
-      } else {
-        logger.debug(`${messageType}-trigger-${triggerIndex}: not fired`);
+      try {
+        if (trigger.shouldFire(msg, messageType)) {
+          logger.debug(`${messageType}-trigger-${triggerIndex}: fired`);
+          trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
+        } else {
+          logger.debug(`${messageType}-trigger-${triggerIndex}: not fired`);
+        }
+      } catch (error) {
+        logger.error(`trigger: problem evaluating trigger - ${error}`);
       }
     }
   }

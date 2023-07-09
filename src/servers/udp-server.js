@@ -27,13 +27,18 @@ class UDPServer {
             address: rinfo.address,
             port: rinfo.port,
           };
+
+          let messageType;
+          let message;
+
           try {
-            const oscMsg = new OSCMessage(osc.fromBuffer(msg, true), sender);
-            this.eventEmitter.emit('message', oscMsg, 'osc');
+            message = new OSCMessage(osc.fromBuffer(msg, true), sender);
+            messageType = 'osc';
           } catch (error) {
-            const udpMsg = new UDPMessage(msg, sender);
-            this.eventEmitter.emit('message', udpMsg, 'udp');
+            message = new UDPMessage(msg, sender);
+            messageType = 'udp';
           }
+          this.eventEmitter.emit('message', message, messageType);
         });
       }
     );
