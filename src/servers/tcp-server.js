@@ -26,10 +26,10 @@ class TCPServer {
         try {
           //TODO(jwetzell): SLIP decoding
           const oscMsg = new OSCMessage(osc.fromBuffer(msg, true), sender);
-          this.eventEmitter.emit('message', oscMsg, 'osc');
+          this.eventEmitter.emit('message', oscMsg);
         } catch (error) {
           const tcpMsg = new TCPMessage(msg, sender);
-          this.eventEmitter.emit('message', tcpMsg, 'tcp');
+          this.eventEmitter.emit('message', tcpMsg);
         }
       });
     });
@@ -44,7 +44,7 @@ class TCPServer {
         port: params.port,
       },
       () => {
-        logger.info(`tcp: server setup on port ${this.server.address().address}:${this.server.address().port}`);
+        logger.debug(`tcp: server setup on port ${this.server.address().address}:${this.server.address().port}`);
       }
     );
   }

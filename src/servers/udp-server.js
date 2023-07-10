@@ -20,7 +20,7 @@ class UDPServer {
         port: params.port,
       },
       () => {
-        logger.info(`udp: server setup on port ${this.server.address().address}:${this.server.address().port}`);
+        logger.debug(`udp: server setup on port ${this.server.address().address}:${this.server.address().port}`);
         this.server.on('message', (msg, rinfo) => {
           const sender = {
             protocol: 'udp',
@@ -28,17 +28,14 @@ class UDPServer {
             port: rinfo.port,
           };
 
-          let messageType;
           let message;
 
           try {
             message = new OSCMessage(osc.fromBuffer(msg, true), sender);
-            messageType = 'osc';
           } catch (error) {
             message = new UDPMessage(msg, sender);
-            messageType = 'udp';
           }
-          this.eventEmitter.emit('message', message, messageType);
+          this.eventEmitter.emit('message', message);
         });
       }
     );

@@ -70,13 +70,11 @@ servers.http.setConfig(config);
 // logger.debug('MQTT Trigger Summary');
 // logger.debug(config.mqtt.triggers);
 
-servers.tcp.on('message', processMessage);
-servers.udp.on('message', processMessage);
-servers.midi.on('message', processMessage);
-servers.ws.on('message', processMessage);
-servers.mqtt.on('message', processMessage);
+// NOTE(jwetzell): listen for all messages on servers
+Object.keys(servers).forEach((messageType) => {
+  servers[messageType].on('message', processMessage);
+});
 
-servers.http.on('message', processMessage);
 servers.http.on('reload', (updatedConfig) => {
   try {
     config = updatedConfig;
@@ -98,17 +96,17 @@ function reloadServers() {
 }
 
 /** Message Processing */
-function processMessage(msg, messageType) {
-  const triggers = config[messageType]?.triggers;
+function processMessage(msg) {
+  const triggers = config[msg.messageType]?.triggers;
   if (triggers !== undefined && triggers.length > 0) {
     for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
       const trigger = triggers[triggerIndex];
       try {
-        if (trigger.shouldFire(msg, messageType)) {
-          logger.debug(`${messageType}-trigger-${triggerIndex}: fired`);
-          trigger.actions.forEach((action) => doAction(action, msg, messageType, trigger));
+        if (trigger.shouldFire(msg)) {
+          logger.debug(`${msg.messageType}-trigger-${triggerIndex}: fired`);
+          trigger.actions.forEach((action) => doAction(action, msg, trigger));
         } else {
-          logger.debug(`${messageType}-trigger-${triggerIndex}: not fired`);
+          logger.debug(`${msg.messageType}-trigger-${triggerIndex}: not fired`);
         }
       } catch (error) {
         logger.error(`trigger: problem evaluating trigger - ${error}`);
@@ -118,7 +116,7 @@ function processMessage(msg, messageType) {
 }
 
 // Action
-function doAction(action, _msg, messageType, trigger) {
+function doAction(action, _msg, trigger) {
   if (!action.enabled) {
     logger.debug(`action: ${action.type} is disabled skipping...`);
     return;
@@ -141,7 +139,7 @@ function doAction(action, _msg, messageType, trigger) {
                 msgToForward,
                 action.params.port,
                 action.params.host,
-                messageType === 'osc' ? true : false
+                msg.messageType === 'osc' ? true : false
               );
             } else {
               logger.error(`action: unhandled forward protocol = ${action.params.protocol}`);
@@ -232,7 +230,7 @@ function doAction(action, _msg, messageType, trigger) {
         }
         break;
       case 'log':
-        logger.info(`${messageType}: ${msg}`);
+        logger.info(`${msg.messageType}: ${msg}`);
         break;
       case 'shell':
         try {
@@ -289,7 +287,7 @@ function doAction(action, _msg, messageType, trigger) {
       case 'delay':
         if (action.params.duration !== undefined && action.params.actions !== undefined) {
           setTimeout(() => {
-            action.params.actions.forEach((action) => doAction(action, msg, messageType, trigger));
+            action.params.actions.forEach((action) => doAction(action, msg, trigger));
           }, action.params.duration);
         }
         break;

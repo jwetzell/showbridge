@@ -45,13 +45,13 @@ class HTTPServer {
     //TODO(jwetzell): error handling on these endpoints
     app.get('/*', (req, res) => {
       const parsedHTTP = new HTTPMessage(req);
-      this.eventEmitter.emit('message', parsedHTTP, 'http');
+      this.eventEmitter.emit('message', msg);
       res.status(200).send({ msg: 'ok' });
     });
 
     app.post('/*', (req, res) => {
       const parsedHTTP = new HTTPMessage(req);
-      this.eventEmitter.emit('message', parsedHTTP, 'http');
+      this.eventEmitter.emit('message', parsedHTTP);
       res.status(200).send({ msg: 'ok' });
     });
 
@@ -66,10 +66,10 @@ class HTTPServer {
     }
     try {
       this.server = this.httpServer.listen(params.port, () => {
-        logger.info(`http: web interface listening on port ${params.port}`);
+        logger.debug(`http: web interface listening on port ${params.port}`);
       });
     } catch (error) {
-      logger.info(`http: problem launching server - ${error}`);
+      logger.error(`http: problem launching server - ${error}`);
     }
   }
 

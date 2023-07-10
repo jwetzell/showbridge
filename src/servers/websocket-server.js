@@ -12,8 +12,8 @@ class WebSocketServer {
 
     this.server.on('connection', (ws, req) => {
       ws.on('message', (msgBuffer) => {
-        const msg = new WebSocketMessage(msgBuffer, req.connection);
-        this.eventEmitter.emit('message', msg, 'ws');
+        const wsMsg = new WebSocketMessage(msgBuffer, req.connection);
+        this.eventEmitter.emit('message', wsMsg);
       });
     });
   }

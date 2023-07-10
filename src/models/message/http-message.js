@@ -11,6 +11,10 @@ class HTTPMessage {
     }
   }
 
+  get messageType() {
+    return 'http';
+  }
+
   get originalUrl() {
     return this.msg.originalUrl;
   }

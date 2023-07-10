@@ -4,6 +4,10 @@ class MQTTMessage {
     this.topic = topic;
   }
 
+  get messageType() {
+    return 'mqtt';
+  }
+
   get payload() {
     try {
       return JSON.parse(this.msg.toString());

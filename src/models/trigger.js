@@ -14,7 +14,7 @@ class Trigger {
     return this.enabled;
   }
 
-  shouldFire(msg, messageType) {
+  shouldFire(msg) {
     if (!this.enabled) {
       return false;
     }
@@ -75,7 +75,7 @@ class Trigger {
         }
         break;
       case 'midi-note-on':
-        if (messageType === 'midi' && msg.status === 'note_on') {
+        if (msg.messageType === 'midi' && msg.status === 'note_on') {
           if (!!this.params) {
             fire = true;
 
@@ -94,7 +94,7 @@ class Trigger {
         }
         break;
       case 'midi-note-off':
-        if (messageType === 'midi' && msg.status === 'note_off') {
+        if (msg.messageType === 'midi' && msg.status === 'note_off') {
           if (!!this.params) {
             fire = true;
 
@@ -113,7 +113,7 @@ class Trigger {
         }
         break;
       case 'midi-control-change':
-        if (messageType === 'midi' && msg.status === 'control_change') {
+        if (msg.messageType === 'midi' && msg.status === 'control_change') {
           if (!!this.params) {
             fire = true;
 
@@ -132,7 +132,7 @@ class Trigger {
         }
         break;
       case 'midi-program-change':
-        if (messageType === 'midi' && msg.status === 'program_change') {
+        if (msg.messageType === 'midi' && msg.status === 'program_change') {
           if (!!this.params) {
             fire = true;
 
@@ -147,7 +147,7 @@ class Trigger {
         }
         break;
       case 'osc-address':
-        if (messageType === 'osc') {
+        if (msg.messageType === 'osc') {
           if (!!this.params && this.params.address !== undefined) {
             //NOTE(jwetzell) convert osc wildcard into regex
             const regexString = this.params.address

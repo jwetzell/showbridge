@@ -7,8 +7,8 @@ class OSCMessage {
     this.sender = sender;
   }
 
-  toString() {
-    return `${this.address} ${this.args.join(' ')}`;
+  get messageType() {
+    return 'osc';
   }
 
   get address() {
@@ -33,6 +33,10 @@ class OSCMessage {
 
   get bytes() {
     return Uint8Array.from(osc.toBuffer(this.msg));
+  }
+
+  toString() {
+    return `${this.address} ${this.args.join(' ')}`;
   }
 }
 module.exports = OSCMessage;

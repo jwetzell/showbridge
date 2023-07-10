@@ -7,8 +7,8 @@ class TCPMessage {
     }
   }
 
-  toString() {
-    return this.string;
+  get messageType() {
+    return 'tcp';
   }
 
   get bytes() {
@@ -25,6 +25,10 @@ class TCPMessage {
 
   set string(string) {
     this.msg = Buffer.from(string);
+  }
+
+  toString() {
+    return this.string;
   }
 }
 module.exports = TCPMessage;

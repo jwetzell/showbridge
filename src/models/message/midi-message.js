@@ -78,13 +78,17 @@ class MIDIMessage {
     return true;
   }
 
-  toString() {
-    return `status: ${this.status} ch: ${this.channel} data: ${this.bytes.slice(1).join(' ')}`;
+  get messageType() {
+    return 'midi';
   }
 
   //TODO(jwetzell) it would be nice to update an instance bytes object as properties are updated via getters/setters like other message types
   get bytes() {
     return MIDIMessage.objectToBytes(this);
+  }
+
+  toString() {
+    return `status: ${this.status} ch: ${this.channel} data: ${this.bytes.slice(1).join(' ')}`;
   }
 
   static objectToBytes(obj) {

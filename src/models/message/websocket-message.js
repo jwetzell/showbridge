@@ -12,11 +12,8 @@ class WebSocketMessage {
     }
   }
 
-  toString() {
-    if (typeof this.payload === 'object') {
-      return JSON.stringify(this.payload);
-    }
-    return `${this.payload}`;
+  get messageType() {
+    return 'ws';
   }
 
   get payload() {
@@ -29,6 +26,13 @@ class WebSocketMessage {
 
   set payload(payload) {
     this.msg = Buffer.from(payload);
+  }
+
+  toString() {
+    if (typeof this.payload === 'object') {
+      return JSON.stringify(this.payload);
+    }
+    return `${this.payload}`;
   }
 }
 module.exports = WebSocketMessage;

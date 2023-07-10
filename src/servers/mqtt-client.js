@@ -41,7 +41,7 @@ class MQTTClient {
 
       this.client.on('message', (topic, message) => {
         const mqttMsg = new MQTTMessage(message, topic);
-        this.eventEmitter.emit('message', mqttMsg, 'mqtt');
+        this.eventEmitter.emit('message', mqttMsg);
       });
     }
   }

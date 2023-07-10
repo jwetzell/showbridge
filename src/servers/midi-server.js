@@ -15,8 +15,8 @@ class MIDIServer {
 
     this.virtualInput.on('message', (deltaTime, msg) => {
       try {
-        const parsedMIDI = new MIDIMessage(msg, 'virtual');
-        this.eventEmitter.emit('message', parsedMIDI, 'midi');
+        const midiMessage = new MIDIMessage(msg, 'virtual');
+        this.eventEmitter.emit('message', midiMessage);
       } catch (error) {
         logger.error(`midi: problem processing MIDI message - ${error}`);
       }
@@ -42,8 +42,8 @@ class MIDIServer {
         input.openPort(index);
         input.on('message', (deltaTime, msg) => {
           try {
-            const parsedMIDI = new MIDIMessage(msg, this.virtualInput.getPortName(index));
-            this.eventEmitter.emit('message', parsedMIDI, 'midi');
+            const midiMessage = new MIDIMessage(msg, this.virtualInput.getPortName(index));
+            this.eventEmitter.emit('message', midiMessage);
           } catch (error) {
             logger.error(`midi: problem processing MIDI message - ${error}`);
           }

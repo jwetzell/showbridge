@@ -8,8 +8,8 @@ class UDPMessage {
     }
   }
 
-  toString() {
-    return this.string;
+  get messageType() {
+    return 'udp';
   }
 
   get bytes() {
@@ -26,6 +26,10 @@ class UDPMessage {
 
   set string(string) {
     this.msg = Buffer.from(string);
+  }
+
+  toString() {
+    return this.string;
   }
 }
 module.exports = UDPMessage;
