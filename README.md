@@ -115,10 +115,16 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 
 
 ## Templating
-Alright there is a lot of referencing to templating. There is no secret sauce it is simply [lodash templating](https://lodash.com/docs/4.17.15#template) can think of it 
+Alright there is a lot of references to templating. There is no secret sauce it is simply [lodash templating](https://lodash.com/docs/4.17.15#template) which is compatible with JS template literals (backtick strings)
+- **examples**: assume incoming message is a midi note on message on channel 1 with note value = 60 and velocity = 127
+    - `"/midi/${msg.channel}/${msg.status}/${msg.note}"` -> `/midi/1/note_on/60`
+    - `"${msg.velocity - 10}"` -> `117`
+    - `"${msg.note + 12}"` -> `72`
+
+
 ## Message Properties
 
-For templating purposes (any property starting with an underscore _) every message has some properties that might be good to know about
+For templating purposes (any param starting with an underscore `_`) the incoming message is made available as `msg` and the properties available under this `msg` object are outlined below. See above for some examples using a midi message as an example of how these properties can be accessed in a template. 
 
 - **http**
     - originalUrl: express.js req.originalUrl
