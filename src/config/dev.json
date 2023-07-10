@@ -29,7 +29,7 @@
       {
         "type": "osc-address",
         "params": {
-          "address": "/midi/*"
+          "address": "/midi/{note_on,note_off}"
         },
         "actions": [
           {

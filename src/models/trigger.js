@@ -150,8 +150,14 @@ class Trigger {
         if (messageType === 'osc') {
           if (!!this.params && this.params.address !== undefined) {
             //NOTE(jwetzell) convert osc wildcard into regex
-            const regexString = `^${this.params.address.replaceAll('*', '[^/]+').replaceAll('?', '.')}$`;
-            const addressRegex = new RegExp(regexString);
+            const regexString = this.params.address
+              .replaceAll('{', '(')
+              .replaceAll('}', ')')
+              .replaceAll(',', '|')
+              .replaceAll('[!', '[^')
+              .replaceAll('*', '[^/]+')
+              .replaceAll('?', '.');
+            const addressRegex = new RegExp(`^${regexString}$`);
             if (addressRegex.test(msg.address)) {
               fire = true;
             }
