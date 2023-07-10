@@ -4,6 +4,8 @@ name: generate-schema-docs
 trigger:
   branch:
     - main
+  event:
+    - push
 steps:
   - name: generate schema docs
     image: python:3
