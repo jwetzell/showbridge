@@ -230,7 +230,7 @@ function doAction(action, _msg, trigger) {
         }
         break;
       case 'log':
-        logger.info(`${msg.messageType}: ${msg}`);
+        logger.info(`log: ${msg.messageType} - ${msg}`);
         break;
       case 'shell':
         try {
