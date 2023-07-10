@@ -1,6 +1,6 @@
 # oscee
 
-### Simple OSC/MIDI router _/s_
+### Simple protocol router _/s_
 
 ### How to use
 - Install
@@ -44,6 +44,8 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
     - value: optional control value 0-127 to match the incoming message to
 - **midi-program-change**
     - program: optional program number 0-127 to match the incoming message to
+- **osc-address**
+    - address: the OSC address to match to incoming OSC messages. Supports address patterns according to the OSC spec.
 
 ## Actions
 - **forward**
