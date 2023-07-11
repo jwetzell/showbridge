@@ -69,7 +69,7 @@ class Router {
       for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex += 1) {
         const trigger = triggers[triggerIndex];
         try {
-          if (trigger.shouldFire(msg)) {
+          if (trigger.enabled && trigger.shouldFire(msg)) {
             logger.trace(`${msg.messageType}-trigger-${triggerIndex}: fired`);
             trigger.actions.forEach((action) => this.doAction(action, msg, trigger));
           } else {
