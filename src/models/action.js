@@ -1,6 +1,6 @@
-const { logger } = require('../utils/helper');
-const Transform = require('./transform');
 const _ = require('lodash');
+const Transform = require('./transform');
+
 class Action {
   constructor(actionObj) {
     this.type = actionObj.type;
@@ -20,9 +20,8 @@ class Action {
         transform.transform(msgCopy, vars);
       });
       return msgCopy;
-    } else {
-      return msg;
     }
+    return msg;
   }
 }
 module.exports = Action;

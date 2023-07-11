@@ -31,7 +31,7 @@ class MQTTMessage {
       case 'text':
         return this.payload;
       default:
-        break;
+        return undefined;
     }
   }
 }

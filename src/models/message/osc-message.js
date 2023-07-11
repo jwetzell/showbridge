@@ -1,5 +1,5 @@
 const osc = require('osc-min');
-const { logger } = require('../../utils/helper');
+
 class OSCMessage {
   constructor(msg, sender) {
     this.msg = msg;

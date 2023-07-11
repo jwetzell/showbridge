@@ -7,7 +7,7 @@ class WebSocketMessage {
       protocol: 'tcp',
       address: connection.remoteAddress,
     };
-    if (this.sender.address.substr(0, 7) == '::ffff:') {
+    if (this.sender.address.substr(0, 7) === '::ffff:') {
       this.sender.address = this.sender.address.substr(7);
     }
   }
