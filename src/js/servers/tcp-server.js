@@ -2,8 +2,8 @@ const events = require('events');
 const net = require('net');
 const osc = require('osc-min');
 const slip = require('slip');
-const OSCMessage = require('../models/message/osc-message');
-const TCPMessage = require('../models/message/tcp-message');
+const OSCMessage = require('../message/osc-message');
+const TCPMessage = require('../message/tcp-message');
 const { logger } = require('../utils/helper');
 
 class TCPServer {

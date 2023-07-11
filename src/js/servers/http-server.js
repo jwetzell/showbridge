@@ -1,8 +1,8 @@
 const events = require('events');
 const cors = require('cors');
 const express = require('express');
-const HTTPMessage = require('../models/message/http-message');
-const Config = require('../models/config');
+const HTTPMessage = require('../message/http-message');
+const Config = require('../config');
 const { logger } = require('../utils/helper');
 
 class HTTPServer {

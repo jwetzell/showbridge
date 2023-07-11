@@ -1,7 +1,7 @@
 const events = require('events');
 const mqtt = require('mqtt');
 const { has } = require('lodash');
-const MQTTMessage = require('../models/message/mqtt-message');
+const MQTTMessage = require('../message/mqtt-message');
 const { logger } = require('../utils/helper');
 
 class MQTTClient {

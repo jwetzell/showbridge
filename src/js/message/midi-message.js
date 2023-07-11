@@ -1,5 +1,5 @@
 const { has } = require('lodash');
-const { logger } = require('../../utils/helper');
+const { logger } = require('../utils/helper');
 
 class MIDIMessage {
   constructor(bytes, port) {

@@ -5,15 +5,15 @@ const server = require('http').createServer(app);
 const superagent = require('superagent');
 const osc = require('osc-min');
 const { exec } = require('child_process');
-const UDPServer = require('../servers/udp-server');
-const TCPServer = require('../servers/tcp-server');
-const MIDIServer = require('../servers/midi-server');
-const WebSocketServer = require('../servers/websocket-server');
-const HTTPServer = require('../servers/http-server');
-const MQTTClient = require('../servers/mqtt-client');
+const UDPServer = require('./servers/udp-server');
+const TCPServer = require('./servers/tcp-server');
+const MIDIServer = require('./servers/midi-server');
+const WebSocketServer = require('./servers/websocket-server');
+const HTTPServer = require('./servers/http-server');
+const MQTTClient = require('./servers/mqtt-client');
 
-const { logger } = require('../utils/helper');
-const { resolveTemplatedProperty, hexToBytes } = require('../utils/helper');
+const { logger } = require('./utils/helper');
+const { resolveTemplatedProperty, hexToBytes } = require('./utils/helper');
 const MIDIMessage = require('./message/midi-message');
 
 class Router {

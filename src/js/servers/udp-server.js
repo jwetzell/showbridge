@@ -1,8 +1,8 @@
 const events = require('events');
 const udp = require('dgram');
 const osc = require('osc-min');
-const OSCMessage = require('../models/message/osc-message');
-const UDPMessage = require('../models/message/udp-message');
+const OSCMessage = require('../message/osc-message');
+const UDPMessage = require('../message/udp-message');
 const { logger } = require('../utils/helper');
 
 class UDPServer {

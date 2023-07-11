@@ -3,11 +3,11 @@
 
 const { readFileSync } = require('fs');
 
-const { logger } = require('./utils/helper');
+const { logger } = require('./js/utils/helper');
 
-const Config = require('./models/config');
+const Config = require('./js/config');
 const defaultConfig = require('./config/default.json');
-const Router = require('./models/router');
+const Router = require('./js/router');
 
 let config = {};
 // if there is an argument load it as the config

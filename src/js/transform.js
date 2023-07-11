@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 const _ = require('lodash');
-const { logger } = require('../utils/helper');
+const { logger } = require('./utils/helper');
 
 class Transform {
   constructor(transformObj) {

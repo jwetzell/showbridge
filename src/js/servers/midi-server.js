@@ -1,6 +1,6 @@
 const events = require('events');
 const midi = require('@julusian/midi');
-const MIDIMessage = require('../models/message/midi-message');
+const MIDIMessage = require('../message/midi-message');
 const { logger } = require('../utils/helper');
 
 class MIDIServer {
