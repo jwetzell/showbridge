@@ -1,3 +1,4 @@
+const { has } = require('lodash');
 const { logger } = require('../../utils/helper');
 
 class MIDIMessage {
@@ -5,13 +6,13 @@ class MIDIMessage {
     this.port = port;
 
     switch (bytes[0] >> 4) {
-      case 0x8: //note off
+      case 0x8: // note off
         this.channel = (bytes[0] & 0xf) + 1;
         this.status = 'note_off';
         this.note = bytes[1];
         this.velocity = bytes[2];
         break;
-      case 0x9: //note on
+      case 0x9: // note on
         this.channel = (bytes[0] & 0xf) + 1;
         this.status = 'note_on';
         this.note = bytes[1];
@@ -45,7 +46,7 @@ class MIDIMessage {
         this.value = bytes[1] + (bytes[2] << 7);
         break;
       case 0xf:
-        //sysex
+        // sysex
         switch (bytes[0] & 0xf) {
           case 0xa:
             this.status = 'start';
@@ -60,17 +61,17 @@ class MIDIMessage {
             this.status = 'reset';
             break;
           default:
-            logger.error('midi: unhandled sysex status = ' + bytes[0]);
+            logger.error(`midi: unhandled sysex status = ${bytes[0]}`);
         }
         break;
 
       default:
-        logger.error('midi: unhandled status = ' + bytes[0]);
+        logger.error(`midi: unhandled status = ${bytes[0]}`);
     }
   }
 
   equals(bytes) {
-    for (let i = 0; i < this.bytes.length; i++) {
+    for (let i = 0; i < this.bytes.length; i += 1) {
       if (this.bytes[i] !== bytes[i]) {
         return false;
       }
@@ -82,7 +83,8 @@ class MIDIMessage {
     return 'midi';
   }
 
-  //TODO(jwetzell) it would be nice to update an instance bytes object as properties are updated via getters/setters like other message types
+  // TODO(jwetzell) it would be nice to update an instance bytes object as properties are updated
+  // via getters/setters like other message types
   get bytes() {
     return MIDIMessage.objectToBytes(this);
   }
@@ -111,7 +113,7 @@ class MIDIMessage {
       case 'note_off':
         midiBytes[0] = (midiStatusMap[obj.status] << 4) ^ (obj.channel - 1);
 
-        if (obj.hasOwnProperty('note') && obj.hasOwnProperty('velocity')) {
+        if (has(obj, 'note') && has(obj, 'velocity')) {
           midiBytes[1] = obj.note;
           midiBytes[2] = obj.velocity;
         } else {
@@ -121,7 +123,7 @@ class MIDIMessage {
       case 'note_on':
         midiBytes[0] = (midiStatusMap[obj.status] << 4) ^ (obj.channel - 1);
 
-        if (obj.hasOwnProperty('note') && obj.hasOwnProperty('velocity')) {
+        if (has(obj, 'note') && has(obj, 'velocity')) {
           midiBytes[1] = obj.note;
           midiBytes[2] = obj.velocity;
         } else {
@@ -131,7 +133,7 @@ class MIDIMessage {
       case 'polyphonic_aftertouch':
         midiBytes[0] = (midiStatusMap[obj.status] << 4) ^ (obj.channel - 1);
 
-        if (obj.hasOwnProperty('note') && obj.hasOwnProperty('pressure')) {
+        if (has(obj, 'note') && has(obj, 'pressure')) {
           midiBytes[1] = obj.note;
           midiBytes[2] = obj.pressure;
         } else {
@@ -141,7 +143,7 @@ class MIDIMessage {
       case 'control_change':
         midiBytes[0] = (midiStatusMap[obj.status] << 4) ^ (obj.channel - 1);
 
-        if (obj.hasOwnProperty('control') && obj.hasOwnProperty('vallue')) {
+        if (has(obj, 'control') && has(obj, 'vallue')) {
           midiBytes[1] = obj.control;
           midiBytes[2] = obj.value;
         } else {
@@ -151,7 +153,7 @@ class MIDIMessage {
       case 'program_change':
         midiBytes[0] = (midiStatusMap[obj.status] << 4) ^ (obj.channel - 1);
 
-        if (obj.hasOwnProperty('program')) {
+        if (has(obj, 'program')) {
           midiBytes[1] = obj.program;
         } else {
           throw new Error('program_change must include program params');
@@ -160,7 +162,7 @@ class MIDIMessage {
       case 'channel_aftertouch':
         midiBytes[0] = (midiStatusMap[obj.status] << 4) ^ (obj.channel - 1);
 
-        if (obj.hasOwnProperty('pressure')) {
+        if (has(obj, 'pressure')) {
           midiBytes[1] = obj.pressure;
         } else {
           throw new Error('channel_aftertouch must include pressure param');
@@ -169,7 +171,7 @@ class MIDIMessage {
       case 'pitch_bend':
         midiBytes[0] = (midiStatusMap[obj.status] << 4) ^ (obj.channel - 1);
 
-        if (obj.hasOwnProperty('value') && obj.value <= 16383) {
+        if (has(obj, 'value') && obj.value <= 16383) {
           const lsb = obj.value & 0x7f;
           const msb = (obj.value >> 7) & 0x7f;
 
@@ -194,9 +196,8 @@ class MIDIMessage {
   static parseActionParams(params) {
     if (params.bytes !== undefined) {
       return new MIDIMessage(params.bytes, 'virtual');
-    } else {
-      return new MIDIMessage(MIDIMessage.objectToBytes(params), 'virtual');
     }
+    return new MIDIMessage(MIDIMessage.objectToBytes(params), 'virtual');
   }
 }
 module.exports = MIDIMessage;

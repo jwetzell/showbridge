@@ -5,6 +5,7 @@ const slip = require('slip');
 const OSCMessage = require('../models/message/osc-message');
 const TCPMessage = require('../models/message/tcp-message');
 const { logger } = require('../utils/helper');
+
 class TCPServer {
   constructor() {
     this.eventEmitter = new events.EventEmitter();
@@ -24,7 +25,7 @@ class TCPServer {
           port: conn.remotePort,
         };
         try {
-          //TODO(jwetzell): SLIP decoding
+          // TODO(jwetzell): SLIP decoding
           const oscMsg = new OSCMessage(osc.fromBuffer(msg, true), sender);
           this.eventEmitter.emit('message', oscMsg);
         } catch (error) {
@@ -59,7 +60,7 @@ class TCPServer {
     if (this.sockets[host][port] === undefined) {
       this.sockets[host][port] = new net.Socket();
       this.sockets[host][port].connect(port, host, () => {
-        logger.debug(`tcp: connected to client`);
+        logger.trace('tcp: connected to client');
       });
 
       this.sockets[host][port].on('error', (error) => {

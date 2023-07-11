@@ -26,8 +26,8 @@ class MIDIServer {
   }
 
   reload() {
-    //TODO(jwetzell): look into better way to reload inputs
-    //TODO(jwetzell): consider letting the user configure the inputs that are loaded
+    // TODO(jwetzell): look into better way to reload inputs
+    // TODO(jwetzell): consider letting the user configure the inputs that are loaded
     this.inputs.forEach((input) => {
       if (input.isPortOpen()) {
         input.closePort();
@@ -36,7 +36,7 @@ class MIDIServer {
 
     this.inputs = [];
 
-    for (let index = 0; index < this.virtualInput.getPortCount(); index++) {
+    for (let index = 0; index < this.virtualInput.getPortCount(); index += 1) {
       if (!this.virtualInput.getPortName(index).includes('oscee')) {
         const input = new midi.Input();
         input.openPort(index);
@@ -50,14 +50,14 @@ class MIDIServer {
         });
       }
     }
-    //TODO(jwetzell): find a way to detect midi device changes
+    // TODO(jwetzell): find a way to detect midi device changes
   }
 
   get outputMap() {
     const output = new midi.Output();
     const outputMap = {};
 
-    for (let i = 0; i < output.getPortCount(); i++) {
+    for (let i = 0; i < output.getPortCount(); i += 1) {
       const midiInputName = output.getPortName(i);
       outputMap[midiInputName] = i;
       outputMap[i] = midiInputName;

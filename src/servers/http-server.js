@@ -1,7 +1,6 @@
 const events = require('events');
 const cors = require('cors');
 const express = require('express');
-const path = require('path');
 const HTTPMessage = require('../models/message/http-message');
 const Config = require('../models/config');
 const { logger } = require('../utils/helper');
@@ -25,10 +24,10 @@ class HTTPServer {
       res.send(this.config.getSchema());
     });
 
-    app.post('/config', (req, res, next) => {
+    app.post('/config', (req, res) => {
       try {
         const configToUpdate = new Config(req.body);
-        //TODO(jwetzell): handle errors on the reload and send them back
+        // TODO(jwetzell): handle errors on the reload and send them back
         this.eventEmitter.emit('reload', configToUpdate);
         this.setConfig(configToUpdate);
         res.status(200).send({ msg: 'config reloaded check console for any errors' });
@@ -42,10 +41,10 @@ class HTTPServer {
       }
     });
 
-    //TODO(jwetzell): error handling on these endpoints
+    // TODO(jwetzell): error handling on these endpoints
     app.get('/*', (req, res) => {
       const parsedHTTP = new HTTPMessage(req);
-      this.eventEmitter.emit('message', msg);
+      this.eventEmitter.emit('message', parsedHTTP);
       res.status(200).send({ msg: 'ok' });
     });
 
@@ -55,7 +54,7 @@ class HTTPServer {
       res.status(200).send({ msg: 'ok' });
     });
 
-    this.httpServer.on('clientError', (error, socket) => {
+    this.httpServer.on('clientError', (error) => {
       throw error;
     });
   }

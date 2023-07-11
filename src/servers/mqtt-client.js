@@ -1,5 +1,6 @@
 const events = require('events');
 const mqtt = require('mqtt');
+const { has } = require('lodash');
 const MQTTMessage = require('../models/message/mqtt-message');
 const { logger } = require('../utils/helper');
 
@@ -17,7 +18,7 @@ class MQTTClient {
     };
 
     if (params.broker !== undefined && params.broker !== '' && params.topics) {
-      if (params.hasOwnProperty('username') && params.hasOwnProperty('password')) {
+      if (has(params, 'username') && has(params, 'password')) {
         connectionOptions.username = params.username;
         connectionOptions.password = params.password;
       }
@@ -29,7 +30,7 @@ class MQTTClient {
       });
 
       this.client.on('connect', () => {
-        logger.info(`mqtt: client connected to ${params.broker}`);
+        logger.debug(`mqtt: client connected to ${params.broker}`);
         if (params.topics?.length > 0) {
           this.client.subscribe(params.topics, (error) => {
             if (error) {

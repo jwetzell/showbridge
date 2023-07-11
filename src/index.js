@@ -1,8 +1,14 @@
 #!/usr/bin/env node
+/* eslint-disable no-use-before-define */
 
-// communication
 const osc = require('osc-min');
 const superagent = require('superagent');
+const { exec } = require('child_process');
+const { readFileSync } = require('fs');
+const express = require('express');
+
+const app = express();
+const server = require('http').createServer(app);
 const UDPServer = require('./servers/udp-server');
 const TCPServer = require('./servers/tcp-server');
 const MIDIServer = require('./servers/midi-server');
@@ -11,22 +17,12 @@ const HTTPServer = require('./servers/http-server');
 const MQTTClient = require('./servers/mqtt-client');
 const MIDIMessage = require('./models/message/midi-message');
 
-// utils
-const _ = require('lodash');
-const { exec } = require('child_process');
-const { readFileSync } = require('fs');
 const { resolveTemplatedProperty, hexToBytes } = require('./utils/helper');
 const { logger } = require('./utils/helper');
 
-// config
 const Config = require('./models/config');
 
-// express
-const express = require('express');
-const app = express();
-const server = require('http').createServer(app);
-
-let servers = {
+const servers = {
   http: new HTTPServer(server, app),
   udp: new UDPServer(),
   tcp: new TCPServer(),
@@ -38,54 +34,63 @@ let servers = {
 const vars = {};
 
 let config = {};
-//if there is an argument load it as the config
+// if there is an argument load it as the config
 if (process.argv.length === 3) {
   const configFile = process.argv[2];
   const configToLoad = JSON.parse(readFileSync(configFile));
   config = new Config(configToLoad);
 } else {
-  //if not load a default
+  // if not load a default
+  // eslint-disable-next-line global-require
   const defaultConfig = require('./config/default.json');
   config = new Config(defaultConfig);
 }
 
 servers.http.setConfig(config);
 
-//TODO(jwetzell): find a way to print these out nicely
-// logger.debug('HTTP Trigger Summary');
+// TODO(jwetzell): find a way to print these out nicely
+// logger.debug('app: HTTP Trigger Summary');
 // logger.debug(config.http.triggers);
 
-// logger.debug('OSC Trigger Summary');
+// logger.debug('app: OSC Trigger Summary');
 // logger.debug(config.osc.triggers);
 
-// logger.debug('MIDI Trigger Summary');
+// logger.debug('app: MIDI Trigger Summary');
 // logger.debug(config.midi.triggers);
 
-// logger.debug('UDP Trigger Summary');
+// logger.debug('app: UDP Trigger Summary');
 // logger.debug(config.udp.triggers);
 
-// logger.debug('TCP Trigger Summary');
+// logger.debug('app: TCP Trigger Summary');
 // logger.debug(config.tcp.triggers);
 
-// logger.debug('MQTT Trigger Summary');
+// logger.debug('app: MQTT Trigger Summary');
 // logger.debug(config.mqtt.triggers);
+
+/** Message Processing */
+function processMessage(msg) {
+  const triggers = config[msg.messageType]?.triggers;
+  if (triggers !== undefined && triggers.length > 0) {
+    for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex += 1) {
+      const trigger = triggers[triggerIndex];
+      try {
+        if (trigger.shouldFire(msg)) {
+          logger.trace(`${msg.messageType}-trigger-${triggerIndex}: fired`);
+          trigger.actions.forEach((action) => doAction(action, msg, trigger));
+        } else {
+          logger.trace(`${msg.messageType}-trigger-${triggerIndex}: not fired`);
+        }
+      } catch (error) {
+        logger.error(`trigger: problem evaluating trigger - ${error}`);
+      }
+    }
+  }
+}
 
 // NOTE(jwetzell): listen for all messages on servers
 Object.keys(servers).forEach((messageType) => {
   servers[messageType].on('message', processMessage);
 });
-
-servers.http.on('reload', (updatedConfig) => {
-  try {
-    config = updatedConfig;
-    reloadServers();
-    logger.info('Config updated successfully');
-  } catch (error) {
-    logger.error('Problem applying new config');
-  }
-});
-
-reloadServers();
 
 function reloadServers() {
   servers.udp.reload(config.udp.params);
@@ -95,25 +100,17 @@ function reloadServers() {
   servers.mqtt.reload(config.mqtt.params);
 }
 
-/** Message Processing */
-function processMessage(msg) {
-  const triggers = config[msg.messageType]?.triggers;
-  if (triggers !== undefined && triggers.length > 0) {
-    for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex++) {
-      const trigger = triggers[triggerIndex];
-      try {
-        if (trigger.shouldFire(msg)) {
-          logger.debug(`${msg.messageType}-trigger-${triggerIndex}: fired`);
-          trigger.actions.forEach((action) => doAction(action, msg, trigger));
-        } else {
-          logger.debug(`${msg.messageType}-trigger-${triggerIndex}: not fired`);
-        }
-      } catch (error) {
-        logger.error(`trigger: problem evaluating trigger - ${error}`);
-      }
-    }
+servers.http.on('reload', (updatedConfig) => {
+  try {
+    config = updatedConfig;
+    reloadServers();
+    logger.debug('app: config updated successfully');
+  } catch (error) {
+    logger.error('app: problem applying new config');
   }
-}
+});
+
+reloadServers();
 
 // Action
 function doAction(action, _msg, trigger) {
@@ -129,18 +126,13 @@ function doAction(action, _msg, trigger) {
     switch (action.type) {
       case 'forward':
         try {
-          let msgToForward = msg.bytes;
+          const msgToForward = msg.bytes;
 
-          if (msgToForward !== udefined) {
+          if (msgToForward !== undefined) {
             if (action.params.protocol === 'udp') {
               servers.udp.send(msgToForward, action.params.port, action.params.host);
             } else if (action.params.protocol === 'tcp') {
-              servers.tcp.send(
-                msgToForward,
-                action.params.port,
-                action.params.host,
-                msg.messageType === 'osc' ? true : false
-              );
+              servers.tcp.send(msgToForward, action.params.port, action.params.host, msg.messageType === 'osc');
             } else {
               logger.error(`action: unhandled forward protocol = ${action.params.protocol}`);
             }
@@ -181,7 +173,7 @@ function doAction(action, _msg, trigger) {
           logger.error(`action: error outputting osc - ${error}`);
         }
         break;
-      case 'udp-output':
+      case 'udp-output': {
         let udpSend;
 
         if (action.params.bytes !== undefined) {
@@ -199,7 +191,8 @@ function doAction(action, _msg, trigger) {
           logger.error('action: udp-output has nothing to send');
         }
         break;
-      case 'tcp-output':
+      }
+      case 'tcp-output': {
         let tcpSend;
 
         if (action.params.bytes !== undefined) {
@@ -217,6 +210,7 @@ function doAction(action, _msg, trigger) {
           logger.error('action: tcp-output has nothing to send');
         }
         break;
+      }
       case 'midi-output':
         try {
           // TODO(jwetzell): add templating to midi-output
@@ -243,7 +237,7 @@ function doAction(action, _msg, trigger) {
         }
         break;
       case 'http':
-        //TODO(jwetzell): add other http things like query parameters although they can just be included in the url field
+        // TODO(jwetzell): add other http things like query parameters though they can just be included in the url field
         try {
           const url = resolveTemplatedProperty(action.params, 'url', { msg, vars });
           const body = resolveTemplatedProperty(action.params, 'body', { msg, vars });
@@ -258,8 +252,8 @@ function doAction(action, _msg, trigger) {
               request.send(body);
             }
 
-            request.end((error, res) => {
-              if (!!error) {
+            request.end((error) => {
+              if (error) {
                 logger.error(`action: problem executing http action - ${error}`);
               }
             });
@@ -287,11 +281,11 @@ function doAction(action, _msg, trigger) {
       case 'delay':
         if (action.params.duration !== undefined && action.params.actions !== undefined) {
           setTimeout(() => {
-            action.params.actions.forEach((action) => doAction(action, msg, trigger));
+            action.params.actions.forEach((subAction) => doAction(subAction, msg, trigger));
           }, action.params.duration);
         }
         break;
-      case 'mqtt-output':
+      case 'mqtt-output': {
         const topic = resolveTemplatedProperty(action.params, 'topic', { msg, vars });
         const payload = resolveTemplatedProperty(action.params, 'payload', { msg, vars });
 
@@ -300,6 +294,8 @@ function doAction(action, _msg, trigger) {
         } else {
           logger.error('action: mqtt-output missing either topic or payload');
         }
+        break;
+      }
       default:
         logger.error(`action: unhandled action type = ${action.type}`);
     }

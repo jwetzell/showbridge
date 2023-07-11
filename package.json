@@ -27,6 +27,9 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
+    "eslint": "^8.44.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
     "nodemon": "^2.0.22",
     "pkg": "^5.8.1",
     "prettier": "^2.8.8",

@@ -1,14 +1,15 @@
 const _ = require('lodash');
+
 function resolveTemplatedProperty(params, property, data) {
-  if (params.hasOwnProperty(`_${property}`)) {
-    //if we have a template versin of the property
+  if (_.has(params, `_${property}`)) {
+    // if we have a template versin of the property
     const templatedProperty = params[`_${property}`];
 
     // process arrays items one by one
     if (Array.isArray(templatedProperty)) {
       const processedOutput = [];
       templatedProperty.forEach((item) => {
-        //only template string types
+        // only template string types
         if (typeof item === 'string') {
           let templateResult = _.template(item)(data);
           if (parseFloat(templateResult)) {
@@ -20,16 +21,16 @@ function resolveTemplatedProperty(params, property, data) {
         }
       });
       return processedOutput;
-    } else if (typeof templatedProperty === 'string') {
-      return _.template(templatedProperty)(data);
-    } else {
-      return templatedProperty;
     }
-  } else if (params.hasOwnProperty(property)) {
-    return params[property];
-  } else {
-    return undefined;
+    if (typeof templatedProperty === 'string') {
+      return _.template(templatedProperty)(data);
+    }
+    return templatedProperty;
   }
+  if (_.has(params, property)) {
+    return params[property];
+  }
+  return undefined;
 }
 
 function hexToBytes(hex) {
@@ -42,6 +43,7 @@ function hexToBytes(hex) {
 }
 
 const pino = require('pino');
+
 const transport = pino.transport({
   target: 'pino-pretty',
   options: { destination: 1 },

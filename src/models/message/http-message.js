@@ -6,7 +6,7 @@ class HTTPMessage {
       protocol: 'tcp',
       address: msg.headers['x-forwarded-for'] || msg.connection.remoteAddress,
     };
-    if (this.sender.address.substr(0, 7) == '::ffff:') {
+    if (this.sender.address.substr(0, 7) === '::ffff:') {
       this.sender.address = this.sender.address.substr(7);
     }
   }
