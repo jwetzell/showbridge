@@ -3,14 +3,25 @@ const Transform = require('./transform');
 
 class Action {
   constructor(actionObj) {
-    this.type = actionObj.type;
-    this.params = actionObj.params;
-    this.enabled = actionObj.enabled;
+    this.obj = actionObj;
+
     this.transforms = [];
 
-    if (actionObj.transforms) {
-      this.transforms = actionObj.transforms.map((transform) => new Transform(transform));
+    if (this.obj.transforms) {
+      this.transforms = this.obj.transforms.map((transform) => new Transform(transform));
     }
+  }
+
+  get type() {
+    return this.obj.type;
+  }
+
+  get params() {
+    return this.obj.params;
+  }
+
+  get enabled() {
+    return this.obj.enabled;
   }
 
   getTransformedMessage(msg, vars) {
