@@ -2,6 +2,15 @@
 
 ### Simple protocol router _/s_
 
+### Supported Protocols
+- http
+- websocket
+- osc (via udp and tcp)
+- tcp
+- udp
+- mqtt
+- midi
+
 ### How to use
 - Install
     - prebuilt binaries (coming soon)
