@@ -1,5 +1,6 @@
 const { Server } = require('ws');
 const events = require('events');
+const { noop } = require('lodash');
 const WebSocketMessage = require('../models/message/websocket-message');
 
 class WebSocketServer {
@@ -16,6 +17,10 @@ class WebSocketServer {
         this.eventEmitter.emit('message', wsMsg);
       });
     });
+  }
+
+  reload() {
+    noop();
   }
 
   on(eventName, listener) {

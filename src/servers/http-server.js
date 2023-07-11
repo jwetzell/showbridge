@@ -29,7 +29,7 @@ class HTTPServer {
         const configToUpdate = new Config(req.body);
         // TODO(jwetzell): handle errors on the reload and send them back
         this.eventEmitter.emit('reload', configToUpdate);
-        this.setConfig(configToUpdate);
+        this.config = configToUpdate;
         res.status(200).send({ msg: 'config reloaded check console for any errors' });
       } catch (error) {
         logger.error(error);
@@ -74,10 +74,6 @@ class HTTPServer {
 
   on(eventName, listener) {
     this.eventEmitter.on(eventName, listener);
-  }
-
-  setConfig(config) {
-    this.config = config;
   }
 }
 

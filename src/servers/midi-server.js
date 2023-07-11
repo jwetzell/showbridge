@@ -53,6 +53,14 @@ class MIDIServer {
     // TODO(jwetzell): find a way to detect midi device changes
   }
 
+  on(eventName, listener) {
+    this.eventEmitter.on(eventName, listener);
+  }
+
+  send(msg) {
+    this.virtualOutput.sendMessage(msg);
+  }
+
   get outputMap() {
     const output = new midi.Output();
     const outputMap = {};
@@ -63,14 +71,6 @@ class MIDIServer {
       outputMap[i] = midiInputName;
     }
     return outputMap;
-  }
-
-  on(eventName, listener) {
-    this.eventEmitter.on(eventName, listener);
-  }
-
-  send(msg) {
-    this.virtualOutput.sendMessage(msg);
   }
 }
 
