@@ -1,4 +1,4 @@
-const Action = require('../action');
+const Action = require('../actions/action');
 
 class Trigger {
   constructor(obj) {

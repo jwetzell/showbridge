@@ -1,5 +1,6 @@
 const _ = require('lodash');
-const Transform = require('./transform');
+const Transform = require('../transforms/transform');
+const { logger } = require('../utils/helper');
 
 class Action {
   constructor(actionObj) {
@@ -28,7 +29,11 @@ class Action {
     if (this.transforms.length > 0) {
       const msgCopy = _.cloneDeep(msg);
       this.transforms.forEach((transform) => {
-        transform.transform(msgCopy, vars);
+        if (transform.enabled) {
+          transform.transform(msgCopy, vars);
+        } else {
+          logger.debug(`transform: ${this.type} is disabled skipping...`);
+        }
       });
       return msgCopy;
     }

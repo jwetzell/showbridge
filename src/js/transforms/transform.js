@@ -1,20 +1,25 @@
 /* eslint-disable no-param-reassign */
 const _ = require('lodash');
-const { logger } = require('./utils/helper');
+const { logger } = require('../utils/helper');
 
 class Transform {
   constructor(transformObj) {
-    this.type = transformObj.type;
-    this.params = transformObj.params;
-    this.enabled = transformObj.enabled;
+    this.obj = transformObj;
+  }
+
+  get type() {
+    return this.obj.type;
+  }
+
+  get params() {
+    return this.obj.params;
+  }
+
+  get enabled() {
+    return this.obj.enabled;
   }
 
   transform(msg, vars) {
-    if (!this.enabled) {
-      logger.debug(`transform: ${this.type} is disabled skipping...`);
-      return;
-    }
-
     logger.trace(`transform: before ${this.type} = ${msg}`);
     if (this.params && _.has(this.params, 'property')) {
       const propertyValue = _.get(msg, this.params.property);
