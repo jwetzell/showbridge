@@ -27,9 +27,10 @@
   "osc": {
     "triggers": [
       {
-        "type": "osc-address",
+        "type": "regex",
         "params": {
-          "address": "/midi/{note_on,note_off}"
+          "patterns": [".*"],
+          "properties": ["address"]
         },
         "actions": [
           {
@@ -48,29 +49,7 @@
         "params": {
           "port": "virtual"
         },
-        "actions": [
-          { "type": "log", "enabled": true },
-          {
-            "type": "midi-output",
-            "params": {
-              "status": "note_on",
-              "note": 1,
-              "channel": 1,
-              "velocity": 127
-            },
-            "transforms": [
-              {
-                "type": "template",
-                "params": {
-                  "property": "note",
-                  "template": "${msg.note}"
-                },
-                "enabled": true
-              }
-            ],
-            "enabled": true
-          }
-        ],
+        "actions": [{ "type": "log", "enabled": true }],
         "enabled": true
       }
     ]
@@ -82,24 +61,14 @@
     },
     "triggers": [
       {
-        "type": "sender",
+        "type": "regex",
         "params": {
-          "address": "127.0.0.1"
+          "patterns": [".*"],
+          "properties": ["string"]
         },
         "actions": [
           {
             "type": "log",
-            "enabled": true
-          },
-          {
-            "type": "osc-output",
-            "params": {
-              "host": "localhost",
-              "_address": "/test/${msg}",
-              "_args": [1, "${msg}"],
-              "protocol": "udp",
-              "port": 8000
-            },
             "enabled": true
           }
         ],
@@ -114,23 +83,15 @@
     },
     "triggers": [
       {
-        "type": "sender",
+        "type": "regex",
         "params": {
-          "address": "127.0.0.1"
+          "patterns": [".*"],
+          "properties": ["string"]
         },
         "actions": [
           {
             "type": "log",
-            "enabled": true
-          },
-          {
-            "type": "forward",
-            "params": {
-              "host": "127.0.0.1",
-              "port": 8001,
-              "protocol": "tcp"
-            },
-            "enabled": true
+            "enabled": false
           }
         ],
         "enabled": true
@@ -140,7 +101,7 @@
   "mqtt": {
     "params": {
       "broker": "",
-      "topics": ["test/#"]
+      "topics": ["#"]
     },
     "triggers": [
       {
