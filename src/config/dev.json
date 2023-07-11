@@ -22,7 +22,22 @@
     ]
   },
   "ws": {
-    "triggers": []
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": [".*"],
+          "properties": ["payload"]
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
   },
   "osc": {
     "triggers": [
@@ -91,7 +106,7 @@
         "actions": [
           {
             "type": "log",
-            "enabled": false
+            "enabled": true
           }
         ],
         "enabled": true
@@ -107,7 +122,7 @@
       {
         "type": "regex",
         "params": {
-          "patterns": ["^.*$"],
+          "patterns": [".*"],
           "properties": ["topic"]
         },
         "actions": [{ "type": "log", "enabled": true }],
