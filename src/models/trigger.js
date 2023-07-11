@@ -22,12 +22,12 @@ class Trigger {
     let fire = false;
     switch (this.type) {
       case 'regex':
-        if (!!this.params) {
+        if (this.params) {
           if (!!this.params.patterns && !!this.params.properties) {
             if (this.params.patterns.length === this.params.properties.length) {
               // assume the regex will pass
               fire = true;
-              for (let i = 0; i < this.params.patterns.length; i++) {
+              for (let i = 0; i < this.params.patterns.length; i += 1) {
                 const pattern = this.params.patterns[i];
                 const property = this.params.properties[i];
 
@@ -37,13 +37,12 @@ class Trigger {
                   logger.error(
                     'trigger: regex is configured to look at a property that does not exist on this message.'
                   );
-                  //bad property config = no fire and since all must match we can stop here
+                  // bad property config = no fire and since all must match we can stop here
                   fire = false;
                   break;
                 }
-
                 if (!regex.test(matchPropertyValue)) {
-                  //property value doesn't fit regex = no fire and since all must match we can stop here
+                  // property value doesn't fit regex = no fire and since all must match we can stop here
                   fire = false;
                   break;
                 }
@@ -55,7 +54,7 @@ class Trigger {
         }
         break;
       case 'sender':
-        if (msg.hasOwnProperty('sender')) {
+        if (_.has(msg, 'sender')) {
           if (msg.sender.address === this.params.address) {
             fire = true;
           }
@@ -65,7 +64,7 @@ class Trigger {
         break;
       case 'bytes-equal':
         if (msg.bytes !== undefined) {
-          //good we are looking at a message that has bytes
+          // good we are looking at a message that has bytes
           const bytesToMatch = Uint8Array.from(this.params.bytes);
           if (_.isEqual(msg.bytes, bytesToMatch)) {
             fire = true;
@@ -76,18 +75,18 @@ class Trigger {
         break;
       case 'midi-note-on':
         if (msg.messageType === 'midi' && msg.status === 'note_on') {
-          if (!!this.params) {
+          if (this.params) {
             fire = true;
 
-            if (this.params.hasOwnProperty('port') && this.params.port !== msg.port) {
+            if (_.has(this.params, 'port') && this.params.port !== msg.port) {
               fire = false;
             }
 
-            if (this.params.hasOwnProperty('note') && this.params.note !== msg.note) {
+            if (_.has(this.params, 'note') && this.params.note !== msg.note) {
               fire = false;
             }
 
-            if (this.params.hasOwnProperty('velocity') && this.params.velocity !== msg.velocity) {
+            if (_.has(this.params, 'velocity') && this.params.velocity !== msg.velocity) {
               fire = false;
             }
           }
@@ -95,18 +94,18 @@ class Trigger {
         break;
       case 'midi-note-off':
         if (msg.messageType === 'midi' && msg.status === 'note_off') {
-          if (!!this.params) {
+          if (this.params) {
             fire = true;
 
-            if (this.params.hasOwnProperty('port') && this.params.port !== msg.port) {
+            if (_.has(this.params, 'port') && this.params.port !== msg.port) {
               fire = false;
             }
 
-            if (this.params.hasOwnProperty('note') && this.params.note !== msg.note) {
+            if (_.has(this.params, 'note') && this.params.note !== msg.note) {
               fire = false;
             }
 
-            if (this.params.hasOwnProperty('velocity') && this.params.velocity !== msg.velocity) {
+            if (_.has(this.params, 'velocity') && this.params.velocity !== msg.velocity) {
               fire = false;
             }
           }
@@ -114,18 +113,18 @@ class Trigger {
         break;
       case 'midi-control-change':
         if (msg.messageType === 'midi' && msg.status === 'control_change') {
-          if (!!this.params) {
+          if (this.params) {
             fire = true;
 
-            if (this.params.hasOwnProperty('port') && this.params.port !== msg.port) {
+            if (_.has(this.params, 'port') && this.params.port !== msg.port) {
               fire = false;
             }
 
-            if (this.params.hasOwnProperty('control') && this.params.control !== msg.control) {
+            if (_.has(this.params, 'control') && this.params.control !== msg.control) {
               fire = false;
             }
 
-            if (this.params.hasOwnProperty('value') && this.params.value !== msg.value) {
+            if (_.has(this.params, 'value') && this.params.value !== msg.value) {
               fire = false;
             }
           }
@@ -133,14 +132,14 @@ class Trigger {
         break;
       case 'midi-program-change':
         if (msg.messageType === 'midi' && msg.status === 'program_change') {
-          if (!!this.params) {
+          if (this.params) {
             fire = true;
 
-            if (this.params.hasOwnProperty('port') && this.params.port !== msg.port) {
+            if (_.has(this.params, 'port') && this.params.port !== msg.port) {
               fire = false;
             }
 
-            if (this.params.hasOwnProperty('program') && this.params.program !== msg.program) {
+            if (_.has(this.params, 'program') && this.params.program !== msg.program) {
               fire = false;
             }
           }
@@ -149,7 +148,7 @@ class Trigger {
       case 'osc-address':
         if (msg.messageType === 'osc') {
           if (!!this.params && this.params.address !== undefined) {
-            //NOTE(jwetzell) convert osc wildcard into regex
+            // NOTE(jwetzell) convert osc wildcard into regex
             const regexString = this.params.address
               .replaceAll('{', '(')
               .replaceAll('}', ')')
