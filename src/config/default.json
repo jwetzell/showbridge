@@ -12,6 +12,10 @@
     "triggers": []
   },
   "midi": {
+    "params": {
+      "virtualInputName": "oscee Input",
+      "virtualOutputName": "oscee Output"
+    },
     "triggers": []
   },
   "udp": {

@@ -70,6 +70,21 @@
       "title": "MIDI configuration",
       "type": "object",
       "properties": {
+        "params": {
+          "type": "object",
+          "properties": {
+            "virtualInputName": {
+              "description": "Name of the virtual MIDI Input port",
+              "type": "string"
+            },
+            "virtualOutputName": {
+              "description": "Name of the virtual MIDI Output port",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",

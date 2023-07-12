@@ -58,6 +58,10 @@
     ]
   },
   "midi": {
+    "params": {
+      "virtualInputName": "oscee Input",
+      "virtualOutputName": "oscee Output"
+    },
     "triggers": [
       {
         "type": "midi-note-on",

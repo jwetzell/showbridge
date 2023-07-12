@@ -7,11 +7,33 @@ class MIDIServer {
   constructor() {
     this.eventEmitter = new events.EventEmitter();
 
+    this.inputs = [];
+  }
+
+  reload(params) {
+    if (this.virtualInput) {
+      this.virtualInput.closePort();
+    }
+
+    if (this.virtualOutput) {
+      this.virtualOutput.closePort();
+    }
+
     this.virtualInput = new midi.Input();
     this.virtualOutput = new midi.Output();
 
-    this.virtualInput.openVirtualPort('oscee Input');
-    this.virtualOutput.openVirtualPort('oscee Output');
+    let virtualInputName = 'oscee Input';
+    let virtualOutputName = 'oscee Output';
+
+    if (params?.virtualInputName) {
+      virtualInputName = params.virtualInputName;
+    }
+    this.virtualInput.openVirtualPort(virtualInputName);
+
+    if (params?.virtualOutputName) {
+      virtualOutputName = params.virtualOutputName;
+    }
+    this.virtualOutput.openVirtualPort(virtualOutputName);
 
     this.virtualInput.on('message', (deltaTime, msg) => {
       try {
@@ -22,10 +44,6 @@ class MIDIServer {
       }
     });
 
-    this.inputs = [];
-  }
-
-  reload() {
     // TODO(jwetzell): look into better way to reload inputs
     // TODO(jwetzell): consider letting the user configure the inputs that are loaded
     this.inputs.forEach((input) => {
