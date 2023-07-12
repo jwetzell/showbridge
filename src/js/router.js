@@ -61,8 +61,7 @@ class Router {
   processMessage(msg) {
     const triggers = this.config[msg.messageType]?.triggers;
     if (triggers !== undefined && triggers.length > 0) {
-      for (let triggerIndex = 0; triggerIndex < triggers.length; triggerIndex += 1) {
-        const trigger = triggers[triggerIndex];
+      triggers.forEach((trigger, triggerIndex) => {
         try {
           if (trigger.enabled && trigger.shouldFire(msg)) {
             logger.trace(`${msg.messageType}-trigger-${triggerIndex}: fired`);
@@ -84,7 +83,7 @@ class Router {
         } catch (error) {
           logger.error(`trigger: problem evaluating trigger - ${error}`);
         }
-      }
+      });
     }
   }
 }
