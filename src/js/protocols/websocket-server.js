@@ -1,7 +1,7 @@
 const { Server } = require('ws');
 const events = require('events');
 const { noop } = require('lodash');
-const WebSocketMessage = require('../message/websocket-message');
+const WebSocketMessage = require('../messages/websocket-message');
 
 class WebSocketServer {
   constructor(server) {

@@ -1,6 +1,6 @@
 const Action = require('./action');
 const { logger } = require('../utils/helper');
-const MIDIMessage = require('../message/midi-message');
+const MIDIMessage = require('../messages/midi-message');
 
 class MIDIOutputAction extends Action {
   do(_msg, vars, servers) {

@@ -1,7 +1,7 @@
 const events = require('events');
 const cors = require('cors');
 const express = require('express');
-const HTTPMessage = require('../message/http-message');
+const HTTPMessage = require('../messages/http-message');
 const Config = require('../config');
 const { logger } = require('../utils/helper');
 
