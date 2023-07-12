@@ -1,7 +1,3 @@
-const express = require('express');
-
-const app = express();
-const server = require('http').createServer(app);
 const UDPServer = require('./protocols/udp-server');
 const TCPServer = require('./protocols/tcp-server');
 const MIDIServer = require('./protocols/midi-server');
@@ -16,19 +12,26 @@ class Router {
     this.vars = {};
     this.config = config;
     this.servers = {
-      http: new HTTPServer(server, app),
+      http: new HTTPServer(),
       udp: new UDPServer(),
       tcp: new TCPServer(),
-      ws: new WebSocketServer(server),
       midi: new MIDIServer(),
       mqtt: new MQTTClient(),
     };
 
-    this.servers.http.config = this.config;
+    this.servers.http.setConfig(this.config);
 
     // NOTE(jwetzell): listen for all messages on servers
     Object.keys(this.servers).forEach((serverType) => {
       this.servers[serverType].on('message', (msg) => {
+        this.processMessage(msg);
+      });
+    });
+
+    // NOTE(jwetzell): websocket server needs the http server instance to load
+    this.servers.http.eventEmitter.on('http-server', (server) => {
+      this.servers.ws = new WebSocketServer(server);
+      this.servers.ws.on('message', (msg) => {
         this.processMessage(msg);
       });
     });

@@ -1,16 +1,17 @@
 const events = require('events');
 const cors = require('cors');
 const express = require('express');
+const http = require('http');
 const HTTPMessage = require('../messages/http-message');
 const Config = require('../config');
 const { logger } = require('../utils/helper');
 
 class HTTPServer {
-  constructor(server, app) {
+  constructor() {
     this.eventEmitter = new events.EventEmitter();
 
-    this.httpServer = server;
-    this.config = {};
+    const app = express();
+    this.httpServer = http.createServer(app);
 
     // Express Server
     app.use(cors());
@@ -55,8 +56,12 @@ class HTTPServer {
     });
 
     this.httpServer.on('clientError', (error) => {
-      throw error;
+      logger.error(error);
     });
+  }
+
+  setConfig(config) {
+    this.config = config;
   }
 
   reload(params) {
@@ -67,6 +72,7 @@ class HTTPServer {
       this.server = this.httpServer.listen(params.port, () => {
         logger.debug(`http: web interface listening on port ${params.port}`);
       });
+      this.eventEmitter.emit('http-server', this.httpServer);
     } catch (error) {
       logger.error(`http: problem launching server - ${error}`);
     }
