@@ -1,5 +1,6 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 const _ = require('lodash');
-const Transform = require('../transforms/transform');
 const { logger } = require('../utils/helper');
 
 class Action {
@@ -7,9 +8,20 @@ class Action {
     this.obj = actionObj;
 
     this.transforms = [];
+    this.loadTransforms();
+  }
 
+  loadTransforms() {
     if (this.obj.transforms) {
-      this.transforms = this.obj.transforms.map((transform) => new Transform(transform));
+      this.transforms = this.obj.transforms.map((transform) => {
+        try {
+          const TransformClass = require(`../transforms/${transform.type}-transform`);
+          return new TransformClass(transform);
+        } catch (error) {
+          logger.error(`action: unhandled transform type = ${transform.type}`);
+          return undefined;
+        }
+      });
     }
   }
 

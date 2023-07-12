@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const pino = require('pino');
 
 function resolveTemplatedProperty(params, property, data) {
   if (_.has(params, `_${property}`)) {
@@ -42,16 +43,17 @@ function hexToBytes(hex) {
   return bytes;
 }
 
-const pino = require('pino');
-
 const transport = pino.transport({
   target: 'pino-pretty',
   options: { destination: 1 },
 });
 const logger = pino(transport);
 
+const messageTypes = ['http', 'ws', 'osc', 'midi', 'tcp', 'udp', 'mqtt'];
+
 module.exports = {
   resolveTemplatedProperty,
   hexToBytes,
   logger,
+  messageTypes,
 };

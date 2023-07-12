@@ -64,7 +64,22 @@
         "params": {
           "port": "virtual"
         },
-        "actions": [{ "type": "log", "enabled": true }],
+        "actions": [
+          {
+            "type": "log",
+            "transforms": [
+              {
+                "type": "template",
+                "params": {
+                  "property": "note",
+                  "template": "${msg.note + 12}"
+                },
+                "enabled": true
+              }
+            ],
+            "enabled": true
+          }
+        ],
         "enabled": true
       }
     ]
@@ -84,6 +99,25 @@
         "actions": [
           {
             "type": "log",
+            "enabled": true
+          },
+          {
+            "type": "osc-output",
+            "params": {
+              "host": "127.0.0.1",
+              "port": 8001,
+              "protocol": "udp",
+              "address": "/test",
+              "_args": ["${msg.string}"]
+            },
+            "enabled": true
+          },
+          {
+            "type": "delay",
+            "params": {
+              "duration": 1000,
+              "actions": [{ "type": "log", "enabled": true }]
+            },
             "enabled": true
           }
         ],
@@ -106,6 +140,15 @@
         "actions": [
           {
             "type": "log",
+            "enabled": true
+          },
+          {
+            "type": "forward",
+            "params": {
+              "host": "127.0.0.1",
+              "port": 8000,
+              "protocol": "tcp"
+            },
             "enabled": true
           }
         ],
