@@ -1,7 +1,12 @@
-/* eslint-disable global-require */
-/* eslint-disable import/no-dynamic-require */
 const _ = require('lodash');
 const { logger } = require('../utils/helper');
+const FloorTransform = require('../transforms/floor-transform');
+const LogTransform = require('../transforms/log-transform');
+const MapTransform = require('../transforms/map-transform');
+const PowerTransform = require('../transforms/power-transform');
+const RoundTransform = require('../transforms/round-transform');
+const ScaleTransform = require('../transforms/scale-transform');
+const TemplateTransform = require('../transforms/template-transform');
 
 class Action {
   constructor(actionObj) {
@@ -14,13 +19,25 @@ class Action {
   loadTransforms() {
     if (this.obj.transforms) {
       this.transforms = this.obj.transforms.map((transform) => {
-        try {
-          // TODO(jwetzell): find a better way to dynamically load these classes
-          const TransformClass = require(`../transforms/${transform.type}-transform`);
-          return new TransformClass(transform);
-        } catch (error) {
-          logger.error(`action: unhandled transform type = ${transform.type}`);
-          return undefined;
+        // TODO(jwetzell): find a better way to dynamically load these classes
+        switch (transform.type) {
+          case 'floor':
+            return new FloorTransform(transform);
+          case 'log':
+            return new LogTransform(transform);
+          case 'map':
+            return new MapTransform(transform);
+          case 'power':
+            return new PowerTransform(transform);
+          case 'round':
+            return new RoundTransform(transform);
+          case 'scale':
+            return new ScaleTransform(transform);
+          case 'template':
+            return new TemplateTransform(transform);
+          default:
+            logger.error(`action: unhandled transform type = ${transform.type}`);
+            return undefined;
         }
       });
     }

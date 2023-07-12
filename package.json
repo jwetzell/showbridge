@@ -43,10 +43,7 @@
     ],
     "outputPath": "dist/bin",
     "assets": [
-      "node_modules/thread-stream",
-      "src/js/actions",
-      "src/js/triggers",
-      "src/js/transforms"
+      "node_modules/thread-stream"
     ]
   }
 }
