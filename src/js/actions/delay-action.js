@@ -8,6 +8,7 @@ class DelayAction extends Action {
     super(obj);
     this.subActions = this.params.actions.map((subAction) => {
       try {
+        // TODO(jwetzell): find a better way to dynamically load these classes
         const ActionClass = require(`../actions/${subAction.type}-action`);
         return new ActionClass(subAction);
       } catch (error) {

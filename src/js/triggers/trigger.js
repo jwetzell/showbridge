@@ -13,6 +13,7 @@ class Trigger {
     if (this.obj.actions) {
       this.actions = this.obj.actions.map((action) => {
         try {
+          // TODO(jwetzell): find a better way to dynamically load these classes
           const ActionClass = require(`../actions/${action.type}-action`);
           return new ActionClass(action);
         } catch (error) {

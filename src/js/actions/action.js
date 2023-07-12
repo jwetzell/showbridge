@@ -15,6 +15,7 @@ class Action {
     if (this.obj.transforms) {
       this.transforms = this.obj.transforms.map((transform) => {
         try {
+          // TODO(jwetzell): find a better way to dynamically load these classes
           const TransformClass = require(`../transforms/${transform.type}-transform`);
           return new TransformClass(transform);
         } catch (error) {

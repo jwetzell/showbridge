@@ -22,6 +22,7 @@ class Config {
         this[messageType] = this.config[messageType];
         this[messageType].triggers = this[messageType]?.triggers.map((trigger) => {
           try {
+            // TODO(jwetzell): find a better way to dynamically load these classes
             const TriggerClass = require(`./triggers/${trigger.type}-trigger`);
             return new TriggerClass(trigger);
           } catch (error) {
