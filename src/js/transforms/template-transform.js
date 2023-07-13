@@ -10,7 +10,7 @@ class TemplateTransform extends Transform {
       try {
         let newValue = _.template(this.params.template)({ msg, vars });
         // try to convert it to a number if it is one
-        if (Number.isNaN(parseFloat(newValue))) {
+        if (!Number.isNaN(parseFloat(newValue))) {
           newValue = parseFloat(newValue);
         }
         _.set(msg, this.params.property, newValue);
