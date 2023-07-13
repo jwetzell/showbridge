@@ -30,9 +30,9 @@
     "eslint": "^8.44.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.8.0",
-    "nodemon": "^2.0.22",
+    "nodemon": "^3.0.1",
     "pkg": "^5.8.1",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.0",
     "rimraf": "^5.0.1"
   },
   "pkg": {
