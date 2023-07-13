@@ -19,8 +19,12 @@ class BridgeServer {
       this.socket.close();
     }
 
-    if (params.url) {
+    if (params.url && params.url !== '') {
       this.socket = io(params.url);
+
+      this.socket.on('connect_error', (error) => {
+        logger.error(`bridge: unable to connect to ${params.url}`);
+      });
 
       this.socket.on('connect', () => {
         if (params.rooms) {
