@@ -71,16 +71,14 @@
         "actions": [
           {
             "type": "log",
-            "transforms": [
-              {
-                "type": "template",
-                "params": {
-                  "property": "note",
-                  "template": "${msg.note + 12}"
-                },
-                "enabled": true
-              }
-            ],
+            "transforms": [],
+            "enabled": true
+          },
+          {
+            "type": "peer-output",
+            "params": {
+              "room": "test-room"
+            },
             "enabled": true
           }
         ],
@@ -176,5 +174,12 @@
         "enabled": true
       }
     ]
+  },
+  "peer": {
+    "params": {
+      "url": "http://localhost:8888",
+      "room": "test"
+    },
+    "triggers": []
   }
 }

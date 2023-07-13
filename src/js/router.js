@@ -6,6 +6,7 @@ const HTTPServer = require('./protocols/http-server');
 const MQTTClient = require('./protocols/mqtt-client');
 
 const { logger } = require('./utils/helper');
+const PeerServer = require('./protocols/peer-server');
 
 class Router {
   constructor(config) {
@@ -17,6 +18,7 @@ class Router {
       tcp: new TCPServer(),
       midi: new MIDIServer(),
       mqtt: new MQTTClient(),
+      peer: new PeerServer(),
     };
 
     this.servers.http.setConfig(this.config);

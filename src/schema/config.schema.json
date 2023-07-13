@@ -232,7 +232,8 @@
           { "$ref": "#/definitions/ActionShell" },
           { "$ref": "#/definitions/ActionHTTP" },
           { "$ref": "#/definitions/ActionDelay" },
-          { "$ref": "#/definitions/ActionMQTTOutput" }
+          { "$ref": "#/definitions/ActionMQTTOutput" },
+          { "$ref": "#/definitions/ActionPeerOutput" }
         ]
       }
     },
@@ -287,6 +288,37 @@
             },
             "value": {
               "description": "value of the variable to store",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this action is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "params", "enabled"],
+      "additionalProperties": false
+    },
+    "ActionPeerOutput": {
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "title": "Peer Output Action",
+      "description": "This action send the incoming message to the specified socket room",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "peer-output"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
+        },
+        "params": {
+          "description": "Peer action params",
+          "type": "object",
+          "properties": {
+            "room": {
+              "description": "room to send the message on",
               "type": "string"
             }
           },
