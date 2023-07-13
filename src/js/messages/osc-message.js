@@ -1,9 +1,15 @@
+const { has } = require('lodash');
 const osc = require('osc-min');
 
 class OSCMessage {
   constructor(msg, sender) {
     this.msg = msg;
-    this.msg.args = this.msg.args.map((arg) => arg.value);
+    this.msg.args = this.msg.args.map((arg) => {
+      if (has(arg, 'value')) {
+        return arg.value;
+      }
+      return arg;
+    });
     this.sender = sender;
   }
 
@@ -37,6 +43,17 @@ class OSCMessage {
 
   toString() {
     return `${this.address} ${this.args.join(' ')}`;
+  }
+
+  toJSON() {
+    return {
+      messageType: this.messageType,
+      ...this,
+    };
+  }
+
+  static fromJSON(json) {
+    return new OSCMessage(json.msg, json.sender);
   }
 }
 module.exports = OSCMessage;

@@ -1,13 +1,9 @@
 class WebSocketMessage {
-  constructor(msg, connection) {
+  constructor(msg, sender) {
     this.msg = msg;
+    this.sender = sender;
 
-    // extract some key request properties
-    this.sender = {
-      protocol: 'tcp',
-      address: connection.remoteAddress,
-    };
-    if (this.sender.address.substr(0, 7) === '::ffff:') {
+    if (this.sender?.address?.substr(0, 7) === '::ffff:') {
       this.sender.address = this.sender.address.substr(7);
     }
   }
@@ -28,11 +24,26 @@ class WebSocketMessage {
     this.msg = Buffer.from(payload);
   }
 
+  get bytes() {
+    return this.msg;
+  }
+
   toString() {
     if (typeof this.payload === 'object') {
       return JSON.stringify(this.payload);
     }
     return `${this.payload}`;
+  }
+
+  toJSON() {
+    return {
+      messageType: this.messageType,
+      ...this,
+    };
+  }
+
+  static fromJSON(json) {
+    return new WebSocketMessage(json.msg, json.sender);
   }
 }
 module.exports = WebSocketMessage;

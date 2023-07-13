@@ -13,7 +13,12 @@ class WebSocketServer {
 
     this.server.on('connection', (ws, req) => {
       ws.on('message', (msgBuffer) => {
-        const wsMsg = new WebSocketMessage(msgBuffer, req.connection);
+        // extract some key request properties
+        const wsMsg = new WebSocketMessage(msgBuffer, {
+          protocol: 'tcp',
+          address: req.socket?.remoteAddress,
+          port: req.socket?.remotePort,
+        });
         this.eventEmitter.emit('message', wsMsg);
       });
     });

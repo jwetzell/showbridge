@@ -25,14 +25,21 @@ class MQTTMessage {
   }
 
   toString() {
-    switch (this.payloadType) {
-      case 'json':
-        return JSON.stringify(this.payload);
-      case 'text':
-        return this.payload;
-      default:
-        return undefined;
+    if (typeof this.payload === 'object') {
+      return JSON.stringify(this.payload);
     }
+    return this.payload;
+  }
+
+  toJSON() {
+    return {
+      messageType: this.messageType,
+      ...this,
+    };
+  }
+
+  static fromJSON(json) {
+    return new MQTTMessage(json.msg, json.topic);
   }
 }
 module.exports = MQTTMessage;

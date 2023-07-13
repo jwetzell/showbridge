@@ -1,8 +1,8 @@
 {
-  "$schema": "../schema/config.schema.json",
+  "$schema": "../../schema/config.schema.json",
   "http": {
     "params": {
-      "port": 3000
+      "port": 3001
     },
     "triggers": [
       {
@@ -14,6 +14,13 @@
         "actions": [
           {
             "type": "log",
+            "enabled": true
+          },
+          {
+            "type": "bridge-output",
+            "params": {
+              "rooms": ["example-room", "example-room2"]
+            },
             "enabled": true
           }
         ],
@@ -33,6 +40,13 @@
           {
             "type": "log",
             "enabled": true
+          },
+          {
+            "type": "bridge-output",
+            "params": {
+              "room": "example-room"
+            },
+            "enabled": true
           }
         ],
         "enabled": true
@@ -51,6 +65,13 @@
           {
             "type": "log",
             "enabled": true
+          },
+          {
+            "type": "bridge-output",
+            "params": {
+              "room": "example-room"
+            },
+            "enabled": true
           }
         ],
         "enabled": true
@@ -59,8 +80,8 @@
   },
   "midi": {
     "params": {
-      "virtualInputName": "oscee Input",
-      "virtualOutputName": "oscee Output"
+      "virtualInputName": "oscee Input2",
+      "virtualOutputName": "oscee Output2"
     },
     "triggers": [
       {
@@ -73,6 +94,13 @@
             "type": "log",
             "transforms": [],
             "enabled": true
+          },
+          {
+            "type": "bridge-output",
+            "params": {
+              "room": "example-room"
+            },
+            "enabled": true
           }
         ],
         "enabled": true
@@ -82,29 +110,7 @@
   "tcp": {
     "params": {
       "address": "0.0.0.0",
-      "port": 8000
-    },
-    "triggers": [
-      {
-        "type": "regex",
-        "params": {
-          "patterns": [".*"],
-          "properties": ["string"]
-        },
-        "actions": [
-          {
-            "type": "log",
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      }
-    ]
-  },
-  "udp": {
-    "params": {
-      "address": "0.0.0.0",
-      "port": 8000
+      "port": 8001
     },
     "triggers": [
       {
@@ -119,11 +125,38 @@
             "enabled": true
           },
           {
-            "type": "forward",
+            "type": "bridge-output",
             "params": {
-              "host": "127.0.0.1",
-              "port": 8000,
-              "protocol": "tcp"
+              "room": "example-room"
+            },
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "udp": {
+    "params": {
+      "address": "0.0.0.0",
+      "port": 8001
+    },
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": [".*"],
+          "properties": ["string"]
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          },
+          {
+            "type": "bridge-output",
+            "params": {
+              "room": "example-room"
             },
             "enabled": true
           }
@@ -134,8 +167,8 @@
   },
   "mqtt": {
     "params": {
-      "broker": "",
-      "topics": ["#"]
+      "broker": "mqtt://localhost:1883",
+      "topics": ["test"]
     },
     "triggers": [
       {
@@ -144,7 +177,16 @@
           "patterns": [".*"],
           "properties": ["topic"]
         },
-        "actions": [{ "type": "log", "enabled": true }],
+        "actions": [
+          { "type": "log", "enabled": true },
+          {
+            "type": "bridge-output",
+            "params": {
+              "room": "example-room"
+            },
+            "enabled": true
+          }
+        ],
         "enabled": true
       }
     ]
@@ -152,7 +194,7 @@
   "bridge": {
     "params": {
       "url": "http://localhost:8888",
-      "rooms": ["example-room", "example-room2"]
+      "room": "test"
     }
   }
 }

@@ -6,7 +6,7 @@ const HTTPServer = require('./protocols/http-server');
 const MQTTClient = require('./protocols/mqtt-client');
 
 const { logger } = require('./utils/helper');
-const PeerServer = require('./protocols/peer-server');
+const BridgeServer = require('./protocols/bridge-server');
 
 class Router {
   constructor(config) {
@@ -18,7 +18,7 @@ class Router {
       tcp: new TCPServer(),
       midi: new MIDIServer(),
       mqtt: new MQTTClient(),
-      peer: new PeerServer(),
+      bridge: new BridgeServer(),
     };
 
     this.servers.http.setConfig(this.config);
@@ -55,10 +55,12 @@ class Router {
 
   reload() {
     Object.keys(this.servers).forEach((serverType) => {
-      if (this.config[serverType].params) {
-        this.servers[serverType].reload(this.config[serverType].params);
-      } else {
-        this.servers[serverType].reload();
+      if (this.config[serverType]) {
+        if (this.config[serverType].params) {
+          this.servers[serverType].reload(this.config[serverType].params);
+        } else {
+          this.servers[serverType].reload();
+        }
       }
     });
   }

@@ -2,7 +2,7 @@ class TCPMessage {
   constructor(msg, sender) {
     this.msg = msg;
     this.sender = sender;
-    if (this.sender.address.substr(0, 7) === '::ffff:') {
+    if (this.sender?.address?.substr(0, 7) === '::ffff:') {
       this.sender.address = this.sender.address.substr(7);
     }
   }
@@ -29,6 +29,17 @@ class TCPMessage {
 
   toString() {
     return this.string;
+  }
+
+  toJSON() {
+    return {
+      messageType: this.messageType,
+      ...this,
+    };
+  }
+
+  static fromJSON(json) {
+    return new TCPMessage(json.msg, json.sender);
   }
 }
 module.exports = TCPMessage;

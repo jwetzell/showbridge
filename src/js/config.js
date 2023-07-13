@@ -1,6 +1,6 @@
 const Ajv = require('ajv');
 const schema = require('../schema/config.schema.json');
-const { logger, messageTypes } = require('./utils/helper');
+const { logger } = require('./utils/helper');
 const BytesEqualTrigger = require('./triggers/bytes-equal-trigger');
 const MIDIControlChangeTrigger = require('./triggers/midi-control-change-trigger');
 const MIDINoteOffTrigger = require('./triggers/midi-note-off-trigger');
@@ -11,6 +11,7 @@ const RegexTrigger = require('./triggers/regex-trigger');
 const SenderTrigger = require('./triggers/sender-trigger');
 
 const validate = new Ajv().compile(schema);
+const messageTypes = ['http', 'ws', 'osc', 'midi', 'tcp', 'udp', 'mqtt'];
 
 class Config {
   constructor(configObj) {
@@ -19,6 +20,7 @@ class Config {
       throw validate.errors;
     } else {
       this.loadTriggers();
+      this.bridge = this.config.bridge;
     }
   }
 
@@ -26,7 +28,7 @@ class Config {
     messageTypes.forEach((messageType) => {
       if (this.config[messageType]) {
         this[messageType] = this.config[messageType];
-        this[messageType].triggers = this[messageType]?.triggers.map((trigger) => {
+        this[messageType].triggers = this[messageType]?.triggers?.map((trigger) => {
           // TODO(jwetzell): find a better way to dynamically load these classes
           switch (trigger.type) {
             case 'bytes-equal':

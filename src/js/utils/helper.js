@@ -49,11 +49,8 @@ const transport = pino.transport({
 });
 const logger = pino(transport);
 
-const messageTypes = ['http', 'ws', 'osc', 'midi', 'tcp', 'udp', 'mqtt', 'peer'];
-
 module.exports = {
   resolveTemplatedProperty,
   hexToBytes,
   logger,
-  messageTypes,
 };

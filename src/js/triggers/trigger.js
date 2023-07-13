@@ -10,7 +10,7 @@ const ShellAction = require('../actions/shell-action');
 const StoreAction = require('../actions/store-action');
 const TCPOutputAction = require('../actions/tcp-output-action');
 const UDPOutputAction = require('../actions/udp-output-action');
-const PeerOutputAction = require('../actions/peer-output-action');
+const BridgeOutputAction = require('../actions/bridge-output-action');
 
 class Trigger {
   constructor(obj) {
@@ -46,8 +46,8 @@ class Trigger {
             return new TCPOutputAction(action);
           case 'udp-output':
             return new UDPOutputAction(action);
-          case 'peer-output':
-            return new PeerOutputAction(action);
+          case 'bridge-output':
+            return new BridgeOutputAction(action);
           default:
             logger.error(`action: unhandled action type = ${action.type}`);
             return undefined;
