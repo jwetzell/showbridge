@@ -38,5 +38,11 @@
       "topics": []
     },
     "triggers": []
+  },
+  "bridge": {
+    "params": {
+      "url": "",
+      "rooms": []
+    }
   }
 }

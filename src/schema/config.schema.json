@@ -212,6 +212,49 @@
         }
       },
       "required": ["triggers", "params"]
+    },
+    "bridge": {
+      "title": "Bridge configuration",
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object",
+          "oneOf": [
+            {
+              "properties": {
+                "url": {
+                  "description": "bridge url",
+                  "type": "string"
+                },
+                "room": {
+                  "description": "room to join",
+                  "type": "string"
+                }
+              },
+              "required": ["url", "room"],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "url": {
+                  "description": "bridge url",
+                  "type": "string"
+                },
+                "rooms": {
+                  "description": "list of rooms to join",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["url", "rooms"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["params"]
     }
   },
   "required": ["http", "ws", "osc", "midi", "tcp", "udp", "mqtt"],
@@ -232,7 +275,8 @@
           { "$ref": "#/definitions/ActionShell" },
           { "$ref": "#/definitions/ActionHTTP" },
           { "$ref": "#/definitions/ActionDelay" },
-          { "$ref": "#/definitions/ActionMQTTOutput" }
+          { "$ref": "#/definitions/ActionMQTTOutput" },
+          { "$ref": "#/definitions/ActionBridgeOutput" }
         ]
       }
     },
@@ -291,6 +335,54 @@
             }
           },
           "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this action is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "params", "enabled"],
+      "additionalProperties": false
+    },
+    "ActionBridgeOutput": {
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "title": "Bridge Output Action",
+      "description": "This action will send the incoming message to the specified bridge room",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "bridge-output"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
+        },
+        "params": {
+          "description": "Bridge Output action params",
+          "type": "object",
+          "properties": {},
+          "oneOf": [
+            {
+              "properties": {
+                "room": {
+                  "description": "room to send the message to",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "rooms": {
+                  "description": "array of rooms to send the message to",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
         },
         "enabled": {
           "description": "Whether this action is enabled",

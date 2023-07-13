@@ -199,5 +199,17 @@ class MIDIMessage {
     }
     return new MIDIMessage(MIDIMessage.objectToBytes(params), 'virtual');
   }
+
+  toJSON() {
+    return {
+      messageType: this.messageType,
+      bytes: this.bytes,
+      port: this.port,
+    };
+  }
+
+  static fromJSON(json) {
+    return new MIDIMessage(json.bytes, json.port);
+  }
 }
 module.exports = MIDIMessage;
