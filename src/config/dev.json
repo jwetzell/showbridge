@@ -151,7 +151,7 @@
   },
   "bridge": {
     "params": {
-      "url": "http://localhost:8888",
+      "url": "",
       "rooms": ["example-room", "example-room2"]
     }
   }
