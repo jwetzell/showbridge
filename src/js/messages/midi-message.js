@@ -143,7 +143,7 @@ class MIDIMessage {
       case 'control_change':
         midiBytes[0] = (midiStatusMap[obj.status] << 4) ^ (obj.channel - 1);
 
-        if (has(obj, 'control') && has(obj, 'vallue')) {
+        if (has(obj, 'control') && has(obj, 'value')) {
           midiBytes[1] = obj.control;
           midiBytes[2] = obj.value;
         } else {
@@ -194,6 +194,7 @@ class MIDIMessage {
   }
 
   static parseActionParams(params) {
+    console.log('parse action params called');
     if (params.bytes !== undefined) {
       return new MIDIMessage(params.bytes, 'virtual');
     }
