@@ -71,6 +71,30 @@
             "type": "log",
             "transforms": [],
             "enabled": true
+          },
+          {
+            "type": "log",
+            "transforms": [
+              {
+                "type": "scale",
+                "params": {
+                  "property": "note",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              },
+              {
+                "type": "scale",
+                "params": {
+                  "property": "velocity",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              }
+            ],
+            "enabled": true
           }
         ],
         "enabled": true
@@ -82,6 +106,30 @@
           {
             "type": "log",
             "transforms": [],
+            "enabled": true
+          },
+          {
+            "type": "log",
+            "transforms": [
+              {
+                "type": "scale",
+                "params": {
+                  "property": "note",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              },
+              {
+                "type": "scale",
+                "params": {
+                  "property": "velocity",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              }
+            ],
             "enabled": true
           }
         ],
@@ -95,6 +143,21 @@
             "type": "log",
             "transforms": [],
             "enabled": true
+          },
+          {
+            "type": "log",
+            "transforms": [
+              {
+                "type": "scale",
+                "params": {
+                  "property": "program",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              }
+            ],
+            "enabled": true
           }
         ],
         "enabled": true
@@ -106,6 +169,30 @@
           {
             "type": "log",
             "transforms": [],
+            "enabled": true
+          },
+          {
+            "type": "log",
+            "transforms": [
+              {
+                "type": "scale",
+                "params": {
+                  "property": "control",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              },
+              {
+                "type": "scale",
+                "params": {
+                  "property": "value",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              }
+            ],
             "enabled": true
           }
         ],
