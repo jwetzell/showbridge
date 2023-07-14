@@ -13,7 +13,7 @@ function resolveTemplatedProperty(params, property, data) {
         // only template string types
         if (typeof item === 'string') {
           let templateResult = _.template(item)(data);
-          if (parseFloat(templateResult)) {
+          if (!Number.isNaN(parseFloat(templateResult))) {
             templateResult = parseFloat(templateResult);
           }
           processedOutput.push(templateResult);
