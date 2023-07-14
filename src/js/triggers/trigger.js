@@ -67,5 +67,14 @@ class Trigger {
   get enabled() {
     return this.obj.enabled;
   }
+
+  toJSON() {
+    return {
+      type: this.type,
+      params: this.params,
+      actions: this.actions,
+      enabled: this.enabled,
+    };
+  }
 }
 module.exports = Trigger;

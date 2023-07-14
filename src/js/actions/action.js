@@ -69,5 +69,14 @@ class Action {
     }
     return msg;
   }
+
+  toJSON() {
+    return {
+      type: this.type,
+      params: this.params,
+      transforms: this.transforms,
+      enabled: this.enabled,
+    };
+  }
 }
 module.exports = Action;

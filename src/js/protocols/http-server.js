@@ -18,7 +18,7 @@ class HTTPServer {
     app.use(express.json());
 
     app.get('/config', (req, res) => {
-      res.send(this.config);
+      res.send(this.config.config);
     });
 
     app.get('/config/schema', (req, res) => {

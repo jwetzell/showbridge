@@ -14,5 +14,13 @@ class Transform {
   get enabled() {
     return this.obj.enabled;
   }
+
+  toJSON() {
+    return {
+      type: this.type,
+      params: this.params,
+      enabled: this.enabled,
+    };
+  }
 }
 module.exports = Transform;
