@@ -29,7 +29,8 @@
           }
         }
       },
-      "required": ["triggers", "params"]
+      "required": ["triggers", "params"],
+      "additionalProperties": false
     },
     "ws": {
       "title": "WebSocket configuration",
@@ -44,7 +45,8 @@
           }
         }
       },
-      "required": ["triggers"]
+      "required": ["triggers"],
+      "additionalProperties": false
     },
     "osc": {
       "title": "OSC configuration",
@@ -64,7 +66,8 @@
           }
         }
       },
-      "required": ["triggers"]
+      "required": ["triggers"],
+      "additionalProperties": false
     },
     "midi": {
       "title": "MIDI configuration",
@@ -136,7 +139,8 @@
           }
         }
       },
-      "required": ["triggers", "params"]
+      "required": ["triggers", "params"],
+      "additionalProperties": false
     },
     "udp": {
       "title": "UDP configuration",
@@ -170,7 +174,8 @@
           }
         }
       },
-      "required": ["triggers", "params"]
+      "required": ["triggers", "params"],
+      "additionalProperties": false
     },
     "mqtt": {
       "title": "MQTT configuration",
@@ -211,7 +216,8 @@
           }
         }
       },
-      "required": ["triggers", "params"]
+      "required": ["triggers", "params"],
+      "additionalProperties": false
     },
     "bridge": {
       "title": "Bridge configuration",
@@ -254,7 +260,8 @@
           ]
         }
       },
-      "required": ["params"]
+      "required": ["params"],
+      "additionalProperties": false
     }
   },
   "required": ["http", "ws", "osc", "midi", "tcp", "udp", "mqtt"],
@@ -1175,7 +1182,8 @@
               "description": "the static payload of the mqtt message",
               "type": "string"
             }
-          }
+          },
+          "additionalProperties": false
         },
         "enabled": {
           "description": "Whether this action is enabled",
@@ -1482,7 +1490,8 @@
               }
             }
           },
-          "required": ["patterns", "properties"]
+          "required": ["patterns", "properties"],
+          "additionalProperties": false
         },
         "actions": {
           "$ref": "#/definitions/ActionList"
