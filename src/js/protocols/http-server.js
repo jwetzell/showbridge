@@ -2,6 +2,7 @@ const events = require('events');
 const cors = require('cors');
 const express = require('express');
 const http = require('http');
+const superagent = require('superagent');
 const HTTPMessage = require('../messages/http-message');
 const Config = require('../config');
 const { logger } = require('../utils/helper');
@@ -76,6 +77,23 @@ class HTTPServer {
     } catch (error) {
       logger.error(`http: problem launching server - ${error}`);
     }
+  }
+
+  send(url, method, body, contentType) {
+    const request = superagent(method, url);
+    if (contentType !== undefined) {
+      request.type(contentType);
+    }
+
+    if (body !== '') {
+      request.send(body);
+    }
+
+    request.end((error) => {
+      if (error) {
+        logger.error(`http: problem sending http - ${error}`);
+      }
+    });
   }
 
   on(eventName, listener) {

@@ -1,9 +1,8 @@
-const superagent = require('superagent');
 const Action = require('./action');
 const { logger, resolveTemplatedProperty } = require('../utils/helper');
 
 class HTTPAction extends Action {
-  do(_msg, vars) {
+  do(_msg, vars, servers) {
     const msg = this.getTransformedMessage(_msg, vars);
     // TODO(jwetzell): add other http things like query parameters though they can just be included in the url field
     try {
@@ -11,20 +10,7 @@ class HTTPAction extends Action {
       const body = resolveTemplatedProperty(this.params, 'body', { msg, vars });
 
       if (url && url !== '') {
-        const request = superagent(this.params.method, url);
-        if (this.params.contentType !== undefined) {
-          request.type(this.params.contentType);
-        }
-
-        if (body !== '') {
-          request.send(body);
-        }
-
-        request.end((error) => {
-          if (error) {
-            logger.error(`action: problem executing http action - ${error}`);
-          }
-        });
+        servers.http.send(url, this.params.method, body, this.params.contentType);
       } else {
         logger.error('action: url is empty');
       }
