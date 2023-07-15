@@ -1,11 +1,11 @@
 const { Server } = require('ws');
-const events = require('events');
+const { EventEmitter } = require('events');
 const { noop } = require('lodash');
 const WebSocketMessage = require('../messages/websocket-message');
 
-class WebSocketServer {
+class WebSocketServer extends EventEmitter {
   constructor(server) {
-    this.eventEmitter = new events.EventEmitter();
+    super();
 
     this.server = new Server({
       server,
@@ -19,17 +19,13 @@ class WebSocketServer {
           address: req.socket?.remoteAddress,
           port: req.socket?.remotePort,
         });
-        this.eventEmitter.emit('message', wsMsg);
+        this.emit('message', wsMsg);
       });
     });
   }
 
   reload() {
     noop();
-  }
-
-  on(eventName, listener) {
-    this.eventEmitter.on(eventName, listener);
   }
 }
 

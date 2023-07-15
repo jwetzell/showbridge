@@ -1,4 +1,4 @@
-const events = require('events');
+const { EventEmitter } = require('events');
 const net = require('net');
 const osc = require('osc-min');
 const slip = require('slip');
@@ -6,9 +6,9 @@ const OSCMessage = require('../messages/osc-message');
 const TCPMessage = require('../messages/tcp-message');
 const { logger } = require('../utils/helper');
 
-class TCPServer {
+class TCPServer extends EventEmitter {
   constructor() {
-    this.eventEmitter = new events.EventEmitter();
+    super();
     this.sockets = {};
   }
 
@@ -27,10 +27,10 @@ class TCPServer {
         try {
           // TODO(jwetzell): SLIP decoding
           const oscMsg = new OSCMessage(osc.fromBuffer(msg, true), sender);
-          this.eventEmitter.emit('message', oscMsg);
+          this.emit('message', oscMsg);
         } catch (error) {
           const tcpMsg = new TCPMessage(msg, sender);
-          this.eventEmitter.emit('message', tcpMsg);
+          this.emit('message', tcpMsg);
         }
       });
     });
@@ -75,10 +75,6 @@ class TCPServer {
       });
     }
     this.sockets[host][port].write(msgToSend);
-  }
-
-  on(eventName, listener) {
-    this.eventEmitter.on(eventName, listener);
   }
 }
 

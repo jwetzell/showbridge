@@ -9,11 +9,7 @@ const MQTTMessage = require('../messages/mqtt-message');
 const WebSocketMessage = require('../messages/websocket-message');
 const HTTPMessage = require('../messages/http-message');
 
-class BridgeServer {
-  constructor() {
-    this.eventEmitter = new EventEmitter();
-  }
-
+class BridgeServer extends EventEmitter {
   reload(params) {
     if (this.socket !== undefined) {
       this.socket.close();
@@ -24,6 +20,7 @@ class BridgeServer {
 
       this.socket.on('connect_error', (error) => {
         logger.error(`bridge: unable to connect to ${params.url}`);
+        logger.error(error);
       });
 
       this.socket.on('connect', () => {
@@ -65,7 +62,7 @@ class BridgeServer {
                 break;
             }
             if (message) {
-              this.eventEmitter.emit('message', message);
+              this.emit('message', message);
             }
           }
         });
@@ -87,10 +84,6 @@ class BridgeServer {
         logger.error(`bridge: unsupported message type: ${message.messageType}`);
       }
     }
-  }
-
-  on(eventName, listener) {
-    this.eventEmitter.on(eventName, listener);
   }
 }
 

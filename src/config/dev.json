@@ -71,7 +71,17 @@
         "actions": [
           {
             "type": "log",
-            "transforms": [],
+            "transforms": [
+              {
+                "type": "scale",
+                "params": {
+                  "property": "note",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              }
+            ],
             "enabled": true
           }
         ],
@@ -116,15 +126,6 @@
         "actions": [
           {
             "type": "log",
-            "enabled": true
-          },
-          {
-            "type": "forward",
-            "params": {
-              "host": "127.0.0.1",
-              "port": 8000,
-              "protocol": "tcp"
-            },
             "enabled": true
           }
         ],

@@ -1,14 +1,10 @@
-const events = require('events');
+const { EventEmitter } = require('events');
 const mqtt = require('mqtt');
 const { has } = require('lodash');
 const MQTTMessage = require('../messages/mqtt-message');
 const { logger } = require('../utils/helper');
 
-class MQTTClient {
-  constructor() {
-    this.eventEmitter = new events.EventEmitter();
-  }
-
+class MQTTClient extends EventEmitter {
   reload(params) {
     if (this.client !== undefined) {
       this.client.end();
@@ -42,7 +38,7 @@ class MQTTClient {
 
       this.client.on('message', (topic, message) => {
         const mqttMsg = new MQTTMessage(message, topic);
-        this.eventEmitter.emit('message', mqttMsg);
+        this.emit('message', mqttMsg);
       });
     }
   }
@@ -51,10 +47,6 @@ class MQTTClient {
     if (this.client !== undefined) {
       this.client.publish(topic, Buffer.from(payload));
     }
-  }
-
-  on(eventName, listener) {
-    this.eventEmitter.on(eventName, listener);
   }
 }
 

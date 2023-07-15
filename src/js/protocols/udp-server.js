@@ -1,15 +1,11 @@
-const events = require('events');
+const { EventEmitter } = require('events');
 const udp = require('dgram');
 const osc = require('osc-min');
 const OSCMessage = require('../messages/osc-message');
 const UDPMessage = require('../messages/udp-message');
 const { logger } = require('../utils/helper');
 
-class UDPServer {
-  constructor() {
-    this.eventEmitter = new events.EventEmitter();
-  }
-
+class UDPServer extends EventEmitter {
   reload(params) {
     if (this.server !== undefined) {
       this.server.close();
@@ -36,7 +32,7 @@ class UDPServer {
           } catch (error) {
             message = new UDPMessage(msg, sender);
           }
-          this.eventEmitter.emit('message', message);
+          this.emit('message', message);
         });
       }
     );
@@ -46,10 +42,6 @@ class UDPServer {
     if (this.server !== undefined) {
       this.server.send(msg, port, host);
     }
-  }
-
-  on(eventName, listener) {
-    this.eventEmitter.on(eventName, listener);
   }
 }
 

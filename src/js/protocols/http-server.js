@@ -1,4 +1,4 @@
-const events = require('events');
+const { EventEmitter } = require('events');
 const cors = require('cors');
 const express = require('express');
 const http = require('http');
@@ -7,9 +7,9 @@ const HTTPMessage = require('../messages/http-message');
 const Config = require('../config');
 const { logger } = require('../utils/helper');
 
-class HTTPServer {
+class HTTPServer extends EventEmitter {
   constructor() {
-    this.eventEmitter = new events.EventEmitter();
+    super();
 
     const app = express();
     this.httpServer = http.createServer(app);
@@ -30,7 +30,7 @@ class HTTPServer {
       try {
         const configToUpdate = new Config(req.body);
         // TODO(jwetzell): handle errors on the reload and send them back
-        this.eventEmitter.emit('reload', configToUpdate);
+        this.emit('reload', configToUpdate);
         this.config = configToUpdate;
         res.status(200).send({ msg: 'config reloaded check console for any errors' });
       } catch (error) {
@@ -46,13 +46,13 @@ class HTTPServer {
     // TODO(jwetzell): error handling on these endpoints
     app.get('/*', (req, res) => {
       const parsedHTTP = new HTTPMessage(req);
-      this.eventEmitter.emit('message', parsedHTTP);
+      this.emit('message', parsedHTTP);
       res.status(200).send({ msg: 'ok' });
     });
 
     app.post('/*', (req, res) => {
       const parsedHTTP = new HTTPMessage(req);
-      this.eventEmitter.emit('message', parsedHTTP);
+      this.emit('message', parsedHTTP);
       res.status(200).send({ msg: 'ok' });
     });
 
@@ -73,7 +73,7 @@ class HTTPServer {
       this.server = this.httpServer.listen(params.port, () => {
         logger.debug(`http: web interface listening on port ${params.port}`);
       });
-      this.eventEmitter.emit('http-server', this.httpServer);
+      this.emit('http-server', this.httpServer);
     } catch (error) {
       logger.error(`http: problem launching server - ${error}`);
     }
@@ -94,10 +94,6 @@ class HTTPServer {
         logger.error(`http: problem sending http - ${error}`);
       }
     });
-  }
-
-  on(eventName, listener) {
-    this.eventEmitter.on(eventName, listener);
   }
 }
 

@@ -1,12 +1,11 @@
-const events = require('events');
+const { EventEmitter } = require('events');
 const midi = require('@julusian/midi');
 const MIDIMessage = require('../messages/midi-message');
 const { logger } = require('../utils/helper');
 
-class MIDIServer {
+class MIDIServer extends EventEmitter {
   constructor() {
-    this.eventEmitter = new events.EventEmitter();
-
+    super();
     this.inputs = [];
   }
 
@@ -38,7 +37,7 @@ class MIDIServer {
     this.virtualInput.on('message', (deltaTime, msg) => {
       try {
         const midiMessage = new MIDIMessage(msg, 'virtual');
-        this.eventEmitter.emit('message', midiMessage);
+        this.emit('message', midiMessage);
       } catch (error) {
         logger.error(`midi: problem processing MIDI message - ${error}`);
       }
@@ -61,7 +60,7 @@ class MIDIServer {
         input.on('message', (deltaTime, msg) => {
           try {
             const midiMessage = new MIDIMessage(msg, this.virtualInput.getPortName(index));
-            this.eventEmitter.emit('message', midiMessage);
+            this.emit('message', midiMessage);
           } catch (error) {
             logger.error(`midi: problem processing MIDI message - ${error}`);
           }
@@ -69,10 +68,6 @@ class MIDIServer {
       }
     }
     // TODO(jwetzell): find a way to detect midi device changes
-  }
-
-  on(eventName, listener) {
-    this.eventEmitter.on(eventName, listener);
   }
 
   send(msg) {

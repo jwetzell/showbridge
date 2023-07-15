@@ -31,7 +31,7 @@ class Router {
     });
 
     // NOTE(jwetzell): websocket server needs the http server instance to load
-    this.servers.http.eventEmitter.on('http-server', (server) => {
+    this.servers.http.on('http-server', (server) => {
       this.servers.ws = new WebSocketServer(server);
       this.servers.ws.on('message', (msg) => {
         this.processMessage(msg);
