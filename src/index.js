@@ -3,19 +3,35 @@
 
 const { readFileSync } = require('fs');
 
+const { program } = require('commander');
 const { logger } = require('./js/utils/helper');
 
 const Config = require('./js/config');
 const defaultConfig = require('./config/default.json');
 const Router = require('./js/router');
 
+program.name('oscee').description('Protocol router');
+program.option('-c, --config <path>', 'location of config file', undefined);
+program.option('-d, --debug', 'turn on debug logging', false);
+program.parse(process.argv);
+
+const options = program.opts();
+
+if (options.debug) {
+  logger.level = 10;
+}
+
 let config = {};
 // if there is an argument load it as the config
-if (process.argv.length === 3) {
-  const configFile = process.argv[2];
-  const configToLoad = JSON.parse(readFileSync(configFile));
-  config = new Config(configToLoad);
-  logger.debug(`app: loading config from ${configFile}`);
+if (options.config) {
+  try {
+    logger.debug(`app: loading config from ${options.config}`);
+    const configToLoad = JSON.parse(readFileSync(options.config));
+    config = new Config(configToLoad);
+  } catch (error) {
+    logger.error(`app: could not load config from ${options.config}`);
+    logger.error(error);
+  }
 } else {
   // if not load a default
   logger.debug(`app: loading default config`);
