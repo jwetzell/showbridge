@@ -68,6 +68,10 @@ class Trigger {
     return this.obj.enabled;
   }
 
+  get comment() {
+    return this.obj.comment;
+  }
+
   toJSON() {
     return {
       type: this.type,

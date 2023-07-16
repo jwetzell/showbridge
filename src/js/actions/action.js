@@ -55,6 +55,10 @@ class Action {
     return this.obj.enabled;
   }
 
+  get comment() {
+    return this.obj.comment;
+  }
+
   getTransformedMessage(msg, vars) {
     if (this.transforms.length > 0) {
       const msgCopy = _.cloneDeep(msg);

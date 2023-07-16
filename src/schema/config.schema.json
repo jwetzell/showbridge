@@ -298,6 +298,9 @@
           "type": "string",
           "const": "log"
         },
+        "comment": {
+          "type": "string"
+        },
         "transforms": {
           "$ref": "#/definitions/TransformList"
         },
@@ -318,6 +321,9 @@
         "type": {
           "type": "string",
           "const": "store"
+        },
+        "comment": {
+          "type": "string"
         },
         "transforms": {
           "$ref": "#/definitions/TransformList"
@@ -362,6 +368,9 @@
         "type": {
           "type": "string",
           "const": "bridge-output"
+        },
+        "comment": {
+          "type": "string"
         },
         "transforms": {
           "$ref": "#/definitions/TransformList"
@@ -410,6 +419,9 @@
         "type": {
           "type": "string",
           "const": "midi-output"
+        },
+        "comment": {
+          "type": "string"
         },
         "transforms": {
           "$ref": "#/definitions/TransformList"
@@ -696,6 +708,9 @@
           "type": "string",
           "const": "forward"
         },
+        "comment": {
+          "type": "string"
+        },
         "transforms": {
           "$ref": "#/definitions/TransformList"
         },
@@ -736,6 +751,9 @@
         "type": {
           "type": "string",
           "const": "osc-output"
+        },
+        "comment": {
+          "type": "string"
         },
         "transforms": {
           "$ref": "#/definitions/TransformList"
@@ -793,6 +811,9 @@
         "type": {
           "type": "string",
           "const": "udp-output"
+        },
+        "comment": {
+          "type": "string"
         },
         "transforms": {
           "$ref": "#/definitions/TransformList"
@@ -899,6 +920,9 @@
         "type": {
           "type": "string",
           "const": "tcp-output"
+        },
+        "comment": {
+          "type": "string"
         },
         "transforms": {
           "$ref": "#/definitions/TransformList"
@@ -1023,6 +1047,9 @@
           "type": "string",
           "const": "shell"
         },
+        "comment": {
+          "type": "string"
+        },
         "transforms": {
           "$ref": "#/definitions/TransformList"
         },
@@ -1070,6 +1097,9 @@
         "type": {
           "type": "string",
           "const": "http"
+        },
+        "comment": {
+          "type": "string"
         },
         "transforms": {
           "$ref": "#/definitions/TransformList"
@@ -1124,6 +1154,9 @@
           "type": "string",
           "const": "delay"
         },
+        "comment": {
+          "type": "string"
+        },
         "transforms": {
           "$ref": "#/definitions/TransformList"
         },
@@ -1159,6 +1192,9 @@
         "type": {
           "type": "string",
           "const": "mqtt-output"
+        },
+        "comment": {
+          "type": "string"
         },
         "transforms": {
           "$ref": "#/definitions/TransformList"
@@ -1203,6 +1239,9 @@
           "type": "string",
           "const": "osc-address"
         },
+        "comment": {
+          "type": "string"
+        },
         "params": {
           "description": "OSC trigger params",
           "type": "object",
@@ -1236,6 +1275,9 @@
           "type": "string",
           "const": "sender"
         },
+        "comment": {
+          "type": "string"
+        },
         "params": {
           "description": "Host trigger params",
           "type": "object",
@@ -1267,6 +1309,9 @@
         "type": {
           "type": "string",
           "const": "bytes-equal"
+        },
+        "comment": {
+          "type": "string"
         },
         "params": {
           "description": "bytes equal trigger params",
@@ -1304,6 +1349,9 @@
         "type": {
           "type": "string",
           "const": "midi-note-off"
+        },
+        "comment": {
+          "type": "string"
         },
         "params": {
           "description": "MIDI note off trigger params",
@@ -1348,6 +1396,9 @@
           "type": "string",
           "const": "midi-note-on"
         },
+        "comment": {
+          "type": "string"
+        },
         "params": {
           "description": "MIDI note on trigger params",
           "type": "object",
@@ -1390,6 +1441,9 @@
         "type": {
           "type": "string",
           "const": "midi-control-change"
+        },
+        "comment": {
+          "type": "string"
         },
         "params": {
           "description": "MIDI control change trigger params",
@@ -1434,6 +1488,9 @@
           "type": "string",
           "const": "midi-program-change"
         },
+        "comment": {
+          "type": "string"
+        },
         "params": {
           "description": "MIDI program change trigger params",
           "type": "object",
@@ -1470,6 +1527,9 @@
         "type": {
           "type": "string",
           "const": "regex"
+        },
+        "comment": {
+          "type": "string"
         },
         "params": {
           "description": "Regex trigger params",
