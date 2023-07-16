@@ -13,15 +13,16 @@
 
 ### How to use
 - Install
-    - prebuilt binaries (coming soon)
+    - prebuilt binaries (check the releases section)
     - build from source: clone and run `npm install && npm run package` to build binaries located at `dist/bin`
-    - via npm: `npm install -g oscee`
+    - via npm: `npm install -g oscee` or run deirectly with npx `npx oscee -c config.json`
 - Create config file
     - sorry, this is the worst part [JSON Schema](https://oscee.jwetzell.com/docs/schema/config)
     - good idea to start with [default.json](src/config/default.json)
 - Run
-    - `oscee config.json`
-    - if no config file is specified then [default.json](src/config/default.json) will be used 
+    - `oscee -c config.json`
+    - if you would like to turn on debug logging use the `-d` or `--debug` flag
+    - if no config file is specified then a [default config](src/config/default.json) will be used
 
 ## The _Basics_
 - triggers: when a message comes in triggers enforce some criteria on the incoming message. If a message "ticks all the boxes" the actions of the trigger are then performed. triggers do not stack each trigger in the array is evaluated in isolation.
