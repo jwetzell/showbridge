@@ -76,6 +76,7 @@ class Action {
 
   toJSON() {
     return {
+      comment: this.comment,
       type: this.type,
       params: this.params,
       transforms: this.transforms,

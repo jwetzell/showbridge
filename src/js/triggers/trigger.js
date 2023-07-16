@@ -74,6 +74,7 @@ class Trigger {
 
   toJSON() {
     return {
+      comment: this.comment,
       type: this.type,
       params: this.params,
       actions: this.actions,
