@@ -77,6 +77,7 @@ class BridgeServer extends EventEmitter {
         if (messageToSend !== undefined) {
           logger.debug(`bridge: forwarding ${message.messageType} message to room ${room}`);
           this.socket.emit('send', room, messageToSend);
+          this.emit('send', { room, message });
         } else {
           logger.error(`bridge: unsupported message type: ${message.messageType}`);
         }

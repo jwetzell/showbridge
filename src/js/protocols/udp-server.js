@@ -41,6 +41,7 @@ class UDPServer extends EventEmitter {
   send(msg, port, host) {
     if (this.server !== undefined) {
       this.server.send(msg, port, host);
+      this.emit('send', { msg, port, host });
     }
   }
 }

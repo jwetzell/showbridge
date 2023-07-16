@@ -75,6 +75,7 @@ class TCPServer extends EventEmitter {
       });
     }
     this.sockets[host][port].write(msgToSend);
+    this.emit('send', { msg, port, host, slipEncode });
   }
 }
 

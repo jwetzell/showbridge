@@ -92,7 +92,9 @@ class HTTPServer extends EventEmitter {
     request.end((error) => {
       if (error) {
         logger.error(`http: problem sending http - ${error}`);
+        return;
       }
+      this.emit('send', { url, method, body, contentType });
     });
   }
 }

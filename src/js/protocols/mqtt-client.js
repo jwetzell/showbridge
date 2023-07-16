@@ -46,6 +46,7 @@ class MQTTClient extends EventEmitter {
   send(topic, payload) {
     if (this.client !== undefined) {
       this.client.publish(topic, Buffer.from(payload));
+      this.emit('send', { topic, payload });
     }
   }
 }

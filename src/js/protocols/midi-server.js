@@ -70,8 +70,9 @@ class MIDIServer extends EventEmitter {
     // TODO(jwetzell): find a way to detect midi device changes
   }
 
-  send(msg) {
-    this.virtualOutput.sendMessage(msg);
+  send(bytes) {
+    this.virtualOutput.sendMessage(bytes);
+    this.emit('send', { bytes });
   }
 
   get outputMap() {

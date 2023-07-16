@@ -1,15 +1,16 @@
+const { EventEmitter } = require('events');
 const UDPServer = require('./protocols/udp-server');
 const TCPServer = require('./protocols/tcp-server');
 const MIDIServer = require('./protocols/midi-server');
 const WebSocketServer = require('./protocols/websocket-server');
 const HTTPServer = require('./protocols/http-server');
 const MQTTClient = require('./protocols/mqtt-client');
-
 const { logger } = require('./utils/helper');
 const BridgeServer = require('./protocols/bridge-server');
 
-class Router {
+class Router extends EventEmitter {
   constructor(config) {
+    super();
     this.vars = {};
     this.config = config;
     this.servers = {
@@ -28,6 +29,7 @@ class Router {
       this.servers[serverType].on('message', (msg) => {
         this.processMessage(msg);
       });
+      this.servers[serverType].on('send', (args) => this.emit('message_out', serverType, args));
     });
 
     // NOTE(jwetzell): websocket server needs the http server instance to load
@@ -66,13 +68,16 @@ class Router {
   }
 
   processMessage(msg) {
+    this.emit('message', msg);
     const triggers = this.config[msg.messageType]?.triggers;
     if (triggers !== undefined && triggers.length > 0) {
       triggers.forEach((trigger, triggerIndex) => {
         try {
+          const triggerPath = `${msg.messageType}/triggers/${triggerIndex}`;
           if (trigger.enabled && trigger.shouldFire(msg)) {
-            logger.trace(`${msg.messageType}-trigger-${triggerIndex}: fired`);
-            trigger.actions.forEach((action) => {
+            this.emit('trigger', trigger, triggerPath, true);
+            logger.trace(`trigger: ${triggerPath}: fired`);
+            trigger.actions.forEach((action, actionIndex) => {
               if (action.enabled) {
                 try {
                   action.do(msg, this.vars, this.servers);
@@ -83,9 +88,11 @@ class Router {
               } else {
                 logger.debug(`action: ${action.type} is disabled skipping...`);
               }
+              this.emit('action', trigger, `${triggerPath}/actions/${actionIndex}`, action.enabled);
             });
           } else {
-            logger.trace(`${msg.messageType}-trigger-${triggerIndex}: not fired`);
+            this.emit('trigger', trigger, `${triggerPath}`, false);
+            logger.trace(`trigger: ${triggerPath}: not fired`);
           }
         } catch (error) {
           logger.error(`trigger: problem evaluating trigger - ${error}`);
