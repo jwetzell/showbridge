@@ -1,16 +1,14 @@
 const _ = require('lodash');
 const Action = require('./action');
-const { logger, resolveTemplatedProperty } = require('../utils/helper');
+const { logger } = require('../utils/helper');
 
 class StoreAction extends Action {
   do(_msg, vars) {
     const msg = this.getTransformedMessage(_msg, vars);
     try {
-      const value = resolveTemplatedProperty(this.params, 'value', { msg, vars });
-      const key = resolveTemplatedProperty(this.params, 'key', { msg, vars });
-
-      if (key !== undefined && value !== undefined) {
-        _.set(vars, key, value);
+      const resolvedParams = this.resolveTemplatedParams({ msg, vars });
+      if (resolvedParams.key !== undefined && resolvedParams.value !== undefined) {
+        _.set(vars, resolvedParams.key, resolvedParams.value);
       } else {
         logger.error('action: store action missing a key or value');
       }

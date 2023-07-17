@@ -1,14 +1,16 @@
 const { exec } = require('child_process');
 const Action = require('./action');
-const { logger, resolveTemplatedProperty } = require('../utils/helper');
+const { logger } = require('../utils/helper');
 
 class ShellAction extends Action {
   do(_msg, vars) {
     const msg = this.getTransformedMessage(_msg, vars);
+
     try {
-      const command = resolveTemplatedProperty(this.params, 'command', { msg, vars });
-      if (command !== undefined && command !== '') {
-        exec(command);
+      const resolvedParams = this.resolveTemplatedParams({ msg, vars });
+
+      if (resolvedParams.command !== undefined && resolvedParams.command !== '') {
+        exec(resolvedParams.command);
       }
     } catch (error) {
       logger.error(`action: problem executing shell action - ${error}`);

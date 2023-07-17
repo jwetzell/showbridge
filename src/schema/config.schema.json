@@ -387,6 +387,7 @@
                   "type": "string"
                 }
               },
+              "required": ["room"],
               "additionalProperties": false
             },
             {
@@ -399,6 +400,30 @@
                   }
                 }
               },
+              "required": ["rooms"],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "_room": {
+                  "description": "room to template and then send the message to",
+                  "type": "string"
+                }
+              },
+              "required": ["_room"],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "_rooms": {
+                  "description": "array of rooms to template and then send the message to",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["_rooms"],
               "additionalProperties": false
             }
           ]
