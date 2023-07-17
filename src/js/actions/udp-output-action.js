@@ -18,12 +18,12 @@ class UDPOutputAction extends Action {
       }
 
       if (udpSend !== undefined) {
-        servers.udp.send(Buffer.from(udpSend), this.params.port, this.params.host);
+        servers.udp.send(Buffer.from(udpSend), resolvedParams.port, resolvedParams.host);
       } else {
         logger.error('action: udp-output has nothing to send');
       }
     } catch (error) {
-      logger.error(`action: problem executing tcp-output action - ${error}`);
+      logger.error(`action: problem executing udp-output action - ${error}`);
     }
   }
 }

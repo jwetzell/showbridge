@@ -18,7 +18,7 @@ class TCPOutputAction extends Action {
       }
 
       if (tcpSend !== undefined) {
-        servers.tcp.send(Buffer.from(tcpSend), this.params.port, this.params.host, this.params.slip);
+        servers.tcp.send(Buffer.from(tcpSend), resolvedParams.port, resolvedParams.host, resolvedParams.slip);
       } else {
         logger.error('action: tcp-output has nothing to send');
       }
