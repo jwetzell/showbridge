@@ -52,7 +52,7 @@ class Action {
   }
 
   get params() {
-    return this.obj.params;
+    return this.obj.params ? this.obj.params : {};
   }
 
   get enabled() {
@@ -67,11 +67,12 @@ class Action {
     if (this.transforms.length > 0) {
       const msgCopy = _.cloneDeep(msg);
       this.transforms.forEach((transform) => {
-        if (transform.enabled) {
-          transform.transform(msgCopy, vars);
-        } else {
+        if (!transform.enabled) {
           logger.debug(`transform: ${this.type} is disabled skipping...`);
+          return;
         }
+
+        transform.transform(msgCopy, vars);
       });
       return msgCopy;
     }

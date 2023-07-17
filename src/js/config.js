@@ -15,13 +15,13 @@ const messageTypes = ['http', 'ws', 'osc', 'midi', 'tcp', 'udp', 'mqtt'];
 
 class Config {
   constructor(configObj) {
-    this.config = configObj;
     if (!validate(configObj)) {
       throw validate.errors;
-    } else {
-      this.loadTriggers();
-      this.bridge = this.config.bridge;
     }
+
+    this.config = configObj;
+    this.loadTriggers();
+    this.bridge = this.config.bridge;
   }
 
   loadTriggers() {

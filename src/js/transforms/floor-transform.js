@@ -8,18 +8,20 @@ class FloorTransform extends Transform {
     try {
       const resolvedParams = this.resolveTemplatedParams({ msg, vars });
       const propertyValue = _.get(msg, resolvedParams.property);
-      if (propertyValue !== undefined) {
-        if (typeof propertyValue === 'number') {
-          _.set(msg, resolvedParams.property, Math.floor(propertyValue));
-        } else {
-          logger.error('transform: floor only works on numbers');
-        }
-      } else {
+      if (propertyValue === undefined) {
         logger.error(`transform: floor transform could not find msg property = ${resolvedParams.property}`);
+        return;
       }
+
+      if (typeof propertyValue !== 'number') {
+        logger.error('transform: floor only works on numbers');
+        return;
+      }
+
+      _.set(msg, resolvedParams.property, Math.floor(propertyValue));
       logger.trace(`transform: after ${this.type} = ${msg}`);
     } catch (error) {
-      logger.error(`tranform: problem executing floor transform - ${error}`);
+      logger.error(`transform: problem executing floor transform - ${error}`);
     }
   }
 }

@@ -71,20 +71,32 @@ class BridgeServer extends EventEmitter {
   }
 
   send(room, message) {
-    if (this.socket !== undefined && this.socket.connected) {
-      if (message.toJSON !== undefined) {
-        const messageToSend = message.toJSON();
-        if (messageToSend !== undefined) {
-          logger.debug(`bridge: forwarding ${message.messageType} message to room ${room}`);
-          this.socket.emit('send', room, messageToSend);
-          this.emit('send', { room, message });
-        } else {
-          logger.error(`bridge: unsupported message type: ${message.messageType}`);
-        }
-      } else {
-        logger.error(`bridge: unsupported message type: ${message.messageType}`);
-      }
+    if (this.socket === undefined) {
+      logger.error('bridge: connection does not seem to be setup');
+      return;
     }
+
+    if (!this.socket.connected) {
+      logger.error('bridge: connection to bridge is broken');
+      return;
+    }
+
+    if (message.toJSON === undefined) {
+      logger.error('bridge: message type is not configured correctly for bridge support');
+      return;
+    }
+
+    const messageToSend = message.toJSON();
+
+    if (messageToSend === undefined) {
+      logger.error(`bridge: unsupported message type: ${message.messageType}`);
+      return;
+    }
+
+    logger.debug(`bridge: forwarding ${message.messageType} message to room ${room}`);
+    this.socket.emit('send', room, messageToSend);
+
+    this.emit('send', { room, message });
   }
 }
 

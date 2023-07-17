@@ -8,20 +8,22 @@ class PowerTransform extends Transform {
     try {
       const resolvedParams = this.resolveTemplatedParams({ msg, vars });
       const propertyValue = _.get(msg, resolvedParams.property);
-      if (propertyValue !== undefined) {
-        if (typeof propertyValue === 'number') {
-          const newValue = propertyValue ** resolvedParams.power;
-          _.set(msg, resolvedParams.property, newValue);
-        } else {
-          logger.error('transform: power can only operate on numbers');
-        }
-      } else {
+      if (propertyValue === undefined) {
         logger.error(`transform: power transform could not find msg property = ${resolvedParams.property}`);
+        return;
       }
+
+      if (typeof propertyValue !== 'number') {
+        logger.error('transform: power can only operate on numbers');
+        return;
+      }
+
+      const newValue = propertyValue ** resolvedParams.power;
+      _.set(msg, resolvedParams.property, newValue);
 
       logger.trace(`transform: after ${this.type} = ${msg}`);
     } catch (error) {
-      logger.error(`tranform: problem executing floor transform - ${error}`);
+      logger.error(`transform: problem executing power transform - ${error}`);
     }
   }
 }

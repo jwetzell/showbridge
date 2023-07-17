@@ -2,7 +2,7 @@ const Action = require('./action');
 const { logger, hexToBytes } = require('../utils/helper');
 
 class UDPOutputAction extends Action {
-  do(_msg, vars, servers) {
+  do(_msg, vars, protocols) {
     const msg = this.getTransformedMessage(_msg, vars);
     let udpSend;
     try {
@@ -18,7 +18,7 @@ class UDPOutputAction extends Action {
       }
 
       if (udpSend !== undefined) {
-        servers.udp.send(Buffer.from(udpSend), resolvedParams.port, resolvedParams.host);
+        protocols.udp.send(Buffer.from(udpSend), resolvedParams.port, resolvedParams.host);
       } else {
         logger.error('action: udp-output has nothing to send');
       }

@@ -47,12 +47,12 @@ class DelayAction extends Action {
     });
   }
 
-  do(_msg, vars, servers) {
+  do(_msg, vars, protocols) {
     const msg = this.getTransformedMessage(_msg, vars);
     if (this.params.duration !== undefined && this.params.actions !== undefined) {
       setTimeout(() => {
         this.subActions.forEach((subAction) => {
-          subAction.do(msg, vars, servers);
+          subAction.do(msg, vars, protocols);
         });
       }, this.params.duration);
     }

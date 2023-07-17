@@ -1,25 +1,32 @@
 const _ = require('lodash');
 const Trigger = require('./trigger');
+const { logger } = require('../utils/helper');
 
 class MIDINoteOffTrigger extends Trigger {
   shouldFire(msg) {
-    if (msg.messageType === 'midi' && msg.status === 'note_off') {
-      if (this.params) {
-        if (_.has(this.params, 'port') && this.params.port !== msg.port) {
-          return false;
-        }
-
-        if (_.has(this.params, 'note') && this.params.note !== msg.note) {
-          return false;
-        }
-
-        if (_.has(this.params, 'velocity') && this.params.velocity !== msg.velocity) {
-          return false;
-        }
-      }
-      return true;
+    if (msg.messageType !== 'midi') {
+      logger.error('trigger: midi-note-off trigger only works on midi messages');
+      return false;
     }
-    return false;
+
+    if (msg.status !== 'note_off') {
+      return false;
+    }
+
+    if (_.has(this.params, 'port') && this.params.port !== msg.port) {
+      return false;
+    }
+
+    if (_.has(this.params, 'note') && this.params.note !== msg.note) {
+      return false;
+    }
+
+    if (_.has(this.params, 'velocity') && this.params.velocity !== msg.velocity) {
+      return false;
+    }
+
+    // NOTE(jwetzell): if msg has passed all the above it is a match;
+    return true;
   }
 }
 

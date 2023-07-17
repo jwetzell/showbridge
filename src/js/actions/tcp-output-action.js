@@ -2,7 +2,7 @@ const Action = require('./action');
 const { logger, hexToBytes } = require('../utils/helper');
 
 class TCPOutputAction extends Action {
-  do(_msg, vars, servers) {
+  do(_msg, vars, protocols) {
     const msg = this.getTransformedMessage(_msg, vars);
     let tcpSend;
     try {
@@ -18,7 +18,7 @@ class TCPOutputAction extends Action {
       }
 
       if (tcpSend !== undefined) {
-        servers.tcp.send(Buffer.from(tcpSend), resolvedParams.port, resolvedParams.host, resolvedParams.slip);
+        protocols.tcp.send(Buffer.from(tcpSend), resolvedParams.port, resolvedParams.host, resolvedParams.slip);
       } else {
         logger.error('action: tcp-output has nothing to send');
       }

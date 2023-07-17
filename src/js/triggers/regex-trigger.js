@@ -4,34 +4,36 @@ const { logger } = require('../utils/helper');
 
 class RegexTrigger extends Trigger {
   shouldFire(msg) {
-    let fire = false;
-    if (this.params) {
-      if (!!this.params.patterns && !!this.params.properties) {
-        if (this.params.patterns.length === this.params.properties.length) {
-          // assume the regex will pass
-          fire = true;
-          for (let i = 0; i < this.params.patterns.length; i += 1) {
-            const pattern = this.params.patterns[i];
-            const property = this.params.properties[i];
+    if (!_.has(this.params, 'patterns') || !_.has(this.params, 'properties')) {
+      logger.error('regex: must have both patterns and properties params');
+      return false;
+    }
 
-            const regex = new RegExp(pattern, 'g');
-            const matchPropertyValue = _.get(msg, property);
-            if (matchPropertyValue === undefined) {
-              logger.error('trigger: regex is configured to look at a property that does not exist on this message.');
-              // bad property config = no fire and since all must match we can stop here
-              fire = false;
-            }
-            if (!regex.test(matchPropertyValue)) {
-              // property value doesn't fit regex = no fire and since all must match we can stop here
-              fire = false;
-            }
-          }
-        } else {
-          logger.error('trigger: regex trigger requires a 1:1 between patterns and properties');
-        }
+    if (this.params.patterns.length !== this.params.properties.length) {
+      logger.error('trigger: regex trigger requires patterns and properties to be the same length');
+      return false;
+    }
+
+    let allRegexTestsPassed = true;
+
+    // assume the regex will pass
+    for (let i = 0; i < this.params.patterns.length; i += 1) {
+      const pattern = this.params.patterns[i];
+      const property = this.params.properties[i];
+
+      const regex = new RegExp(pattern, 'g');
+      const matchPropertyValue = _.get(msg, property);
+      if (matchPropertyValue === undefined) {
+        logger.error('trigger: regex is configured to look at a property that does not exist on this message.');
+        // bad property config = no fire and since all must match we can stop here
+        allRegexTestsPassed = false;
+      }
+      if (!regex.test(matchPropertyValue)) {
+        // property value doesn't fit regex = no fire and since all must match we can stop here
+        allRegexTestsPassed = false;
       }
     }
-    return fire;
+    return allRegexTestsPassed;
   }
 }
 

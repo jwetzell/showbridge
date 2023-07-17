@@ -53,6 +53,7 @@ class TCPServer extends EventEmitter {
   send(msg, port, host, slipEncode) {
     const msgToSend = slipEncode ? slip.encode(msg) : msg;
 
+    // NOTE(jwetzell): keep around sockets for any tcp host:port connection we've made so far
     if (this.sockets[host] === undefined) {
       this.sockets[host] = {};
     }
@@ -63,6 +64,7 @@ class TCPServer extends EventEmitter {
         logger.trace('tcp: connected to client');
       });
 
+      // NOTE(jwetzell): when a tcp client errors out get rid of it (will be recreated next send to host:port)
       this.sockets[host][port].on('error', (error) => {
         logger.error(`tcp: client error - ${error}`);
         this.sockets[host][port].destroy();

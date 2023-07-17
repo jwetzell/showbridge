@@ -13,7 +13,7 @@ class Router extends EventEmitter {
     super();
     this.vars = {};
     this.config = config;
-    this.servers = {
+    this.protocols = {
       http: new HTTPServer(),
       udp: new UDPServer(),
       tcp: new TCPServer(),
@@ -22,25 +22,25 @@ class Router extends EventEmitter {
       bridge: new BridgeServer(),
     };
 
-    this.servers.http.setConfig(this.config);
+    this.protocols.http.setConfig(this.config);
 
-    // NOTE(jwetzell): listen for all messages on servers
-    Object.keys(this.servers).forEach((serverType) => {
-      this.servers[serverType].on('message', (msg) => {
+    // NOTE(jwetzell): listen for all messages on all protocols
+    Object.keys(this.protocols).forEach((protocol) => {
+      this.protocols[protocol].on('message', (msg) => {
         this.processMessage(msg);
       });
-      this.servers[serverType].on('send', (args) => this.emit('message_out', serverType, args));
+      this.protocols[protocol].on('send', (args) => this.emit('message_out', protocol, args));
     });
 
     // NOTE(jwetzell): websocket server needs the http server instance to load
-    this.servers.http.on('http-server', (server) => {
-      this.servers.ws = new WebSocketServer(server);
-      this.servers.ws.on('message', (msg) => {
+    this.protocols.http.on('http-server', (server) => {
+      this.protocols.ws = new WebSocketServer(server);
+      this.protocols.ws.on('message', (msg) => {
         this.processMessage(msg);
       });
     });
 
-    this.servers.http.on('reload', (updatedConfig) => {
+    this.protocols.http.on('reload', (updatedConfig) => {
       try {
         this.config = updatedConfig;
         this.reload();
@@ -56,12 +56,12 @@ class Router extends EventEmitter {
   }
 
   reload() {
-    Object.keys(this.servers).forEach((serverType) => {
-      if (this.config[serverType]) {
-        if (this.config[serverType].params) {
-          this.servers[serverType].reload(this.config[serverType].params);
+    Object.keys(this.protocols).forEach((protocol) => {
+      if (this.config[protocol]) {
+        if (this.config[protocol].params) {
+          this.protocols[protocol].reload(this.config[protocol].params);
         } else {
-          this.servers[serverType].reload();
+          this.protocols[protocol].reload();
         }
       }
     });
@@ -74,24 +74,30 @@ class Router extends EventEmitter {
       triggers.forEach((trigger, triggerIndex) => {
         try {
           const triggerPath = `${msg.messageType}/triggers/${triggerIndex}`;
-          if (trigger.enabled && trigger.shouldFire(msg)) {
+          if (!trigger.enabled) {
+            logger.debug(`trigger: ${triggerPath}: not enabled`);
+            this.emit('trigger', trigger, `${triggerPath}`, false);
+            return;
+          }
+
+          if (trigger.shouldFire(msg)) {
             this.emit('trigger', trigger, triggerPath, true);
             logger.trace(`trigger: ${triggerPath}: fired`);
             trigger.actions.forEach((action, actionIndex) => {
-              if (action.enabled) {
-                try {
-                  action.do(msg, this.vars, this.servers);
-                  logger.debug(`action: ${action.type} triggered from ${trigger.type}`);
-                } catch (error) {
-                  logger.error(`action: problem running action - ${error}`);
-                }
-              } else {
-                logger.debug(`action: ${action.type} is disabled skipping...`);
+              if (!action.enabled) {
+                logger.debug(`action: ${triggerPath}/actions/${actionIndex}: not enabled`);
+                this.emit('action', trigger, `${triggerPath}/actions/${actionIndex}`, false);
+                return;
               }
-              this.emit('action', trigger, `${triggerPath}/actions/${actionIndex}`, action.enabled);
+
+              try {
+                action.do(msg, this.vars, this.protocols);
+                this.emit('action', trigger, `${triggerPath}/actions/${actionIndex}`, true);
+              } catch (error) {
+                logger.error(`action: problem running action - ${error}`);
+              }
             });
           } else {
-            this.emit('trigger', trigger, `${triggerPath}`, false);
             logger.trace(`trigger: ${triggerPath}: not fired`);
           }
         } catch (error) {

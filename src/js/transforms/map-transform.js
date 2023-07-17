@@ -13,7 +13,7 @@ class MapTransform extends Transform {
       }
       logger.trace(`transform: after ${this.type} = ${msg}`);
     } catch (error) {
-      logger.error(`tranform: problem executing floor transform - ${error}`);
+      logger.error(`transform: problem executing map transform - ${error}`);
     }
   }
 }
