@@ -1609,7 +1609,7 @@
 
     "TransformScale": {
       "title": "Scale Transform",
-      "description": "This tranform will scale the incoming message property",
+      "description": "This transform will scale the incoming message property",
       "type": "object",
       "properties": {
         "type": {
@@ -1647,7 +1647,7 @@
           "additionalProperties": false
         },
         "enabled": {
-          "description": "Whether this tranform is enabled",
+          "description": "Whether this transform is enabled",
           "type": "boolean"
         }
       },
@@ -1676,7 +1676,7 @@
           "additionalProperties": false
         },
         "enabled": {
-          "description": "Whether this tranform is enabled",
+          "description": "Whether this transform is enabled",
           "type": "boolean"
         }
       },
@@ -1705,7 +1705,7 @@
           "additionalProperties": false
         },
         "enabled": {
-          "description": "Whether this tranform is enabled",
+          "description": "Whether this transform is enabled",
           "type": "boolean"
         }
       },
@@ -1738,7 +1738,7 @@
           "additionalProperties": false
         },
         "enabled": {
-          "description": "Whether this tranform is enabled",
+          "description": "Whether this transform is enabled",
           "type": "boolean"
         }
       },
@@ -1771,7 +1771,7 @@
           "additionalProperties": false
         },
         "enabled": {
-          "description": "Whether this tranform is enabled",
+          "description": "Whether this transform is enabled",
           "type": "boolean"
         }
       },
@@ -1804,7 +1804,7 @@
           "additionalProperties": false
         },
         "enabled": {
-          "description": "Whether this tranform is enabled",
+          "description": "Whether this transform is enabled",
           "type": "boolean"
         }
       },
@@ -1837,7 +1837,7 @@
           "additionalProperties": false
         },
         "enabled": {
-          "description": "Whether this tranform is enabled",
+          "description": "Whether this transform is enabled",
           "type": "boolean"
         }
       },
