@@ -43,11 +43,8 @@ function hexToBytes(hex) {
   return bytes;
 }
 
-const transport = pino.transport({
-  target: 'pino-pretty',
-  options: { destination: 1 },
-});
-const logger = pino(transport);
+// TODO(jwetzell): sort out logging
+const logger = pino();
 
 module.exports = {
   resolveTemplatedProperty,
