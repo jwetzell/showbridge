@@ -6,6 +6,7 @@
   "scripts": {
     "pretty": "prettier --write src/*",
     "dev": "nodemon -w src --exec 'node src/app.js -d -c src/config/dev.json' | pino-pretty",
+    "test": "node src/test.js",
     "prepackage": "rimraf dist",
     "package": "pkg ."
   },
