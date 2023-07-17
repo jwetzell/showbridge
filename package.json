@@ -6,7 +6,7 @@
   "bin": "src/index.js",
   "scripts": {
     "pretty": "prettier --write src/*",
-    "dev": "nodemon -w src --exec 'node src/index.js -c src/config/dev.json' | pino-pretty",
+    "dev": "nodemon -w src --exec 'node src/index.js -d -c src/config/dev.json' | pino-pretty",
     "prepackage": "rimraf dist",
     "package": "pkg ."
   },
