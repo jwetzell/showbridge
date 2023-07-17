@@ -34,6 +34,19 @@ function resolveTemplatedProperty(params, property, data) {
   return undefined;
 }
 
+function resolveAllKeys(_obj, data) {
+  const obj = _.cloneDeep(_obj);
+  Object.keys(obj)
+    .filter((key) => key.startsWith('_'))
+    .forEach((templateKey) => {
+      // NOTE(jwetzell): essentially replace _key: "${msg.property}" with key: "resolvedValue"
+      const cleanKey = templateKey.replace('_', '');
+      _.set(obj, cleanKey, resolveTemplatedProperty(obj, cleanKey, data));
+      delete obj[templateKey];
+    });
+  return obj;
+}
+
 function hexToBytes(hex) {
   const cleanHex = hex.replaceAll(' ', '').replaceAll('0x', '').replaceAll(',', '');
   const bytes = [];
@@ -47,6 +60,7 @@ function hexToBytes(hex) {
 const logger = pino();
 
 module.exports = {
+  resolveAllKeys,
   resolveTemplatedProperty,
   hexToBytes,
   logger,
