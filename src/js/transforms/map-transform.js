@@ -3,13 +3,18 @@ const Transform = require('./transform');
 const { logger } = require('../utils/helper');
 
 class MapTransform extends Transform {
-  transform(msg) {
+  transform(msg, vars) {
     logger.trace(`transform: before ${this.type} = ${msg}`);
-    const propertyValue = _.get(msg, this.params.property);
-    if (_.has(this.params.map, propertyValue)) {
-      _.set(msg, this.params.property, this.params.map[propertyValue]);
+    try {
+      const resolvedParams = this.resolveTemplatedParams({ msg, vars });
+      const propertyValue = _.get(msg, resolvedParams.property);
+      if (_.has(resolvedParams.map, propertyValue)) {
+        _.set(msg, resolvedParams.property, resolvedParams.map[propertyValue]);
+      }
+      logger.trace(`transform: after ${this.type} = ${msg}`);
+    } catch (error) {
+      logger.error(`tranform: problem executing floor transform - ${error}`);
     }
-    logger.trace(`transform: after ${this.type} = ${msg}`);
   }
 }
 
