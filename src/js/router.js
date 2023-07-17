@@ -7,10 +7,14 @@ const HTTPServer = require('./protocols/http-server');
 const MQTTClient = require('./protocols/mqtt-client');
 const { logger } = require('./utils/helper');
 const BridgeServer = require('./protocols/bridge-server');
+const Config = require('./config');
 
 class Router extends EventEmitter {
   constructor(config) {
     super();
+    if (!(config instanceof Config)) {
+      throw new Error('router config is not an instance of Config');
+    }
     this.vars = {};
     this.config = config;
     this.protocols = {
@@ -65,6 +69,10 @@ class Router extends EventEmitter {
         }
       }
     });
+  }
+
+  setLogLevel(logLevel) {
+    logger.level = logLevel;
   }
 
   processMessage(msg) {

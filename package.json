@@ -1,17 +1,31 @@
 {
   "name": "oscee",
   "version": "0.0.0",
-  "description": "",
-  "main": "src/index.js",
-  "bin": "src/index.js",
+  "description": "Simple Protocol Router /s",
+  "bin": "src/app.js",
   "scripts": {
     "pretty": "prettier --write src/*",
-    "dev": "nodemon -w src --exec 'node src/index.js -d -c src/config/dev.json' | pino-pretty",
+    "dev": "nodemon -w src --exec 'node src/app.js -d -c src/config/dev.json' | pino-pretty",
     "prepackage": "rimraf dist",
     "package": "pkg ."
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Joel Wetzell",
+    "email": "me@jwetzell.com",
+    "url": "https://jwetzell.com"
+  },
+  "keywords": [
+    "show",
+    "control",
+    "protocol",
+    "router",
+    "theatre"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://git.jwetzell.com/jwetzell/oscee.git"
+  },
+  "license": "GPL-3.0-only",
   "dependencies": {
     "@julusian/midi": "^3.0.1",
     "ajv": "^8.12.0",

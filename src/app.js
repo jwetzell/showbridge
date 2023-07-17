@@ -22,7 +22,7 @@ if (options.debug) {
 }
 
 let config = {};
-// if there is an argument load it as the config
+// if there is a config argument load it as the config
 if (options.config) {
   try {
     logger.debug(`app: loading config from ${options.config}`);
