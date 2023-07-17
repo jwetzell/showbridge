@@ -1,4 +1,4 @@
-const { logger } = require('../utils/helper');
+const { logger, resolveAllKeys } = require('../utils/helper');
 const DelayAction = require('../actions/delay-action');
 const ForwardAction = require('../actions/forward-action');
 const HttpAction = require('../actions/http-action');
@@ -70,6 +70,10 @@ class Trigger {
 
   get comment() {
     return this.obj.comment;
+  }
+
+  resolveTemplatedParams(data) {
+    return resolveAllKeys(this.params, data);
   }
 
   toJSON() {

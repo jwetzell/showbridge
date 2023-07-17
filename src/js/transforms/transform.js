@@ -1,3 +1,5 @@
+const { resolveAllKeys } = require('../utils/helper');
+
 class Transform {
   constructor(transformObj) {
     this.obj = transformObj;
@@ -13,6 +15,10 @@ class Transform {
 
   get enabled() {
     return this.obj.enabled;
+  }
+
+  resolveTemplatedParams(data) {
+    return resolveAllKeys(this.params, data);
   }
 
   toJSON() {

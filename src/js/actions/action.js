@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { logger } = require('../utils/helper');
+const { logger, resolveAllKeys } = require('../utils/helper');
 const FloorTransform = require('../transforms/floor-transform');
 const LogTransform = require('../transforms/log-transform');
 const MapTransform = require('../transforms/map-transform');
@@ -41,6 +41,10 @@ class Action {
         }
       });
     }
+  }
+
+  resolveTemplatedParams(data) {
+    return resolveAllKeys(this.params, data);
   }
 
   get type() {
