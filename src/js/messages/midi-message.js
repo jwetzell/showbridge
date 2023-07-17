@@ -194,7 +194,6 @@ class MIDIMessage {
   }
 
   static parseActionParams(params) {
-    console.log('parse action params called');
     if (params.bytes !== undefined) {
       return new MIDIMessage(params.bytes, 'virtual');
     }
