@@ -30,7 +30,7 @@ class OSCOutputAction extends Action {
         logger.error(`action: unhandled osc output protocol = ${resolvedParams.protocol}`);
       }
     } catch (error) {
-      logger.error(`action: error outputting osc - ${error}`);
+      logger.error(`action: problem executing osc-output action - ${error}`);
     }
   }
 }

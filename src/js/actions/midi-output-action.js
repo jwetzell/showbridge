@@ -15,7 +15,7 @@ class MIDIOutputAction extends Action {
         servers.midi.send(Buffer.from(midiToSend.bytes));
       }
     } catch (error) {
-      logger.error(`action: error outputting midi - ${error}`);
+      logger.error(`action: problem executing midi-output action - ${error}`);
     }
   }
 }

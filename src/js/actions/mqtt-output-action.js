@@ -14,7 +14,7 @@ class MQTTOutputAction extends Action {
         logger.error('action: mqtt-output missing either topic or payload');
       }
     } catch (error) {
-      logger.error(`action: error outputting mqtt - ${error}`);
+      logger.error(`action: problem executing mqtt-output action - ${error}`);
     }
   }
 }
