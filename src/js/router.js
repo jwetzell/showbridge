@@ -6,7 +6,7 @@ const WebSocketServer = require('./protocols/websocket-server');
 const HTTPServer = require('./protocols/http-server');
 const MQTTClient = require('./protocols/mqtt-client');
 const { logger } = require('./utils/helper');
-const BridgeServer = require('./protocols/bridge-server');
+const CloudServer = require('./protocols/cloud-server');
 const Config = require('./config');
 
 class Router extends EventEmitter {
@@ -23,7 +23,7 @@ class Router extends EventEmitter {
       tcp: new TCPServer(),
       midi: new MIDIServer(),
       mqtt: new MQTTClient(),
-      bridge: new BridgeServer(),
+      cloud: new CloudServer(),
     };
 
     this.protocols.http.setConfig(this.config);

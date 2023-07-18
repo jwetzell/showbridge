@@ -22,7 +22,7 @@ class Config {
 
     this.config = configObj;
     this.loadTriggers();
-    this.bridge = this.config.bridge;
+    this.cloud = this.config.cloud;
   }
 
   loadTriggers() {

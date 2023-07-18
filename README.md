@@ -101,7 +101,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 - **shell**
     - _command: JS literal template of shell command to run has access to msg properties
     - command: shell command to run _command has priority
-- **bridge**
+- **cloud-output**
     - room(s): string or array of string representing the room(s) to send the incoming msg (post transforms) to
 
 ## Transforms
@@ -172,14 +172,14 @@ For templating purposes (any param starting with an underscore `_`) the incoming
 - **websocket**
     - payload: ws message content (if this is JSON it will be parsed into an object)
 
-## Bridging instances
-A bridge is mechanism for remotely connecting two router instances. The routers can send messages over the bridge using the bridge-output action mentioned above. To control what messages routers are listening to when multiple routers are connected to the same bridge server the concept of rooms is used. A room is simply a string i.e 'room1', 'super-secret-room-name', etc. when a bridge-output action is used the configured room(s) property of that action controls what room(s) the message will be sent to. The room(s) property of the bridge params controls what room(s) a router is joined to. When a bridge-output sends a message to a room that a router is configured to be in then the router will receive the message sent and process it as if it was a native message.
-### Bridge Example: not sure this will make things any more clear but....
-- assume all routers are configure to connect to the same bridge server
+## Connecting instances remotely?
+Remotely connecting two or more router instances is supported via the cloud config sections. The routers can send messages through the cloud server using the cloud-output action mentioned above. To control what messages routers are listening to when multiple routers are connected to the same cloud server the concept of rooms is used. A room is simply a string i.e 'room1', 'super-secret-room-name', etc. when a cloud-output action is used the configured room(s) property of that action controls what room(s) the message will be sent to. The room(s) property of the cloud params controls what room(s) a router is joined to. When a cloud-output sends a message to a room that a router is configured to be in then the router will receive the message sent and process it as if it was a native message.
+### Cloud Example: not sure this will make things any more clear but....
+- assume all routers are configure to connect to the same cloud server
 - router1 is setup to join `room1` and log all midi-note-on messages
 - router2 is setup to join `room1` and `room2` and log all midi-note-on messages
 - router3 is not setup to be a part of any room
-    - router3 is configured with a midi-note-on trigger with a bridge-output action that has rooms = ["room1","room2"]
-- router3 now receives a midi note_on message the bridge-output action will cause the following
+    - router3 is configured with a midi-note-on trigger with a cloud-output action that has rooms = ["room1","room2"]
+- router3 now receives a midi note_on message the cloud-output action will cause the following
     - router1 will log a midi-note-on message
-    - router2 will log 2 midi-note-on messages (this is because it is joined to 2 rooms and the bridge-output action was configured to send the message to both of the rooms that router2 was joined to)
+    - router2 will log 2 midi-note-on messages (this is because it is joined to 2 rooms and the cloud-output action was configured to send the message to both of the rooms that router2 was joined to)

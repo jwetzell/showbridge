@@ -9,14 +9,14 @@ const MQTTMessage = require('../messages/mqtt-message');
 const WebSocketMessage = require('../messages/websocket-message');
 const HTTPMessage = require('../messages/http-message');
 
-class BridgeServer extends EventEmitter {
+class CloudServer extends EventEmitter {
   reload(params) {
     if (this.socket !== undefined) {
       this.socket.close();
     }
 
     if (params.url === undefined || params.url === '') {
-      logger.debug('bridge: no url provided skipping setup');
+      logger.debug('cloud: no url provided skipping setup');
       return;
     }
 
@@ -25,12 +25,12 @@ class BridgeServer extends EventEmitter {
     });
 
     this.socket.on('connect_error', (error) => {
-      logger.error(`bridge: unable to connect to ${params.url}`);
+      logger.error(`cloud: unable to connect to ${params.url}`);
       logger.error(error);
     });
 
     this.socket.on('connect', () => {
-      logger.debug(`bridge: bridge instance ${params.url} joined`);
+      logger.debug(`cloud: cloud instance ${params.url} joined`);
 
       if (params.rooms) {
         this.socket.emit('join', params.rooms);
@@ -66,7 +66,7 @@ class BridgeServer extends EventEmitter {
               message = MQTTMessage.fromJSON(msgObj);
               break;
             default:
-              logger.error(`bridge: unhandled message type = ${msgObj.messageType}`);
+              logger.error(`cloud: unhandled message type = ${msgObj.messageType}`);
               break;
           }
           if (message) {
@@ -79,32 +79,32 @@ class BridgeServer extends EventEmitter {
 
   send(room, message) {
     if (this.socket === undefined) {
-      logger.error('bridge: connection does not seem to be setup');
+      logger.error('cloud: connection does not seem to be setup');
       return;
     }
 
     if (!this.socket.connected) {
-      logger.error('bridge: connection to bridge is broken');
+      logger.error('cloud: connection to cloud is broken');
       return;
     }
 
     if (message.toJSON === undefined) {
-      logger.error('bridge: message type is not configured correctly for bridge support');
+      logger.error('cloud: message type is not configured correctly for cloud support');
       return;
     }
 
     const messageToSend = message.toJSON();
 
     if (messageToSend === undefined) {
-      logger.error(`bridge: unsupported message type: ${message.messageType}`);
+      logger.error(`cloud: unsupported message type: ${message.messageType}`);
       return;
     }
 
-    logger.debug(`bridge: forwarding ${message.messageType} message to room ${room}`);
+    logger.debug(`cloud: forwarding ${message.messageType} message to room ${room}`);
     this.socket.emit('send', room, messageToSend);
 
     this.emit('send', { room, message });
   }
 }
 
-module.exports = BridgeServer;
+module.exports = CloudServer;

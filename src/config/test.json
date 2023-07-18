@@ -261,7 +261,7 @@
       }
     ]
   },
-  "bridge": {
+  "cloud": {
     "params": {
       "url": "",
       "rooms": ["example-room"]

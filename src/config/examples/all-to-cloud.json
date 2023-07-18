@@ -17,7 +17,7 @@
             "enabled": true
           },
           {
-            "type": "bridge-output",
+            "type": "cloud-output",
             "params": {
               "rooms": ["example-room", "example-room2"]
             },
@@ -42,7 +42,7 @@
             "enabled": true
           },
           {
-            "type": "bridge-output",
+            "type": "cloud-output",
             "params": {
               "room": "example-room"
             },
@@ -67,7 +67,7 @@
             "enabled": true
           },
           {
-            "type": "bridge-output",
+            "type": "cloud-output",
             "params": {
               "room": "example-room"
             },
@@ -96,7 +96,7 @@
             "enabled": true
           },
           {
-            "type": "bridge-output",
+            "type": "cloud-output",
             "params": {
               "room": "example-room"
             },
@@ -125,7 +125,7 @@
             "enabled": true
           },
           {
-            "type": "bridge-output",
+            "type": "cloud-output",
             "params": {
               "room": "example-room"
             },
@@ -154,7 +154,7 @@
             "enabled": true
           },
           {
-            "type": "bridge-output",
+            "type": "cloud-output",
             "params": {
               "room": "example-room"
             },
@@ -180,7 +180,7 @@
         "actions": [
           { "type": "log", "enabled": true },
           {
-            "type": "bridge-output",
+            "type": "cloud-output",
             "params": {
               "room": "example-room"
             },
@@ -191,7 +191,7 @@
       }
     ]
   },
-  "bridge": {
+  "cloud": {
     "params": {
       "url": "http://localhost:8888",
       "room": "test"

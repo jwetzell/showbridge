@@ -231,8 +231,8 @@
       "required": ["triggers", "params"],
       "additionalProperties": false
     },
-    "bridge": {
-      "title": "Bridge configuration",
+    "cloud": {
+      "title": "Cloud configuration",
       "type": "object",
       "properties": {
         "params": {
@@ -241,7 +241,7 @@
             {
               "properties": {
                 "url": {
-                  "description": "bridge url",
+                  "description": "cloud url",
                   "type": "string"
                 },
                 "room": {
@@ -255,7 +255,7 @@
             {
               "properties": {
                 "url": {
-                  "description": "bridge url",
+                  "description": "cloud url",
                   "type": "string"
                 },
                 "rooms": {
@@ -295,7 +295,7 @@
           { "$ref": "#/definitions/ActionHTTP" },
           { "$ref": "#/definitions/ActionDelay" },
           { "$ref": "#/definitions/ActionMQTTOutput" },
-          { "$ref": "#/definitions/ActionBridgeOutput" }
+          { "$ref": "#/definitions/ActionCloudOutput" }
         ]
       }
     },
@@ -371,15 +371,15 @@
       "required": ["type", "params", "enabled"],
       "additionalProperties": false
     },
-    "ActionBridgeOutput": {
+    "ActionCloudOutput": {
       "$schema": "http://json-schema.org/draft-07/schema",
-      "title": "Bridge Output Action",
-      "description": "This action will send the incoming message to the specified bridge room",
+      "title": "Cloud Output Action",
+      "description": "This action will send the incoming message to the specified cloud room",
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "const": "bridge-output"
+          "const": "cloud-output"
         },
         "comment": {
           "type": "string"
@@ -388,7 +388,7 @@
           "$ref": "#/definitions/TransformList"
         },
         "params": {
-          "description": "Bridge Output action params",
+          "description": "Cloud Output action params",
           "type": "object",
           "properties": {},
           "oneOf": [
