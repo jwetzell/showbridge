@@ -15,7 +15,7 @@
 - Install
     - prebuilt binaries (check the releases section)
     - build from source: clone and run `npm install && npm run package` to build binaries located at `dist/bin`
-    - via npm: `npm install -g oscee` or run deirectly with npx `npx oscee -c config.json`
+    - via npm: `npm install -g oscee` or run directly with npx `npx oscee@latest -c config.json`
 - Create config file
     - sorry, this is the worst part [JSON Schema](https://oscee.jwetzell.com/docs/schema/config)
     - good idea to start with [default.json](src/config/default.json)
