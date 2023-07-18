@@ -2,6 +2,7 @@ const { EventEmitter } = require('events');
 const midi = require('@julusian/midi');
 const MIDIMessage = require('../messages/midi-message');
 const { logger } = require('../utils/helper');
+const packageInfo = require('../../../package.json');
 
 class MIDIServer extends EventEmitter {
   constructor() {
@@ -21,8 +22,8 @@ class MIDIServer extends EventEmitter {
     this.virtualInput = new midi.Input();
     this.virtualOutput = new midi.Output();
 
-    let virtualInputName = 'oscee Input';
-    let virtualOutputName = 'oscee Output';
+    let virtualInputName = `${packageInfo.name} Input`;
+    let virtualOutputName = `${packageInfo.name} Output`;
 
     if (params?.virtualInputName) {
       virtualInputName = params.virtualInputName;
@@ -54,7 +55,7 @@ class MIDIServer extends EventEmitter {
     this.inputs = [];
 
     for (let index = 0; index < this.virtualInput.getPortCount(); index += 1) {
-      if (!this.virtualInput.getPortName(index).includes('oscee')) {
+      if (!this.virtualInput.getPortName(index).includes(virtualInputName)) {
         const input = new midi.Input();
         input.openPort(index);
         input.on('message', (deltaTime, msg) => {

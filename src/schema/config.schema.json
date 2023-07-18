@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "Config",
   "title": "Config File Schema",
-  "description": "oscee config JSON layout",
+  "description": "config JSON layout",
   "type": "object",
   "properties": {
     "http": {
@@ -1077,7 +1077,7 @@
     },
     "ActionShell": {
       "title": "Shell Command Action",
-      "description": "This action will execute the configured shell command on the system that is running oscee",
+      "description": "This action will execute the configured shell command on the system that is running the router",
       "type": "object",
       "properties": {
         "type": {
