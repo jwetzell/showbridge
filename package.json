@@ -1,5 +1,5 @@
 {
-  "name": "oscee",
+  "name": "showbridge",
   "version": "0.0.0",
   "description": "Simple Protocol Router /s",
   "bin": "src/app.js",
@@ -24,7 +24,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://git.jwetzell.com/jwetzell/oscee.git"
+    "url": "https://git.jwetzell.com/jwetzell/showbridge.git"
   },
   "license": "GPL-3.0-only",
   "dependencies": {

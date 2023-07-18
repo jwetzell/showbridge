@@ -47,8 +47,8 @@
   },
   "midi": {
     "params": {
-      "virtualInputName": "oscee Input",
-      "virtualOutputName": "oscee Output"
+      "virtualInputName": "showbridge dev Input",
+      "virtualOutputName": "showbridge dev Output"
     },
     "triggers": [
       {

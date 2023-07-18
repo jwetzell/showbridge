@@ -1,6 +1,4 @@
-# oscee
-
-### Simple protocol router _/s_
+## Simple protocol router _/s_
 
 ### Supported Protocols
 - http
@@ -15,12 +13,12 @@
 - Install
     - prebuilt binaries (check the releases section)
     - build from source: clone and run `npm install && npm run package` to build binaries located at `dist/bin`
-    - via npm: `npm install -g oscee` or run directly with npx `npx oscee@latest -c config.json`
+    - via npm: `npm install -g showbridge` or run directly with npx `npx showbridge@latest -c config.json`
 - Create config file
-    - sorry, this is the worst part [JSON Schema](https://oscee.jwetzell.com/docs/schema/config)
+    - sorry, this is the worst part [JSON Schema](https://showbridge.jwetzell.com/docs/schema/config)
     - good idea to start with [default.json](src/config/default.json)
 - Run
-    - `oscee -c config.json`
+    - `showbridge -c config.json`
     - if you would like to turn on debug logging use the `-d` or `--debug` flag
     - if no config file is specified then a [default config](src/config/default.json) will be used
 
