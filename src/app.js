@@ -14,11 +14,16 @@ const packageInfo = require('../package.json');
 program.name('oscee').description('Protocol router');
 program.option('-c, --config <path>', 'location of config file', undefined);
 program.option('-d, --debug', 'turn on debug logging', false);
+program.option('-t, --trace', 'turn on trace logging', false);
 program.parse(process.argv);
 
 const options = program.opts();
 
 if (options.debug) {
+  logger.level = 20;
+}
+
+if (options.trace) {
   logger.level = 10;
 }
 
