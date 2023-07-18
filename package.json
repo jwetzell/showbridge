@@ -5,7 +5,7 @@
   "bin": "src/app.js",
   "scripts": {
     "pretty": "prettier --write src/*",
-    "dev": "nodemon -w src --exec 'node src/app.js -d -c src/config/dev.json' | pino-pretty",
+    "dev": "nodemon -w src --exec 'node src/app.js -d -c src/config/dev.json'",
     "test": "node src/test.js",
     "prepackage": "rimraf dist",
     "package": "pkg ."
@@ -37,6 +37,7 @@
     "mqtt": "^4.3.7",
     "osc-min": "^1.1.2",
     "pino": "^8.14.1",
+    "pino-pretty": "^10.0.1",
     "slip": "^1.0.2",
     "socket.io-client": "^4.7.1",
     "superagent": "^8.0.9",
@@ -47,7 +48,6 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.8.0",
     "nodemon": "^3.0.1",
-    "pino-pretty": "^10.0.1",
     "pkg": "^5.8.1",
     "prettier": "^3.0.0",
     "rimraf": "^5.0.1"

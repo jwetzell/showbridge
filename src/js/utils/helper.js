@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const pino = require('pino');
+const pretty = require('pino-pretty');
 
 function resolveTemplatedProperty(params, property, data) {
   if (_.has(params, `_${property}`)) {
@@ -57,7 +58,7 @@ function hexToBytes(hex) {
 }
 
 // TODO(jwetzell): sort out logging
-const logger = pino();
+const logger = pino(pretty());
 
 module.exports = {
   resolveAllKeys,
