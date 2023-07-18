@@ -25,7 +25,11 @@
           "type": "array",
           "items": {
             "type": "object",
-            "oneOf": [{ "$ref": "#/definitions/TriggerSender" }, { "$ref": "#/definitions/TriggerRegex" }]
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerAny" }
+            ]
           }
         }
       },
@@ -41,7 +45,11 @@
           "type": "array",
           "items": {
             "type": "object",
-            "oneOf": [{ "$ref": "#/definitions/TriggerSender" }, { "$ref": "#/definitions/TriggerRegex" }]
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerAny" }
+            ]
           }
         }
       },
@@ -61,7 +69,8 @@
               { "$ref": "#/definitions/TriggerSender" },
               { "$ref": "#/definitions/TriggerRegex" },
               { "$ref": "#/definitions/TriggerBytesEqual" },
-              { "$ref": "#/definitions/TriggerOSCAddress" }
+              { "$ref": "#/definitions/TriggerOSCAddress" },
+              { "$ref": "#/definitions/TriggerAny" }
             ]
           }
         }
@@ -99,7 +108,8 @@
               { "$ref": "#/definitions/TriggerMIDINoteOff" },
               { "$ref": "#/definitions/TriggerMIDINoteOn" },
               { "$ref": "#/definitions/TriggerMIDIControlChange" },
-              { "$ref": "#/definitions/TriggerMIDIProgramChange" }
+              { "$ref": "#/definitions/TriggerMIDIProgramChange" },
+              { "$ref": "#/definitions/TriggerAny" }
             ]
           }
         }
@@ -134,7 +144,8 @@
             "oneOf": [
               { "$ref": "#/definitions/TriggerRegex" },
               { "$ref": "#/definitions/TriggerSender" },
-              { "$ref": "#/definitions/TriggerBytesEqual" }
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerAny" }
             ]
           }
         }
@@ -169,7 +180,8 @@
             "oneOf": [
               { "$ref": "#/definitions/TriggerRegex" },
               { "$ref": "#/definitions/TriggerSender" },
-              { "$ref": "#/definitions/TriggerBytesEqual" }
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerAny" }
             ]
           }
         }
@@ -212,7 +224,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "oneOf": [{ "$ref": "#/definitions/TriggerRegex" }]
+            "oneOf": [{ "$ref": "#/definitions/TriggerRegex" }, { "$ref": "#/definitions/TriggerAny" }]
           }
         }
       },
@@ -1252,6 +1264,30 @@
         }
       },
       "required": ["type", "params", "enabled"],
+      "additionalProperties": false
+    },
+
+    "TriggerAny": {
+      "title": "Any Trigger",
+      "description": "This trigger will match any message",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "any"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "enabled"],
       "additionalProperties": false
     },
 

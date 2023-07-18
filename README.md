@@ -36,6 +36,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 - enabled: boolean - if false the piece is skipped and so are the underlying pieces. i.e. if a trigger is disabled no actions under that trigger will be performed, if an action is disabled no transforms under that action will be performed
 
 ## Triggers
+- **any**: fires for any incoming message
 - **regex**
     - patterns: a list of regex patterns as strings
     - properties: a list of properties to test with their respective patterns, must be 1:1 

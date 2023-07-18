@@ -9,6 +9,7 @@ const MIDIProgramChangeTrigger = require('./triggers/midi-program-change-trigger
 const OSCAddressTrigger = require('./triggers/osc-address-trigger');
 const RegexTrigger = require('./triggers/regex-trigger');
 const SenderTrigger = require('./triggers/sender-trigger');
+const AnyTrigger = require('./triggers/any-trigger');
 
 const validate = new Ajv().compile(schema);
 const messageTypes = ['http', 'ws', 'osc', 'midi', 'tcp', 'udp', 'mqtt'];
@@ -47,6 +48,8 @@ class Config {
               return new RegexTrigger(trigger);
             case 'sender':
               return new SenderTrigger(trigger);
+            case 'any':
+              return new AnyTrigger(trigger);
             default:
               logger.error(`config: unhandled trigger type = ${trigger.type}`);
               return undefined;
