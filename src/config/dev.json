@@ -6,11 +6,7 @@
     },
     "triggers": [
       {
-        "type": "regex",
-        "params": {
-          "patterns": [".*"],
-          "properties": ["originalUrl"]
-        },
+        "type": "any",
         "actions": [
           {
             "type": "log",
@@ -24,11 +20,7 @@
   "ws": {
     "triggers": [
       {
-        "type": "regex",
-        "params": {
-          "patterns": [".*"],
-          "properties": ["payload"]
-        },
+        "type": "any",
         "actions": [
           {
             "type": "log",
@@ -42,11 +34,7 @@
   "osc": {
     "triggers": [
       {
-        "type": "regex",
-        "params": {
-          "patterns": [".*"],
-          "properties": ["address"]
-        },
+        "type": "any",
         "actions": [
           {
             "type": "log",
@@ -64,24 +52,10 @@
     },
     "triggers": [
       {
-        "type": "midi-note-on",
-        "params": {
-          "port": "virtual"
-        },
+        "type": "any",
         "actions": [
           {
             "type": "log",
-            "transforms": [
-              {
-                "type": "scale",
-                "params": {
-                  "property": "note",
-                  "inRange": [0, 127],
-                  "outRange": [0, 12.7]
-                },
-                "enabled": true
-              }
-            ],
             "enabled": true
           }
         ],
@@ -96,11 +70,7 @@
     },
     "triggers": [
       {
-        "type": "regex",
-        "params": {
-          "patterns": [".*"],
-          "properties": ["string"]
-        },
+        "type": "any",
         "actions": [
           {
             "type": "log",
@@ -118,11 +88,7 @@
     },
     "triggers": [
       {
-        "type": "regex",
-        "params": {
-          "patterns": [".*"],
-          "properties": ["string"]
-        },
+        "type": "any",
         "actions": [
           {
             "type": "log",
@@ -140,11 +106,7 @@
     },
     "triggers": [
       {
-        "type": "regex",
-        "params": {
-          "patterns": [".*"],
-          "properties": ["topic"]
-        },
+        "type": "any",
         "actions": [{ "type": "log", "enabled": true }],
         "enabled": true
       }
@@ -153,7 +115,7 @@
   "bridge": {
     "params": {
       "url": "",
-      "rooms": ["example-room", "example-room2"]
+      "rooms": ["example-room"]
     }
   }
 }
