@@ -9,6 +9,7 @@ const { logger } = require('./js/utils/helper');
 const Config = require('./js/config');
 const defaultConfig = require('./config/default.json');
 const Router = require('./js/router');
+const packageInfo = require('../package.json');
 
 program.name('oscee').description('Protocol router');
 program.option('-c, --config <path>', 'location of config file', undefined);
@@ -20,6 +21,8 @@ const options = program.opts();
 if (options.debug) {
   logger.level = 10;
 }
+
+logger.debug(`app: starting oscee version: ${packageInfo.version}`);
 
 let config = {};
 // if there is a config argument load it as the config
