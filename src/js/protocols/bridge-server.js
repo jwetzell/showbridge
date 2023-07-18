@@ -20,7 +20,9 @@ class BridgeServer extends EventEmitter {
       return;
     }
 
-    this.socket = io(params.url);
+    this.socket = io(params.url, {
+      transports: ['websocket'],
+    });
 
     this.socket.on('connect_error', (error) => {
       logger.error(`bridge: unable to connect to ${params.url}`);
@@ -28,6 +30,8 @@ class BridgeServer extends EventEmitter {
     });
 
     this.socket.on('connect', () => {
+      logger.debug(`bridge: bridge instance ${params.url} joined`);
+
       if (params.rooms) {
         this.socket.emit('join', params.rooms);
       }
