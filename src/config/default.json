@@ -3,41 +3,83 @@
     "params": {
       "port": 3000
     },
-    "triggers": []
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
   },
   "ws": {
-    "triggers": []
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
   },
   "osc": {
-    "triggers": []
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
   },
   "midi": {
     "params": {
       "virtualInputName": "oscee Input",
       "virtualOutputName": "oscee Output"
     },
-    "triggers": []
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
   },
   "udp": {
     "params": {
       "address": "0.0.0.0",
       "port": 8000
     },
-    "triggers": []
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
   },
   "tcp": {
     "params": {
       "address": "0.0.0.0",
       "port": 8000
     },
-    "triggers": []
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
   },
   "mqtt": {
     "params": {
       "broker": "",
       "topics": []
     },
-    "triggers": []
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
   },
   "bridge": {
     "params": {
