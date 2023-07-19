@@ -4,12 +4,12 @@
 const { readFileSync } = require('fs');
 
 const { program } = require('commander');
-const { logger } = require('./js/utils/helper');
+const { logger } = require('../../lib/utils/helper');
 
-const Config = require('./js/config');
-const defaultConfig = require('./config/default.json');
-const Router = require('./js/router');
-const packageInfo = require('../package.json');
+const Config = require('../../lib/config');
+const defaultConfig = require('../../config/default.json');
+const Router = require('../../lib/router');
+const packageInfo = require('../../package.json');
 
 program.name(packageInfo.name).description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);

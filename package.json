@@ -2,11 +2,11 @@
   "name": "showbridge",
   "version": "0.0.0",
   "description": "Simple Protocol Router /s",
-  "bin": "src/app.js",
+  "bin": "apps/cli/main.js",
   "scripts": {
-    "pretty": "prettier --write src/*",
-    "dev": "nodemon -w src --exec 'node src/app.js -d -c src/config/dev.json'",
-    "test": "node src/test.js",
+    "pretty": "prettier --write lib/*",
+    "dev": "nodemon -w lib --exec 'node apps/cli/main.js -d -c config/dev.json'",
+    "test": "node tests/test.js",
     "prepackage": "rimraf dist",
     "package": "pkg ."
   },

@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-const { logger } = require('./js/utils/helper');
+const { logger } = require('../lib/utils/helper');
 
-const Config = require('./js/config');
-const testConfig = require('./config/test.json');
-const Router = require('./js/router');
-const MIDIMessage = require('./js/messages/midi-message');
-const UDPMessage = require('./js/messages/udp-message');
-const TCPMessage = require('./js/messages/tcp-message');
-const MQTTMessage = require('./js/messages/mqtt-message');
-const WebSocketMessage = require('./js/messages/websocket-message');
-const HTTPMessage = require('./js/messages/http-message');
+const Config = require('../lib/config');
+const testConfig = require('./test.json');
+const Router = require('../lib/router');
+const MIDIMessage = require('../lib/messages/midi-message');
+const UDPMessage = require('../lib/messages/udp-message');
+const TCPMessage = require('../lib/messages/tcp-message');
+const MQTTMessage = require('../lib/messages/mqtt-message');
+const WebSocketMessage = require('../lib/messages/websocket-message');
+const HTTPMessage = require('../lib/messages/http-message');
 
 logger.info(`app: loading test config`);
 const config = new Config(testConfig);
