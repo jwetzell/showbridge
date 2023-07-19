@@ -239,6 +239,7 @@
           "type": "object",
           "oneOf": [
             {
+              "title": "Single Room Config",
               "properties": {
                 "url": {
                   "description": "cloud url",
@@ -253,6 +254,7 @@
               "additionalProperties": false
             },
             {
+              "title": "Multi Room Config",
               "properties": {
                 "url": {
                   "description": "cloud url",
@@ -393,6 +395,7 @@
           "properties": {},
           "oneOf": [
             {
+              "title": "Single Room Output",
               "properties": {
                 "room": {
                   "description": "room to send the message to",
@@ -403,6 +406,7 @@
               "additionalProperties": false
             },
             {
+              "title": "Multi Room Output",
               "properties": {
                 "rooms": {
                   "description": "array of rooms to send the message to",
@@ -466,7 +470,6 @@
         "params": {
           "description": "MIDI output action params",
           "type": "object",
-          "properties": {},
           "oneOf": [
             {
               "title": "MIDI Bytes",
@@ -483,6 +486,7 @@
                   "maxItems": 3
                 }
               },
+              "required": ["bytes"],
               "additionalProperties": false
             },
             {
