@@ -8,7 +8,8 @@
     "dev": "nodemon -w lib --exec 'node apps/cli/main.js -d -c config/dev.json'",
     "test": "node tests/test.js",
     "prepackage": "rimraf dist",
-    "package": "pkg ."
+    "package": "pkg .",
+    "electron": "electron apps/launcher/main.js"
   },
   "author": {
     "name": "Joel Wetzell",
@@ -44,6 +45,7 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
+    "electron": "^25.3.0",
     "eslint": "^8.44.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.8.0",
