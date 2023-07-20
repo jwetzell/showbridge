@@ -1,7 +1,18 @@
-.log-container {
-  border: 1px solid #44475a;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  -webkit-app-region: drag;
 }
 
-#log {
-  color: #f8f8f2;
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+.title {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-size: 35px;
 }
