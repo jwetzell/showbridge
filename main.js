@@ -46,4 +46,47 @@ if (options.config) {
 }
 
 const router = new Router(config);
+
+process.on('message', (message) => {
+  switch (message.eventType) {
+    case 'check_config':
+      try {
+        const newConfig = new Config(message.config);
+        process.send({
+          eventType: 'config_valid',
+          config: newConfig.toJSON(),
+        });
+      } catch (error) {
+        process.send({
+          eventType: 'config_error',
+          error,
+        });
+        logger.error(`app: problem loading new config`);
+        logger.error(error.toString());
+      }
+      break;
+    case 'update_config':
+      try {
+        router.config = new Config(message.config);
+        router.reload();
+        logger.info('app: new config applied router reload');
+      } catch (error) {
+        process.send({
+          eventType: 'config_error',
+          error,
+        });
+        logger.error(`app: problem loading new config`);
+        logger.error(error.toString());
+      }
+      break;
+    case 'destroy':
+      router.stop();
+      process.exit(0);
+      break;
+    default:
+      logger.error(`app: unhandled process event type = ${message.eventType}`);
+      break;
+  }
+});
+
 router.start();

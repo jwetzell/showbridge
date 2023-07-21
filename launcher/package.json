@@ -7,8 +7,10 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "prebuild:linux": "cd ../ && npm run bundle",
+    "prebuild:linux": "npm run tailwind && cd ../ && npm run bundle",
     "build:linux": "electron-builder -l",
+    "tailwind": "tailwindcss build -i tailwind.css -o assets/css/tailwind.css",
+    "prestart": "npm run tailwind",
     "start": "electron main.js"
   },
   "dependencies": {
@@ -19,7 +21,8 @@
     "@electron/notarize": "^1.2.3",
     "electron": "^24.6.3",
     "electron-builder": "^23.6.0",
-    "electron-reloader": "^1.2.3"
+    "electron-reloader": "^1.2.3",
+    "tailwindcss": "^3.3.3"
   },
   "build": {
     "productName": "showbridge",
