@@ -46,7 +46,11 @@ function quitApp() {
 }
 
 function createTray() {
-  tray = new electron.Tray('assets/images/icon.png');
+  if (process.platform === 'darwin') {
+    tray = new electron.Tray(path.join(__dirname, 'assets/images/icon16x16.png'));
+  } else {
+    tray = new electron.Tray(path.join(__dirname, './assets/icon.png'));
+  }
   tray.setIgnoreDoubleClickEvents(true);
 
   const menu = new electron.Menu();
@@ -73,6 +77,7 @@ function createWindow() {
     resizable: false,
     roundedCorners: false,
     transparent: true,
+    icon: path.join(__dirname, './assets/icon.png'),
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js'),
@@ -123,7 +128,6 @@ app.whenReady().then(() => {
     }
 
     // NOTE(jwetzell): evaluate how node binary will need to be determined when it comes to a packaged app
-    console.log(rootPath);
     showbridgeProcess = respawn(
       () => ['node', path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath, `-t`],
       {
@@ -184,6 +188,7 @@ app.whenReady().then(() => {
     showbridgeProcess.on('exit', (code) => {
       console.log(`process exit ${code}`);
       if (!restartProcess) {
+        // TODO(jwetzell) figure out why this doesn't exit on built mac app
         app.exit();
       }
     });

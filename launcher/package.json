@@ -9,6 +9,8 @@
   "scripts": {
     "prebuild:linux": "npm run tailwind && cd ../ && npm run bundle",
     "build:linux": "electron-builder -l",
+    "build:mac": "electron-builder -m",
+    "build:win": "electron-builder -w",
     "tailwind": "tailwindcss build -i tailwind.css -o assets/css/tailwind.css",
     "prestart": "npm run tailwind",
     "start": "electron main.js"
@@ -27,30 +29,30 @@
   "build": {
     "productName": "showbridge",
     "appId": "showbridge.jwetzell.com",
-    "remoteBuild": false,
     "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
-    "dmg": {
-      "sign": true
-    },
     "mac": {
-      "target": "dmg",
-      "category": "com.jwetzell.showbridge",
-      "extendInfo": {
-        "LSBackgroundOnly": 1,
-        "LSUIElement": 1
-      },
-      "hardenedRuntime": "true",
-      "gatekeeperAssess": "false"
+      "category": "Utilities",
+      "icon": "assets/images/icon512x512.png",
+      "hardenedRuntime": true,
+      "electronLanguages": [
+        "en"
+      ],
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
     },
     "win": {
-      "target": "nsis"
+      "target": "NSIS",
+      "icon": "src/assets/img/icon512x512.png"
     },
     "nsis": {
-      "createStartMenuShortcut": true,
-      "perMachine": true,
-      "oneClick": false,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true
+      "oneClick": false
     },
     "directories": {
       "output": "../dist/electron-output/"
