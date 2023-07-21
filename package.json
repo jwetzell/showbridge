@@ -2,13 +2,15 @@
   "name": "showbridge",
   "version": "0.0.0",
   "description": "Simple Protocol Router /s",
-  "bin": "apps/cli/main.js",
+  "bin": "main.js",
   "scripts": {
     "pretty": "prettier --write lib/*",
-    "dev": "nodemon -w lib --exec 'node apps/cli/main.js -d -c config/dev.json'",
+    "dev": "nodemon --exec 'node main.js -d -c config/dev.json'",
     "test": "node tests/test.js",
-    "prepackage": "rimraf dist",
-    "package": "pkg ."
+    "prepackage": "rimraf dist/bin",
+    "package": "pkg .",
+    "prebundle": "rimraf dist/bundle",
+    "bundle": "ncc build main.js -o dist/bundle && cp -r node_modules/@julusian/midi/prebuilds dist/bundle"
   },
   "author": {
     "name": "Joel Wetzell",
@@ -44,6 +46,8 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
+    "@vercel/ncc": "^0.36.1",
+    "esbuild": "^0.18.15",
     "eslint": "^8.44.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.8.0",

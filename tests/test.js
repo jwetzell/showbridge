@@ -1,15 +1,9 @@
 #!/usr/bin/env node
-const { logger } = require('../lib/utils/helper');
+const { logger } = require('../lib/utils');
+const { Config, Router } = require('../lib');
+const { MIDIMessage, UDPMessage, TCPMessage, MQTTMessage, WebSocketMessage, HTTPMessage } = require('../lib/messages');
 
-const Config = require('../lib/config');
 const testConfig = require('./test.json');
-const Router = require('../lib/router');
-const MIDIMessage = require('../lib/messages/midi-message');
-const UDPMessage = require('../lib/messages/udp-message');
-const TCPMessage = require('../lib/messages/tcp-message');
-const MQTTMessage = require('../lib/messages/mqtt-message');
-const WebSocketMessage = require('../lib/messages/websocket-message');
-const HTTPMessage = require('../lib/messages/http-message');
 
 logger.info(`app: loading test config`);
 const config = new Config(testConfig);
