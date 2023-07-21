@@ -1,0 +1,72 @@
+{
+  "name": "showbridge-launcher",
+  "description": "showbridge",
+  "version": "0.0.1",
+  "main": "main.js",
+  "license": "MIT",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build:linux": "electron-builder -l",
+    "start": "electron main.js"
+  },
+  "dependencies": {
+    "fs-extra": "^11.1.1",
+    "respawn": "^2.6.0"
+  },
+  "devDependencies": {
+    "@electron/notarize": "^1.2.3",
+    "electron": "^24.6.3",
+    "electron-builder": "^23.6.0",
+    "electron-reloader": "^1.2.3"
+  },
+  "build": {
+    "productName": "showbridge",
+    "appId": "showbridge.jwetzell.com",
+    "remoteBuild": false,
+    "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
+    "dmg": {
+      "sign": true
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "com.jwetzell.showbridge",
+      "extendInfo": {
+        "LSBackgroundOnly": 1,
+        "LSUIElement": 1
+      },
+      "hardenedRuntime": "true",
+      "gatekeeperAssess": "false"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "createStartMenuShortcut": true,
+      "perMachine": true,
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "directories": {
+      "output": "../../dist/electron-output/"
+    },
+    "linux": {
+      "target": "AppImage",
+      "extraFiles": []
+    },
+    "files": [
+      "**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../cli",
+        "to": "./cli"
+      },
+      {
+        "from": "../../config",
+        "to": "."
+      }
+    ]
+  }
+}
