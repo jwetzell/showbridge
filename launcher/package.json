@@ -7,6 +7,7 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
+    "prebuild:linux": "cd ../ && npm run bundle",
     "build:linux": "electron-builder -l",
     "start": "electron main.js"
   },
@@ -49,7 +50,7 @@
       "allowToChangeInstallationDirectory": true
     },
     "directories": {
-      "output": "../../dist/electron-output/"
+      "output": "../dist/electron-output/"
     },
     "linux": {
       "target": "AppImage",
@@ -60,12 +61,12 @@
     ],
     "extraResources": [
       {
-        "from": "../cli",
-        "to": "./cli"
+        "from": "../dist/bundle",
+        "to": "./dist/bundle"
       },
       {
-        "from": "../../config",
-        "to": "."
+        "from": "../config",
+        "to": "./config"
       }
     ]
   }

@@ -4,7 +4,7 @@ const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const respawn = require('respawn');
-const defaultConfig = require('../../config/default.json');
+const defaultConfig = require('../config/default.json');
 
 let win;
 
@@ -40,18 +40,21 @@ app.whenReady().then(() => {
     }
 
     // NOTE(jwetzell): evaluate how node binary will need to be determined when it comes to a packaged app
-
-    const showbridgeProcess = respawn(() => ['node', path.join(rootPath, 'cli/main.js'), '-c', configFilePath, `-t`], {
-      name: 'showbridge process',
-      env: {
-        IPC_PARENT: 1,
-      },
-      maxRestarts: -1,
-      sleep: 1000,
-      kill: 5000,
-      cwd: rootPath,
-      stdio: [null, null, null, 'ipc'],
-    });
+    console.log(rootPath);
+    const showbridgeProcess = respawn(
+      () => ['node', path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath, `-t`],
+      {
+        name: 'showbridge process',
+        env: {
+          IPC_PARENT: 1,
+        },
+        maxRestarts: -1,
+        sleep: 1000,
+        kill: 5000,
+        cwd: rootPath,
+        stdio: [null, null, null, 'ipc'],
+      }
+    );
 
     showbridgeProcess.on('start', () => {
       console.log('process start');
