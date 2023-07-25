@@ -4,22 +4,25 @@
     <meta charset="UTF-8" />
     <title>showbridge</title>
     <link rel="stylesheet" href="./assets/css/tailwind.css" />
+    <link rel="stylesheet" href="./assets/css/index.css" />
   </head>
-  <body class="h-screen w-screen bg-black">
-      <div class="bg-blue-500 flex flex-col items-center justify-center h-10 w-full text-gray-300">
+  <body class="w-screen h-screen bg-black">
+    <div id="contents">
+      <div #id="title-bar" class="flex flex-col items-center justify-center w-full h-10 text-gray-300 bg-blue-500">
         <div class="">showbridge</div>
       </div>
 
-      <div id="drag-container" class="m-2 border-solid border-gray-500 bg-gray-600 hover:bg-gray-700">
+      <div id="drag-drop-container" class="m-2 bg-gray-600 border-gray-500 border-solid hover:bg-gray-700">
         <div class="flex flex-col items-center justify-center w-full h-24">
           <h3>Update Config</h3>
         </div>
       </div>
     </div>
 
-    <div class="flex justify-around items-center">
-      <div><button id="quit-button" class="bg-gray-200 rounded-sm px-2">Quit</button></div>
-      <div><button id="show-logs" class="bg-gray-200 rounded-sm px-2">Logs</button></div>
+    <div class="flex items-center justify-around">
+      <div><button id="quit-button" class="px-2 bg-gray-200 rounded-sm">Quit</button></div>
+      <div><button id="show-logs" class="px-2 bg-gray-200 rounded-sm">Logs</button></div>
+    </div>
     </div>
     <script type="text/javascript" src="assets/js/main.js"></script>
   </body>
