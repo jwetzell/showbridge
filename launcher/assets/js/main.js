@@ -1,4 +1,4 @@
-const dragContainer = document.getElementById('drag-container');
+const dragContainer = document.getElementById('drag-drop-container');
 dragContainer.onclick = (event) => {
   window.electron.send('load_config');
 };
