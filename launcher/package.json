@@ -30,9 +30,9 @@
     "productName": "showbridge",
     "appId": "showbridge.jwetzell.com",
     "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
+    "icon": "./assets/images/icon512x512.png",
     "mac": {
       "category": "Utilities",
-      "icon": "assets/images/icon512x512.png",
       "hardenedRuntime": true,
       "electronLanguages": [
         "en"
@@ -48,8 +48,7 @@
       ]
     },
     "win": {
-      "target": "NSIS",
-      "icon": "src/assets/img/icon512x512.png"
+      "target": "NSIS"
     },
     "nsis": {
       "oneClick": false
@@ -58,8 +57,7 @@
       "output": "../dist/electron-output/"
     },
     "linux": {
-      "target": "AppImage",
-      "extraFiles": []
+      "target": "AppImage"
     },
     "files": [
       "**/*"

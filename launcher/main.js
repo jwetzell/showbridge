@@ -1,19 +1,22 @@
 // NOTE(jwetzell): HEAVY inspiration from https://github.com/bitfocus/companion/launcher
 
-const electron = require('electron');
-const { app, BrowserWindow, dialog, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem } = require('electron');
 
 const path = require('path');
 const fs = require('fs-extra');
 const respawn = require('respawn');
 const defaultConfig = require('../config/default.json');
 
+let rootPath = process.resourcesPath;
+
 let restartProcess = true;
 
 let showbridgeProcess;
 let win;
+let logWin;
 let tray;
 let configDir;
+let configFilePath;
 
 function toggleWindow() {
   if (win.isVisible()) {
@@ -25,10 +28,10 @@ function toggleWindow() {
 }
 
 function quitApp() {
-  electron.dialog
+  dialog
     .showMessageBox(undefined, {
       title: 'showbridge',
-      message: 'Sure you want to quit showbridge?',
+      message: 'Are you sure you want to quit showbridge?',
       buttons: ['Quit', 'Cancel'],
     })
     .then((resp) => {
@@ -45,28 +48,18 @@ function quitApp() {
     });
 }
 
-function createTray() {
-  if (process.platform === 'darwin') {
-    tray = new electron.Tray(path.join(__dirname, 'assets/images/icon16x16.png'));
-  } else {
-    tray = new electron.Tray(path.join(__dirname, './assets/icon.png'));
-  }
-  tray.setIgnoreDoubleClickEvents(true);
-
-  const menu = new electron.Menu();
-  menu.append(
-    new electron.MenuItem({
-      label: 'Show/Hide Window',
-      click: toggleWindow,
-    })
-  );
-  menu.append(
-    new electron.MenuItem({
-      label: 'Quit',
-      click: quitApp,
-    })
-  );
-  tray.setContextMenu(menu);
+function createLogWindow() {
+  logWin = new BrowserWindow({
+    width: 700,
+    height: 500,
+    webPreferences: {
+      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  });
+  logWin.removeMenu();
+  logWin.loadFile('logger.html');
+  // logWin.webContents.openDevTools();
 }
 
 function createWindow() {
@@ -77,7 +70,7 @@ function createWindow() {
     resizable: false,
     roundedCorners: false,
     transparent: true,
-    icon: path.join(__dirname, './assets/icon.png'),
+    icon: path.join(__dirname, './assets/images/icon512x512.png'),
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js'),
@@ -85,6 +78,48 @@ function createWindow() {
   });
   win.loadFile('index.html');
   // win.webContents.openDevTools();
+}
+
+function createTray() {
+  tray = new Tray(path.join(__dirname, 'assets/images/icon16x16.png'));
+  tray.setIgnoreDoubleClickEvents(true);
+
+  const menu = new Menu();
+  menu.append(
+    new MenuItem({
+      label: 'Show/Hide Window',
+      click: toggleWindow,
+    })
+  );
+  menu.append(
+    new MenuItem({
+      label: 'View Logs',
+      click: createLogWindow,
+    })
+  );
+  menu.append(
+    new MenuItem({
+      label: 'Quit',
+      click: quitApp,
+    })
+  );
+  tray.setContextMenu(menu);
+}
+
+function reloadConfigFromDisk() {
+  if (configFilePath && fs.existsSync(configFilePath)) {
+    try {
+      const config = JSON.parse(fs.readFileSync(configFilePath));
+      showbridgeProcess.child.send({
+        eventType: 'update_config',
+        config,
+      });
+    } catch (error) {
+      dialog.showErrorBox('Error', error.toString());
+    }
+  } else {
+    dialog.showErrorBox('Error', 'No config found on disk.');
+  }
 }
 
 function loadConfigFromFile(configPath) {
@@ -101,7 +136,6 @@ function loadConfigFromFile(configPath) {
         }
       }
     } catch (error) {
-      console.error(error);
       dialog.showErrorBox('Error', error.toString());
     }
   } else {
@@ -115,30 +149,30 @@ app.whenReady().then(() => {
   if (!fs.existsSync(configDir)) {
     fs.mkdirSync(configDir);
   }
-  const configFilePath = path.join(configDir, 'config.json');
+  configFilePath = path.join(configDir, 'config.json');
   console.log(`config file exists: ${fs.existsSync(configFilePath)}`);
   if (!fs.existsSync(configFilePath)) {
-    fs.writeFileSync(configFilePath, JSON.stringify(defaultConfig));
+    console.log('populating config.json with default config');
+    fs.writeFileSync(configFilePath, JSON.stringify(defaultConfig, null, 2));
   }
 
   try {
-    let rootPath = process.resourcesPath;
+    createWindow();
+    createTray();
+
     if (!app.isPackaged) {
       rootPath = path.join(__dirname, '..');
     }
 
     // NOTE(jwetzell): evaluate how node binary will need to be determined when it comes to a packaged app
-    showbridgeProcess = respawn(
-      () => ['node', path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath, `-t`],
-      {
-        name: 'showbridge process',
-        maxRestarts: -1,
-        sleep: 1000,
-        kill: 5000,
-        cwd: rootPath,
-        stdio: [null, null, null, 'ipc'],
-      }
-    );
+    showbridgeProcess = respawn(() => ['node', path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath], {
+      name: 'showbridge process',
+      maxRestarts: 3,
+      sleep: 1000,
+      kill: 5000,
+      cwd: rootPath,
+      stdio: [null, null, null, 'ipc'],
+    });
 
     showbridgeProcess.on('start', () => {
       if (showbridgeProcess.child) {
@@ -153,21 +187,19 @@ app.whenReady().then(() => {
                   buttons: ['Apply', 'Cancel'],
                   defaultId: 0,
                   title: 'Apply Config',
-                  message: 'This looks like a valid config JSON. Would you like to apply it?',
+                  message: 'This looks like a valid config JSON file. Would you like to apply it?',
                 })
                 .then((response) => {
                   if (response.response === 0) {
-                    showbridgeProcess.child.send({
-                      eventType: 'update_config',
-                      config: message.config,
-                    });
+                    fs.writeFileSync(configFilePath, JSON.stringify(message.config, null, 2));
+                    reloadConfigFromDisk();
                   }
                 });
               break;
             case 'config_error':
-              console.error('problems with config');
               // TODO(jwetzell): format these errors better
-              dialog.showErrorBox('Error', JSON.stringify(message.error.toString()));
+              win.webContents.send('config_error', message.errors);
+              dialog.showErrorBox('Error', message.errors.map((error) => error.message).join('\n'));
               break;
             default:
               break;
@@ -177,16 +209,15 @@ app.whenReady().then(() => {
     });
 
     showbridgeProcess.on('stop', () => {
-      console.log('process stop');
+      console.log('showbridge process stopped');
     });
 
     showbridgeProcess.on('spawn', () => {
       // TODO(jwetzell): catch loops in underlying command crashing
-      console.log('process spawn');
+      console.log('showbridge process spawned');
     });
 
     showbridgeProcess.on('exit', (code) => {
-      console.log(`process exit ${code}`);
       if (!restartProcess) {
         // TODO(jwetzell) figure out why this doesn't exit on built mac app
         app.exit();
@@ -194,25 +225,28 @@ app.whenReady().then(() => {
     });
 
     showbridgeProcess.on('stdout', (data) => {
-      console.log(`stdout ${data}`);
+      if (logWin && !logWin.isDestroyed()) {
+        logWin.webContents.send('log', data.toString());
+      }
     });
+
     showbridgeProcess.on('stderr', (data) => {
-      console.log(`stderr ${data}`);
+      if (logWin && !logWin.isDestroyed()) {
+        logWin.webContents.send('log', data.toString());
+      }
     });
 
     showbridgeProcess.start();
   } catch (error) {
-    console.error(`problem loading existing config`);
-    console.error(error);
+    dialog.showErrorBox('Error', error);
   }
 
-  createWindow();
-  createTray();
-
+  // NOTE(jwetzell) load config file from drag/drop
   ipcMain.on('check_config', (event, file) => {
     loadConfigFromFile(file.path);
   });
 
+  // NOTE(jwetzell) open config file from file browser
   ipcMain.on('load_config', () => {
     dialog
       .showOpenDialog(win, {
@@ -234,9 +268,12 @@ app.whenReady().then(() => {
     quitApp();
   });
 
-  app.on('activate', () => {
-    if (electron.BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+  ipcMain.on('show_logs', () => {
+    if (logWin === undefined || logWin.isDestroyed()) {
+      createLogWindow();
+    } else {
+      logWin.show();
+      logWin.focus();
     }
   });
 });
@@ -246,7 +283,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  if (win === null) {
+  if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });

@@ -1,0 +1,269 @@
+{
+  "$schema": "../schema/config.schema.json",
+  "http": {
+    "params": {
+      "port": 3000
+    },
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": [".*"],
+          "properties": ["originalUrl"]
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ]
+      }
+    ]
+  },
+  "ws": {
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": [".*"],
+          "properties": ["payload"]
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "osc": {
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": [".*"],
+          "properties": ["address"]
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "midi": {
+    "params": {
+      "virtualInputName": "showbridge test Input",
+      "virtualOutputName": "showbridge test Output"
+    },
+    "triggers": [
+      {
+        "type": "midi-note-off",
+        "params": {},
+        "actions": [
+          {
+            "type": "log",
+            "transforms": [],
+            "enabled": true
+          },
+          {
+            "type": "log",
+            "transforms": [
+              {
+                "type": "scale",
+                "params": {
+                  "property": "note",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              },
+              {
+                "type": "scale",
+                "params": {
+                  "property": "velocity",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              }
+            ],
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      },
+      {
+        "type": "midi-note-on",
+        "params": {},
+        "actions": [
+          {
+            "type": "log",
+            "transforms": [],
+            "enabled": true
+          },
+          {
+            "type": "log",
+            "transforms": [
+              {
+                "type": "scale",
+                "params": {
+                  "property": "note",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              },
+              {
+                "type": "scale",
+                "params": {
+                  "property": "velocity",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              }
+            ],
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      },
+      {
+        "type": "midi-program-change",
+        "params": {},
+        "actions": [
+          {
+            "type": "log",
+            "transforms": [],
+            "enabled": true
+          },
+          {
+            "type": "log",
+            "transforms": [
+              {
+                "type": "scale",
+                "params": {
+                  "property": "program",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              }
+            ],
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      },
+      {
+        "type": "midi-control-change",
+        "params": {},
+        "actions": [
+          {
+            "type": "log",
+            "transforms": [],
+            "enabled": true
+          },
+          {
+            "type": "log",
+            "transforms": [
+              {
+                "type": "scale",
+                "params": {
+                  "property": "control",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              },
+              {
+                "type": "scale",
+                "params": {
+                  "property": "value",
+                  "inRange": [0, 127],
+                  "outRange": [0, 12.7]
+                },
+                "enabled": true
+              }
+            ],
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "tcp": {
+    "params": {
+      "address": "0.0.0.0",
+      "port": 8000
+    },
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": [".*"],
+          "properties": ["string"]
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "udp": {
+    "params": {
+      "address": "0.0.0.0",
+      "port": 8000
+    },
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": [".*"],
+          "properties": ["string"]
+        },
+        "actions": [
+          {
+            "type": "log",
+            "enabled": true
+          }
+        ],
+        "enabled": true
+      }
+    ]
+  },
+  "mqtt": {
+    "params": {
+      "broker": "",
+      "topics": ["#"]
+    },
+    "triggers": [
+      {
+        "type": "regex",
+        "params": {
+          "patterns": [".*"],
+          "properties": ["topic"]
+        },
+        "actions": [{ "type": "log", "enabled": true }],
+        "enabled": true
+      }
+    ]
+  },
+  "cloud": {
+    "params": {
+      "url": "",
+      "rooms": ["example-room"]
+    }
+  }
+}

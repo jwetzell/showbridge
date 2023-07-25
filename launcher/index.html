@@ -5,23 +5,22 @@
     <title>showbridge</title>
     <link rel="stylesheet" href="./assets/css/tailwind.css" />
   </head>
-  <body class="h-screen w-screen bg-black drag">
+  <body class="h-screen w-screen bg-black">
       <div class="bg-blue-500 flex flex-col items-center justify-center h-10 w-full text-gray-300">
         <div class="">showbridge</div>
       </div>
 
       <div id="drag-container" class="m-2 border-solid border-gray-500 bg-gray-600 hover:bg-gray-700">
-        <div class="flex flex-col items-center justify-center">
-          <h3>Drag config here</h3>
+        <div class="flex flex-col items-center justify-center w-full h-24">
+          <h3>Update Config</h3>
         </div>
-        <div class="w-full h-20"></div>
       </div>
     </div>
 
-    <div class="flex justify-around">
+    <div class="flex justify-around items-center">
       <div><button id="quit-button" class="bg-gray-200 rounded-sm px-2">Quit</button></div>
-      
+      <div><button id="show-logs" class="bg-gray-200 rounded-sm px-2">Logs</button></div>
     </div>
-    <script src="assets/js/main.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
   </body>
 </html>

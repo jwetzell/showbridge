@@ -1,13 +1,13 @@
 const dragContainer = document.getElementById('drag-container');
 dragContainer.onclick = (event) => {
-  window.electron.loadConfig();
+  window.electron.send('load_config');
 };
 
 dragContainer.ondrop = (event) => {
   event.preventDefault();
   if (event.dataTransfer.files.length > 0) {
     const file = event.dataTransfer.files[0];
-    window.electron.updateConfig({ name: file.name, path: file.path });
+    window.electron.send('check_config', { name: file.name, path: file.path });
   }
 };
 
@@ -17,5 +17,9 @@ dragContainer.ondragover = (event) => {
 };
 
 document.getElementById('quit-button').onclick = (event) => {
-  window.electron.quitApp();
+  electron.send('quit');
+};
+
+document.getElementById('show-logs').onclick = (event) => {
+  electron.send('show_logs');
 };

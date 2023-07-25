@@ -56,13 +56,13 @@ process.on('message', (message) => {
           eventType: 'config_valid',
           config: newConfig.toJSON(),
         });
-      } catch (error) {
+      } catch (errors) {
         process.send({
           eventType: 'config_error',
-          error,
+          errors,
         });
         logger.error(`app: problem loading new config`);
-        logger.error(error.toString());
+        logger.error(errors.toString());
       }
       break;
     case 'update_config':
@@ -70,19 +70,17 @@ process.on('message', (message) => {
         router.config = new Config(message.config);
         router.reload();
         logger.info('app: new config applied router reload');
-      } catch (error) {
+      } catch (errors) {
+        logger.error('app: errors loading config');
         process.send({
           eventType: 'config_error',
-          error,
+          errors,
         });
-        logger.error(`app: problem loading new config`);
-        logger.error(error.toString());
       }
       break;
     case 'destroy':
       router.stop();
       process.exit(0);
-      break;
     default:
       logger.error(`app: unhandled process event type = ${message.eventType}`);
       break;
