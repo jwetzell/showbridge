@@ -279,6 +279,14 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
+  if (showbridgeProcess) {
+    restartProcess = false;
+    if (showbridgeProcess.child) {
+      showbridgeProcess.child.send({
+        eventType: 'destroy',
+      });
+    }
+  }
   app.quit();
 });
 
