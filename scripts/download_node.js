@@ -21,6 +21,9 @@ exports.default = async function (context) {
     case 1: // x64
       arch = 'x64';
       break;
+    case 2:
+      arch = 'armv7l';
+      break;
     case 3: // arm64
       arch = 'arm64';
       break;

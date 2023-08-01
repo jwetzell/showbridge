@@ -12,12 +12,12 @@
   },
   "type": "commonjs",
   "scripts": {
-    "prebuild:linux": "npm run tailwind && cd ../ && npm run bundle",
     "build:linux": "electron-builder -l",
     "build:mac": "electron-builder -m",
     "build:win": "electron-builder -w",
     "tailwind": "tailwindcss build -i tailwind.css -o assets/css/tailwind.css",
-    "prestart": "npm run tailwind",
+    "bundle:dev": "ncc build ../main.js -o ../dist/bundle --target es2020 && cp -r ../node_modules/@julusian/midi/prebuilds ../dist/bundle",
+    "prestart": "npm run tailwind && npm run bundle:dev",
     "start": "electron main.js"
   },
   "dependencies": {
@@ -36,12 +36,15 @@
     "appId": "showbridge.jwetzell.com",
     "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
     "icon": "./assets/images/icon512x512.png",
-    "beforePack": "build/download_node.js",
-    "afterPack": "build/cleanup.js",
+    "beforePack": "../scripts/electron_bundle.js",
+    "afterPack": "../scripts/cleanup.js",
+    "directories": {
+      "output": "../dist/electron-output/"
+    },
     "mac": {
       "category": "Utilities",
       "electronLanguages": [
-        "en"
+        "en-US"
       ],
       "target": [
         {
@@ -60,15 +63,19 @@
     "nsis": {
       "oneClick": false
     },
-    "directories": {
-      "output": "../dist/electron-output/"
-    },
     "linux": {
-      "target": "AppImage"
+      "category": "Utility",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64",
+            "armv7l"
+          ]
+        }
+      ]
     },
-    "files": [
-      "**/*"
-    ],
     "extraResources": [
       {
         "from": "../dist/bundle",

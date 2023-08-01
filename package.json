@@ -9,8 +9,6 @@
     "test": "node tests/test.js",
     "prepackage": "rimraf dist/bin",
     "package": "pkg .",
-    "prebundle": "rimraf dist/bundle",
-    "bundle": "ncc build main.js -o dist/bundle --target es2020 && cp -r node_modules/@julusian/midi/prebuilds dist/bundle",
     "electron": "cd launcher && npm run start"
   },
   "author": {
