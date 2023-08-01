@@ -256,9 +256,14 @@ app.whenReady().then(() => {
     });
 
     showbridgeProcess.on('stderr', (data) => {
+      console.log(data.toString());
       if (logWin && !logWin.isDestroyed()) {
         logWin.webContents.send('log', data.toString());
       }
+    });
+
+    showbridgeProcess.on('warn', (err) => {
+      console.error(err);
     });
 
     showbridgeProcess.start();
@@ -301,6 +306,18 @@ app.whenReady().then(() => {
       logWin.focus();
     }
   });
+});
+
+app.on('will-quit', () => {
+  console.log('app will quit');
+  if (showbridgeProcess) {
+    restartProcess = false;
+    if (showbridgeProcess.child) {
+      showbridgeProcess.child.send({
+        eventType: 'destroy',
+      });
+    }
+  }
 });
 
 app.on('window-all-closed', () => {
