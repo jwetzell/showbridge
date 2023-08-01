@@ -12,6 +12,11 @@
         "params": {
           "type": "object",
           "properties": {
+            "address": {
+              "description": "Address to listen on defaults to 0.0.0.0",
+              "type": "string",
+              "default": "0.0.0.0"
+            },
             "port": {
               "description": "TCP port to listen on (this will be the same port used for websocket connections",
               "type": "number",
@@ -127,7 +132,8 @@
           "properties": {
             "address": {
               "description": "Address to listen on defaults to 0.0.0.0",
-              "type": "string"
+              "type": "string",
+              "default": "0.0.0.0"
             },
             "port": {
               "description": "TCP port to listen on",
@@ -164,7 +170,8 @@
           "properties": {
             "address": {
               "description": "Address to listen on defaults to 0.0.0.0",
-              "type": "string"
+              "type": "string",
+              "default": "0.0.0.0"
             },
             "port": {
               "description": "UDP port to listen on",
