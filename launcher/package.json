@@ -25,10 +25,9 @@
     "respawn": "^2.6.0"
   },
   "devDependencies": {
-    "@electron/notarize": "^1.2.3",
-    "electron": "^24.6.3",
-    "electron-builder": "^23.6.0",
-    "electron-reloader": "^1.2.3",
+    "@electron/notarize": "^2.1.0",
+    "electron": "^25.3.2",
+    "electron-builder": "^24.6.3",
     "tailwindcss": "^3.3.3"
   },
   "build": {
@@ -41,11 +40,11 @@
     "directories": {
       "output": "../dist/electron-output/"
     },
+    "electronLanguages": [
+      "en-US"
+    ],
     "mac": {
       "category": "Utilities",
-      "electronLanguages": [
-        "en-US"
-      ],
       "target": [
         {
           "target": "zip",
@@ -88,6 +87,10 @@
       {
         "from": "../config",
         "to": "./config"
+      },
+      {
+        "from": "../webui",
+        "to": "./webui"
       }
     ]
   }

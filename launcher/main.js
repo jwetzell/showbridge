@@ -106,6 +106,29 @@ function createTray() {
   tray.setContextMenu(menu);
 }
 
+function writeConfigToDisk(filePath, configObj) {
+  // TODO(jwetzell): add error handling
+  if (fs.existsSync(filePath)) {
+    console.log('backing up current config');
+    try {
+      fs.moveSync(filePath, `${filePath}.bak`, {
+        overwrite: true,
+      });
+    } catch (error) {
+      dialog.showErrorBox('Error', `Problem backing up config ${error}`);
+    }
+  }
+
+  try {
+    console.log('saving new config');
+    fs.writeJSONSync(filePath, configObj, {
+      spaces: 2,
+    });
+  } catch (error) {
+    dialog.showErrorBox('Error', `Problem saving up config ${error}`);
+  }
+}
+
 function reloadConfigFromDisk() {
   if (configFilePath && fs.existsSync(configFilePath)) {
     try {
@@ -157,7 +180,7 @@ app.whenReady().then(() => {
 
   if (!fs.existsSync(configFilePath)) {
     console.log('populating config.json with default config');
-    fs.writeFileSync(configFilePath, JSON.stringify(defaultConfig, null, 2));
+    writeConfigToDisk(configFilePath, defaultConfig);
   }
 
   try {
@@ -188,21 +211,22 @@ app.whenReady().then(() => {
       app.exit(11);
     }
 
-    // NOTE(jwetzell): evaluate how node binary will need to be determined when it comes to a packaged app
-    showbridgeProcess = respawn(() => [nodeBin, path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath], {
-      name: 'showbridge process',
-      maxRestarts: 3,
-      sleep: 1000,
-      kill: 5000,
-      cwd: rootPath,
-      stdio: [null, null, null, 'ipc'],
-    });
+    showbridgeProcess = respawn(
+      () => [nodeBin, path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath, '-h', './webui'],
+      {
+        name: 'showbridge process',
+        maxRestarts: 3,
+        sleep: 1000,
+        kill: 5000,
+        cwd: rootPath,
+        stdio: [null, null, null, 'ipc'],
+      }
+    );
 
     showbridgeProcess.on('start', () => {
       if (showbridgeProcess.child) {
-        // NOTE(jwetzell): setup listeners for
         showbridgeProcess.child.on('message', (message) => {
-          // TODO(jwetzell): react to these messages visually
+          console.log(message.eventType);
           switch (message.eventType) {
             case 'config_valid':
               dialog
@@ -215,7 +239,7 @@ app.whenReady().then(() => {
                 })
                 .then((response) => {
                   if (response.response === 0) {
-                    fs.writeFileSync(configFilePath, JSON.stringify(message.config, null, 2));
+                    writeConfigToDisk(configFilePath, message.config);
                     reloadConfigFromDisk();
                   }
                 });
@@ -225,7 +249,13 @@ app.whenReady().then(() => {
               win.webContents.send('config_error', message.errors);
               dialog.showErrorBox('Error', message.errors.map((error) => error.message).join('\n'));
               break;
+            case 'config_updated':
+              // TODO(jwetzell): add rollback
+              writeConfigToDisk(configFilePath, message.config);
+              break;
             default:
+              console.error(`unhandled message from showbridge process`);
+              console.error(message);
               break;
           }
         });
@@ -250,13 +280,14 @@ app.whenReady().then(() => {
     });
 
     showbridgeProcess.on('stdout', (data) => {
+      console.log(data.toString());
       if (logWin && !logWin.isDestroyed()) {
         logWin.webContents.send('log', data.toString());
       }
     });
 
     showbridgeProcess.on('stderr', (data) => {
-      console.log(data.toString());
+      console.error(data.toString());
       if (logWin && !logWin.isDestroyed()) {
         logWin.webContents.send('log', data.toString());
       }

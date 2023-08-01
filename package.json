@@ -5,7 +5,7 @@
   "bin": "main.js",
   "scripts": {
     "pretty": "prettier --write lib/*",
-    "dev": "nodemon --exec 'node main.js -d -c config/dev.json'",
+    "dev": "nodemon --exec 'node main.js -d -c config/dev.json -h webui'",
     "test": "node tests/test.js",
     "prepackage": "rimraf dist/bin",
     "package": "pkg .",

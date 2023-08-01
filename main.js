@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /* eslint-disable no-use-before-define */
 
-const { readFileSync } = require('fs');
-
+const { readFileSync, existsSync } = require('fs');
+const path = require('path');
 const { program } = require('commander');
 const { logger } = require('./lib/utils');
 const { Config, Router } = require('./lib');
@@ -12,11 +12,14 @@ const packageInfo = require('./package.json');
 
 program.name(packageInfo.name).description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);
+program.option('-h, --html <path>', 'location of html to serve', undefined);
 program.option('-d, --debug', 'turn on debug logging', false);
 program.option('-t, --trace', 'turn on trace logging', false);
 program.parse(process.argv);
 
 const options = program.opts();
+
+const isChildProcess = process.send !== undefined;
 
 if (options.debug) {
   logger.level = 20;
@@ -46,21 +49,42 @@ if (options.config) {
 }
 
 const router = new Router(config);
+if (options.html) {
+  if (existsSync(options.html)) {
+    const filePath = path.resolve(options.html);
+    router.servePath(filePath);
+  } else {
+    console.error(`${options.html} does not seem to exist skipping setup`);
+  }
+}
+
+router.on('config_updated', (updatedConfig) => {
+  if (isChildProcess) {
+    process.send({
+      eventType: 'config_updated',
+      config: updatedConfig,
+    });
+  }
+});
 
 process.on('message', (message) => {
   switch (message.eventType) {
     case 'check_config':
       try {
         const newConfig = new Config(message.config);
-        process.send({
-          eventType: 'config_valid',
-          config: newConfig.toJSON(),
-        });
+        if (isChildProcess) {
+          process.send({
+            eventType: 'config_valid',
+            config: newConfig.toJSON(),
+          });
+        }
       } catch (errors) {
-        process.send({
-          eventType: 'config_error',
-          errors,
-        });
+        if (isChildProcess) {
+          process.send({
+            eventType: 'config_error',
+            errors,
+          });
+        }
         logger.error(`app: problem loading new config`);
         logger.error(errors.toString());
       }
@@ -72,10 +96,12 @@ process.on('message', (message) => {
         logger.info('app: new config applied router reload');
       } catch (errors) {
         logger.error('app: errors loading config');
-        process.send({
-          eventType: 'config_error',
-          errors,
-        });
+        if (isChildProcess) {
+          process.send({
+            eventType: 'config_error',
+            errors,
+          });
+        }
       }
       break;
     case 'destroy':
