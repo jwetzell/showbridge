@@ -5,6 +5,11 @@
   "main": "main.js",
   "license": "MIT",
   "private": true,
+  "author": {
+    "name": "Joel Wetzell",
+    "email": "me@jwetzell.com",
+    "url": "https://jwetzell.com/"
+  },
   "type": "commonjs",
   "scripts": {
     "prebuild:linux": "npm run tailwind && cd ../ && npm run bundle",
@@ -31,9 +36,10 @@
     "appId": "showbridge.jwetzell.com",
     "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
     "icon": "./assets/images/icon512x512.png",
+    "beforePack": "build/download_node.js",
+    "afterPack": "build/cleanup.js",
     "mac": {
       "category": "Utilities",
-      "hardenedRuntime": true,
       "electronLanguages": [
         "en"
       ],
@@ -45,7 +51,8 @@
             "arm64"
           ]
         }
-      ]
+      ],
+      "hardenedRuntime": "true"
     },
     "win": {
       "target": "NSIS"
@@ -66,6 +73,10 @@
       {
         "from": "../dist/bundle",
         "to": "./dist/bundle"
+      },
+      {
+        "from": "../node",
+        "to": "./node"
       },
       {
         "from": "../config",

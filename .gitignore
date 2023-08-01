@@ -1,4 +1,6 @@
+node
 node_modules
 dist
 html
 .DS_store
+.cache

@@ -146,11 +146,15 @@ function loadConfigFromFile(configPath) {
 app.whenReady().then(() => {
   configDir = path.join(app.getPath('appData'), '/showbridge/');
   console.log(`config dir exists: ${fs.existsSync(configDir)}`);
+
   if (!fs.existsSync(configDir)) {
     fs.mkdirSync(configDir);
   }
   configFilePath = path.join(configDir, 'config.json');
   console.log(`config file exists: ${fs.existsSync(configFilePath)}`);
+
+  console.log(`app is packaged: ${app.isPackaged}`);
+
   if (!fs.existsSync(configFilePath)) {
     console.log('populating config.json with default config');
     fs.writeFileSync(configFilePath, JSON.stringify(defaultConfig, null, 2));
@@ -160,12 +164,32 @@ app.whenReady().then(() => {
     createWindow();
     createTray();
 
+    rootPath = process.resourcesPath;
     if (!app.isPackaged) {
       rootPath = path.join(__dirname, '..');
     }
 
+    let nodeBin = null;
+
+    if (!app.isPackaged) {
+      nodeBin = 'node';
+    } else {
+      const nodeBinPath = process.platform === 'win32' ? 'node/node.exe' : 'node/bin/node';
+
+      const potentialNodePath = path.join(rootPath, nodeBinPath);
+
+      if (fs.pathExistsSync(potentialNodePath)) {
+        nodeBin = potentialNodePath;
+      }
+    }
+
+    if (!nodeBin) {
+      dialog.showErrorBox('Unable to start', 'Failed to find node binary to run');
+      app.exit(11);
+    }
+
     // NOTE(jwetzell): evaluate how node binary will need to be determined when it comes to a packaged app
-    showbridgeProcess = respawn(() => ['node', path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath], {
+    showbridgeProcess = respawn(() => [nodeBin, path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath], {
       name: 'showbridge process',
       maxRestarts: 3,
       sleep: 1000,
@@ -218,6 +242,7 @@ app.whenReady().then(() => {
     });
 
     showbridgeProcess.on('exit', (code) => {
+      console.log(`showbridge process exited: ${code}`);
       if (!restartProcess) {
         // TODO(jwetzell) figure out why this doesn't exit on built mac app
         app.exit();
