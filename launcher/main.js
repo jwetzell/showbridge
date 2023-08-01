@@ -1,6 +1,6 @@
 // NOTE(jwetzell): HEAVY inspiration from https://github.com/bitfocus/companion/launcher
 
-const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell } = require('electron');
 
 const path = require('path');
 const fs = require('fs-extra');
@@ -335,6 +335,22 @@ app.whenReady().then(() => {
     } else {
       logWin.show();
       logWin.focus();
+    }
+  });
+
+  ipcMain.on('show_ui', () => {
+    try {
+      const config = fs.readJSONSync(configFilePath);
+      if (config.http.params.port) {
+        // TODO(jwetzell)
+        shell.openExternal(
+          `http://${config.http.params.address ? config.http.params.address : 'localhost'}:${config.http.params.port}`
+        );
+      } else {
+        dialog.showErrorBox('Error', 'HTTP server does not seem to be setup right.');
+      }
+    } catch (error) {
+      dialog.showErrorBox('Error', 'Problem determining current router settings');
     }
   });
 });

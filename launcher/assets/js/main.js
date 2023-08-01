@@ -23,3 +23,7 @@ document.getElementById('quit-button').onclick = (event) => {
 document.getElementById('show-logs').onclick = (event) => {
   electron.send('show_logs');
 };
+
+document.getElementById('show-ui').onclick = (event) => {
+  electron.send('show_ui');
+};
