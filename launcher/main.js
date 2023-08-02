@@ -166,7 +166,20 @@ function loadConfigFromFile(configPath) {
   }
 }
 
+const lock = app.requestSingleInstanceLock();
+if (!lock) {
+  dialog.showErrorBox(
+    'Already Running?',
+    'Looks like showbridge is already running. Only one instance at a time is allowed.'
+  );
+  app.quit();
+}
+
 app.whenReady().then(() => {
+  if (!lock) {
+    console.log('showbridge already running skipping setup');
+    return;
+  }
   configDir = path.join(app.getPath('appData'), '/showbridge/');
   console.log(`config dir exists: ${fs.existsSync(configDir)}`);
 
