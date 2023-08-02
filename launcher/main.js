@@ -77,7 +77,6 @@ function createWindow() {
     },
   });
   win.loadFile('index.html');
-  // win.webContents.openDevTools();
 }
 
 function createTray() {
@@ -95,6 +94,16 @@ function createTray() {
     new MenuItem({
       label: 'View Logs',
       click: createLogWindow,
+    })
+  );
+  menu.append(
+    new MenuItem({
+      label: 'Open DevTools',
+      click: () => {
+        win.webContents.openDevTools({
+          mode: 'detach',
+        });
+      },
     })
   );
   menu.append(
@@ -239,7 +248,6 @@ app.whenReady().then(() => {
     showbridgeProcess.on('start', () => {
       if (showbridgeProcess.child) {
         showbridgeProcess.child.on('message', (message) => {
-          console.log(message.eventType);
           switch (message.eventType) {
             case 'config_valid':
               dialog
@@ -265,6 +273,11 @@ app.whenReady().then(() => {
             case 'config_updated':
               // TODO(jwetzell): add rollback
               writeConfigToDisk(configFilePath, message.config);
+              break;
+            case 'message':
+              if (win && win.isVisible()) {
+                win.webContents.send('message', message.message);
+              }
               break;
             default:
               console.error(`unhandled message from showbridge process`);

@@ -1,4 +1,6 @@
 const dragContainer = document.getElementById('drag-drop-container');
+const messageIndicator = document.getElementById('message-indicator');
+
 dragContainer.onclick = (event) => {
   window.electron.send('load_config');
 };
@@ -27,3 +29,11 @@ document.getElementById('show-logs').onclick = (event) => {
 document.getElementById('show-ui').onclick = (event) => {
   electron.send('show_ui');
 };
+
+electron.on('message', (event, message) => {
+  // NOTE(jwetzell) flash message indicator
+  messageIndicator.style.display = 'block';
+  setTimeout(() => {
+    messageIndicator.style.display = 'none';
+  }, 100);
+});

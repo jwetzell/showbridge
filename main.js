@@ -67,6 +67,15 @@ router.on('config_updated', (updatedConfig) => {
   }
 });
 
+router.on('message', (message) => {
+  if (isChildProcess) {
+    process.send({
+      eventType: 'message',
+      message,
+    });
+  }
+});
+
 process.on('message', (message) => {
   switch (message.eventType) {
     case 'check_config':
