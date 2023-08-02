@@ -15,6 +15,7 @@ html {
 
 select,
 input,
-button {
+button,
+.buttons {
   -webkit-app-region: no-drag !important;
 }

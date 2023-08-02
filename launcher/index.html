@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./assets/css/index.css" />
   </head>
   <body class="w-screen h-screen bg-black">
-    <div>
+    <div class="flex flex-col w-full h-full">
       <div #id="title-bar" class="flex flex-col items-center justify-center w-full h-10 text-gray-300 bg-blue-500">
         <div class="">showbridge</div>
       </div>
@@ -17,12 +17,24 @@
           <h3>Update Config</h3>
         </div>
       </div>
-    </div>
 
-    <div class="flex items-center justify-around">
-      <div><button id="quit-button" class="px-2 bg-gray-200 rounded-sm">Quit</button></div>
-      <div><button id="show-ui" class="px-2 bg-gray-200 rounded-sm">Web UI</button></div>
-      <div><button id="show-logs" class="px-2 bg-gray-200 rounded-sm">Logs</button></div>
+      <div class="flex items-center justify-around flex-grow buttons">
+        <div
+          id="quit-button"
+          class="flex items-center justify-center flex-grow h-full px-2 bg-gray-400 cursor-pointer hover:bg-gray-300">
+          <div>Quit</div>
+        </div>
+        <div
+          id="show-ui"
+          class="flex items-center justify-center flex-grow h-full px-2 bg-gray-400 cursor-pointer hover:bg-gray-300">
+          <div>Web UI</div>
+        </div>
+        <div
+          id="show-logs"
+          class="flex items-center justify-center flex-grow h-full px-2 bg-gray-400 cursor-pointer hover:bg-gray-300">
+          <div>Logs</div>
+        </div>
+      </div>
     </div>
     <script type="text/javascript" src="assets/js/main.js"></script>
   </body>

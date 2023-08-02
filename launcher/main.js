@@ -68,7 +68,7 @@ function createWindow() {
     height: 200,
     frame: false,
     resizable: false,
-    roundedCorners: false,
+    roundedCorners: true,
     transparent: true,
     icon: path.join(__dirname, './assets/images/icon512x512.png'),
     webPreferences: {
