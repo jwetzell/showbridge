@@ -62,6 +62,15 @@ function createLogWindow() {
   // logWin.webContents.openDevTools();
 }
 
+function showLogWindow() {
+  if (logWin === undefined || logWin.isDestroyed()) {
+    createLogWindow();
+  } else {
+    logWin.show();
+    logWin.focus();
+  }
+}
+
 function createWindow() {
   win = new BrowserWindow({
     width: 200,
@@ -93,7 +102,7 @@ function createTray() {
   menu.append(
     new MenuItem({
       label: 'View Logs',
-      click: createLogWindow,
+      click: showLogWindow,
     })
   );
   menu.append(
@@ -138,10 +147,10 @@ function writeConfigToDisk(filePath, configObj) {
   }
 }
 
-function reloadConfigFromDisk() {
-  if (configFilePath && fs.existsSync(configFilePath)) {
+function reloadConfigFromDisk(filePath) {
+  if (filePath && fs.existsSync(filePath)) {
     try {
-      const config = JSON.parse(fs.readFileSync(configFilePath));
+      const config = JSON.parse(fs.readFileSync(filePath));
       showbridgeProcess.child.send({
         eventType: 'update_config',
         config,
@@ -154,10 +163,10 @@ function reloadConfigFromDisk() {
   }
 }
 
-function loadConfigFromFile(configPath) {
-  if (fs.existsSync(configPath)) {
+function loadConfigFromFile(filePath) {
+  if (fs.existsSync(filePath)) {
     try {
-      const newConfigFile = fs.readFileSync(configPath);
+      const newConfigFile = fs.readFileSync(filePath);
       const newConfigObj = JSON.parse(newConfigFile);
       if (showbridgeProcess) {
         if (showbridgeProcess.child) {
@@ -175,7 +184,25 @@ function loadConfigFromFile(configPath) {
   }
 }
 
+function getNodeBinaryLocation(isPackaged) {
+  let nodeBin = null;
+
+  if (!isPackaged) {
+    nodeBin = 'node';
+  } else {
+    const nodeBinPath = process.platform === 'win32' ? 'node/node.exe' : 'node/bin/node';
+
+    const potentialNodePath = path.join(rootPath, nodeBinPath);
+
+    if (fs.pathExistsSync(potentialNodePath)) {
+      nodeBin = potentialNodePath;
+    }
+  }
+  return nodeBin;
+}
+
 const lock = app.requestSingleInstanceLock();
+
 if (!lock) {
   dialog.showErrorBox(
     'Already Running?',
@@ -186,9 +213,10 @@ if (!lock) {
 
 app.whenReady().then(() => {
   if (!lock) {
-    console.log('showbridge already running skipping setup');
+    console.error('showbridge already running skipping setup');
     return;
   }
+
   configDir = path.join(app.getPath('appData'), '/showbridge/');
   console.log(`config dir exists: ${fs.existsSync(configDir)}`);
 
@@ -197,6 +225,11 @@ app.whenReady().then(() => {
   }
   configFilePath = path.join(configDir, 'config.json');
   console.log(`config file exists: ${fs.existsSync(configFilePath)}`);
+
+  rootPath = process.resourcesPath;
+  if (!app.isPackaged) {
+    rootPath = path.join(__dirname, '..');
+  }
 
   console.log(`app is packaged: ${app.isPackaged}`);
 
@@ -209,24 +242,7 @@ app.whenReady().then(() => {
     createWindow();
     createTray();
 
-    rootPath = process.resourcesPath;
-    if (!app.isPackaged) {
-      rootPath = path.join(__dirname, '..');
-    }
-
-    let nodeBin = null;
-
-    if (!app.isPackaged) {
-      nodeBin = 'node';
-    } else {
-      const nodeBinPath = process.platform === 'win32' ? 'node/node.exe' : 'node/bin/node';
-
-      const potentialNodePath = path.join(rootPath, nodeBinPath);
-
-      if (fs.pathExistsSync(potentialNodePath)) {
-        nodeBin = potentialNodePath;
-      }
-    }
+    const nodeBin = getNodeBinaryLocation(app.isPackaged);
 
     if (!nodeBin) {
       dialog.showErrorBox('Unable to start', 'Failed to find node binary to run');
@@ -261,7 +277,7 @@ app.whenReady().then(() => {
                 .then((response) => {
                   if (response.response === 0) {
                     writeConfigToDisk(configFilePath, message.config);
-                    reloadConfigFromDisk();
+                    reloadConfigFromDisk(configFilePath);
                   }
                 });
               break;
@@ -356,12 +372,7 @@ app.whenReady().then(() => {
   });
 
   ipcMain.on('show_logs', () => {
-    if (logWin === undefined || logWin.isDestroyed()) {
-      createLogWindow();
-    } else {
-      logWin.show();
-      logWin.focus();
-    }
+    showLogWindow();
   });
 
   ipcMain.on('show_ui', () => {
