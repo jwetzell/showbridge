@@ -75,7 +75,7 @@ steps:
         from_secret: ftp_password
       PLUGIN_HOSTNAME:
         from_secret: ftp_hostname
-      PLUGIN_SRC_DIR: dist/electron-output
+      PLUGIN_SRC_DIR: /dist/electron-output
       PLUGIN_DEST_DIR: /download/launcher/latest
       PLUGIN_INCLUDE: ^.*\.AppImage$
       PLUGIN_SECURE: true
