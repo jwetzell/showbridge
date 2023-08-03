@@ -9,6 +9,9 @@ const udpPortInput = document.getElementById('udp-port-input');
 const midiInputNameInput = document.getElementById('midi-input-name-input');
 const midiOutputNameInput = document.getElementById('midi-output-name-input');
 
+const cloudURLInput = document.getElementById('cloud-url-input');
+const mqttBrokerURLInput = document.getElementById('mqtt-broker-url-input');
+
 const saveButton = document.getElementById('save-settings');
 
 let currentConfig;
@@ -62,6 +65,12 @@ electron.on('current_config', (event, config) => {
   if (currentConfig.midi.params.virtualOutputName) {
     midiOutputNameInput.value = currentConfig.midi.params.virtualOutputName;
   }
+
+  // Load Cloud settings
+  cloudURLInput.value = currentConfig.cloud.params.url;
+
+  // Load MQTT settings
+  mqttBrokerURLInput.value = currentConfig.mqtt.params.broker;
 });
 
 // setup current address info
@@ -96,6 +105,14 @@ midiInputNameInput.onchange = (event) => {
 
 midiOutputNameInput.onchange = (event) => {
   currentConfig.midi.params.virtualOutputName = event.target.value;
+};
+
+cloudURLInput.onchange = (event) => {
+  currentConfig.cloud.params.url = event.target.value;
+};
+
+mqttBrokerURLInput.onchange = (event) => {
+  currentConfig.mqtt.params.broker = event.target.value;
 };
 
 saveButton.onclick = (event) => {

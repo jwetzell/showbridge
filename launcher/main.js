@@ -93,7 +93,7 @@ function createWindow() {
 function createSettingsWindow() {
   settingsWin = new BrowserWindow({
     width: 300,
-    height: 400,
+    height: 500,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js'),
@@ -296,7 +296,7 @@ app.whenReady().then(() => {
     }
 
     showbridgeProcess = respawn(
-      () => [nodeBin, path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath, '-h', './webui'],
+      () => [nodeBin, path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath, '-h', './webui', '-t'],
       {
         name: 'showbridge process',
         maxRestarts: 3,
@@ -375,7 +375,7 @@ app.whenReady().then(() => {
     });
 
     showbridgeProcess.on('stderr', (data) => {
-      console.error(data.toString());
+      console.log(data.toString());
       if (logWin && !logWin.isDestroyed()) {
         logWin.webContents.send('log', data.toString());
       }
@@ -454,7 +454,6 @@ app.whenReady().then(() => {
   });
 
   ipcMain.on('apply_config_from_object', (event, config) => {
-    console.log(config);
     writeConfigToDisk(configFilePath, config);
     reloadConfigFromDisk(configFilePath);
   });
