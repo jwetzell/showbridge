@@ -18,7 +18,9 @@
     "tailwind": "tailwindcss build -i tailwind.css -o assets/css/tailwind.css",
     "bundle:dev": "ncc build ../main.js -o ../dist/bundle --target es2020 && cp -r ../node_modules/@julusian/midi/prebuilds ../dist/bundle",
     "prestart": "npm run tailwind && npm run bundle:dev",
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "preelectron": "npm run tailwind",
+    "electron": "electron main.js"
   },
   "dependencies": {
     "fs-extra": "^11.1.1",

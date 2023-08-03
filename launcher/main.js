@@ -5,6 +5,7 @@ const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell } = req
 const path = require('path');
 const fs = require('fs-extra');
 const respawn = require('respawn');
+const { networkInterfaces } = require('os');
 const defaultConfig = require('../config/default.json');
 
 let rootPath = process.resourcesPath;
@@ -14,6 +15,7 @@ let restartProcess = true;
 let showbridgeProcess;
 let win;
 let logWin;
+let settingsWin;
 let tray;
 let configDir;
 let configFilePath;
@@ -88,6 +90,44 @@ function createWindow() {
   win.loadFile('index.html');
 }
 
+function createSettingsWindow() {
+  settingsWin = new BrowserWindow({
+    width: 300,
+    height: 400,
+    webPreferences: {
+      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  });
+  settingsWin.removeMenu();
+  settingsWin.loadFile('settings.html');
+}
+
+function showSettingsWindow() {
+  if (settingsWin === undefined || settingsWin.isDestroyed()) {
+    createSettingsWindow();
+  } else {
+    settingsWin.show();
+    settingsWin.focus();
+  }
+}
+
+function getIPAddresses() {
+  const allInterfaces = networkInterfaces();
+  const validAddresses = [];
+  Object.entries(allInterfaces).forEach(([interfaceName, addresses]) => {
+    const goodAddresses = addresses.filter((address) => !address.internal);
+    validAddresses.push(...goodAddresses);
+  });
+  return validAddresses;
+}
+
+function getConfigObject(filePath) {
+  if (fs.existsSync(filePath)) {
+    return fs.readJsonSync(filePath);
+  }
+}
+
 function createTray() {
   tray = new Tray(path.join(__dirname, 'assets/images/icon16x16.png'));
   tray.setIgnoreDoubleClickEvents(true);
@@ -113,6 +153,12 @@ function createTray() {
           mode: 'detach',
         });
       },
+    })
+  );
+  menu.append(
+    new MenuItem({
+      label: 'Settings',
+      click: showSettingsWindow,
     })
   );
   menu.append(
@@ -350,7 +396,7 @@ app.whenReady().then(() => {
   });
 
   // NOTE(jwetzell) open config file from file browser
-  ipcMain.on('load_config', () => {
+  ipcMain.on('load_config_from_file', () => {
     dialog
       .showOpenDialog(win, {
         title: 'Open Config File',
@@ -375,6 +421,10 @@ app.whenReady().then(() => {
     showLogWindow();
   });
 
+  ipcMain.on('show_settings', () => {
+    showSettingsWindow();
+  });
+
   ipcMain.on('show_ui', () => {
     try {
       const config = fs.readJSONSync(configFilePath);
@@ -389,6 +439,24 @@ app.whenReady().then(() => {
     } catch (error) {
       dialog.showErrorBox('Error', 'Problem determining current router settings');
     }
+  });
+
+  ipcMain.on('load_addresses', () => {
+    if (settingsWin && settingsWin.isVisible()) {
+      settingsWin.webContents.send('ip_addresses', getIPAddresses());
+    }
+  });
+
+  ipcMain.on('load_current_config', () => {
+    if (settingsWin && settingsWin.isVisible()) {
+      settingsWin.webContents.send('current_config', getConfigObject(configFilePath));
+    }
+  });
+
+  ipcMain.on('apply_config_from_object', (event, config) => {
+    console.log(config);
+    writeConfigToDisk(configFilePath, config);
+    reloadConfigFromDisk(configFilePath);
   });
 });
 

@@ -2,7 +2,7 @@ const dragContainer = document.getElementById('drag-drop-container');
 const messageIndicator = document.getElementById('message-indicator');
 
 dragContainer.onclick = (event) => {
-  window.electron.send('load_config');
+  window.electron.send('load_config_from_file');
 };
 
 dragContainer.ondrop = (event) => {
@@ -18,18 +18,6 @@ dragContainer.ondragover = (event) => {
   event.stopPropagation();
 };
 
-document.getElementById('quit-button').onclick = (event) => {
-  electron.send('quit');
-};
-
-document.getElementById('show-logs').onclick = (event) => {
-  electron.send('show_logs');
-};
-
-document.getElementById('show-ui').onclick = (event) => {
-  electron.send('show_ui');
-};
-
 electron.on('message', (event, message) => {
   // NOTE(jwetzell) flash message indicator
   messageIndicator.style.display = 'block';
@@ -37,3 +25,19 @@ electron.on('message', (event, message) => {
     messageIndicator.style.display = 'none';
   }, 100);
 });
+
+function showLogs() {
+  electron.send('show_logs');
+}
+
+function showWebUI() {
+  electron.send('show_ui');
+}
+
+function quitApp() {
+  electron.send('quit');
+}
+
+function showSettings() {
+  electron.send('show_settings');
+}

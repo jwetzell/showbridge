@@ -15,7 +15,11 @@ html {
 
 select,
 input,
-button,
-.buttons {
+button {
   -webkit-app-region: no-drag !important;
+}
+
+.clickable {
+  -webkit-app-region: no-drag !important;
+  cursor: pointer;
 }
