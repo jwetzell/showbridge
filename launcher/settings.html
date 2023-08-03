@@ -8,51 +8,90 @@
   </head>
   <body class="w-screen h-screen bg-gray-600">
     <div class="flex flex-col items-center justify-center w-full h-full">
-      <div class="flex flex-col flex-grow w-full">
-        <div>
-          <h1 class="text-center">HTTP</h1>
-          <label for="http-address-select">Address</label>
-          <select id="http-address-select"></select>
-          <label for="http-port-input">Port</label>
-          <input type="number" id="http-port-input" />
+      <div class="flex flex-col flex-grow overflow-scroll">
+        <h1 class="text-center">HTTP</h1>
+        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+          <div>
+            <label for="http-address-select">Address</label>
+            <select id="http-address-select">
+              <option value="0.0.0.0">All</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="http-port-input">Port</label>
+            <input type="number" class="w-auto" id="http-port-input" />
+          </div>
         </div>
 
-        <div>
-          <h1 class="text-center">TCP</h1>
-          <label for="tcp-address-select">Address</label>
-          <select id="tcp-address-select"></select>
-          <label for="tcp-port-input">Port</label>
-          <input type="number" id="tcp-port-input" />
+        <h1 class="text-center">TCP</h1>
+        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+          <div>
+            <label for="tcp-address-select">Address</label>
+            <select id="tcp-address-select">
+              <option value="0.0.0.0">All</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="tcp-port-input">Port</label>
+            <input type="number" id="tcp-port-input" />
+          </div>
         </div>
 
-        <div>
-          <h1 class="text-center">UDP</h1>
-          <label for="udp-address-select">Address</label>
-          <select id="udp-address-select"></select>
-          <label for="udp-port-input">Port</label>
-          <input type="number" id="udp-port-input" />
+        <h1 class="text-center">UDP</h1>
+        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+          <div>
+            <label for="udp-address-select">Address</label>
+            <select id="udp-address-select">
+              <option value="0.0.0.0">All</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="udp-port-input">Port</label>
+            <input type="number" id="udp-port-input" />
+          </div>
         </div>
 
-        <div>
-          <h1 class="text-center">MIDI</h1>
-          <label for="midi-input-name-input">Input Name</label>
-          <input id="midi-input-name-input"></select>
-          <label for="midi-output-name-input">Output Name</label>
-          <input id="midi-output-name-input" />
+        <h1 class="text-center">MIDI</h1>
+        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+          <div>
+            <label for="midi-input-name-input">Input Name</label>
+            <input type="text" id="midi-input-name-input" minlength="1" required />
+          </div>
+
+          <div>
+            <label for="midi-output-name-input">Output Name</label>
+            <input type="text" id="midi-output-name-input" minlength="1" required />
+          </div>
         </div>
 
-        <div>
-          <h1 class="text-center">MQTT</h1>
-          <label for="mqtt-broker-url-input">Broker URL</label>
-          <input id="mqtt-broker-url-input"></select>
+        <h1 class="text-center">MQTT</h1>
+        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+          <div>
+            <label for="mqtt-broker-url-input">Broker URL</label>
+            <input id="mqtt-broker-url-input" placeholder="mqtt://localhost:1883" />
+          </div>
+
+          <div>
+            <label for="mqtt-broker-username-input">Username</label>
+            <input id="mqtt-broker-username-input" />
+          </div>
+
+          <div>
+            <label for="mqtt-broker-password-input">Password</label>
+            <input type="password" id="mqtt-broker-password-input" />
+          </div>
         </div>
 
-        <div>
-          <h1 class="text-center">Cloud</h1>
-          <label for="cloud-url-input">URL</label>
-          <input id="cloud-url-input"></select>
+        <h1 class="text-center">Cloud</h1>
+        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+          <div>
+            <label for="cloud-url-input">URL</label>
+            <input id="cloud-url-input" placeholder="https://showbridge-cloud.jwetzell.com" />
+          </div>
         </div>
-
       </div>
 
       <div

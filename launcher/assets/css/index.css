@@ -23,3 +23,13 @@ button {
   -webkit-app-region: no-drag !important;
   cursor: pointer;
 }
+
+input {
+  margin: 1px;
+  border-radius: 3px;
+  padding-left: 3px;
+}
+
+input:invalid {
+  border: 2px solid red;
+}

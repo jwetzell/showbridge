@@ -10,7 +10,10 @@ const midiInputNameInput = document.getElementById('midi-input-name-input');
 const midiOutputNameInput = document.getElementById('midi-output-name-input');
 
 const cloudURLInput = document.getElementById('cloud-url-input');
+
 const mqttBrokerURLInput = document.getElementById('mqtt-broker-url-input');
+const mqttBrokerUsernameInput = document.getElementById('mqtt-broker-username-input');
+const mqttBrokerPasswordInput = document.getElementById('mqtt-broker-password-input');
 
 const saveButton = document.getElementById('save-settings');
 
@@ -71,6 +74,13 @@ electron.on('current_config', (event, config) => {
 
   // Load MQTT settings
   mqttBrokerURLInput.value = currentConfig.mqtt.params.broker;
+  if (currentConfig.mqtt.params.broker === undefined || currentConfig.mqtt.params.broker === '') {
+    mqttBrokerUsernameInput.disabled = true;
+    mqttBrokerPasswordInput.disabled = true;
+  }
+
+  mqttBrokerUsernameInput.value = currentConfig.mqtt.params.username ? currentConfig.mqtt.params.username : '';
+  mqttBrokerPasswordInput.value = currentConfig.mqtt.params.password ? currentConfig.mqtt.params.password : '';
 });
 
 // setup current address info
@@ -111,8 +121,23 @@ cloudURLInput.onchange = (event) => {
   currentConfig.cloud.params.url = event.target.value;
 };
 
-mqttBrokerURLInput.onchange = (event) => {
+mqttBrokerURLInput.onkeyup = (event) => {
+  if (event.target.value && event.target.value !== '') {
+    mqttBrokerUsernameInput.disabled = false;
+    mqttBrokerPasswordInput.disabled = false;
+  } else {
+    mqttBrokerUsernameInput.disabled = true;
+    mqttBrokerPasswordInput.disabled = true;
+  }
   currentConfig.mqtt.params.broker = event.target.value;
+};
+
+mqttBrokerUsernameInput.onchange = (event) => {
+  currentConfig.mqtt.params.username = event.target.value;
+};
+
+mqttBrokerPasswordInput.onchange = (event) => {
+  currentConfig.mqtt.params.password = event.target.value;
 };
 
 saveButton.onclick = (event) => {

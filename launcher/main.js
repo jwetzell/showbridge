@@ -92,7 +92,7 @@ function createWindow() {
 
 function createSettingsWindow() {
   settingsWin = new BrowserWindow({
-    width: 300,
+    width: 450,
     height: 500,
     webPreferences: {
       nodeIntegration: true,
