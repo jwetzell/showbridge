@@ -1,0 +1,109 @@
+{
+  "name": "showbridge-launcher",
+  "description": "showbridge",
+  "version": "0.0.1",
+  "main": "main.js",
+  "license": "MIT",
+  "private": true,
+  "author": {
+    "name": "Joel Wetzell",
+    "email": "me@jwetzell.com",
+    "url": "https://jwetzell.com/"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "build:linux": "electron-builder -l",
+    "build:mac": "electron-builder -m",
+    "build:win": "electron-builder -w",
+    "tailwind": "tailwindcss build -i tailwind.css -o assets/css/tailwind.css",
+    "bundle:dev": "ncc build ../main.js -o ../dist/bundle --target es2020 && cp -r ../node_modules/@julusian/midi/prebuilds ../dist/bundle",
+    "prestart": "npm run tailwind && npm run bundle:dev",
+    "start": "electron main.js",
+    "preelectron": "npm run tailwind",
+    "electron": "electron main.js",
+    "release":"electron-builder"
+  },
+  "dependencies": {
+    "fs-extra": "^11.1.1",
+    "respawn": "^2.6.0"
+  },
+  "devDependencies": {
+    "@electron/notarize": "^2.1.0",
+    "electron": "^25.3.2",
+    "electron-builder": "^24.6.3",
+    "tailwindcss": "^3.3.3"
+  },
+  "build": {
+    "productName": "showbridge",
+    "appId": "showbridge.jwetzell.com",
+    "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
+    "icon": "./assets/images/icon512x512.png",
+    "beforePack": "../scripts/electron_bundle.js",
+    "afterPack": "../scripts/cleanup.js",
+    "directories": {
+      "output": "../dist/electron-output/"
+    },
+    "electronLanguages": [
+      "en-US"
+    ],
+    "mac": {
+      "category": "Utilities",
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "hardenedRuntime": "true",
+      "publish": [
+        "github"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "publish": [
+        "github"
+      ]
+    },
+    "nsis": {
+      "oneClick": false
+    },
+    "linux": {
+      "category": "Utility",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64",
+            "armv7l"
+          ]
+        }
+      ],
+      "publish": [
+        "github"
+      ]
+    },
+    "extraResources": [
+      {
+        "from": "../dist/bundle",
+        "to": "./dist/bundle"
+      },
+      {
+        "from": "../node",
+        "to": "./node"
+      },
+      {
+        "from": "../config",
+        "to": "./config"
+      },
+      {
+        "from": "../webui",
+        "to": "./webui"
+      }
+    ]
+  }
+}

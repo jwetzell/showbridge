@@ -1,0 +1,25 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  -webkit-app-region: drag;
+}
+
+#contents {
+  user-select: none;
+}
+
+#drag-drop-container {
+  -webkit-app-region: no-drag !important;
+}
+
+select,
+input,
+button {
+  -webkit-app-region: no-drag !important;
+}
+
+.clickable {
+  -webkit-app-region: no-drag !important;
+  cursor: pointer;
+}
