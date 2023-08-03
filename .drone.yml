@@ -60,7 +60,7 @@ steps:
       - cd launcher
       - npm install
   - name: build launcher
-    image: node:18.16.1-alpine
+    image: electronuserland/builder:18
     commands:
       - cd launcher
       - npm run build:linux
