@@ -60,10 +60,11 @@ steps:
       - cd launcher
       - npm install
   - name: build launcher
-    image: electronuserland/builder:18
+    image: electronuserland/builder:18-wine
     commands:
       - cd launcher
       - npm run build:linux
+      - npm run build:win
       - cd ..
       - ls dist/electron-output
   - name: deploy linux packages
@@ -78,6 +79,7 @@ steps:
       PLUGIN_SRC_DIR: /dist/electron-output
       PLUGIN_DEST_DIR: /download/launcher/latest
       PLUGIN_INCLUDE: ^.*\.AppImage$
+      PLUGIN_EXCLUDE: ^.*-unpacked$
       PLUGIN_SECURE: true
       PLUGIN_VERIFY: false
       PLUGIN_CLEAN_DIR: false
