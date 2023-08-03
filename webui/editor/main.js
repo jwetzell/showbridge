@@ -7,6 +7,7 @@ const editor = new JSONEditor(container, options);
 
 function loadConfig() {
   $.get(`/config`, (data) => {
+    console.log(data);
     editor.set(data);
   });
 
