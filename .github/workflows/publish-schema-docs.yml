@@ -22,7 +22,7 @@ jobs:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.FTP_USERNAME}}
           password: ${{secrets.FTP_PASSWORD}}
-          local-dir: ./html/docs/schema/config
-          server-dir: docs/schema/config
+          local-dir: ./html/docs/schema/config/
+          server-dir: docs/schema/config/
           port: 21
           protocol: ftps
