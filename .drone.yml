@@ -53,16 +53,10 @@ trigger:
   event:
     - push
 steps:
-  - name: install dependencies
+  - name: install dependencies and build launcher
     image: node:18.16.1-alpine
     commands:
       - cd launcher
-      - pwd
       - npm install
-  - name: build launcher
-    image: node:18.16.1-alpine
-    commands:
-      - cd launcher
-      - pwd
       - npm run build:linux
       - ls dist/electron-output
