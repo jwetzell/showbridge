@@ -16,6 +16,7 @@
     "email": "me@jwetzell.com",
     "url": "https://jwetzell.com"
   },
+  "repository": "https://github.com/jwetzell/showbridge",
   "keywords": [
     "show",
     "control",
@@ -23,10 +24,6 @@
     "router",
     "theatre"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://git.jwetzell.com/jwetzell/showbridge.git"
-  },
   "license": "GPL-3.0-only",
   "dependencies": {
     "@apideck/better-ajv-errors": "^0.3.6",

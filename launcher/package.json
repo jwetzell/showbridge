@@ -10,6 +10,7 @@
     "email": "me@jwetzell.com",
     "url": "https://jwetzell.com/"
   },
+  "repository": "https://github.com/jwetzell/showbridge",
   "type": "commonjs",
   "scripts": {
     "build:linux": "electron-builder -l",
