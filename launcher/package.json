@@ -20,7 +20,8 @@
     "prestart": "npm run tailwind && npm run bundle:dev",
     "start": "electron main.js",
     "preelectron": "npm run tailwind",
-    "electron": "electron main.js"
+    "electron": "electron main.js",
+    "release":"electron-builder"
   },
   "dependencies": {
     "fs-extra": "^11.1.1",
@@ -56,10 +57,16 @@
           ]
         }
       ],
-      "hardenedRuntime": "true"
+      "hardenedRuntime": "true",
+      "publish": [
+        "github"
+      ]
     },
     "win": {
-      "target": "NSIS"
+      "target": "NSIS",
+      "publish": [
+        "github"
+      ]
     },
     "nsis": {
       "oneClick": false
@@ -75,6 +82,9 @@
             "armv7l"
           ]
         }
+      ],
+      "publish": [
+        "github"
       ]
     },
     "extraResources": [
