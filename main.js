@@ -54,7 +54,7 @@ if (options.html) {
     const filePath = path.resolve(options.html);
     router.servePath(filePath);
   } else {
-    console.error(`${options.html} does not seem to exist skipping setup`);
+    console.error(`provided html path = ${options.html} does not seem to exist skipping...`);
   }
 }
 

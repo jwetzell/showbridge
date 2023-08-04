@@ -4,10 +4,92 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Showbridge</title>
+    <style>
+      html * {
+        font-family: sans-serif;
+      }
+
+      [id*='message-indicator'] {
+        background-color: greenyellow;
+        height: 6px;
+        width: 6px;
+        border-radius: 100%;
+        visibility: hidden;
+      }
+
+      .message-indicator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid black;
+        border-radius: 4px;
+        margin: 4px;
+        padding: 4px;
+      }
+
+      .message-type {
+        margin-left: 3px;
+        margin-right: 3px;
+      }
+
+      .message-indicators {
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .editor-link {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+      }
+    </style>
   </head>
   <body style="width: 100vw; height: 100vh; background-color: dimgray">
-    <ul>
-      <li><a href="editor">Editor</a></li>
-    </ul>
+    <div style="display: flex; flex-direction: column; height: 100%; width: 100%">
+      <div class="message-indicators">
+        <div class="message-indicator">
+          <div class="message-type">HTTP</div>
+          <div id="http-message-indicator"></div>
+        </div>
+
+        <div class="message-indicator">
+          <div class="message-type">WebSocket</div>
+          <div id="ws-message-indicator"></div>
+        </div>
+
+        <div class="message-indicator">
+          <div class="message-type">OSC</div>
+          <div id="osc-message-indicator"></div>
+        </div>
+
+        <div class="message-indicator">
+          <div class="message-type">UDP</div>
+          <div id="udp-message-indicator"></div>
+        </div>
+
+        <div class="message-indicator">
+          <div class="message-type">TCP</div>
+          <div id="tcp-message-indicator"></div>
+        </div>
+
+        <div class="message-indicator">
+          <div class="message-type">MIDI</div>
+          <div id="midi-message-indicator"></div>
+        </div>
+
+        <div class="message-indicator">
+          <div class="message-type">MQTT</div>
+          <div id="mqtt-message-indicator"></div>
+        </div>
+      </div>
+
+      <div class="editor-link">
+        <a href="/editor">EDITOR</a>
+      </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
   </body>
 </html>
