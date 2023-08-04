@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const httpAddressSelect = document.getElementById('http-address-select');
 const tcpAddressSelect = document.getElementById('tcp-address-select');
 const udpAddressSelect = document.getElementById('udp-address-select');
@@ -22,8 +23,6 @@ let currentConfig;
 electron.send('load_addresses');
 
 electron.on('ip_addresses', (event, addresses) => {
-  const options = addresses.map((address) => new Option(address.address, address.address));
-
   addresses.forEach((address) => {
     httpAddressSelect.add(new Option(address.address, address.address));
     tcpAddressSelect.add(new Option(address.address, address.address));
@@ -140,6 +139,6 @@ mqttBrokerPasswordInput.onchange = (event) => {
   currentConfig.mqtt.params.password = event.target.value;
 };
 
-saveButton.onclick = (event) => {
+saveButton.onclick = () => {
   electron.send('apply_config_from_object', currentConfig);
 };

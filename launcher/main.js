@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 // NOTE(jwetzell): HEAVY inspiration from https://github.com/bitfocus/companion/launcher
 
 const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell } = require('electron');
@@ -126,6 +127,7 @@ function getConfigObject(filePath) {
   if (fs.existsSync(filePath)) {
     return fs.readJsonSync(filePath);
   }
+  return undefined;
 }
 
 function createTray() {
@@ -429,10 +431,12 @@ app.whenReady().then(() => {
     try {
       const config = fs.readJSONSync(configFilePath);
       if (config.http.params.port) {
+        let addressToOpen = 'localhost';
+        if (config.http.params.address !== undefined && config.http.params.address !== '0.0.0.0') {
+          addressToOpen = config.http.params.address;
+        }
         // TODO(jwetzell)
-        shell.openExternal(
-          `http://${config.http.params.address ? config.http.params.address : 'localhost'}:${config.http.params.port}`
-        );
+        shell.openExternal(`http://${addressToOpen}:${config.http.params.port}`);
       } else {
         dialog.showErrorBox('Error', 'HTTP server does not seem to be setup right.');
       }
@@ -455,6 +459,7 @@ app.whenReady().then(() => {
 
   ipcMain.on('apply_config_from_object', (event, config) => {
     writeConfigToDisk(configFilePath, config);
+    // TODO(jwetzell): error handling
     reloadConfigFromDisk(configFilePath);
   });
 });

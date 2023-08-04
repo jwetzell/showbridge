@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 const logsElement = document.getElementById('logs');
 const logsWrapperElement = document.getElementById('logs-wrapper');
 electron.on('log', (event, log) => {
