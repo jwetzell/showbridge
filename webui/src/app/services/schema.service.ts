@@ -61,11 +61,15 @@ export class SchemaService {
     }
   }
 
-  getFormGroupFromSchema(schema: SomeJSONSchema) {
+  getFormGroupFromParamsSchema(schema: SomeJSONSchema) {
     const formGroup = new FormGroup({});
     if (schema?.properties) {
-      Object.entries(schema.properties).forEach(([paramKey, paramSchema]) => {
-        formGroup.addControl(paramKey, new FormControl(undefined));
+      Object.entries(schema.properties).forEach(([paramKey, paramSchema]: [string, any]) => {
+        if (paramSchema.const) {
+          formGroup.addControl(paramKey, new FormControl(paramSchema.const));
+        } else {
+          formGroup.addControl(paramKey, new FormControl(undefined));
+        }
       });
     } else {
       console.error('trigger-form: params schema without properties');
