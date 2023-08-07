@@ -1,7 +1,7 @@
 <ng-container *ngIf="trigger">
   <mat-card class="trigger">
     <mat-card-header>
-      <mat-toolbar style="background-color: transparent">
+      <mat-toolbar class="bg-transparent">
         <span>Trigger</span>
         <div [style.visibility]="triggerIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
         <span style="flex: 1 1 auto"></span>
@@ -19,5 +19,24 @@
         (delete)="deleteAction(i)"
         (updated)="actionUpdated(i, $event)"></app-action>
     </mat-card-content>
+    <mat-card-footer>
+      <mat-toolbar class="bg-transparent">
+        <span class="flex-auto"></span>
+
+        <ng-container *ngIf="schemaService.actionTypes.length > 0">
+          <button mat-icon-button color="primary" [matMenuTriggerFor]="addTriggerMenu">
+            <mat-icon>add</mat-icon>
+          </button>
+          <mat-menu #addTriggerMenu="matMenu">
+            <button
+              mat-menu-item
+              *ngFor="let actionType of schemaService.actionTypes"
+              (click)="addAction(actionType.type)">
+              <span>{{ actionType.name }}</span>
+            </button>
+          </mat-menu>
+        </ng-container>
+      </mat-toolbar>
+    </mat-card-footer>
   </mat-card>
 </ng-container>

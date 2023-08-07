@@ -9,18 +9,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { ActionFormComponent } from './components/action-form/action-form.component';
 import { ActionComponent } from './components/action/action.component';
 import { ConfigComponent } from './components/config/config.component';
-import { ParamsSchemaFormComponent } from './components/params-schema-form/params-schema-form.component';
 import { ProtocolComponent } from './components/protocol/protocol.component';
 import { TransformFormComponent } from './components/transform-form/transform-form.component';
 import { TransformComponent } from './components/transform/transform.component';
 import { TriggerFormComponent } from './components/trigger-form/trigger-form.component';
 import { TriggerComponent } from './components/trigger/trigger.component';
+import { ProtocolFormComponent } from './components/protocol-form/protocol-form.component';
+import { ParamsFormComponent } from './components/params-form/params-form.component';
 
 @NgModule({
   declarations: [
@@ -30,10 +35,11 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     ActionComponent,
     TriggerComponent,
     ProtocolComponent,
-    ParamsSchemaFormComponent,
     TriggerFormComponent,
     ActionFormComponent,
     TransformFormComponent,
+    ProtocolFormComponent,
+    ParamsFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +54,9 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     MatSlideToggleModule,
     MatButtonModule,
     MatToolbarModule,
+    MatMenuModule,
+    MatInputModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

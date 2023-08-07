@@ -1,9 +1,0 @@
-<ng-container *ngIf="paramsSchema && paramsFormGroup">
-  <div>{{ paramsSchema | json }}</div>
-  <form [formGroup]="paramsFormGroup">
-    <div *ngFor="let key of paramKeys()">
-      <label>{{ key }}: </label>
-      <input [formControlName]="key" />
-    </div>
-  </form>
-</ng-container>

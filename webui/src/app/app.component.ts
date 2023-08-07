@@ -5,6 +5,7 @@ import { ConfigFileSchema } from './models/config.models';
 import { ConfigService } from './services/config.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,7 +22,8 @@ export class AppComponent {
   constructor(
     private configService: ConfigService,
     private eventService: EventService,
-    private schemaService: SchemaService
+    private schemaService: SchemaService,
+    private snackBar: MatSnackBar
   ) {
     this.config$ = this.configService.getConfig();
     this.configService.getSchema().subscribe((schema) => {
@@ -29,7 +31,6 @@ export class AppComponent {
       this.schemaValidator.addSchema(schema, 'config');
       this.schemaService.setSchema(schema);
       this.schemaLoaded = true;
-      console.log(this.schemaLoaded);
     });
   }
 
@@ -47,6 +48,7 @@ export class AppComponent {
         this.pendingConfig = undefined;
         this.pendingConfigIsValid = false;
         this.eventService.reload();
+        this.snackBar.open('Config saved successfully!', 'Save');
       });
     } else {
       console.error('pending config is null');

@@ -14,60 +14,36 @@ export class TriggerFormComponent {
   @Input() data?: Trigger;
   @Output() updated: EventEmitter<Trigger> = new EventEmitter<Trigger>();
 
-  paramsSchema: any;
   schema: any;
   triggerFormGroup: FormGroup = new FormGroup({
     type: new FormControl('any'),
     comment: new FormControl(''),
     enabled: new FormControl(true),
   });
-  paramsFormGroup: FormGroup = new FormGroup({});
 
-  pendingValue?: Trigger;
-
-  constructor(
-    private formGroupService: FormGroupService,
-    private schemaService: SchemaService
-  ) {}
+  constructor(private schemaService: SchemaService) {}
 
   ngOnInit(): void {
     if (this.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Trigger', this.type);
 
-      this.paramsSchema = this.schemaService.getParamsForObjectType('Trigger', this.type);
-      if (this.paramsSchema && this.paramsSchema.properties) {
-        this.paramsFormGroup = this.schemaService.getFormGroupFromParamsSchema(this.paramsSchema);
-      } else {
-        console.error(`transform-form: no params schema found for ${this.type}`);
-      }
-
       if (this.data && this.triggerFormGroup) {
         this.triggerFormGroup.patchValue(this.data);
-        if (this.data.params && this.paramsFormGroup) {
-          this.paramsFormGroup.patchValue(this.data.params);
-        }
       }
       this.triggerFormGroup.valueChanges.subscribe((value) => {
-        this.formUpdated();
-      });
-
-      this.paramsFormGroup.valueChanges.subscribe((value) => {
         this.formUpdated();
       });
     }
   }
 
   formUpdated() {
-    const params = this.schemaService.cleanParams(this.paramsSchema, this.paramsFormGroup.value);
-
     this.updated.emit({
       ...this.triggerFormGroup.value,
-      params,
     });
   }
 
-  paramKeys() {
-    return Object.keys(this.paramsFormGroup.controls);
+  paramsUpdated(params: any) {
+    this.updated.emit({ ...this.triggerFormGroup.value, params });
   }
 
   getType(): string {

@@ -1,4 +1,12 @@
 <ng-container *ngIf="config$ | async as config">
-  <app-config [config]="config" (updated)="configUpdated($event)"></app-config>
-  <button *ngIf="pendingConfigIsValid" (click)="applyConfig()">Apply Config</button>
+  <ng-container *ngIf="schemaLoaded">
+    <mat-toolbar color="primary">
+      <span>showbridge</span>
+      <span class="flex-auto"></span>
+      <button mat-icon-button *ngIf="pendingConfigIsValid" (click)="applyConfig()">
+        <mat-icon>save</mat-icon>
+      </button>
+    </mat-toolbar>
+    <app-config [config]="config" (updated)="configUpdated($event)"></app-config>
+  </ng-container>
 </ng-container>

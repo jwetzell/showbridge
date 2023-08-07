@@ -6,21 +6,8 @@
         <label>enabled:</label>
         <mat-slide-toggle formControlName="enabled" color="primary"></mat-slide-toggle>
       </div>
-      <div>
-        <label>comment: </label>
-        <input type="text" formControlName="comment" />
-      </div>
     </div>
-    <ng-container *ngIf="paramsSchema && paramsFormGroup">
-      <div>
-        <hr />
-        <form [formGroup]="paramsFormGroup">
-          <div *ngFor="let key of paramKeys()">
-            <label>{{ key }}: </label>
-            <input [formControlName]="key" />
-          </div>
-        </form>
-      </div>
-    </ng-container>
+    <hr />
+    <app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
   </form>
 </ng-container>

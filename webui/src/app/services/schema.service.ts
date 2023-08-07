@@ -1,19 +1,72 @@
 import { Injectable } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { ConfigFileSchema } from '../models/config.models';
+import Ajv from 'ajv';
+import { ItemInfo } from '../models/form.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SchemaService {
   schema?: JSONSchemaType<ConfigFileSchema>;
+  ajv: Ajv = new Ajv();
+  actionTypes: ItemInfo[] = [];
+  transformTypes: ItemInfo[] = [];
 
   constructor() {}
 
   setSchema(schema: JSONSchemaType<ConfigFileSchema>) {
     this.schema = schema;
+
+    this.populateActionTypes();
+
+    this.populateTransformTypes();
+  }
+
+  populateActionTypes() {
+    if (this.schema) {
+      const definitions = this.schema.definitions;
+      if (definitions) {
+        this.actionTypes = Object.keys(definitions)
+          .filter((definitionKey) => definitionKey.startsWith('Action'))
+          .map((definitionKey) => definitions[definitionKey])
+          .filter((definition) => definition.properties?.type?.const !== undefined)
+          .map((definition) => {
+            return {
+              name: definition['title'],
+              type: definition.properties?.type?.const,
+            };
+          });
+      }
+    }
+  }
+
+  populateTransformTypes() {
+    if (this.schema) {
+      const definitions = this.schema.definitions;
+      if (definitions) {
+        this.transformTypes = Object.keys(definitions)
+          .filter((definitionKey) => definitionKey.startsWith('Transform'))
+          .map((definitionKey) => definitions[definitionKey])
+          .filter((definition) => definition.properties?.type?.const !== undefined)
+          .map((definition) => {
+            return {
+              name: definition['title'],
+              type: definition.properties?.type?.const,
+            };
+          });
+      }
+    }
   }
 
   getSchemaForObjectType(objectType: string, type: string) {
@@ -27,6 +80,20 @@ export class SchemaService {
           })
           .find((definition) => definition.properties?.type?.const === type);
         return definition;
+      }
+    } else {
+      console.error('schema is null');
+    }
+    return undefined;
+  }
+
+  getSchemaForProtocol(protocolType: string) {
+    if (this.schema) {
+      const schemaProperties = this.schema.properties;
+      if (schemaProperties) {
+        const protocolSchema = schemaProperties[protocolType];
+
+        return protocolSchema;
       }
     } else {
       console.error('schema is null');
@@ -51,8 +118,13 @@ export class SchemaService {
     }
   }
 
-  matchParamDataToSchema(data: any, schemas: any[]) {
-    // TODO(jwetzel): actually implement some sort of matching logic
+  matchParamsDataToSchema(data: any, schemas: any[]) {
+    const matchingSchemaIndex = schemas.findIndex((schema) => {
+      return this.ajv.validate(schema, data);
+    });
+    if (matchingSchemaIndex >= 0) {
+      return matchingSchemaIndex;
+    }
     return 0;
   }
 
@@ -70,10 +142,47 @@ export class SchemaService {
     const formGroup = new FormGroup({});
     if (schema?.properties) {
       Object.entries(schema.properties).forEach(([paramKey, paramSchema]: [string, any]) => {
-        if (paramSchema.const) {
-          formGroup.addControl(paramKey, new FormControl(paramSchema.const));
-        } else {
-          formGroup.addControl(paramKey, new FormControl(undefined));
+        // TODO(jwetzell): handle params that are of array or object type
+        if (paramSchema.type) {
+          switch (paramSchema.type) {
+            case 'string':
+            case 'number':
+            case 'array': // TODO(jwetzell): actually handle arrays
+            case 'object': // TODO(jwetzell): actually handle objects
+              let formDefault = '';
+              const validators: ValidatorFn[] = [];
+
+              // NOTE(jwetzell): check for a default value to set
+              if (paramSchema.const) {
+                formDefault = paramSchema.const;
+              } else if (paramSchema.default) {
+                formDefault = paramSchema.default;
+              }
+
+              // NOTE(jwetzell): add as many validators as we can
+
+              if (paramSchema.minimum) {
+                validators.push(Validators.min(paramSchema.minimum));
+              }
+
+              if (paramSchema.maximum) {
+                validators.push(Validators.max(paramSchema.maximum));
+              }
+
+              if (schema.required) {
+                if (schema.required.includes(paramKey)) {
+                  validators.push(Validators.required);
+                }
+              }
+              if (paramSchema.type === 'object') {
+                validators.push(this.objectValidator);
+              }
+              formGroup.addControl(paramKey, new FormControl(formDefault, validators));
+              break;
+            default:
+              console.error(`schema-service: unhandled param schema type for form group = ${paramSchema.type}`);
+              break;
+          }
         }
       });
     } else {
@@ -107,18 +216,71 @@ export class SchemaService {
                 if (paramValue.trim().length === 0) {
                   params[paramKey] = [];
                 } else {
-                  params[paramKey] = paramValue.split(',').map((part: string) => part.trim());
+                  let itemsArray = paramValue.split(',').map((part: string) => part.trim());
+                  if (paramSchema?.items?.type) {
+                    if (paramSchema?.items?.type === 'integer') {
+                      itemsArray = itemsArray.map((item: any) => parseInt(item));
+                    } else if (paramSchema?.items?.type === 'number') {
+                      itemsArray = itemsArray.map((item: any) => parseFloat(item));
+                    } else {
+                      console.error(`schema-service: unhandled array schema type: ${paramSchema.type}`);
+                    }
+                  }
+                  params[paramKey] = itemsArray;
                 }
               }
 
               break;
+            case 'string':
+              break;
+            case 'object':
+              params[paramKey] = JSON.parse(params[paramKey]);
+              break;
             default:
-              console.log(`action-form: unhandled param schema type: ${paramSchema.type}`);
+              console.log(`schema-service: unhandled param schema type: ${paramSchema.type}`);
               break;
           }
         }
       }
     });
     return params;
+  }
+
+  getTriggerTypesForProtocol(protocolType: string): string[] {
+    const types: string[] = [];
+    if (!this.schema) {
+      return types;
+    }
+
+    if (this.schema.properties[protocolType]) {
+      const protocolTypeSchema = this.schema.properties[protocolType];
+      if (protocolTypeSchema?.properties?.triggers?.items?.oneOf) {
+        const validTriggerRefs = protocolTypeSchema.properties.triggers.items.oneOf;
+        validTriggerRefs
+          .map((triggerRef: any) => triggerRef['$ref'])
+          .forEach((triggerRef: string) => {
+            if (triggerRef.startsWith('#/definitions/')) {
+              triggerRef = triggerRef.replace('#/definitions/', '');
+              if (this.schema?.definitions) {
+                const triggerSchema = this.schema?.definitions[triggerRef];
+                if (triggerSchema) {
+                  types.push(triggerSchema.properties.type.const);
+                }
+              }
+            }
+          });
+      }
+    }
+
+    return types;
+  }
+
+  objectValidator(control: AbstractControl): ValidationErrors | null {
+    try {
+      JSON.parse(control.value);
+      return null;
+    } catch (error) {
+      return { notObject: { value: control.value } };
+    }
   }
 }

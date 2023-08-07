@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Action } from 'src/app/models/action.model';
+import { ItemInfo } from 'src/app/models/form.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { EventService } from 'src/app/services/event.service';
+import { SchemaService } from 'src/app/services/schema.service';
 @Component({
   selector: 'app-trigger',
   templateUrl: './trigger.component.html',
@@ -15,7 +17,10 @@ export class TriggerComponent implements OnInit {
 
   triggerIndicatorVisibility: boolean = false;
 
-  constructor(private eventService: EventService) {}
+  constructor(
+    private eventService: EventService,
+    public schemaService: SchemaService
+  ) {}
 
   ngOnInit() {
     if (this.path) {
@@ -42,6 +47,14 @@ export class TriggerComponent implements OnInit {
         this.updated.emit(triggerCopy);
       }
     }
+  }
+
+  addAction(actionType: string) {
+    this.trigger?.actions?.push({
+      type: actionType,
+      enabled: true,
+    });
+    this.updated.emit(this.trigger);
   }
 
   deleteMe() {

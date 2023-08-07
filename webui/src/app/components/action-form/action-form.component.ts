@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Action } from 'src/app/models/action.model';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -14,15 +14,12 @@ export class ActionFormComponent implements OnInit {
   @Input() data?: Action;
   @Output() updated: EventEmitter<Action> = new EventEmitter<Action>();
 
-  paramsSchema: any;
   schema: any;
   actionFormGroup: FormGroup = new FormGroup({
     type: new FormControl('log'),
     comment: new FormControl(''),
     enabled: new FormControl(true),
   });
-  paramsFormGroup: FormGroup = new FormGroup({});
-  paramsOptions: { display: string; formGroup: FormGroup; keys: string[]; schema: any }[] = [];
 
   constructor(private schemaService: SchemaService) {}
 
@@ -30,81 +27,24 @@ export class ActionFormComponent implements OnInit {
     if (this.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Action', this.type);
 
-      this.paramsSchema = this.schemaService.getParamsForObjectType('Action', this.type);
-      if (this.paramsSchema) {
-        if (this.paramsSchema.properties) {
-          this.paramsFormGroup = this.schemaService.getFormGroupFromParamsSchema(this.paramsSchema);
-        } else if (this.paramsSchema.oneOf) {
-          this.paramsOptions = this.paramsSchema.oneOf.map((oneOf: any) => {
-            const paramsOption = {
-              display: oneOf.title,
-              schema: oneOf,
-              formGroup: this.schemaService.getFormGroupFromParamsSchema(oneOf),
-            };
-            return {
-              ...paramsOption,
-              keys: Object.keys(paramsOption.formGroup.controls),
-            };
-          });
-          const matchingSchemaIndex = this.schemaService.matchParamDataToSchema(
-            this.data?.params,
-            this.paramsOptions.map((paramsOption) => paramsOption.schema)
-          );
-
-          this.paramsFormGroup = this.paramsOptions[matchingSchemaIndex].formGroup;
-          this.paramsSchema = this.paramsOptions[matchingSchemaIndex].schema;
-        }
-      } else {
-        console.error(`transform-form: no params schema found for ${this.type}`);
-      }
-
       if (this.data && this.actionFormGroup) {
         this.actionFormGroup.patchValue(this.data);
-
-        if (this.data.params && this.paramsFormGroup) {
-          this.paramsFormGroup.patchValue(this.data.params);
-        }
       }
 
       this.actionFormGroup.valueChanges.subscribe((value) => {
         this.formUpdated();
       });
-
-      this.paramsFormGroup.valueChanges.subscribe((value) => {
-        this.formUpdated();
-      });
     }
-  }
-
-  paramsOptionsTabSelected(event: MatTabChangeEvent) {
-    // TODO(jwetzell): figure out how to handle params properties that have const requirements
-    const paramsOption = this.paramsOptions[event.index];
-    console.log(paramsOption);
-
-    this.paramsSchema = paramsOption.schema;
-    this.paramsFormGroup = paramsOption.formGroup;
-
-    if (this.data) {
-      if (this.data.params && this.paramsFormGroup) {
-        this.paramsFormGroup.patchValue(this.data.params);
-      }
-    }
-
-    this.paramsFormGroup.valueChanges.subscribe((value) => {
-      this.formUpdated();
-    });
   }
 
   formUpdated() {
-    const params = this.schemaService.cleanParams(this.paramsSchema, this.paramsFormGroup.value);
     this.updated.emit({
       ...this.actionFormGroup.value,
-      params,
     });
   }
 
-  paramKeys() {
-    return Object.keys(this.paramsFormGroup.controls);
+  paramsUpdated(params: any) {
+    this.updated.emit({ ...this.actionFormGroup.value, params });
   }
 
   getType(): string {

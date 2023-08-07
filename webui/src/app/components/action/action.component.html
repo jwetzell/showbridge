@@ -1,7 +1,7 @@
 <ng-container *ngIf="action">
   <mat-card class="action">
     <mat-card-header>
-      <mat-toolbar style="background-color: transparent">
+      <mat-toolbar class="bg-transparent">
         <span>Action</span>
         <div [style.visibility]="actionIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
         <span style="flex: 1 1 auto"></span>
@@ -18,5 +18,23 @@
         (delete)="deleteTransform(i)"
         (updated)="transformUpdated(i, $event)"></app-transform>
     </mat-card-content>
+    <mat-card-footer>
+      <mat-toolbar class="bg-transparent">
+        <span class="flex-auto"></span>
+        <ng-container *ngIf="schemaService.transformTypes.length > 0">
+          <button mat-icon-button color="primary" [matMenuTriggerFor]="addTriggerMenu">
+            <mat-icon>add</mat-icon>
+          </button>
+          <mat-menu #addTriggerMenu="matMenu">
+            <button
+              mat-menu-item
+              *ngFor="let transformType of schemaService.transformTypes"
+              (click)="addTransform(transformType.type)">
+              <span>{{ transformType.name }}</span>
+            </button>
+          </mat-menu>
+        </ng-container>
+      </mat-toolbar>
+    </mat-card-footer>
   </mat-card>
 </ng-container>

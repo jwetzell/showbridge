@@ -13,14 +13,11 @@ export class TransformFormComponent implements OnInit {
   @Input() data?: Transform;
   @Output() updated: EventEmitter<Transform> = new EventEmitter<Transform>();
 
-  paramsSchema: any;
   schema: any;
   transformFormGroup: FormGroup = new FormGroup({
     type: new FormControl(''),
-    comment: new FormControl(''),
     enabled: new FormControl(true),
   });
-  paramsFormGroup: FormGroup = new FormGroup({});
 
   constructor(private schemaService: SchemaService) {}
 
@@ -28,40 +25,24 @@ export class TransformFormComponent implements OnInit {
     if (this.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Transform', this.type);
 
-      this.paramsSchema = this.schemaService.getParamsForObjectType('Transform', this.type);
-      if (this.paramsSchema && this.paramsSchema.properties) {
-        this.paramsFormGroup = this.schemaService.getFormGroupFromParamsSchema(this.paramsSchema);
-      } else {
-        console.error(`transform-form: no params schema found for ${this.type}`);
-      }
-
       if (this.data && this.transformFormGroup) {
         this.transformFormGroup.patchValue(this.data);
-        if (this.data.params && this.paramsFormGroup) {
-          this.paramsFormGroup.patchValue(this.data.params);
-        }
       }
 
       this.transformFormGroup.valueChanges.subscribe((value) => {
-        this.formUpdated();
-      });
-
-      this.paramsFormGroup.valueChanges.subscribe((value) => {
         this.formUpdated();
       });
     }
   }
 
   formUpdated() {
-    const params = this.schemaService.cleanParams(this.paramsSchema, this.paramsFormGroup.value);
     this.updated.emit({
       ...this.transformFormGroup.value,
-      params,
     });
   }
 
-  paramKeys() {
-    return Object.keys(this.paramsFormGroup.controls);
+  paramsUpdated(params: any) {
+    this.updated.emit({ ...this.transformFormGroup.value, params });
   }
 
   getType(): string {

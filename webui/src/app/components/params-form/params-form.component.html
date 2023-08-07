@@ -1,0 +1,16 @@
+<ng-container *ngIf="parentSchema">
+  <ng-container *ngIf="paramsOptions.length > 1">
+    <mat-tab-group [selectedIndex]="paramsOptionsSelectedIndex" (selectedTabChange)="paramsOptionsTabSelected($event)">
+      <mat-tab *ngFor="let paramsOption of paramsOptions" label="{{ paramsOption.display }}"></mat-tab>
+    </mat-tab-group>
+  </ng-container>
+  <form [formGroup]="paramsFormGroup">
+    <div *ngFor="let key of paramKeys()">
+      <!-- TODO(jwetzell): figure out how to display params that are arrays or objects-->
+      <mat-form-field>
+        <mat-label>{{ key }}</mat-label>
+        <input matInput [formControlName]="key" />
+      </mat-form-field>
+    </div>
+  </form>
+</ng-container>

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Action } from 'src/app/models/action.model';
 import { EventService } from 'src/app/services/event.service';
+import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
   selector: 'app-action',
@@ -16,7 +17,10 @@ export class ActionComponent implements OnInit {
 
   actionIndicatorVisibility: boolean = false;
 
-  constructor(private eventService: EventService) {}
+  constructor(
+    private eventService: EventService,
+    public schemaService: SchemaService
+  ) {}
 
   ngOnInit(): void {
     if (this.path) {
@@ -47,6 +51,14 @@ export class ActionComponent implements OnInit {
       this.action?.transforms?.splice(index, 1);
       this.updated.emit(this.action);
     }
+  }
+
+  addTransform(tranformType: string) {
+    this.action?.transforms?.push({
+      type: tranformType,
+      enabled: true,
+    });
+    this.updated.emit(this.action);
   }
 
   update(action: Action) {
