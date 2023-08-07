@@ -1,12 +1,10 @@
 <ng-container *ngIf="config">
   <mat-tab-group>
     <mat-tab *ngFor="let protocol of protocols" [label]="protocol">
-      <ng-template matTabContent>
-        <app-protocol
-          [protocolType]="protocol"
-          [protocol]="config[protocol]"
-          (updated)="protocolUpdate(protocol, $event)"></app-protocol>
-      </ng-template>
+      <app-protocol
+        [protocolType]="protocol"
+        [protocol]="config[protocol]"
+        (updated)="protocolUpdate(protocol, $event)"></app-protocol>
     </mat-tab>
   </mat-tab-group>
 </ng-container>
