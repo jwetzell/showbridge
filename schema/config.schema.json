@@ -20,6 +20,8 @@
             "port": {
               "description": "TCP port to listen on (this will be the same port used for websocket connections",
               "type": "number",
+              "minimum": 1,
+              "maximum": 65535,
               "default": 3000
             }
           },
@@ -138,6 +140,8 @@
             "port": {
               "description": "TCP port to listen on",
               "type": "number",
+              "minimum": 1,
+              "maximum": 65535,
               "default": 3000
             }
           },
@@ -176,6 +180,8 @@
             "port": {
               "description": "UDP port to listen on",
               "type": "number",
+              "minimum": 1,
+              "maximum": 65535,
               "default": 3000
             }
           },
