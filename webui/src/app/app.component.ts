@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import Ajv, { JSONSchemaType } from 'ajv';
-import { Observable, Subject, filter, of } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import Ajv from 'ajv';
+import { Subject, filter } from 'rxjs';
+import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { ConfigFileSchema } from './models/config.models';
 import { ConfigService } from './services/config.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
-import { ImportConfigComponent } from './components/import-config/import-config.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -84,34 +84,5 @@ export class AppComponent {
       return valid;
     }
     return false;
-  }
-
-  getTriggerTypesForMessageType(messageType: string, schema: JSONSchemaType<ConfigFileSchema>): string[] {
-    const ajv = new Ajv({
-      schemas: [schema],
-    });
-    const types: string[] = [];
-
-    if (schema.properties[messageType]) {
-      const messageTypeSchema = schema.properties[messageType];
-      if (messageTypeSchema?.properties?.triggers?.items?.oneOf) {
-        const validTriggerRefs = messageTypeSchema.properties.triggers.items.oneOf;
-        validTriggerRefs
-          .map((triggerRef: any) => triggerRef['$ref'])
-          .forEach((triggerRef: string) => {
-            if (triggerRef.startsWith('#/definitions/')) {
-              triggerRef = triggerRef.replace('#/definitions/', '');
-              if (schema.definitions) {
-                const triggerSchema = schema?.definitions[triggerRef];
-                if (triggerSchema) {
-                  types.push(triggerSchema.properties.type.const);
-                }
-              }
-            }
-          });
-      }
-    }
-
-    return types;
   }
 }
