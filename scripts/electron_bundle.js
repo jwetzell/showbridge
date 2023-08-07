@@ -12,12 +12,18 @@ exports.default = async function (context) {
   }
   console.log('bundling things up for electron app');
 
+  console.log('bundling main.js');
   execSync(
     `ncc build ${path.join(__dirname, '../main.js')} -o ${path.join(__dirname, '../dist/bundle')} --target es2020`,
     {
       stdio: 'inherit',
     }
   );
+
+  console.log('building webui');
+  execSync(`cd ../webui && npm install && npm run build`, {
+    stdio: 'inherit',
+  });
   await downloadNode(context);
   const platform = context.packager.platform.nodeName;
 

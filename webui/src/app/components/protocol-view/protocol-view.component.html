@@ -1,0 +1,21 @@
+<ng-container *ngIf="protocolFormGroup && protocolType && protocol">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ protocolType }} configuration</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="protocolFormGroup">
+        <div formGroupName="params">
+          <div *ngFor="let key of paramKeys()">
+            <label>{{ key }}: </label>
+            <input [formControlName]="key" />
+          </div>
+        </div>
+      </form>
+      <app-trigger
+        *ngFor="let triggerFormGroup of getTriggerFormGroups(); let i = index"
+        [path]="protocolType + '/triggers/' + i"
+        [triggerFormGroup]="triggerFormGroup"></app-trigger>
+    </mat-card-content>
+  </mat-card>
+</ng-container>

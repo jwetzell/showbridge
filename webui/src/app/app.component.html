@@ -1,0 +1,4 @@
+<ng-container *ngIf="config$ | async as config">
+  <app-config [config]="config" (updated)="configUpdated($event)"></app-config>
+  <button *ngIf="pendingConfigIsValid" (click)="applyConfig()">Apply Config</button>
+</ng-container>

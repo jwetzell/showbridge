@@ -298,7 +298,7 @@ app.whenReady().then(() => {
     }
 
     showbridgeProcess = respawn(
-      () => [nodeBin, path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath, '-h', './webui', '-t'],
+      () => [nodeBin, path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath, '-h', './dist/webui', '-t'],
       {
         name: 'showbridge process',
         maxRestarts: 3,

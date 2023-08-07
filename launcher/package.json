@@ -102,8 +102,8 @@
         "to": "./config"
       },
       {
-        "from": "../webui",
-        "to": "./webui"
+        "from": "../dist/webui",
+        "to": "./dist/webui"
       }
     ]
   }

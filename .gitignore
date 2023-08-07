@@ -4,3 +4,4 @@ dist
 html
 .DS_store
 .cache
+.angular

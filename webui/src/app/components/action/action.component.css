@@ -1,0 +1,11 @@
+.action {
+  background-color: skyblue;
+  margin: 2px;
+}
+
+.message-indicator {
+  background-color: greenyellow;
+  height: 6px;
+  width: 6px;
+  border-radius: 100%;
+}
