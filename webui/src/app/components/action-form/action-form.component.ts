@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Action } from 'src/app/models/action.model';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -21,6 +22,7 @@ export class ActionFormComponent implements OnInit {
     enabled: new FormControl(true),
   });
   paramsFormGroup: FormGroup = new FormGroup({});
+  paramsOptions: { display: string; formGroup: FormGroup; keys: string[]; schema: any }[] = [];
 
   constructor(private schemaService: SchemaService) {}
 
@@ -30,7 +32,23 @@ export class ActionFormComponent implements OnInit {
 
       this.paramsSchema = this.schemaService.getParamsForObjectType('Action', this.type);
       if (this.paramsSchema) {
-        this.paramsFormGroup = this.schemaService.getFormGroupFromSchema(this.paramsSchema);
+        if (this.paramsSchema.properties) {
+          this.paramsFormGroup = this.schemaService.getFormGroupFromParamsSchema(this.paramsSchema);
+        } else if (this.paramsSchema.oneOf) {
+          console.log(this.paramsSchema);
+          this.paramsOptions = this.paramsSchema.oneOf.map((oneOf: any) => {
+            const paramsOption = {
+              display: oneOf.title,
+              schema: oneOf,
+              formGroup: this.schemaService.getFormGroupFromParamsSchema(oneOf),
+            };
+            return {
+              ...paramsOption,
+              keys: Object.keys(paramsOption.formGroup.controls),
+            };
+          });
+          console.log(this.paramsOptions);
+        }
       } else {
         console.error(`transform-form: no params schema found for ${this.type}`);
       }
@@ -51,6 +69,25 @@ export class ActionFormComponent implements OnInit {
         this.formUpdated();
       });
     }
+  }
+
+  paramsOptionsTabSelected(event: MatTabChangeEvent) {
+    console.log(event.index);
+    const paramsOption = this.paramsOptions[event.index];
+    console.log(paramsOption);
+
+    this.paramsSchema = paramsOption.schema;
+    this.paramsFormGroup = paramsOption.formGroup;
+
+    if (this.data) {
+      if (this.data.params && this.paramsFormGroup) {
+        this.paramsFormGroup.patchValue(this.data.params);
+      }
+    }
+
+    this.paramsFormGroup.valueChanges.subscribe((value) => {
+      this.formUpdated();
+    });
   }
 
   formUpdated() {

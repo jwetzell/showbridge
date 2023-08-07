@@ -11,6 +11,11 @@
         <input type="text" formControlName="comment" />
       </div>
     </div>
+    <ng-container *ngIf="paramsOptions.length > 1">
+      <mat-tab-group (selectedTabChange)="paramsOptionsTabSelected($event)">
+        <mat-tab *ngFor="let paramsOption of paramsOptions" label="{{ paramsOption.display }}"></mat-tab>
+      </mat-tab-group>
+    </ng-container>
     <ng-container *ngIf="paramsSchema && paramsFormGroup">
       <div>
         <hr />

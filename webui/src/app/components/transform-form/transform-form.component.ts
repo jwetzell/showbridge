@@ -29,8 +29,8 @@ export class TransformFormComponent implements OnInit {
       this.schema = this.schemaService.getSchemaForObjectType('Transform', this.type);
 
       this.paramsSchema = this.schemaService.getParamsForObjectType('Transform', this.type);
-      if (this.paramsSchema) {
-        this.paramsFormGroup = this.schemaService.getFormGroupFromSchema(this.paramsSchema);
+      if (this.paramsSchema && this.paramsSchema.properties) {
+        this.paramsFormGroup = this.schemaService.getFormGroupFromParamsSchema(this.paramsSchema);
       } else {
         console.error(`transform-form: no params schema found for ${this.type}`);
       }
