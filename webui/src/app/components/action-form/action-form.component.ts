@@ -35,7 +35,6 @@ export class ActionFormComponent implements OnInit {
         if (this.paramsSchema.properties) {
           this.paramsFormGroup = this.schemaService.getFormGroupFromParamsSchema(this.paramsSchema);
         } else if (this.paramsSchema.oneOf) {
-          console.log(this.paramsSchema);
           this.paramsOptions = this.paramsSchema.oneOf.map((oneOf: any) => {
             const paramsOption = {
               display: oneOf.title,
@@ -47,7 +46,13 @@ export class ActionFormComponent implements OnInit {
               keys: Object.keys(paramsOption.formGroup.controls),
             };
           });
-          console.log(this.paramsOptions);
+          const matchingSchemaIndex = this.schemaService.matchParamDataToSchema(
+            this.data?.params,
+            this.paramsOptions.map((paramsOption) => paramsOption.schema)
+          );
+
+          this.paramsFormGroup = this.paramsOptions[matchingSchemaIndex].formGroup;
+          this.paramsSchema = this.paramsOptions[matchingSchemaIndex].schema;
         }
       } else {
         console.error(`transform-form: no params schema found for ${this.type}`);
@@ -72,7 +77,7 @@ export class ActionFormComponent implements OnInit {
   }
 
   paramsOptionsTabSelected(event: MatTabChangeEvent) {
-    console.log(event.index);
+    // TODO(jwetzell): figure out how to handle params properties that have const requirements
     const paramsOption = this.paramsOptions[event.index];
     console.log(paramsOption);
 

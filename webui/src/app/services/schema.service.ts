@@ -51,6 +51,11 @@ export class SchemaService {
     }
   }
 
+  matchParamDataToSchema(data: any, schemas: any[]) {
+    // TODO(jwetzel): actually implement some sort of matching logic
+    return 0;
+  }
+
   getParamsForProtocol(protocol: string) {
     if (this.schema) {
       if (this.schema.properties[protocol]) {
