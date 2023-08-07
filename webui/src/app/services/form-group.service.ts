@@ -14,46 +14,9 @@ export class FormGroupService {
 
   constructor() {}
 
-  setSchema(schema: JSONSchemaType<ConfigFileSchema>) {
-    this.schema = schema;
-  }
-
-  getParamsForObjectType(objectType: string, type: string) {
-    if (this.schema) {
-      const definitions = this.schema.definitions;
-      if (definitions) {
-        const definition = Object.keys(definitions)
-          .filter((definitionKey) => definitionKey.startsWith(objectType))
-          .map((definitionKey) => {
-            return definitions[definitionKey];
-          })
-          .find((definition) => definition.properties?.type?.const === type);
-        return definition?.properties.params;
-      }
-    } else {
-      console.error('schema is null');
-    }
-  }
-
-  getParamsForProtocol(protocol: string) {
-    if (this.schema) {
-      if (this.schema.properties[protocol]) {
-        return this.schema.properties.protocol;
-      }
-    } else {
-      console.error('schema is null');
-    }
-  }
-
   getProtocolFormGroup(protocolType: string, protocol: ProtocolConfiguration): FormGroup {
     const formGroup = new FormGroup({
       params: new FormGroup({}),
-      triggers: new FormArray([]),
-    });
-
-    const triggers = formGroup.get('triggers') as FormArray;
-    protocol.triggers?.forEach((trigger: Trigger) => {
-      triggers.push(this.getTriggerFormGroup(trigger));
     });
 
     if (protocol?.params) {

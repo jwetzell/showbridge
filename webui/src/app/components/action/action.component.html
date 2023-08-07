@@ -1,25 +1,22 @@
-<ng-container *ngIf="actionFormGroup">
+<ng-container *ngIf="action">
   <mat-card class="action">
     <mat-card-header>
-      <mat-card-title>Action</mat-card-title>
-      <div [style.visibility]="actionIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
+      <mat-toolbar style="background-color: transparent">
+        <span>Action</span>
+        <div [style.visibility]="actionIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
+        <span style="flex: 1 1 auto"></span>
+        <button (click)="deleteMe()" mat-icon-button color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-toolbar>
     </mat-card-header>
     <mat-card-content>
-      <form [formGroup]="actionFormGroup">
-        <div>type: {{ getType() }}</div>
-        <!-- <input formControlName="type" /> -->
-        <label>enabled:</label>
-        <input type="checkbox" formControlName="enabled" />
-        <div formGroupName="params">
-          <div *ngFor="let key of paramKeys()">
-            <label>{{ key }}: </label>
-            <input [formControlName]="key" />
-          </div>
-        </div>
-        <app-transform
-          *ngFor="let transformFormGroup of getTransformFormGroups()"
-          [transformFormGroup]="transformFormGroup"></app-transform>
-      </form>
+      <app-action-form [type]="action.type" [data]="action" (updated)="update($event)"></app-action-form>
+      <app-transform
+        *ngFor="let transform of action.transforms; let i = index"
+        [transform]="transform"
+        (delete)="deleteTransform(i)"
+        (updated)="transformUpdated(i, $event)"></app-transform>
     </mat-card-content>
   </mat-card>
 </ng-container>

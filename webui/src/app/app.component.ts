@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ConfigFileSchema } from './models/config.models';
 import { ConfigService } from './services/config.service';
 import { EventService } from './services/event.service';
-import { FormGroupService } from './services/form-group.service';
+import { SchemaService } from './services/schema.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,31 +16,41 @@ export class AppComponent {
   pendingConfig?: ConfigFileSchema;
   schemaValidator?: Ajv;
   pendingConfigIsValid: Boolean = false;
+  schemaLoaded: Boolean = false;
 
   constructor(
     private configService: ConfigService,
     private eventService: EventService,
-    private formGroupService: FormGroupService
+    private schemaService: SchemaService
   ) {
     this.config$ = this.configService.getConfig();
     this.configService.getSchema().subscribe((schema) => {
       this.schemaValidator = new Ajv();
       this.schemaValidator.addSchema(schema, 'config');
-      this.formGroupService.setSchema(schema);
+      this.schemaService.setSchema(schema);
+      this.schemaLoaded = true;
+      console.log(this.schemaLoaded);
     });
   }
 
   configUpdated(newConfig: ConfigFileSchema) {
+    console.log('config updated');
     this.pendingConfig = newConfig;
     this.pendingConfigIsValid = this.validatePendingConfig();
+    if (!this.pendingConfigIsValid) {
+      console.error(this.schemaValidator?.errors);
+    }
   }
 
   applyConfig() {
     if (this.pendingConfig) {
       this.configService.uploadConfig(this.pendingConfig).subscribe((resp) => {
         this.pendingConfig = undefined;
+        this.pendingConfigIsValid = false;
         this.eventService.reload();
       });
+    } else {
+      console.error('pending config is null');
     }
   }
 

@@ -1,22 +1,17 @@
-<ng-container *ngIf="transformFormGroup">
+<ng-container *ngIf="transform">
   <mat-card class="transform">
     <mat-card-header>
-      <mat-card-title>Transform</mat-card-title>
-      <div [style.visibility]="transformIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
+      <mat-toolbar style="background-color: transparent">
+        <span>Transform</span>
+        <div [style.visibility]="transformIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
+        <span style="flex: 1 1 auto"></span>
+        <button (click)="deleteMe()" mat-icon-button color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-toolbar>
     </mat-card-header>
     <mat-card-content>
-      <form [formGroup]="transformFormGroup">
-        <div>type: {{ getType() }}</div>
-        <!-- <input formControlName="type" /> -->
-        <label>enabled:</label>
-        <input type="checkbox" formControlName="enabled" />
-        <div formGroupName="params">
-          <div *ngFor="let key of paramKeys()">
-            <label>{{ key }}: </label>
-            <input [formControlName]="key" />
-          </div>
-        </div>
-      </form>
+      <app-transform-form [type]="transform.type" [data]="transform" (updated)="update($event)"></app-transform-form>
     </mat-card-content>
   </mat-card>
 </ng-container>

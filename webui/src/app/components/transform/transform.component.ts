@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Transform } from 'src/app/models/transform.model';
 import { EventService } from 'src/app/services/event.service';
-import { FormGroupService } from 'src/app/services/form-group.service';
 
 @Component({
   selector: 'app-transform',
@@ -9,14 +8,15 @@ import { FormGroupService } from 'src/app/services/form-group.service';
   styleUrls: ['./transform.component.css'],
 })
 export class TransformComponent implements OnInit {
-  @Input() transformFormGroup?: FormGroup;
+  @Input() transform?: Transform;
   @Input() path?: string;
+
+  @Output() delete: EventEmitter<string> = new EventEmitter<string>();
+  @Output() updated: EventEmitter<Transform> = new EventEmitter<Transform>();
+
   transformIndicatorVisibility: boolean = false;
 
-  constructor(
-    private formGroupService: FormGroupService,
-    private eventService: EventService
-  ) {}
+  constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
     if (this.path) {
@@ -28,9 +28,12 @@ export class TransformComponent implements OnInit {
     }
   }
 
-  paramKeys() {
-    const paramsFormGroup = this.transformFormGroup?.get('params') as FormGroup;
-    return Object.keys(paramsFormGroup.controls);
+  deleteMe() {
+    this.delete.emit(this.path);
+  }
+
+  update(transform: Transform) {
+    this.updated.emit(transform);
   }
 
   flashIndicator() {
@@ -38,9 +41,5 @@ export class TransformComponent implements OnInit {
     setTimeout(() => {
       this.transformIndicatorVisibility = false;
     }, 200);
-  }
-
-  getType(): string {
-    return this.transformFormGroup?.controls['type'].value;
   }
 }

@@ -1,27 +1,21 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Action } from 'src/app/models/action.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { EventService } from 'src/app/services/event.service';
-import { FormGroupService } from 'src/app/services/form-group.service';
 @Component({
   selector: 'app-trigger',
   templateUrl: './trigger.component.html',
   styleUrls: ['./trigger.component.css'],
 })
 export class TriggerComponent implements OnInit {
-  // @Input() trigger?: Trigger;
   @Input() path?: string;
-  @Output() updated: Subject<Trigger> = new Subject<Trigger>();
+  @Input() trigger?: Trigger;
+  @Output() updated: EventEmitter<Trigger> = new EventEmitter<Trigger>();
+  @Output() delete: EventEmitter<string> = new EventEmitter<string>();
 
   triggerIndicatorVisibility: boolean = false;
 
-  @Input() triggerFormGroup?: FormGroup;
-
-  constructor(
-    private formGroupService: FormGroupService,
-    private eventService: EventService
-  ) {}
+  constructor(private eventService: EventService) {}
 
   ngOnInit() {
     if (this.path) {
@@ -31,11 +25,34 @@ export class TriggerComponent implements OnInit {
         }
       });
     }
-    if (this.triggerFormGroup) {
-      this.triggerFormGroup.valueChanges.subscribe((value) => {
-        this.updated.next(value);
-      });
+  }
+
+  deleteAction(index: number) {
+    if (this.trigger) {
+      this.trigger?.actions?.splice(index, 1);
+      this.updated.emit(this.trigger);
     }
+  }
+
+  actionUpdated(index: number, action: Action) {
+    if (this.trigger) {
+      if (this.trigger?.actions !== undefined && this.trigger.actions[index] !== undefined) {
+        const triggerCopy = JSON.parse(JSON.stringify(this.trigger));
+        triggerCopy.actions[index] = action;
+        this.updated.emit(triggerCopy);
+      }
+    }
+  }
+
+  deleteMe() {
+    this.delete.emit(this.path);
+  }
+
+  update(trigger: Trigger) {
+    this.updated.next({
+      ...this.trigger,
+      ...trigger,
+    });
   }
 
   flashIndicator() {
@@ -43,20 +60,5 @@ export class TriggerComponent implements OnInit {
     setTimeout(() => {
       this.triggerIndicatorVisibility = false;
     }, 200);
-  }
-
-  getActionFormGroups() {
-    return (this.triggerFormGroup?.get('actions') as FormArray).controls.map((formControl) => {
-      return formControl as FormGroup;
-    });
-  }
-
-  getType(): string {
-    return this.triggerFormGroup?.controls['type'].value;
-  }
-
-  paramKeys() {
-    const paramsFormGroup = this.triggerFormGroup?.get('params') as FormGroup;
-    return Object.keys(paramsFormGroup.controls);
   }
 }

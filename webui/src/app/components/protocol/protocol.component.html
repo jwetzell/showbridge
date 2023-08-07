@@ -13,9 +13,11 @@
         </div>
       </form>
       <app-trigger
-        *ngFor="let triggerFormGroup of getTriggerFormGroups(); let i = index"
+        *ngFor="let trigger of protocol.triggers; let i = index"
         [path]="protocolType + '/triggers/' + i"
-        [triggerFormGroup]="triggerFormGroup"></app-trigger>
+        [trigger]="trigger"
+        (delete)="deleteTrigger(i)"
+        (updated)="triggerUpdated(i, $event)"></app-trigger>
     </mat-card-content>
   </mat-card>
 </ng-container>

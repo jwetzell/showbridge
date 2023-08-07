@@ -5,7 +5,8 @@
 
 .message-indicator {
   background-color: greenyellow;
-  height: 6px;
-  width: 6px;
+  height: 10px;
+  width: 10px;
   border-radius: 100%;
+  margin-left: 10px;
 }

@@ -1,0 +1,26 @@
+<ng-container *ngIf="actionFormGroup">
+  <form [formGroup]="actionFormGroup">
+    <div>
+      <div>type: {{ getType() }}</div>
+      <div>
+        <label>enabled:</label>
+        <mat-slide-toggle formControlName="enabled" color="primary"></mat-slide-toggle>
+      </div>
+      <div>
+        <label>comment: </label>
+        <input type="text" formControlName="comment" />
+      </div>
+    </div>
+    <ng-container *ngIf="paramsSchema && paramsFormGroup">
+      <div>
+        <hr />
+        <form [formGroup]="paramsFormGroup">
+          <div *ngFor="let key of paramKeys()">
+            <label>{{ key }}: </label>
+            <input [formControlName]="key" />
+          </div>
+        </form>
+      </div>
+    </ng-container>
+  </form>
+</ng-container>

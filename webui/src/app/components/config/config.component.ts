@@ -16,7 +16,7 @@ export class ConfigComponent {
     const newConfig = JSON.parse(JSON.stringify(this.config));
 
     newConfig[protocol] = newProtocolConfig;
-
+    console.log(newConfig);
     this.updated.emit(newConfig);
   }
 }

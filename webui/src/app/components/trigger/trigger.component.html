@@ -1,28 +1,23 @@
-<ng-container *ngIf="triggerFormGroup">
+<ng-container *ngIf="trigger">
   <mat-card class="trigger">
     <mat-card-header>
-      <mat-card-title>Trigger</mat-card-title>
-      <div [style.visibility]="triggerIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
+      <mat-toolbar style="background-color: transparent">
+        <span>Trigger</span>
+        <div [style.visibility]="triggerIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
+        <span style="flex: 1 1 auto"></span>
+        <button (click)="deleteMe()" mat-icon-button color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-toolbar>
     </mat-card-header>
     <mat-card-content>
-      <form [formGroup]="triggerFormGroup">
-        <div>
-          <div>type: {{ getType() }}</div>
-          <!-- <input formControlName="type" /> -->
-          <label>enabled:</label>
-          <input type="checkbox" formControlName="enabled" />
-        </div>
-        <div formGroupName="params">
-          <div *ngFor="let key of paramKeys()">
-            <label>{{ key }}: </label>
-            <input [formControlName]="key" />
-          </div>
-        </div>
-        <app-action
-          *ngFor="let actionFormGroup of getActionFormGroups(); let i = index"
-          [path]="path + '/actions/' + i"
-          [actionFormGroup]="actionFormGroup"></app-action>
-      </form>
+      <app-trigger-form [type]="trigger.type" [data]="trigger" (updated)="update($event)"></app-trigger-form>
+      <app-action
+        *ngFor="let action of trigger.actions; let i = index"
+        [path]="path + '/actions/' + i"
+        [action]="action"
+        (delete)="deleteAction(i)"
+        (updated)="actionUpdated(i, $event)"></app-action>
     </mat-card-content>
   </mat-card>
 </ng-container>

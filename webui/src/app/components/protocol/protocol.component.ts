@@ -1,15 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
+import { Trigger } from 'src/app/models/trigger.model';
 import { EventService } from 'src/app/services/event.service';
 import { FormGroupService } from 'src/app/services/form-group.service';
 
 @Component({
-  selector: 'app-protocol-view',
-  templateUrl: './protocol-view.component.html',
-  styleUrls: ['./protocol-view.component.css'],
+  selector: 'app-protocol',
+  templateUrl: './protocol.component.html',
+  styleUrls: ['./protocol.component.css'],
 })
-export class ProtocolViewComponent implements OnChanges {
+export class ProtocolComponent implements OnChanges {
   @Input() protocolType?: string;
   @Input() protocol?: ProtocolConfiguration;
   @Output() updated: EventEmitter<ProtocolConfiguration> = new EventEmitter<ProtocolConfiguration>();
@@ -25,10 +26,10 @@ export class ProtocolViewComponent implements OnChanges {
       this.protocolFormGroup = this.formGroupService.getProtocolFormGroup(this.protocolType, this.protocol);
       this.protocolFormGroup.patchValue(this.protocol);
       this.protocolFormGroup.valueChanges.subscribe((value) => {
-        console.log(value);
         if (value.params) {
           Object.keys(value.params).forEach((paramKey) => {
             console.log(value.params[paramKey]);
+            // TODO(jwetzell): find better way to do this number parsing stuff
             try {
               value.params[paramKey] = parseInt(value.params[paramKey]);
             } catch (error) {
@@ -36,16 +37,26 @@ export class ProtocolViewComponent implements OnChanges {
             }
           });
         }
-        console.log(value);
         this.updated.emit(value);
       });
     }
   }
 
-  getTriggerFormGroups() {
-    return (this.protocolFormGroup?.get('triggers') as FormArray).controls.map((formControl) => {
-      return formControl as FormGroup;
-    });
+  deleteTrigger(index: number) {
+    if (this.protocol) {
+      this.protocol?.triggers?.splice(index, 1);
+      this.updated.emit(this.protocol);
+    }
+  }
+
+  triggerUpdated(index: number, trigger: Trigger) {
+    if (this.protocol) {
+      if (this.protocol?.triggers !== undefined && this.protocol.triggers[index] !== undefined) {
+        const protocolCopy = JSON.parse(JSON.stringify(this.protocol));
+        protocolCopy.triggers[index] = trigger;
+        this.updated.emit(protocolCopy);
+      }
+    }
   }
 
   paramKeys() {

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Action } from 'src/app/models/action.model';
 import { EventService } from 'src/app/services/event.service';
 
 @Component({
@@ -7,12 +7,19 @@ import { EventService } from 'src/app/services/event.service';
   templateUrl: './action.component.html',
   styleUrls: ['./action.component.css'],
 })
-export class ActionComponent implements OnInit {
+export class ActionComponent implements OnInit, OnChanges {
   @Input() path?: string;
-  @Input() actionFormGroup?: FormGroup;
+  @Input() action?: Action;
+
+  @Output() delete: EventEmitter<string> = new EventEmitter<string>();
+  @Output() updated: EventEmitter<Action> = new EventEmitter<Action>();
+
   actionIndicatorVisibility: boolean = false;
 
   constructor(private eventService: EventService) {}
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+  }
 
   ngOnInit(): void {
     if (this.path) {
@@ -24,25 +31,38 @@ export class ActionComponent implements OnInit {
     }
   }
 
+  transformUpdated(index: number, action: Action) {
+    if (this.action) {
+      if (this.action?.transforms !== undefined && this.action.transforms[index] !== undefined) {
+        const actionCopy = JSON.parse(JSON.stringify(this.action));
+        actionCopy.transforms[index] = action;
+        this.updated.emit(actionCopy);
+      }
+    }
+  }
+
+  deleteMe() {
+    this.delete.emit(this.path);
+  }
+
+  deleteTransform(index: number) {
+    if (this.action) {
+      this.action?.transforms?.splice(index, 1);
+      this.updated.emit(this.action);
+    }
+  }
+
+  update(action: Action) {
+    this.updated.emit({
+      ...this.action,
+      ...action,
+    });
+  }
+
   flashIndicator() {
     this.actionIndicatorVisibility = true;
     setTimeout(() => {
       this.actionIndicatorVisibility = false;
     }, 200);
-  }
-
-  getTransformFormGroups() {
-    return (this.actionFormGroup?.get('transforms') as FormArray).controls.map((formControl) => {
-      return formControl as FormGroup;
-    });
-  }
-
-  paramKeys() {
-    const paramsFormGroup = this.actionFormGroup?.get('params') as FormGroup;
-    return Object.keys(paramsFormGroup.controls);
-  }
-
-  getType(): string {
-    return this.actionFormGroup?.controls['type'].value;
   }
 }
