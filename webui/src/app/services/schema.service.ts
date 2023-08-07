@@ -1,17 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
-import { JSONSchemaType } from 'ajv';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import Ajv, { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { ConfigFileSchema } from '../models/config.models';
-import Ajv from 'ajv';
 import { ItemInfo } from '../models/form.model';
 
 @Injectable({
@@ -206,7 +197,12 @@ export class SchemaService {
         if (paramSchema.type) {
           switch (paramSchema.type) {
             case 'integer':
-              params[paramKey] = parseInt(params[paramKey]);
+              const paramValue = parseInt(params[paramKey]);
+              if (Number.isNaN(paramValue)) {
+                delete params[paramKey];
+              } else {
+                params[paramKey] = parseInt(params[paramKey]);
+              }
               break;
             case 'number':
               params[paramKey] = parseFloat(params[paramKey]);
@@ -233,6 +229,16 @@ export class SchemaService {
 
               break;
             case 'string':
+              // NOTE(jwetzell): clean out empty string values that aren't required
+              if (params[paramKey] === '') {
+                if (paramSchema.required) {
+                  if (!paramSchema.includes(paramKey)) {
+                    delete params[paramKey];
+                  }
+                } else {
+                  delete params[paramKey];
+                }
+              }
               break;
             case 'object':
               params[paramKey] = JSON.parse(params[paramKey]);
