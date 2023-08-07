@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Action } from 'src/app/models/action.model';
 import { ItemInfo } from 'src/app/models/form.model';
@@ -16,7 +17,7 @@ export class TriggerComponent implements OnInit {
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
 
   triggerIndicatorVisibility: boolean = false;
-
+  pendingUpdate?: Trigger;
   constructor(
     private eventService: EventService,
     public schemaService: SchemaService
@@ -42,9 +43,14 @@ export class TriggerComponent implements OnInit {
   actionUpdated(index: number, action: Action) {
     if (this.trigger) {
       if (this.trigger?.actions !== undefined && this.trigger.actions[index] !== undefined) {
-        const triggerCopy = JSON.parse(JSON.stringify(this.trigger));
-        triggerCopy.actions[index] = action;
-        this.updated.emit(triggerCopy);
+        this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
+        if (this.pendingUpdate && this.pendingUpdate.actions) {
+          this.pendingUpdate.actions[index] = {
+            ...this.pendingUpdate.actions[index],
+            ...action,
+          };
+          this.updated.emit(this.pendingUpdate);
+        }
       }
     }
   }
@@ -73,5 +79,17 @@ export class TriggerComponent implements OnInit {
     setTimeout(() => {
       this.triggerIndicatorVisibility = false;
     }, 200);
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (this.trigger?.actions !== undefined) {
+      moveItemInArray(this.trigger?.actions, event.previousIndex, event.currentIndex);
+      if (this.pendingUpdate && this.pendingUpdate.actions) {
+        moveItemInArray(this.pendingUpdate.actions, event.previousIndex, event.currentIndex);
+        this.updated.emit(this.pendingUpdate);
+      } else {
+        this.updated.emit(this.trigger);
+      }
+    }
   }
 }

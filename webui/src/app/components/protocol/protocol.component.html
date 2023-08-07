@@ -8,12 +8,19 @@
         [type]="protocolType"
         [data]="protocol"
         (updated)="protocolUpdated($event)"></app-protocol-form>
-      <app-trigger
-        *ngFor="let trigger of protocol.triggers; let i = index"
-        [path]="protocolType + '/triggers/' + i"
-        [trigger]="trigger"
-        (delete)="deleteTrigger(i)"
-        (updated)="triggerUpdated(i, $event)"></app-trigger>
+      <div cdkDropList (cdkDropListDropped)="drop($event)" class=".transform-boundary">
+        <div cdkDrag *ngFor="let trigger of protocol.triggers; let i = index" cdkDragBoundary=".transform-boundary">
+          <div class="h-10 bg-gray-200 rounded-xl m-4" *cdkDragPlaceholder></div>
+          <div cdkDragHandle class="relative top-10 left-1 z-50 w-fit hover:cursor-move">
+            <mat-icon>drag_indicator</mat-icon>
+          </div>
+          <app-trigger
+            [path]="protocolType + '/triggers/' + i"
+            [trigger]="trigger"
+            (delete)="deleteTrigger(i)"
+            (updated)="triggerUpdated(i, $event)"></app-trigger>
+        </div>
+      </div>
     </mat-card-content>
     <mat-card-footer>
       <mat-toolbar class="bg-transparent">

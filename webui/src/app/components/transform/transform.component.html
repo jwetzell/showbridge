@@ -2,7 +2,7 @@
   <mat-card class="transform">
     <mat-card-header>
       <mat-toolbar class="bg-transparent">
-        <span>Transform</span>
+        <span>{{ transform.type }} Transform</span>
         <div [style.visibility]="transformIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
         <span style="flex: 1 1 auto"></span>
         <button (click)="deleteMe()" mat-icon-button color="warn">

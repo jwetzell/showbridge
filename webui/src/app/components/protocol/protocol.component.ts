@@ -1,4 +1,5 @@
 import { trigger } from '@angular/animations';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
@@ -17,6 +18,8 @@ export class ProtocolComponent {
   @Input() protocol?: ProtocolConfiguration;
   @Output() updated: EventEmitter<ProtocolConfiguration> = new EventEmitter<ProtocolConfiguration>();
   triggerTypes: string[] = [];
+
+  pendingUpdate?: ProtocolConfiguration;
 
   constructor(private schemaService: SchemaService) {}
 
@@ -44,9 +47,14 @@ export class ProtocolComponent {
   triggerUpdated(index: number, trigger: Trigger) {
     if (this.protocol) {
       if (this.protocol?.triggers !== undefined && this.protocol.triggers[index] !== undefined) {
-        const protocolCopy = JSON.parse(JSON.stringify(this.protocol));
-        protocolCopy.triggers[index] = trigger;
-        this.updated.emit(protocolCopy);
+        this.pendingUpdate = JSON.parse(JSON.stringify(this.protocol));
+        if (this.pendingUpdate && this.pendingUpdate.triggers) {
+          this.pendingUpdate.triggers[index] = {
+            ...this.pendingUpdate.triggers[index],
+            ...trigger,
+          };
+          this.updated.emit(this.pendingUpdate);
+        }
       }
     }
   }
@@ -56,5 +64,17 @@ export class ProtocolComponent {
       type: triggerType,
       enabled: true,
     });
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (this.protocol?.triggers !== undefined) {
+      moveItemInArray(this.protocol?.triggers, event.previousIndex, event.currentIndex);
+      if (this.pendingUpdate && this.pendingUpdate.triggers) {
+        moveItemInArray(this.pendingUpdate.triggers, event.previousIndex, event.currentIndex);
+        this.updated.emit(this.pendingUpdate);
+      } else {
+        this.updated.emit(this.protocol);
+      }
+    }
   }
 }

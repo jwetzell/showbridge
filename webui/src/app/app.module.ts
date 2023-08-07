@@ -7,13 +7,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { CdkDropList, CdkDrag, CdkDragPlaceholder, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { ActionFormComponent } from './components/action-form/action-form.component';
@@ -57,6 +59,12 @@ import { ParamsFormComponent } from './components/params-form/params-form.compon
     MatMenuModule,
     MatInputModule,
     MatSnackBarModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    CdkDropList,
+    CdkDrag,
+    CdkDragPlaceholder,
+    CdkDragHandle,
   ],
   providers: [],
   bootstrap: [AppComponent],

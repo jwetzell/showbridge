@@ -1,13 +1,12 @@
 <ng-container *ngIf="transformFormGroup">
   <form [formGroup]="transformFormGroup">
-    <div>
-      <div>type: {{ getType() }}</div>
+    <app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
+    <div class="flex justify-center items-center">
+      <div class="flex-auto"></div>
       <div>
         <label>enabled:</label>
-        <mat-slide-toggle formControlName="enabled" color="primary"></mat-slide-toggle>
+        <mat-checkbox formControlName="enabled" color="primary"></mat-checkbox>
       </div>
     </div>
-    <hr />
-    <app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
   </form>
 </ng-container>

@@ -5,12 +5,18 @@
     </mat-tab-group>
   </ng-container>
   <form [formGroup]="paramsFormGroup">
-    <div *ngFor="let key of paramKeys()">
-      <!-- TODO(jwetzell): figure out how to display params that are arrays or objects-->
-      <mat-form-field>
-        <mat-label>{{ key }}</mat-label>
-        <input matInput [formControlName]="key" />
-      </mat-form-field>
+    <div class="flex flex-col">
+      <div *ngFor="let key of paramKeys()" class="m-2">
+        <!-- TODO(jwetzell): figure out how to display params that are arrays or objects-->
+
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>{{ key }}</mat-label>
+          <input matInput [formControlName]="key" />
+          <ng-container *ngIf="!paramsFormGroup.controls[key].valid">
+            <mat-error>{{ paramsFormGroup.controls[key].errors | json }}</mat-error>
+          </ng-container>
+        </mat-form-field>
+      </div>
     </div>
   </form>
 </ng-container>

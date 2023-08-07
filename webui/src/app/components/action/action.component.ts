@@ -1,5 +1,7 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Action } from 'src/app/models/action.model';
+import { Transform } from 'src/app/models/transform.model';
 import { EventService } from 'src/app/services/event.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -15,6 +17,7 @@ export class ActionComponent implements OnInit {
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
   @Output() updated: EventEmitter<Action> = new EventEmitter<Action>();
 
+  pendingUpdate?: Action;
   actionIndicatorVisibility: boolean = false;
 
   constructor(
@@ -32,12 +35,18 @@ export class ActionComponent implements OnInit {
     }
   }
 
-  transformUpdated(index: number, action: Action) {
+  transformUpdated(index: number, transform: Transform) {
+    console.log(transform);
     if (this.action) {
       if (this.action?.transforms !== undefined && this.action.transforms[index] !== undefined) {
-        const actionCopy = JSON.parse(JSON.stringify(this.action));
-        actionCopy.transforms[index] = action;
-        this.updated.emit(actionCopy);
+        this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
+        if ((this.pendingUpdate && this, this.pendingUpdate?.transforms)) {
+          this.pendingUpdate.transforms[index] = {
+            ...this.pendingUpdate.transforms[index],
+            ...transform,
+          };
+          this.updated.emit(this.pendingUpdate);
+        }
       }
     }
   }
@@ -73,5 +82,17 @@ export class ActionComponent implements OnInit {
     setTimeout(() => {
       this.actionIndicatorVisibility = false;
     }, 200);
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (this.action?.transforms !== undefined) {
+      moveItemInArray(this.action?.transforms, event.previousIndex, event.currentIndex);
+      if (this.pendingUpdate && this.pendingUpdate.transforms) {
+        moveItemInArray(this.pendingUpdate.transforms, event.previousIndex, event.currentIndex);
+        this.updated.emit(this.pendingUpdate);
+      } else {
+        this.updated.emit(this.action);
+      }
+    }
   }
 }
