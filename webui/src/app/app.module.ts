@@ -15,6 +15,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
 import { CdkDropList, CdkDrag, CdkDragPlaceholder, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
@@ -28,6 +29,7 @@ import { TriggerFormComponent } from './components/trigger-form/trigger-form.com
 import { TriggerComponent } from './components/trigger/trigger.component';
 import { ProtocolFormComponent } from './components/protocol-form/protocol-form.component';
 import { ParamsFormComponent } from './components/params-form/params-form.component';
+import { ImportConfigComponent } from './components/import-config/import-config.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,7 @@ import { ParamsFormComponent } from './components/params-form/params-form.compon
     TransformFormComponent,
     ProtocolFormComponent,
     ParamsFormComponent,
+    ImportConfigComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +68,7 @@ import { ParamsFormComponent } from './components/params-form/params-form.compon
     CdkDrag,
     CdkDragPlaceholder,
     CdkDragHandle,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

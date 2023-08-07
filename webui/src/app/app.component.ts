@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
 import Ajv, { JSONSchemaType } from 'ajv';
-import { Observable } from 'rxjs';
+import { Observable, Subject, filter, of } from 'rxjs';
 import { ConfigFileSchema } from './models/config.models';
 import { ConfigService } from './services/config.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ImportConfigComponent } from './components/import-config/import-config.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  config$: Observable<ConfigFileSchema>;
+  config$: Subject<ConfigFileSchema> = new Subject<ConfigFileSchema>();
 
   pendingConfig?: ConfigFileSchema;
   schemaValidator?: Ajv;
@@ -23,9 +25,12 @@ export class AppComponent {
     private configService: ConfigService,
     private eventService: EventService,
     private schemaService: SchemaService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
-    this.config$ = this.configService.getConfig();
+    this.configService.getConfig().subscribe((currentConfig) => {
+      this.config$.next(currentConfig);
+    });
     this.configService.getSchema().subscribe((schema) => {
       this.schemaValidator = new Ajv();
       this.schemaValidator.addSchema(schema, 'config');
@@ -56,6 +61,21 @@ export class AppComponent {
     } else {
       console.error('pending config is null');
     }
+  }
+
+  importConfig() {
+    const dialogRef = this.dialog.open(ImportConfigComponent, {
+      width: '400px',
+      height: '400px',
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter((result) => !!result && result !== ''))
+      .subscribe((result) => {
+        this.config$.next(result);
+        this.configUpdated(result);
+      });
   }
 
   validatePendingConfig() {

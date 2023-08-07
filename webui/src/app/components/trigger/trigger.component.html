@@ -1,14 +1,14 @@
 <ng-container *ngIf="trigger">
   <mat-card class="trigger">
     <mat-card-header>
-      <mat-toolbar class="bg-transparent">
-        <span>{{ trigger.type }} Trigger</span>
+      <div class="flex items-center w-full bg-transparent ml-2">
+        <div>{{ trigger.type }} Trigger</div>
         <div [style.visibility]="triggerIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
-        <span style="flex: 1 1 auto"></span>
+        <div style="flex: 1 1 auto"></div>
         <button (click)="deleteMe()" mat-icon-button color="warn">
           <mat-icon>delete</mat-icon>
         </button>
-      </mat-toolbar>
+      </div>
     </mat-card-header>
     <mat-card-content>
       <app-trigger-form [type]="trigger.type" [data]="trigger" (updated)="update($event)"></app-trigger-form>
@@ -28,7 +28,7 @@
       </div>
     </mat-card-content>
     <mat-card-footer>
-      <mat-toolbar class="bg-transparent">
+      <div class="flex bg-transparent">
         <span class="flex-auto"></span>
 
         <ng-container *ngIf="schemaService.actionTypes.length > 0">
@@ -44,7 +44,7 @@
             </button>
           </mat-menu>
         </ng-container>
-      </mat-toolbar>
+      </div>
     </mat-card-footer>
   </mat-card>
 </ng-container>

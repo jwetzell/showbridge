@@ -23,7 +23,7 @@
       </div>
     </mat-card-content>
     <mat-card-footer>
-      <mat-toolbar class="bg-transparent">
+      <div class="flex bg-transparent">
         <span class="flex-auto"></span>
         <ng-container *ngIf="triggerTypes.length > 0">
           <button mat-icon-button color="primary" [matMenuTriggerFor]="addTriggerMenu">
@@ -35,7 +35,7 @@
             </button>
           </mat-menu>
         </ng-container>
-      </mat-toolbar>
+      </div>
     </mat-card-footer>
   </mat-card>
 </ng-container>

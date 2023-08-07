@@ -3,6 +3,9 @@
     <mat-toolbar color="primary">
       <span>showbridge</span>
       <span class="flex-auto"></span>
+      <button mat-icon-button (click)="importConfig()">
+        <mat-icon>upload</mat-icon>
+      </button>
       <button mat-icon-button *ngIf="pendingConfigIsValid" (click)="applyConfig()">
         <mat-icon>save</mat-icon>
       </button>

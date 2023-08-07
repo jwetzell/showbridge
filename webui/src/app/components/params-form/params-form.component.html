@@ -6,16 +6,13 @@
   </ng-container>
   <form [formGroup]="paramsFormGroup">
     <div class="flex flex-col">
-      <div *ngFor="let key of paramKeys()" class="m-2">
+      <div *ngFor="let key of paramKeys()" class="m-1">
         <!-- TODO(jwetzell): figure out how to display params that are arrays or objects-->
-
-        <mat-form-field subscriptSizing="dynamic">
-          <mat-label>{{ key }}</mat-label>
-          <input matInput [formControlName]="key" />
-          <ng-container *ngIf="!paramsFormGroup.controls[key].valid">
-            <mat-error>{{ paramsFormGroup.controls[key].errors | json }}</mat-error>
-          </ng-container>
-        </mat-form-field>
+        <label for="{{ key }}">{{ key }}: </label>
+        <input class="rounded-sm pl-1 border-solid border-gray-200 border-2" id="{{ key }}" [formControlName]="key" />
+        <ng-container *ngIf="!paramsFormGroup.controls[key].valid">
+          <mat-error>{{ paramsFormGroup.controls[key].errors | json }}</mat-error>
+        </ng-container>
       </div>
     </div>
   </form>

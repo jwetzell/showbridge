@@ -280,7 +280,26 @@ export class SchemaService {
       JSON.parse(control.value);
       return null;
     } catch (error) {
-      return { notObject: { value: control.value } };
+      return { json: true };
     }
+  }
+
+  configValidator(validateSchema: any) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!validateSchema) {
+        return null;
+      }
+
+      try {
+        const configObj = JSON.parse(control.value);
+        if (this.ajv.validate(validateSchema, configObj)) {
+          return null;
+        } else {
+          return { config: this.ajv.errors };
+        }
+      } catch (error) {
+        return { json: true };
+      }
+    };
   }
 }

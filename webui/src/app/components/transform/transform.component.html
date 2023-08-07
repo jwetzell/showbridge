@@ -1,14 +1,14 @@
 <ng-container *ngIf="transform">
   <mat-card class="transform">
     <mat-card-header>
-      <mat-toolbar class="bg-transparent">
-        <span>{{ transform.type }} Transform</span>
+      <div class="flex items-center w-full bg-transparent ml-2">
+        <div>{{ transform.type }} Transform</div>
         <div [style.visibility]="transformIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
-        <span style="flex: 1 1 auto"></span>
+        <div style="flex: 1 1 auto"></div>
         <button (click)="deleteMe()" mat-icon-button color="warn">
           <mat-icon>delete</mat-icon>
         </button>
-      </mat-toolbar>
+      </div>
     </mat-card-header>
     <mat-card-content>
       <app-transform-form [type]="transform.type" [data]="transform" (updated)="update($event)"></app-transform-form>
