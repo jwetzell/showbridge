@@ -9,8 +9,6 @@ export class ConfigService {
   constructor(private http: HttpClient) {}
 
   uploadConfig(config: ConfigFileSchema) {
-    console.log('upload config');
-    console.log(JSON.stringify(config));
     return this.http.post(`/config`, config, {
       headers: {
         'Content-Type': 'application/json',

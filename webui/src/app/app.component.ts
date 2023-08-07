@@ -34,7 +34,6 @@ export class AppComponent {
   }
 
   configUpdated(newConfig: ConfigFileSchema) {
-    console.log('config updated');
     this.pendingConfig = newConfig;
     this.pendingConfigIsValid = this.validatePendingConfig();
     if (!this.pendingConfigIsValid) {
