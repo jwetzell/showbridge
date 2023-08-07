@@ -405,7 +405,6 @@
         "params": {
           "description": "Cloud Output action params",
           "type": "object",
-          "properties": {},
           "oneOf": [
             {
               "title": "Single Room Output",
@@ -989,7 +988,6 @@
         "params": {
           "description": "TCP output action params",
           "type": "object",
-          "properties": {},
           "oneOf": [
             {
               "title": "TCP Bytes",
