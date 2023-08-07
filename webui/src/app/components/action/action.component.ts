@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Action } from 'src/app/models/action.model';
 import { EventService } from 'src/app/services/event.service';
 
@@ -7,7 +7,7 @@ import { EventService } from 'src/app/services/event.service';
   templateUrl: './action.component.html',
   styleUrls: ['./action.component.css'],
 })
-export class ActionComponent implements OnInit, OnChanges {
+export class ActionComponent implements OnInit {
   @Input() path?: string;
   @Input() action?: Action;
 
@@ -17,9 +17,6 @@ export class ActionComponent implements OnInit, OnChanges {
   actionIndicatorVisibility: boolean = false;
 
   constructor(private eventService: EventService) {}
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-  }
 
   ngOnInit(): void {
     if (this.path) {
