@@ -43,12 +43,15 @@ export class AppComponent {
   }
 
   applyConfig() {
+    // TODO(jwetzell): handle http port change i.e prompt for redirect or just do it
     if (this.pendingConfig) {
       this.configService.uploadConfig(this.pendingConfig).subscribe((resp) => {
         this.pendingConfig = undefined;
         this.pendingConfigIsValid = false;
         this.eventService.reload();
-        this.snackBar.open('Config saved successfully!', 'Save');
+        this.snackBar.open('Config saved successfully!', 'Save', {
+          duration: 3000,
+        });
       });
     } else {
       console.error('pending config is null');
