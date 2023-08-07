@@ -36,15 +36,17 @@ export class ActionComponent implements OnInit {
   }
 
   transformUpdated(index: number, transform: Transform) {
-    console.log(transform);
     if (this.action) {
       if (this.action?.transforms !== undefined && this.action.transforms[index] !== undefined) {
-        this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
-        if ((this.pendingUpdate && this, this.pendingUpdate?.transforms)) {
+        if (!this.pendingUpdate) {
+          this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
+        }
+        if (this.pendingUpdate && this.pendingUpdate?.transforms) {
           this.pendingUpdate.transforms[index] = {
             ...this.pendingUpdate.transforms[index],
             ...transform,
           };
+          console.log('action update called because of transform update');
           this.updated.emit(this.pendingUpdate);
         }
       }
@@ -58,23 +60,49 @@ export class ActionComponent implements OnInit {
   deleteTransform(index: number) {
     if (this.action) {
       this.action?.transforms?.splice(index, 1);
-      this.updated.emit(this.action);
     }
+    if (!this.pendingUpdate) {
+      this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
+    }
+    this.pendingUpdate?.transforms?.splice(index, 1);
+    this.updated.emit(this.pendingUpdate);
   }
 
-  addTransform(tranformType: string) {
+  addTransform(transformType: string) {
+    // TODO(jwetzell): figure this out properly
+    if (this.action && this.action?.transforms === undefined) {
+      this.action.transforms = [];
+    }
+    if (!this.pendingUpdate) {
+      this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
+    }
+
     this.action?.transforms?.push({
-      type: tranformType,
+      type: transformType,
       enabled: true,
     });
-    this.updated.emit(this.action);
+
+    if (this.pendingUpdate && this.pendingUpdate.transforms === undefined) {
+      this.pendingUpdate.transforms = [];
+    }
+
+    this.pendingUpdate?.transforms?.push({
+      type: transformType,
+      enabled: true,
+    });
+    this.updated.emit(this.pendingUpdate);
   }
 
   update(action: Action) {
-    this.updated.emit({
-      ...this.action,
+    console.log(action);
+    if (!this.pendingUpdate) {
+      this.pendingUpdate = action;
+    }
+    this.pendingUpdate = {
+      ...this.pendingUpdate,
       ...action,
-    });
+    };
+    this.updated.emit(this.pendingUpdate);
   }
 
   flashIndicator() {

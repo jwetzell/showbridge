@@ -1,7 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Action } from 'src/app/models/action.model';
-import { ItemInfo } from 'src/app/models/form.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { EventService } from 'src/app/services/event.service';
 import { SchemaService } from 'src/app/services/schema.service';
@@ -43,7 +42,10 @@ export class TriggerComponent implements OnInit {
   actionUpdated(index: number, action: Action) {
     if (this.trigger) {
       if (this.trigger?.actions !== undefined && this.trigger.actions[index] !== undefined) {
-        this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
+        if (!this.pendingUpdate) {
+          this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
+        }
+
         if (this.pendingUpdate && this.pendingUpdate.actions) {
           this.pendingUpdate.actions[index] = {
             ...this.pendingUpdate.actions[index],
@@ -56,11 +58,30 @@ export class TriggerComponent implements OnInit {
   }
 
   addAction(actionType: string) {
+    // TODO(jwetzell): figure this out properly
+    if (this.trigger && this.trigger?.actions === undefined) {
+      console.log('setting trigger actions to empty array');
+      this.trigger.actions = [];
+    }
+    if (!this.pendingUpdate) {
+      this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
+    }
+
+    if (this.pendingUpdate && this.pendingUpdate.actions === undefined) {
+      this.pendingUpdate.actions = [];
+    }
+
+    console.log(this.pendingUpdate);
+
     this.trigger?.actions?.push({
       type: actionType,
       enabled: true,
     });
-    this.updated.emit(this.trigger);
+    this.pendingUpdate?.actions?.push({
+      type: actionType,
+      enabled: true,
+    });
+    this.updated.emit(this.pendingUpdate);
   }
 
   deleteMe() {
@@ -68,10 +89,19 @@ export class TriggerComponent implements OnInit {
   }
 
   update(trigger: Trigger) {
-    this.updated.next({
-      ...this.trigger,
+    if (!this.pendingUpdate) {
+      this.pendingUpdate = trigger;
+    }
+
+    this.pendingUpdate = {
+      ...this.pendingUpdate,
       ...trigger,
-    });
+    };
+    this.trigger = {
+      ...this.pendingUpdate,
+      ...trigger,
+    };
+    this.updated.next(this.pendingUpdate);
   }
 
   flashIndicator() {

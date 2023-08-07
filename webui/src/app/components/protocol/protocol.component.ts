@@ -1,11 +1,7 @@
-import { trigger } from '@angular/animations';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
 import { Trigger } from 'src/app/models/trigger.model';
-import { EventService } from 'src/app/services/event.service';
-import { FormGroupService } from 'src/app/services/form-group.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
@@ -47,7 +43,9 @@ export class ProtocolComponent {
   triggerUpdated(index: number, trigger: Trigger) {
     if (this.protocol) {
       if (this.protocol?.triggers !== undefined && this.protocol.triggers[index] !== undefined) {
-        this.pendingUpdate = JSON.parse(JSON.stringify(this.protocol));
+        if (!this.pendingUpdate) {
+          this.pendingUpdate = JSON.parse(JSON.stringify(this.protocol));
+        }
         if (this.pendingUpdate && this.pendingUpdate.triggers) {
           this.pendingUpdate.triggers[index] = {
             ...this.pendingUpdate.triggers[index],
@@ -60,10 +58,29 @@ export class ProtocolComponent {
   }
 
   addTrigger(triggerType: string) {
+    // TODO(jwetzell): figure this out properly
+    if (this.protocol && this.protocol?.triggers === undefined) {
+      this.protocol.triggers = [];
+    }
+    if (!this.pendingUpdate) {
+      this.pendingUpdate = JSON.parse(JSON.stringify(this.protocol));
+    }
+    // TODO(jwetzell): find a way to dummy up the params field
     this.protocol?.triggers?.push({
       type: triggerType,
       enabled: true,
     });
+
+    if (this.pendingUpdate && this.pendingUpdate.triggers === undefined) {
+      this.pendingUpdate.triggers = [];
+    }
+
+    this.pendingUpdate?.triggers?.push({
+      type: triggerType,
+      enabled: true,
+    });
+
+    this.updated.emit(this.pendingUpdate);
   }
 
   drop(event: CdkDragDrop<string[]>) {
