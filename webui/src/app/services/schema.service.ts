@@ -147,6 +147,7 @@ export class SchemaService {
           switch (paramSchema.type) {
             case 'string':
             case 'number':
+            case 'integer':
             case 'array': // TODO(jwetzell): actually handle arrays
             case 'object': // TODO(jwetzell): actually handle objects
               let formDefault = '';
