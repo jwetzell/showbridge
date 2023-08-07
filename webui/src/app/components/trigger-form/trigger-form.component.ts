@@ -35,14 +35,10 @@ export class TriggerFormComponent {
       this.schema = this.schemaService.getSchemaForObjectType('Trigger', this.type);
 
       this.paramsSchema = this.schemaService.getParamsForObjectType('Trigger', this.type);
-      this.paramsSchema = this.schemaService.getParamsForObjectType('Trigger', this.type);
-      if (this.paramsSchema?.properties) {
-        Object.entries(this.paramsSchema.properties).forEach(([paramKey, paramSchema]) => {
-          this.paramsFormGroup.addControl(paramKey, new FormControl(undefined));
-        });
+      if (this.paramsSchema) {
+        this.paramsFormGroup = this.schemaService.getFormGroupFromSchema(this.paramsSchema);
       } else {
-        console.error('trigger-form: params schema without properties');
-        console.error(this.schema);
+        console.error(`transform-form: no params schema found for ${this.type}`);
       }
 
       if (this.data && this.triggerFormGroup) {

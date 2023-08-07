@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { JSONSchemaType } from 'ajv';
+import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { ConfigFileSchema } from '../models/config.models';
 
 @Injectable({
@@ -57,6 +59,19 @@ export class SchemaService {
     } else {
       console.error('schema is null');
     }
+  }
+
+  getFormGroupFromSchema(schema: SomeJSONSchema) {
+    const formGroup = new FormGroup({});
+    if (schema?.properties) {
+      Object.entries(schema.properties).forEach(([paramKey, paramSchema]) => {
+        formGroup.addControl(paramKey, new FormControl(undefined));
+      });
+    } else {
+      console.error('trigger-form: params schema without properties');
+      console.error(schema);
+    }
+    return formGroup;
   }
 
   cleanParams(paramsSchema: any, params: any): any {

@@ -29,14 +29,10 @@ export class TransformFormComponent implements OnInit {
       this.schema = this.schemaService.getSchemaForObjectType('Transform', this.type);
 
       this.paramsSchema = this.schemaService.getParamsForObjectType('Transform', this.type);
-      this.paramsSchema = this.schemaService.getParamsForObjectType('Transform', this.type);
-      if (this.paramsSchema?.properties) {
-        Object.entries(this.paramsSchema.properties).forEach(([paramKey, paramSchema]) => {
-          this.paramsFormGroup.addControl(paramKey, new FormControl(undefined));
-        });
+      if (this.paramsSchema) {
+        this.paramsFormGroup = this.schemaService.getFormGroupFromSchema(this.paramsSchema);
       } else {
-        console.error('transform-form: params schema without properties');
-        console.error(this.schema);
+        console.error(`transform-form: no params schema found for ${this.type}`);
       }
 
       if (this.data && this.transformFormGroup) {

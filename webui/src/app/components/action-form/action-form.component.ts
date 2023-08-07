@@ -29,14 +29,10 @@ export class ActionFormComponent implements OnInit {
       this.schema = this.schemaService.getSchemaForObjectType('Action', this.type);
 
       this.paramsSchema = this.schemaService.getParamsForObjectType('Action', this.type);
-      this.paramsSchema = this.schemaService.getParamsForObjectType('Action', this.type);
-      if (this.paramsSchema?.properties) {
-        Object.entries(this.paramsSchema.properties).forEach(([paramKey, paramSchema]: [string, any]) => {
-          this.paramsFormGroup.addControl(paramKey, new FormControl(undefined));
-        });
+      if (this.paramsSchema) {
+        this.paramsFormGroup = this.schemaService.getFormGroupFromSchema(this.paramsSchema);
       } else {
-        console.error('action-form: params schema without properties');
-        console.error(this.schema);
+        console.error(`transform-form: no params schema found for ${this.type}`);
       }
 
       if (this.data && this.actionFormGroup) {
