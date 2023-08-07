@@ -253,8 +253,8 @@ export class SchemaService {
     return params;
   }
 
-  getTriggerTypesForProtocol(protocolType: string): string[] {
-    const types: string[] = [];
+  getTriggerTypesForProtocol(protocolType: string): ItemInfo[] {
+    const types: ItemInfo[] = [];
     if (!this.schema) {
       return types;
     }
@@ -271,7 +271,10 @@ export class SchemaService {
               if (this.schema?.definitions) {
                 const triggerSchema = this.schema?.definitions[triggerRef];
                 if (triggerSchema) {
-                  types.push(triggerSchema.properties.type.const);
+                  types.push({
+                    name: triggerSchema['title'],
+                    type: triggerSchema.properties.type.const,
+                  });
                 }
               }
             }

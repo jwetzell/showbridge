@@ -1,6 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
+import { ItemInfo } from 'src/app/models/form.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -13,7 +14,7 @@ export class ProtocolComponent {
   @Input() protocolType?: string;
   @Input() protocol?: ProtocolConfiguration;
   @Output() updated: EventEmitter<ProtocolConfiguration> = new EventEmitter<ProtocolConfiguration>();
-  triggerTypes: string[] = [];
+  triggerTypes: ItemInfo[] = [];
 
   pendingUpdate?: ProtocolConfiguration;
 

@@ -10,8 +10,8 @@
         (updated)="protocolUpdated($event)"></app-protocol-form>
       <div cdkDropList (cdkDropListDropped)="drop($event)" class=".transform-boundary">
         <div cdkDrag *ngFor="let trigger of protocol.triggers; let i = index" cdkDragBoundary=".transform-boundary">
-          <div class="h-10 bg-gray-200 rounded-xl m-4" *cdkDragPlaceholder></div>
-          <div cdkDragHandle class="relative top-10 left-1 z-50 w-fit hover:cursor-move">
+          <div class="h-10 m-4 bg-gray-200 rounded-xl" *cdkDragPlaceholder></div>
+          <div cdkDragHandle class="relative z-50 top-10 left-1 w-fit hover:cursor-move">
             <mat-icon>drag_indicator</mat-icon>
           </div>
           <app-trigger
@@ -30,8 +30,8 @@
             <mat-icon>add</mat-icon>
           </button>
           <mat-menu #addTriggerMenu="matMenu">
-            <button mat-menu-item *ngFor="let triggerType of triggerTypes" (click)="addTrigger(triggerType)">
-              <span>{{ triggerType }}</span>
+            <button mat-menu-item *ngFor="let triggerType of triggerTypes" (click)="addTrigger(triggerType.type)">
+              <span>{{ triggerType.name }}</span>
             </button>
           </mat-menu>
         </ng-container>
