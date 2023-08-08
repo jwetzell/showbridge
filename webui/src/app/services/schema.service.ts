@@ -198,7 +198,6 @@ export class SchemaService {
       console.error('trigger-form: params schema without properties');
       console.error(schema);
     }
-    console.log(paramsFormInfo);
     return paramsFormInfo;
   }
 
