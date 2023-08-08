@@ -1,7 +1,7 @@
 <ng-container *ngIf="action">
   <mat-card class="action">
     <mat-card-header>
-      <div class="flex items-center w-full bg-transparent ml-2">
+      <div class="flex items-center w-full ml-2 bg-transparent">
         <div>{{ action.type }} Action</div>
         <div [style.visibility]="actionIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
         <div style="flex: 1 1 auto"></div>
@@ -14,8 +14,8 @@
       <app-action-form [type]="action.type" [data]="action" (updated)="update($event)"></app-action-form>
       <div cdkDropList (cdkDropListDropped)="drop($event)" class=".transform-boundary">
         <div cdkDrag *ngFor="let transform of action.transforms; let i = index" cdkDragBoundary=".transform-boundary">
-          <div class="h-10 bg-gray-200 rounded-xl m-4" *cdkDragPlaceholder></div>
-          <div cdkDragHandle class="relative top-10 left-1 z-50 w-fit hover:cursor-move">
+          <div class="h-10 m-4 bg-gray-200 rounded-xl" *cdkDragPlaceholder></div>
+          <div cdkDragHandle class="relative z-50 top-10 left-1 w-fit hover:cursor-move">
             <mat-icon>drag_indicator</mat-icon>
           </div>
           <app-transform

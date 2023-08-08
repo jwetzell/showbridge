@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Trigger } from 'src/app/models/trigger.model';
-import { FormGroupService } from 'src/app/services/form-group.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({

@@ -1,7 +1,7 @@
 <ng-container *ngIf="transformFormGroup">
   <form [formGroup]="transformFormGroup">
     <app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
-    <div class="flex justify-center items-center">
+    <div class="flex items-center justify-center">
       <div class="flex-auto"></div>
       <div>
         <label>enabled:</label>

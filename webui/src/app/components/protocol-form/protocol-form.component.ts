@@ -1,8 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
-import { Transform } from 'src/app/models/transform.model';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({

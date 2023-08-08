@@ -1,8 +1,8 @@
 <div class="flex flex-col h-full">
   <h1 mat-dialog-title>Import Config</h1>
   <ng-container *ngIf="formGroup">
-    <div class="w-full h-full flex-auto">
-      <form [formGroup]="formGroup" class="h-full w-full p-2">
+    <div class="flex-auto w-full h-full">
+      <form [formGroup]="formGroup" class="w-full h-full p-2">
         <textarea formControlName="config" placeholder="Paste Config Here" class="w-full h-full"></textarea>
       </form>
     </div>

@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Action } from 'src/app/models/action.model';
 import { SchemaService } from 'src/app/services/schema.service';
 

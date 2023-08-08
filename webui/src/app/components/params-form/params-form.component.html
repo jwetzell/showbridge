@@ -9,7 +9,7 @@
       <div *ngFor="let key of paramKeys()" class="m-1">
         <!-- TODO(jwetzell): figure out how to display params that are arrays or objects-->
         <label for="{{ key }}">{{ key }}: </label>
-        <input class="rounded-sm pl-1 border-solid border-gray-200 border-2" id="{{ key }}" [formControlName]="key" />
+        <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" id="{{ key }}" [formControlName]="key" />
         <ng-container *ngIf="!paramsFormGroup.controls[key].valid">
           <mat-error>{{ paramsFormGroup.controls[key].errors | json }}</mat-error>
         </ng-container>

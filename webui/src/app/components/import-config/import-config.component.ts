@@ -1,5 +1,5 @@
-import { Component, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SchemaService } from 'src/app/services/schema.service';
 

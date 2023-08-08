@@ -1,6 +1,6 @@
 <ng-container *ngIf="triggerFormGroup">
   <form [formGroup]="triggerFormGroup">
-    <div class="flex justify-center items-center">
+    <div class="flex items-center justify-center">
       <div class="flex-auto">
         <mat-form-field subscriptSizing="dynamic" class="w-full">
           <mat-label>comment: </mat-label>
@@ -10,7 +10,7 @@
     </div>
     <hr />
     <app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
-    <div class="flex justify-center items-center">
+    <div class="flex items-center justify-center">
       <div class="flex-auto"></div>
       <div>
         <label>enabled:</label>
