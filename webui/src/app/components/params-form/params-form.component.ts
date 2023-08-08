@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ParamsFormInfo } from 'src/app/models/form.model';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
@@ -14,9 +15,9 @@ export class ParamsFormComponent implements OnInit {
   @Output() updated: EventEmitter<any> = new EventEmitter<any>();
 
   paramsSchema: any;
-  paramsFormGroup: FormGroup = new FormGroup({});
+  paramsFormInfo?: ParamsFormInfo;
 
-  paramsOptions: { display: string; formGroup: FormGroup; keys: string[]; schema: any }[] = [];
+  paramsOptions: { display: string; paramsFormInfo: ParamsFormInfo; keys: string[]; schema: any }[] = [];
   paramsOptionsSelectedIndex: number = 0;
 
   constructor(private schemaService: SchemaService) {}
@@ -25,17 +26,17 @@ export class ParamsFormComponent implements OnInit {
     this.paramsSchema = this.parentSchema.properties?.params;
     if (this.paramsSchema) {
       if (this.paramsSchema.properties) {
-        this.paramsFormGroup = this.schemaService.getFormGroupFromParamsSchema(this.paramsSchema);
+        this.paramsFormInfo = this.schemaService.getFormGroupFromParamsSchema(this.paramsSchema);
       } else if (this.paramsSchema.oneOf) {
         this.paramsOptions = this.paramsSchema.oneOf.map((oneOf: any) => {
           const paramsOption = {
             display: oneOf.title,
             schema: oneOf,
-            formGroup: this.schemaService.getFormGroupFromParamsSchema(oneOf),
+            paramsFormInfo: this.schemaService.getFormGroupFromParamsSchema(oneOf),
           };
           return {
             ...paramsOption,
-            keys: Object.keys(paramsOption.formGroup.controls),
+            keys: Object.keys(paramsOption.paramsFormInfo.formGroup.controls),
           };
         });
         const matchingSchemaIndex = this.schemaService.matchParamsDataToSchema(
@@ -44,7 +45,7 @@ export class ParamsFormComponent implements OnInit {
         );
 
         this.paramsOptionsSelectedIndex = matchingSchemaIndex;
-        this.paramsFormGroup = this.paramsOptions[matchingSchemaIndex].formGroup;
+        this.paramsFormInfo = this.paramsOptions[matchingSchemaIndex].paramsFormInfo;
         this.paramsSchema = this.paramsOptions[matchingSchemaIndex].schema;
       } else {
         console.error('params is not a singular or oneOf');
@@ -52,11 +53,11 @@ export class ParamsFormComponent implements OnInit {
       }
     }
 
-    if (this.data && this.paramsFormGroup) {
-      this.paramsFormGroup.patchValue(this.data);
+    if (this.data && this.paramsFormInfo?.formGroup) {
+      this.paramsFormInfo.formGroup.patchValue(this.data);
     }
 
-    this.paramsFormGroup.valueChanges.subscribe((value) => {
+    this.paramsFormInfo?.formGroup.valueChanges.subscribe((value) => {
       this.formUpdated();
     });
   }
@@ -66,23 +67,26 @@ export class ParamsFormComponent implements OnInit {
     const paramsOption = this.paramsOptions[event.index];
 
     this.paramsSchema = paramsOption.schema;
-    this.paramsFormGroup = paramsOption.formGroup;
+    this.paramsFormInfo = paramsOption.paramsFormInfo;
 
-    if (this.data && this.paramsFormGroup) {
-      this.paramsFormGroup.patchValue(this.data);
+    if (this.data && this.paramsFormInfo.formGroup) {
+      this.paramsFormInfo.formGroup.patchValue(this.data);
     }
 
-    this.paramsFormGroup.valueChanges.subscribe((value) => {
+    this.paramsFormInfo.formGroup.valueChanges.subscribe((value) => {
       this.formUpdated();
     });
   }
 
   formUpdated() {
-    const params = this.schemaService.cleanParams(this.paramsSchema, this.paramsFormGroup.value);
+    const params = this.schemaService.cleanParams(this.paramsSchema, this.paramsFormInfo?.formGroup.value);
     this.updated.emit(params);
   }
 
   paramKeys() {
-    return Object.keys(this.paramsFormGroup.controls);
+    if (this.paramsFormInfo) {
+      return Object.keys(this.paramsFormInfo?.formGroup.controls);
+    }
+    return [];
   }
 }

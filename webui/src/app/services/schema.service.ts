@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn,
 import Ajv, { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { ConfigFileSchema } from '../models/config.models';
-import { ItemInfo } from '../models/form.model';
+import { ItemInfo, ParamsFormInfo } from '../models/form.model';
 
 @Injectable({
   providedIn: 'root',
@@ -129,8 +129,11 @@ export class SchemaService {
     }
   }
 
-  getFormGroupFromParamsSchema(schema: SomeJSONSchema) {
-    const formGroup = new FormGroup({});
+  getFormGroupFromParamsSchema(schema: SomeJSONSchema): ParamsFormInfo {
+    const paramsFormInfo: ParamsFormInfo = {
+      formGroup: new FormGroup({}),
+      paramsInfo: {},
+    };
     if (schema?.properties) {
       Object.entries(schema.properties).forEach(([paramKey, paramSchema]: [string, any]) => {
         // TODO(jwetzell): handle params that are of array or object type
@@ -169,7 +172,12 @@ export class SchemaService {
               if (paramSchema.type === 'object') {
                 validators.push(this.objectValidator);
               }
-              formGroup.addControl(paramKey, new FormControl(formDefault, validators));
+              paramsFormInfo.formGroup.addControl(paramKey, new FormControl(formDefault, validators));
+              paramsFormInfo.paramsInfo[paramKey] = {
+                display: paramKey,
+                type: paramSchema.type,
+                hint: paramSchema.description,
+              };
               break;
             default:
               console.error(`schema-service: unhandled param schema type for form group = ${paramSchema.type}`);
@@ -183,7 +191,8 @@ export class SchemaService {
       console.error('trigger-form: params schema without properties');
       console.error(schema);
     }
-    return formGroup;
+    console.log(paramsFormInfo);
+    return paramsFormInfo;
   }
 
   cleanParams(paramsSchema: any, params: any): any {
