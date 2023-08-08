@@ -13,6 +13,9 @@
         <button mat-icon-button matTooltip="Apply Config" *ngIf="pendingConfigIsValid" (click)="applyConfig()">
           <mat-icon>save</mat-icon>
         </button>
+        <button *ngIf="pendingConfig && !pendingConfigIsValid" mat-icon-button color="warn" matTooltip="Config Errors">
+          <mat-icon>error</mat-icon>
+        </button>
       </mat-toolbar>
       <app-config class="flex-auto" [config]="config" (updated)="configUpdated($event)"></app-config>
     </div>
