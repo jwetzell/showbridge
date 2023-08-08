@@ -1235,6 +1235,7 @@
               "type": "number"
             },
             "actions": {
+              "type": "array",
               "$ref": "#/definitions/ActionList"
             }
           },
@@ -1692,6 +1693,9 @@
           "type": "string",
           "const": "scale"
         },
+        "comment": {
+          "type": "string"
+        },
         "params": {
           "description": "Scale transform params",
           "type": "object",
@@ -1740,6 +1744,9 @@
           "type": "string",
           "const": "round"
         },
+        "comment": {
+          "type": "string"
+        },
         "params": {
           "description": "Round transform params",
           "type": "object",
@@ -1770,6 +1777,9 @@
           "type": "string",
           "const": "floor"
         },
+        "comment": {
+          "type": "string"
+        },
         "params": {
           "description": "Floor transform params",
           "type": "object",
@@ -1799,6 +1809,9 @@
         "type": {
           "type": "string",
           "const": "log"
+        },
+        "comment": {
+          "type": "string"
         },
         "params": {
           "description": "Log transform params",
@@ -1834,6 +1847,9 @@
           "type": "string",
           "const": "power"
         },
+        "comment": {
+          "type": "string"
+        },
         "params": {
           "description": "Power transform params",
           "type": "object",
@@ -1868,6 +1884,9 @@
           "type": "string",
           "const": "map"
         },
+        "comment": {
+          "type": "string"
+        },
         "params": {
           "description": "map transform params",
           "type": "object",
@@ -1901,6 +1920,9 @@
         "type": {
           "type": "string",
           "const": "template"
+        },
+        "comment": {
+          "type": "string"
         },
         "params": {
           "description": "Template transform params",
