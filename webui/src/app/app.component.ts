@@ -26,7 +26,7 @@ export class AppComponent {
 
   constructor(
     private configService: ConfigService,
-    private eventService: EventService,
+    public eventService: EventService,
     private schemaService: SchemaService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
