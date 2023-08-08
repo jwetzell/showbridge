@@ -13,9 +13,7 @@ export class ConfigComponent {
   protocols = ['http', 'ws', 'osc', 'tcp', 'udp', 'midi', 'mqtt', 'cloud'];
 
   protocolUpdate(protocol: string, newProtocolConfig: ProtocolConfiguration) {
-    console.log('protocol updated');
     const newConfig = JSON.parse(JSON.stringify(this.config));
-
     newConfig[protocol] = newProtocolConfig;
     console.log(newConfig);
     this.updated.emit(newConfig);
