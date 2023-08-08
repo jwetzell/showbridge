@@ -1022,7 +1022,8 @@
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
-                  "type": "boolean"
+                  "type": "boolean",
+                  "default": true
                 },
                 "bytes": {
                   "description": "bytes to send",
@@ -1050,7 +1051,8 @@
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
-                  "type": "boolean"
+                  "type": "boolean",
+                  "default": true
                 },
                 "hex": {
                   "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
@@ -1076,7 +1078,8 @@
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
-                  "type": "boolean"
+                  "type": "boolean",
+                  "default": true
                 },
                 "_string": {
                   "description": "string to send ran through templating engine",
@@ -1101,7 +1104,8 @@
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
-                  "type": "boolean"
+                  "type": "boolean",
+                  "default": true
                 },
                 "string": {
                   "description": "string to send",
@@ -1361,7 +1365,7 @@
           "type": "object",
           "properties": {
             "address": {
-              "description": "OSC Address to match supports OSC 1.0 address patterns spec *,?,{string1,string2},[a-z],[!a-z]",
+              "description": "OSC Address to match. Supports OSC 1.0 address patterns spec *,?,{string1,string2},[a-z],[!a-z]",
               "type": "string"
             }
           },
