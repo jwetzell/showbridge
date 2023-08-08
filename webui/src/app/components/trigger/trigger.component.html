@@ -1,50 +1,41 @@
 <ng-container *ngIf="trigger">
-  <mat-card class="trigger">
-    <mat-card-header>
-      <div class="flex items-center w-full ml-2 bg-transparent">
-        <div>{{ trigger.type }} Trigger</div>
-        <div [style.visibility]="triggerIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
-        <div style="flex: 1 1 auto"></div>
-        <button (click)="deleteMe()" mat-icon-button color="warn">
-          <mat-icon>delete</mat-icon>
+  <div class="flex">
+    <div class="flex flex-col my-3 ml-5 bg-gray-900 border-2 border-black border-solid trigger w-fit">
+      <div class="ml-2 text-gray-500">{{ trigger.type }}</div>
+      <div class="flex-auto m-2">
+        <app-object-form
+          [objectType]="'Trigger'"
+          [type]="trigger.type"
+          [data]="trigger"
+          (updated)="update($event)"></app-object-form>
+      </div>
+      <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
+    </div>
+    <div class="mt-8">
+      <mat-icon [style.color]="indicatorColor" class="scale-150">arrow_right</mat-icon>
+    </div>
+    <div cdkDropList (cdkDropListDropped)="drop($event)">
+      <div cdkDrag *ngFor="let action of trigger.actions; let i = index">
+        <div class="h-10 m-4 bg-gray-200 rounded-xl" *cdkDragPlaceholder></div>
+        <app-action
+          [path]="path + '/actions/' + i"
+          [action]="action"
+          (delete)="deleteAction(i)"
+          (updated)="actionUpdated(i, $event)"></app-action>
+      </div>
+      <div class="w-full" *ngIf="schemaService.actionTypes.length > 0">
+        <button class="w-full bg-gray-700" [matMenuTriggerFor]="addActionMenu">
+          <mat-icon>add</mat-icon>
         </button>
-      </div>
-    </mat-card-header>
-    <mat-card-content>
-      <app-trigger-form [type]="trigger.type" [data]="trigger" (updated)="update($event)"></app-trigger-form>
-
-      <div cdkDropList (cdkDropListDropped)="drop($event)" class=".transform-boundary">
-        <div cdkDrag *ngFor="let action of trigger.actions; let i = index" cdkDragBoundary=".transform-boundary">
-          <div class="h-10 m-4 bg-gray-200 rounded-xl" *cdkDragPlaceholder></div>
-          <div cdkDragHandle class="relative z-50 top-10 left-1 w-fit hover:cursor-move">
-            <mat-icon>drag_indicator</mat-icon>
-          </div>
-          <app-action
-            [path]="path + '/actions/' + i"
-            [action]="action"
-            (delete)="deleteAction(i)"
-            (updated)="actionUpdated(i, $event)"></app-action>
-        </div>
-      </div>
-    </mat-card-content>
-    <mat-card-footer>
-      <div class="flex bg-transparent">
-        <span class="flex-auto"></span>
-
-        <ng-container *ngIf="schemaService.actionTypes.length > 0">
-          <button mat-icon-button color="primary" [matMenuTriggerFor]="addTriggerMenu">
-            <mat-icon>add</mat-icon>
+        <mat-menu #addActionMenu="matMenu">
+          <button
+            mat-menu-item
+            *ngFor="let actionType of schemaService.actionTypes"
+            (click)="addAction(actionType.type)">
+            <span>{{ actionType.name }}</span>
           </button>
-          <mat-menu #addTriggerMenu="matMenu">
-            <button
-              mat-menu-item
-              *ngFor="let actionType of schemaService.actionTypes"
-              (click)="addAction(actionType.type)">
-              <span>{{ actionType.name }}</span>
-            </button>
-          </mat-menu>
-        </ng-container>
+        </mat-menu>
       </div>
-    </mat-card-footer>
-  </mat-card>
+    </div>
+  </div>
 </ng-container>

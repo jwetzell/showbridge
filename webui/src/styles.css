@@ -2,15 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-.message-indicator {
-  background-color: greenyellow;
-  height: 10px;
-  width: 10px;
-  border-radius: 100%;
-  margin-left: 10px;
+html,
+body {
+  height: 100%;
+  background-color: rgb(30, 30, 30);
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-.cdk-drop-list-draggin .cdk-drag {
+.cdk-drop-list-dragging .cdk-drag {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 

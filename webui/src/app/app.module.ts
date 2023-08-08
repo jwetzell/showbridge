@@ -19,16 +19,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTreeModule } from '@angular/material/tree';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { ActionFormComponent } from './components/action-form/action-form.component';
 import { ActionComponent } from './components/action/action.component';
 import { ConfigComponent } from './components/config/config.component';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
+import { ObjectFormComponent } from './components/object-form/object-form.component';
 import { ParamsFormComponent } from './components/params-form/params-form.component';
 import { ProtocolFormComponent } from './components/protocol-form/protocol-form.component';
 import { ProtocolComponent } from './components/protocol/protocol.component';
-import { TransformFormComponent } from './components/transform-form/transform-form.component';
 import { TransformComponent } from './components/transform/transform.component';
-import { TriggerFormComponent } from './components/trigger-form/trigger-form.component';
 import { TriggerComponent } from './components/trigger/trigger.component';
 
 @NgModule({
@@ -39,9 +37,7 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     ActionComponent,
     TriggerComponent,
     ProtocolComponent,
-    TriggerFormComponent,
-    ActionFormComponent,
-    TransformFormComponent,
+    ObjectFormComponent,
     ProtocolFormComponent,
     ParamsFormComponent,
     ImportConfigComponent,

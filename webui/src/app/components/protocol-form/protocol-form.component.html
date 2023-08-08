@@ -1,1 +1,5 @@
-<app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
+<mat-icon class="text-gray-500 hover:cursor-pointer" (click)="openSettingsDialog()">settings</mat-icon>
+
+<ng-template #settingsDialogRef>
+  <app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
+</ng-template>

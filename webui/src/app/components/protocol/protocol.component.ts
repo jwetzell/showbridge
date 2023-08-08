@@ -37,8 +37,12 @@ export class ProtocolComponent {
   deleteTrigger(index: number) {
     if (this.protocol) {
       this.protocol?.triggers?.splice(index, 1);
-      this.updated.emit(this.protocol);
     }
+    if (!this.pendingUpdate) {
+      this.pendingUpdate = JSON.parse(JSON.stringify(this.protocol));
+    }
+    this.pendingUpdate?.triggers?.splice(index, 1);
+    this.updated.emit(this.pendingUpdate);
   }
 
   triggerUpdated(index: number, trigger: Trigger) {

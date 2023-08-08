@@ -14,7 +14,7 @@ export class TransformComponent implements OnInit {
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
   @Output() updated: EventEmitter<Transform> = new EventEmitter<Transform>();
 
-  transformIndicatorVisibility: boolean = false;
+  indicatorColor: string = 'gray';
 
   constructor(private eventService: EventService) {}
 
@@ -37,9 +37,9 @@ export class TransformComponent implements OnInit {
   }
 
   flashIndicator() {
-    this.transformIndicatorVisibility = true;
+    this.indicatorColor = 'greenyellow';
     setTimeout(() => {
-      this.transformIndicatorVisibility = false;
+      this.indicatorColor = 'gray';
     }, 200);
   }
 }

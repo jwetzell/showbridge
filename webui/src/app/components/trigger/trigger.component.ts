@@ -15,8 +15,9 @@ export class TriggerComponent implements OnInit {
   @Output() updated: EventEmitter<Trigger> = new EventEmitter<Trigger>();
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
 
-  triggerIndicatorVisibility: boolean = false;
+  indicatorColor: string = 'gray';
   pendingUpdate?: Trigger;
+
   constructor(
     private eventService: EventService,
     public schemaService: SchemaService
@@ -35,8 +36,12 @@ export class TriggerComponent implements OnInit {
   deleteAction(index: number) {
     if (this.trigger) {
       this.trigger?.actions?.splice(index, 1);
-      this.updated.emit(this.trigger);
     }
+    if (!this.pendingUpdate) {
+      this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
+    }
+    this.pendingUpdate?.actions?.splice(index, 1);
+    this.updated.emit(this.pendingUpdate);
   }
 
   actionUpdated(index: number, action: Action) {
@@ -67,16 +72,15 @@ export class TriggerComponent implements OnInit {
       this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
     }
 
-    if (this.pendingUpdate && this.pendingUpdate.actions === undefined) {
-      this.pendingUpdate.actions = [];
-    }
-
-    console.log(this.pendingUpdate);
-
     this.trigger?.actions?.push({
       type: actionType,
       enabled: true,
     });
+
+    if (this.pendingUpdate && this.pendingUpdate.actions === undefined) {
+      this.pendingUpdate.actions = [];
+    }
+
     this.pendingUpdate?.actions?.push({
       type: actionType,
       enabled: true,
@@ -105,9 +109,9 @@ export class TriggerComponent implements OnInit {
   }
 
   flashIndicator() {
-    this.triggerIndicatorVisibility = true;
+    this.indicatorColor = 'greenyellow';
     setTimeout(() => {
-      this.triggerIndicatorVisibility = false;
+      this.indicatorColor = 'gray';
     }, 200);
   }
 

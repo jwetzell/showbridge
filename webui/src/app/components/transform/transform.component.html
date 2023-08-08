@@ -1,17 +1,17 @@
 <ng-container *ngIf="transform">
-  <mat-card class="transform">
-    <mat-card-header>
-      <div class="flex items-center w-full ml-2 bg-transparent">
-        <div>{{ transform.type }} Transform</div>
-        <div [style.visibility]="transformIndicatorVisibility ? 'visible' : 'hidden'" class="message-indicator"></div>
-        <div style="flex: 1 1 auto"></div>
-        <button (click)="deleteMe()" mat-icon-button color="warn">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </mat-card-header>
-    <mat-card-content>
-      <app-transform-form [type]="transform.type" [data]="transform" (updated)="update($event)"></app-transform-form>
-    </mat-card-content>
-  </mat-card>
+  <div class="flex items-center p-2 m-2 transform border-2 border-gray-400 border-solid w-fit">
+    <!-- TODO(jwetzell): add support for this -->
+    <!-- <div>
+      <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
+    </div> -->
+    <div class="text-gray-400">{{ transform.type }}</div>
+    <div class="flex-auto ml-2">
+      <app-object-form
+        [objectType]="'Transform'"
+        [type]="transform.type"
+        [data]="transform"
+        (updated)="update($event)"></app-object-form>
+    </div>
+    <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
+  </div>
 </ng-container>

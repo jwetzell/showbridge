@@ -18,7 +18,7 @@ export class ActionComponent implements OnInit {
   @Output() updated: EventEmitter<Action> = new EventEmitter<Action>();
 
   pendingUpdate?: Action;
-  actionIndicatorVisibility: boolean = false;
+  indicatorColor: string = 'gray';
 
   constructor(
     private eventService: EventService,
@@ -106,9 +106,9 @@ export class ActionComponent implements OnInit {
   }
 
   flashIndicator() {
-    this.actionIndicatorVisibility = true;
+    this.indicatorColor = 'greenyellow';
     setTimeout(() => {
-      this.actionIndicatorVisibility = false;
+      this.indicatorColor = 'gray';
     }, 200);
   }
 

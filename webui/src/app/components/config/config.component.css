@@ -1,0 +1,8 @@
+::ng-deep .mdc-tab__text-label {
+  color: rgb(127, 129, 132) !important;
+}
+
+::ng-deep .mdc-tab {
+  background-color: rgb(45, 45, 45) !important;
+  border: 2px solid black !important;
+}

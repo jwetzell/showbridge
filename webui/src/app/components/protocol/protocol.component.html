@@ -1,41 +1,30 @@
 <ng-container *ngIf="protocolType && protocol">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>{{ protocolType }} configuration</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
+  <div class="flex flex-col">
+    <div>
       <app-protocol-form
         [type]="protocolType"
         [data]="protocol"
         (updated)="protocolUpdated($event)"></app-protocol-form>
-      <div cdkDropList (cdkDropListDropped)="drop($event)" class=".transform-boundary">
-        <div cdkDrag *ngFor="let trigger of protocol.triggers; let i = index" cdkDragBoundary=".transform-boundary">
-          <div class="h-10 m-4 bg-gray-200 rounded-xl" *cdkDragPlaceholder></div>
-          <div cdkDragHandle class="relative z-50 top-10 left-1 w-fit hover:cursor-move">
-            <mat-icon>drag_indicator</mat-icon>
-          </div>
-          <app-trigger
-            [path]="protocolType + '/triggers/' + i"
-            [trigger]="trigger"
-            (delete)="deleteTrigger(i)"
-            (updated)="triggerUpdated(i, $event)"></app-trigger>
-        </div>
+    </div>
+    <div cdkDropList (cdkDropListDropped)="drop($event)">
+      <div cdkDrag *ngFor="let trigger of protocol.triggers; let i = index">
+        <div class="h-10 m-4 bg-gray-200 rounded-xl" *cdkDragPlaceholder></div>
+        <app-trigger
+          [path]="protocolType + '/triggers/' + i"
+          [trigger]="trigger"
+          (delete)="deleteTrigger(i)"
+          (updated)="triggerUpdated(i, $event)"></app-trigger>
       </div>
-    </mat-card-content>
-    <mat-card-footer>
-      <div class="flex bg-transparent">
-        <span class="flex-auto"></span>
-        <ng-container *ngIf="triggerTypes.length > 0">
-          <button mat-icon-button color="primary" [matMenuTriggerFor]="addTriggerMenu">
-            <mat-icon>add</mat-icon>
+      <ng-container *ngIf="triggerTypes.length > 0">
+        <button class="w-full mt-2 bg-gray-700" [matMenuTriggerFor]="addTriggerMenu">
+          <mat-icon>add</mat-icon>
+        </button>
+        <mat-menu #addTriggerMenu="matMenu">
+          <button mat-menu-item *ngFor="let triggerType of triggerTypes" (click)="addTrigger(triggerType.type)">
+            <span>{{ triggerType.name }}</span>
           </button>
-          <mat-menu #addTriggerMenu="matMenu">
-            <button mat-menu-item *ngFor="let triggerType of triggerTypes" (click)="addTrigger(triggerType.type)">
-              <span>{{ triggerType.name }}</span>
-            </button>
-          </mat-menu>
-        </ng-container>
-      </div>
-    </mat-card-footer>
-  </mat-card>
+        </mat-menu>
+      </ng-container>
+    </div>
+  </div>
 </ng-container>

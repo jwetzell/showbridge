@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -11,10 +12,14 @@ export class ProtocolFormComponent implements OnInit {
   @Input() type?: string;
   @Input() data?: ProtocolConfiguration;
   @Output() updated: EventEmitter<ProtocolConfiguration> = new EventEmitter<ProtocolConfiguration>();
+  @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
 
   schema: any;
 
-  constructor(private schemaService: SchemaService) {}
+  constructor(
+    private schemaService: SchemaService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     if (this.type) {
@@ -25,5 +30,11 @@ export class ProtocolFormComponent implements OnInit {
   paramsUpdated(params: any) {
     console.log('protocol params updated');
     this.updated.emit({ ...this.data, params });
+  }
+
+  openSettingsDialog() {
+    if (this.dialogRef) {
+      this.dialog.open(this.dialogRef);
+    }
   }
 }

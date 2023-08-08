@@ -1,0 +1,28 @@
+<ng-container *ngIf="formGroup">
+  <form [formGroup]="formGroup" class="h-full">
+    <div class="flex items-center justify-around h-full">
+      <div>
+        <label class="text-gray-300">enabled:</label>
+        <mat-slide-toggle formControlName="enabled" color="primary"></mat-slide-toggle>
+      </div>
+      <mat-icon class="text-gray-500 hover:cursor-pointer" (click)="openSettingsDialog()">settings</mat-icon>
+
+      <ng-template #settingsDialogRef>
+        <div class="m-2">
+          <app-params-form
+            [parentSchema]="schema"
+            [data]="data?.params"
+            (updated)="paramsUpdated($event)"></app-params-form>
+          <div class="flex items-center justify-center">
+            <div class="flex-auto">
+              <mat-form-field subscriptSizing="dynamic" class="w-full">
+                <mat-label>comment: </mat-label>
+                <textarea matInput type="text" formControlName="comment"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </form>
+</ng-container>
