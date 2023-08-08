@@ -175,6 +175,8 @@ export class SchemaService {
               console.error(`schema-service: unhandled param schema type for form group = ${paramSchema.type}`);
               break;
           }
+        } else {
+          console.error('schema-service: param property without type');
         }
       });
     } else {
