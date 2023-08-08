@@ -8,7 +8,7 @@ import { ConfigFileSchema } from './models/config.models';
 import { ConfigService } from './services/config.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
-import exportFromJson from 'export-from-json';
+import { downloadJSON } from './utils/utils';
 
 @Component({
   selector: 'app-root',
@@ -92,11 +92,7 @@ export class AppComponent {
 
   downloadConfig() {
     const configToDownload = this.pendingConfig ? this.pendingConfig : this.config;
-    exportFromJson({
-      data: configToDownload as object,
-      fileName: 'config',
-      exportType: exportFromJson.types.json,
-    });
+    downloadJSON(configToDownload, 'config.json');
   }
 
   validatePendingConfig() {
