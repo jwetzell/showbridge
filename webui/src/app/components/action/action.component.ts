@@ -101,6 +101,11 @@ export class ActionComponent implements OnInit {
       ...this.pendingUpdate,
       ...action,
     };
+
+    this.action = {
+      ...this.pendingUpdate,
+      ...action,
+    };
     this.updated.emit(this.pendingUpdate);
   }
 

@@ -41,6 +41,10 @@ export class TransformComponent implements OnInit {
       ...this.pendingUpdate,
       ...transform,
     };
+    this.transform = {
+      ...this.pendingUpdate,
+      ...transform,
+    };
     this.updated.emit(this.pendingUpdate);
   }
 
