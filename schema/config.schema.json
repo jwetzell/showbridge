@@ -492,6 +492,7 @@
           "oneOf": [
             {
               "title": "MIDI Bytes",
+              "type": "object",
               "properties": {
                 "bytes": {
                   "description": "MIDI data to be sent as an array of 3 bytes",
@@ -510,6 +511,7 @@
             },
             {
               "title": "MIDI Note Off Message",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -540,6 +542,7 @@
             },
             {
               "title": "MIDI Note On Message",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -570,6 +573,7 @@
             },
             {
               "title": "MIDI Polyphonic Aftertouch",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -600,6 +604,7 @@
             },
             {
               "title": "MIDI Control Change",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -630,6 +635,7 @@
             },
             {
               "title": "MIDI Program Change",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -654,6 +660,7 @@
             },
             {
               "title": "MIDI Channel Aftertouch",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -678,6 +685,7 @@
             },
             {
               "title": "MIDI Pitch Bend",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -702,6 +710,7 @@
             },
             {
               "title": "MIDI Start",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -714,6 +723,7 @@
             },
             {
               "title": "MIDI Continue",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -726,6 +736,7 @@
             },
             {
               "title": "MIDI Stop",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
@@ -738,6 +749,7 @@
             },
             {
               "title": "MIDI Reset",
+              "type": "object",
               "properties": {
                 "status": {
                   "description": "MIDI status value",
