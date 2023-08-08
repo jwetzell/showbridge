@@ -69,6 +69,15 @@ export class ParamsFormComponent implements OnInit {
     this.paramsSchema = paramsOption.schema;
     this.paramsFormInfo = paramsOption.paramsFormInfo;
 
+    // NOTE(jwetzell): prune params that MUST change from the data when switch paramOptions
+    Object.entries(this.paramsFormInfo.paramsInfo).forEach(([paramKey, paramInfo]) => {
+      if (paramInfo.const) {
+        if (this.data[paramKey]) {
+          delete this.data[paramKey];
+        }
+      }
+    });
+
     if (this.data && this.paramsFormInfo.formGroup) {
       this.paramsFormInfo.formGroup.patchValue(this.data);
     }

@@ -11,6 +11,8 @@ export interface ParamsFormInfo {
       display: string;
       hint: string;
       type: string;
+      options?: string[];
+      const: boolean;
     };
   };
 }

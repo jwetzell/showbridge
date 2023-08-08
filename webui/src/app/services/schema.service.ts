@@ -184,7 +184,14 @@ export class SchemaService {
                 display: paramKey,
                 type: paramSchema.type,
                 hint: paramSchema.description,
+                const: !!paramSchema.const,
               };
+
+              if (paramSchema.enum) {
+                console.log(paramSchema.enum);
+                paramsFormInfo.paramsInfo[paramKey].options = paramSchema.enum;
+              }
+
               break;
             default:
               console.error(`schema-service: unhandled param schema type for form group = ${paramSchema.type}`);

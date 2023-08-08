@@ -20,11 +20,21 @@
             *ngSwitchCase="'integer'"
             class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
             [formControlName]="key" />
-          <input
-            type="text"
-            *ngSwitchCase="'string'"
-            class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-            [formControlName]="key" />
+
+          <ng-container *ngSwitchCase="'string'">
+            <input
+              type="text"
+              *ngIf="!paramsFormInfo.paramsInfo[key].options; else stringSelectList"
+              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+              [formControlName]="key" />
+            <ng-template #stringSelectList>
+              <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key">
+                <option *ngFor="let option of paramsFormInfo.paramsInfo[key].options" value="{{ option }}">
+                  {{ option }}
+                </option>
+              </select>
+            </ng-template>
+          </ng-container>
           <!-- TODO(jwetzell): figure out how to display params that are arrays or objects-->
           <input
             *ngSwitchDefault
