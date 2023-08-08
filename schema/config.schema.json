@@ -785,7 +785,9 @@
             },
             "port": {
               "description": "Port to forward msg to",
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
             },
             "protocol": {
               "description": "Protocol to use when forwarding msg",
@@ -830,7 +832,9 @@
             },
             "port": {
               "description": "Port to send OSC to",
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
             },
             "protocol": {
               "description": "Protocol to use when sending OSC",
@@ -894,7 +898,9 @@
                 },
                 "port": {
                   "description": "Port to send UDP packet to",
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
                 },
                 "bytes": {
                   "description": "bytes to send",
@@ -916,7 +922,9 @@
                 },
                 "port": {
                   "description": "Port to send UDP packet to",
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
                 },
                 "hex": {
                   "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
@@ -936,7 +944,9 @@
                 },
                 "port": {
                   "description": "Port to send UDP packet to",
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
                 },
                 "_string": {
                   "description": "string to send ran through templating engine",
@@ -955,7 +965,9 @@
                 },
                 "port": {
                   "description": "Port to send UDP packet to",
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
                 },
                 "string": {
                   "description": "string to send",
@@ -1004,7 +1016,9 @@
                 },
                 "port": {
                   "description": "Port to send TCP packet to",
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1030,7 +1044,9 @@
                 },
                 "port": {
                   "description": "Port to send TCP packet to",
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1054,7 +1070,9 @@
                 },
                 "port": {
                   "description": "Port to send TCP packet to",
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1077,7 +1095,9 @@
                 },
                 "port": {
                   "description": "Port to send TCP packet to",
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
