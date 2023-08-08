@@ -142,6 +142,7 @@ export class SchemaService {
             case 'string':
             case 'number':
             case 'integer':
+            case 'boolean':
             case 'array': // TODO(jwetzell): actually handle arrays
             case 'object': // TODO(jwetzell): actually handle objects
               let formDefault = '';
@@ -164,11 +165,17 @@ export class SchemaService {
                 validators.push(Validators.max(paramSchema.maximum));
               }
 
+              if (paramSchema.pattern) {
+                console.log(paramSchema.pattern);
+                validators.push(Validators.pattern(new RegExp(paramSchema.pattern)));
+              }
+
               if (schema.required) {
                 if (schema.required.includes(paramKey)) {
                   validators.push(Validators.required);
                 }
               }
+
               if (paramSchema.type === 'object') {
                 validators.push(this.objectValidator);
               }
