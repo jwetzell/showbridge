@@ -8,6 +8,8 @@ import { ConfigFileSchema } from './models/config.models';
 import { ConfigService } from './services/config.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
+import exportFromJson from 'export-from-json';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,6 +22,7 @@ export class AppComponent {
   schemaValidator?: Ajv;
   pendingConfigIsValid: Boolean = false;
   schemaLoaded: Boolean = false;
+  config?: ConfigFileSchema;
 
   constructor(
     private configService: ConfigService,
@@ -28,8 +31,10 @@ export class AppComponent {
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
+    // this.configService.setupForDummySite();
     this.configService.getConfig().subscribe((currentConfig) => {
       this.config$.next(currentConfig);
+      this.config = currentConfig;
     });
     this.configService.getSchema().subscribe((schema) => {
       this.schemaValidator = new Ajv();
@@ -48,6 +53,12 @@ export class AppComponent {
   }
 
   applyConfig() {
+    if (this.configService.isDummySite) {
+      this.snackBar.open('Dummy site nothing to save to!', 'Save', {
+        duration: 3000,
+      });
+      return;
+    }
     // TODO(jwetzell): handle http port change i.e prompt for redirect or just do it
     if (this.pendingConfig) {
       this.configService.uploadConfig(this.pendingConfig).subscribe((resp) => {
@@ -74,8 +85,18 @@ export class AppComponent {
       .pipe(filter((result) => !!result && result !== ''))
       .subscribe((result) => {
         this.config$.next(result);
+        this.config = result;
         this.configUpdated(result);
       });
+  }
+
+  downloadConfig() {
+    const configToDownload = this.pendingConfig ? this.pendingConfig : this.config;
+    exportFromJson({
+      data: configToDownload as object,
+      fileName: 'config',
+      exportType: exportFromJson.types.json,
+    });
   }
 
   validatePendingConfig() {

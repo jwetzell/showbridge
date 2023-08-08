@@ -4,10 +4,13 @@
       <mat-toolbar color="primary">
         <span>showbridge</span>
         <span class="flex-auto"></span>
-        <button mat-icon-button (click)="importConfig()">
+        <button mat-icon-button matTooltip="Download Config" (click)="downloadConfig()">
+          <mat-icon>download</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Import Config" (click)="importConfig()">
           <mat-icon>upload</mat-icon>
         </button>
-        <button mat-icon-button *ngIf="pendingConfigIsValid" (click)="applyConfig()">
+        <button mat-icon-button matTooltip="Apply Config" *ngIf="pendingConfigIsValid" (click)="applyConfig()">
           <mat-icon>save</mat-icon>
         </button>
       </mat-toolbar>
