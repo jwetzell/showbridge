@@ -20,7 +20,6 @@
       </div>
       <div cdkDropList (cdkDropListDropped)="drop($event)">
         <div cdkDrag *ngFor="let transform of action.transforms; let i = index">
-          <div class="h-10 m-4 bg-gray-200 rounded-xl" *cdkDragPlaceholder></div>
           <app-transform
             [path]="path + '/transforms/' + i"
             [transform]="transform"
