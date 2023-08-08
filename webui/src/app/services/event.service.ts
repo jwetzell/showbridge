@@ -18,29 +18,33 @@ export class EventService {
   }
 
   reload() {
-    this.socket = new WebSocket(this.baseUrl, 'webui');
-    // TODO (jwetzell): implement transform event messages in the actual router
-    this.socket.onmessage = (message: MessageEvent) => {
-      const messageObj = JSON.parse(message.data);
-      switch (messageObj.eventType) {
-        case 'message':
-          this.messageEvents$.next(messageObj);
-          break;
-        case 'trigger':
-          this.triggerEvents$.next(messageObj);
-          break;
-        case 'action':
-          this.actionEvents$.next(messageObj);
-          break;
-        case 'transform':
-          this.transformEvents$.next(messageObj);
-          break;
-        default:
-          console.log(`unhandled websocket message type = ${messageObj.eventType}`);
-          console.log(messageObj);
-          break;
-      }
-    };
+    try {
+      this.socket = new WebSocket(this.baseUrl, 'webui');
+      // TODO (jwetzell): implement transform event messages in the actual router
+      this.socket.onmessage = (message: MessageEvent) => {
+        const messageObj = JSON.parse(message.data);
+        switch (messageObj.eventType) {
+          case 'message':
+            this.messageEvents$.next(messageObj);
+            break;
+          case 'trigger':
+            this.triggerEvents$.next(messageObj);
+            break;
+          case 'action':
+            this.actionEvents$.next(messageObj);
+            break;
+          case 'transform':
+            this.transformEvents$.next(messageObj);
+            break;
+          default:
+            console.log(`unhandled websocket message type = ${messageObj.eventType}`);
+            console.log(messageObj);
+            break;
+        }
+      };
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   getTriggersForPath(path: string) {
