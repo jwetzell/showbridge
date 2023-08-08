@@ -1,15 +1,17 @@
 <ng-container *ngIf="config$ | async as config">
   <ng-container *ngIf="schemaLoaded">
-    <mat-toolbar color="primary">
-      <span>showbridge</span>
-      <span class="flex-auto"></span>
-      <button mat-icon-button (click)="importConfig()">
-        <mat-icon>upload</mat-icon>
-      </button>
-      <button mat-icon-button *ngIf="pendingConfigIsValid" (click)="applyConfig()">
-        <mat-icon>save</mat-icon>
-      </button>
-    </mat-toolbar>
-    <app-config [config]="config" (updated)="configUpdated($event)"></app-config>
+    <div class="h-screen max-h-screen flex flex-col">
+      <mat-toolbar color="primary">
+        <span>showbridge</span>
+        <span class="flex-auto"></span>
+        <button mat-icon-button (click)="importConfig()">
+          <mat-icon>upload</mat-icon>
+        </button>
+        <button mat-icon-button *ngIf="pendingConfigIsValid" (click)="applyConfig()">
+          <mat-icon>save</mat-icon>
+        </button>
+      </mat-toolbar>
+      <app-config class="flex-auto" [config]="config" (updated)="configUpdated($event)"></app-config>
+    </div>
   </ng-container>
 </ng-container>

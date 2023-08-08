@@ -27,7 +27,11 @@
             (updated)="transformUpdated(i, $event)"></app-transform>
         </div>
         <div *ngIf="schemaService.actionTypes.length > 0">
-          <button class="w-full bg-gray-700" [matMenuTriggerFor]="addTransformMenu"><mat-icon>add</mat-icon></button>
+          <div
+            class="w-full flex justify-center items-center hover:cursor-pointer hover:bg-gray-500 bg-gray-700"
+            [matMenuTriggerFor]="addTransformMenu">
+            <mat-icon>add</mat-icon>
+          </div>
           <mat-menu #addTransformMenu="matMenu">
             <button
               mat-menu-item

@@ -6,3 +6,11 @@
   background-color: rgb(45, 45, 45) !important;
   border: 2px solid black !important;
 }
+
+.mat-mdc-tab-group {
+  height: 100%;
+}
+
+::ng-deep .mat-mdc-tab-body-wrapper {
+  height: 100%;
+}

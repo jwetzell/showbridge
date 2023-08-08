@@ -1,24 +1,27 @@
 <ng-container *ngIf="protocolType && protocol">
-  <div class="flex flex-col">
+  <div class="flex flex-col h-full">
     <div>
       <app-protocol-form
         [type]="protocolType"
         [data]="protocol"
         (updated)="protocolUpdated($event)"></app-protocol-form>
     </div>
-    <div cdkDropList (cdkDropListDropped)="drop($event)">
+    <div class="flex-auto" cdkDropList (cdkDropListDropped)="drop($event)">
       <div cdkDrag *ngFor="let trigger of protocol.triggers; let i = index">
-        <div class="h-10 m-4 bg-gray-200 rounded-xl" *cdkDragPlaceholder></div>
         <app-trigger
           [path]="protocolType + '/triggers/' + i"
           [trigger]="trigger"
           (delete)="deleteTrigger(i)"
           (updated)="triggerUpdated(i, $event)"></app-trigger>
       </div>
+    </div>
+    <div>
       <ng-container *ngIf="triggerTypes.length > 0">
-        <button class="w-full mt-2 bg-gray-700" [matMenuTriggerFor]="addTriggerMenu">
+        <div
+          class="w-full flex justify-center items-center hover:cursor-pointer hover:bg-gray-500 bg-gray-700"
+          [matMenuTriggerFor]="addTriggerMenu">
           <mat-icon>add</mat-icon>
-        </button>
+        </div>
         <mat-menu #addTriggerMenu="matMenu">
           <button mat-menu-item *ngFor="let triggerType of triggerTypes" (click)="addTrigger(triggerType.type)">
             <span>{{ triggerType.name }}</span>
