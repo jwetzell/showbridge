@@ -15,6 +15,7 @@ export class TransformComponent implements OnInit {
   @Output() updated: EventEmitter<Transform> = new EventEmitter<Transform>();
 
   indicatorColor: string = 'gray';
+  pendingUpdate?: Transform;
 
   constructor(private eventService: EventService) {}
 
@@ -33,7 +34,14 @@ export class TransformComponent implements OnInit {
   }
 
   update(transform: Transform) {
-    this.updated.emit(transform);
+    if (!this.pendingUpdate) {
+      this.pendingUpdate = JSON.parse(JSON.stringify(this.transform));
+    }
+    this.pendingUpdate = {
+      ...this.pendingUpdate,
+      ...transform,
+    };
+    this.updated.emit(this.pendingUpdate);
   }
 
   flashIndicator() {

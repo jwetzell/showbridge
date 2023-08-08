@@ -94,9 +94,8 @@ export class ActionComponent implements OnInit {
   }
 
   update(action: Action) {
-    console.log(action);
     if (!this.pendingUpdate) {
-      this.pendingUpdate = action;
+      this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
     }
     this.pendingUpdate = {
       ...this.pendingUpdate,

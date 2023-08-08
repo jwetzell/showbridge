@@ -94,7 +94,7 @@ export class TriggerComponent implements OnInit {
 
   update(trigger: Trigger) {
     if (!this.pendingUpdate) {
-      this.pendingUpdate = trigger;
+      this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
     }
 
     this.pendingUpdate = {
