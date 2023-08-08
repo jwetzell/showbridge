@@ -6,7 +6,7 @@
   </ng-container>
   <form [formGroup]="paramsFormInfo.formGroup">
     <div class="flex flex-col">
-      <div *ngFor="let key of paramKeys()" class="m-1 flex items-center">
+      <div *ngFor="let key of paramKeys()" class="flex items-center m-1">
         <label>{{ paramsFormInfo.paramsInfo[key].display }}: </label>
         <ng-container [ngSwitch]="paramsFormInfo.paramsInfo[key].type">
           <input type="checkbox" *ngSwitchCase="'boolean'" [formControlName]="key" />
