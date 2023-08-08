@@ -71,7 +71,7 @@ export class ParamsFormComponent implements OnInit {
 
     // NOTE(jwetzell): prune params that MUST change from the data when switch paramOptions
     Object.entries(this.paramsFormInfo.paramsInfo).forEach(([paramKey, paramInfo]) => {
-      if (paramInfo.const) {
+      if (paramInfo.const && this.data) {
         if (this.data[paramKey]) {
           delete this.data[paramKey];
         }
@@ -81,6 +81,8 @@ export class ParamsFormComponent implements OnInit {
     if (this.data && this.paramsFormInfo.formGroup) {
       this.paramsFormInfo.formGroup.patchValue(this.data);
     }
+
+    this.formUpdated();
 
     this.paramsFormInfo.formGroup.valueChanges.subscribe((value) => {
       this.formUpdated();
