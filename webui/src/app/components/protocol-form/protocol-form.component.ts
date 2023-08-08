@@ -16,6 +16,8 @@ export class ProtocolFormComponent implements OnInit {
 
   schema: any;
 
+  hasSettings: boolean = false;
+
   constructor(
     private schemaService: SchemaService,
     private dialog: MatDialog
@@ -24,6 +26,9 @@ export class ProtocolFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.type) {
       this.schema = this.schemaService.getSchemaForProtocol(this.type);
+      if (this.schema.properties.params) {
+        this.hasSettings = true;
+      }
     }
   }
 

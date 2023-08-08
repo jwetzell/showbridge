@@ -1,4 +1,4 @@
-<ng-container *ngIf="parentSchema">
+<ng-container *ngIf="parentSchema && paramsFormGroup">
   <ng-container *ngIf="paramsOptions.length > 1">
     <mat-tab-group [selectedIndex]="paramsOptionsSelectedIndex" (selectedTabChange)="paramsOptionsTabSelected($event)">
       <mat-tab *ngFor="let paramsOption of paramsOptions" label="{{ paramsOption.display }}"></mat-tab>

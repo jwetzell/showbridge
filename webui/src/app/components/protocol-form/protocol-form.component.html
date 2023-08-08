@@ -1,5 +1,7 @@
-<mat-icon class="text-gray-500 hover:cursor-pointer" (click)="openSettingsDialog()">settings</mat-icon>
+<ng-container *ngIf="hasSettings">
+  <mat-icon class="text-gray-500 hover:cursor-pointer" (click)="openSettingsDialog()">settings</mat-icon>
 
-<ng-template #settingsDialogRef>
-  <app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
-</ng-template>
+  <ng-template #settingsDialogRef>
+    <app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
+  </ng-template>
+</ng-container>
