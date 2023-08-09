@@ -25,7 +25,7 @@ export class TriggerComponent implements OnInit {
 
   ngOnInit() {
     if (this.path) {
-      this.eventService.getTriggersForPath(this.path).subscribe((triggerEvent) => {
+      this.eventService.getTriggerEventsForPath(this.path).subscribe((triggerEvent) => {
         if (triggerEvent.data.fired) {
           this.flashIndicator();
         }

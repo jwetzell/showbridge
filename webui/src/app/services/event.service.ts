@@ -47,7 +47,7 @@ export class EventService {
     }
   }
 
-  getTriggersForPath(path: string) {
+  getTriggerEventsForPath(path: string) {
     return this.triggerEvents$.pipe(
       filter((triggerEvent) => {
         return triggerEvent.data.path === path;
