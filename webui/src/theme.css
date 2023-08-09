@@ -660,7 +660,7 @@ html {
   background-color: var(--mdc-ripple-color, transparent);
 }
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
-  color: rgba(194, 24, 91, 0.87);
+  color: black;
 }
 .mdc-text-field--invalid:not(.mdc-text-field--disabled):hover .mdc-line-ripple::before {
   border-bottom-color: var(--mdc-theme-error, #f44336);

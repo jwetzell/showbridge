@@ -7,7 +7,7 @@
   <form [formGroup]="paramsFormInfo.formGroup">
     <div class="flex flex-col">
       <div *ngFor="let key of paramKeys()" class="flex items-center m-1">
-        <label>{{ paramsFormInfo.paramsInfo[key].display }}: </label>
+        <label class="mr-2 text-gray-300">{{ paramsFormInfo.paramsInfo[key].display }}: </label>
         <ng-container [ngSwitch]="paramsFormInfo.paramsInfo[key].type">
           <input type="checkbox" *ngSwitchCase="'boolean'" [formControlName]="key" />
           <input
@@ -42,7 +42,7 @@
             [formControlName]="key" />
         </ng-container>
         <ng-container *ngIf="!paramsFormInfo.formGroup.controls[key].valid">
-          <mat-error>{{ paramsFormInfo.formGroup.controls[key].errors | json }}</mat-error>
+          <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
         </ng-container>
         <mat-icon matTooltip="{{ paramsFormInfo.paramsInfo[key].hint }}" class="ml-1">help_outline</mat-icon>
       </div>
