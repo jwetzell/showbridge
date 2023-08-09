@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { EventService } from 'src/app/services/event.service';
@@ -25,11 +26,19 @@ export class TriggerComponent implements OnInit {
 
   ngOnInit() {
     if (this.path) {
-      this.eventService.getTriggerEventsForPath(this.path).subscribe((triggerEvent) => {
-        if (triggerEvent.data.fired) {
-          this.flashIndicator();
-        }
-      });
+      this.eventService
+        .getTriggerEventsForPath(this.path)
+        .pipe(
+          tap((triggerEvent) => {
+            if (triggerEvent.data.fired) {
+              this.indicatorColor = 'greenyellow';
+            }
+          }),
+          debounceTime(200)
+        )
+        .subscribe((triggerEvent) => {
+          this.indicatorColor = 'gray';
+        });
     }
   }
 
@@ -106,13 +115,6 @@ export class TriggerComponent implements OnInit {
       ...trigger,
     };
     this.updated.next(this.pendingUpdate);
-  }
-
-  flashIndicator() {
-    this.indicatorColor = 'greenyellow';
-    setTimeout(() => {
-      this.indicatorColor = 'gray';
-    }, 200);
   }
 
   drop(event: CdkDragDrop<string[]>) {

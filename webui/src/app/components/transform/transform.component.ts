@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { tap, debounceTime } from 'rxjs';
 import { Transform } from 'src/app/models/transform.model';
 import { EventService } from 'src/app/services/event.service';
 
@@ -21,11 +22,19 @@ export class TransformComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.path) {
-      this.eventService.getTransformEventsForPath(this.path).subscribe((transformEvent) => {
-        if (transformEvent.data.fired) {
-          this.flashIndicator();
-        }
-      });
+      this.eventService
+        .getTransformEventsForPath(this.path)
+        .pipe(
+          tap((transformEvent) => {
+            if (transformEvent.data.fired) {
+              this.indicatorColor = 'greenyellow';
+            }
+          }),
+          debounceTime(200)
+        )
+        .subscribe((transformEvent) => {
+          this.indicatorColor = 'gray';
+        });
     }
   }
 
@@ -46,12 +55,5 @@ export class TransformComponent implements OnInit {
       ...transform,
     };
     this.updated.emit(this.pendingUpdate);
-  }
-
-  flashIndicator() {
-    this.indicatorColor = 'greenyellow';
-    setTimeout(() => {
-      this.indicatorColor = 'gray';
-    }, 200);
   }
 }
