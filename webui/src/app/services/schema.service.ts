@@ -19,6 +19,8 @@ export class SchemaService {
   setSchema(schema: JSONSchemaType<ConfigFileSchema>) {
     this.schema = schema;
 
+    this.ajv.addSchema(schema);
+
     this.populateActionTypes();
 
     this.populateTransformTypes();

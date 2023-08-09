@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import Ajv from 'ajv';
 import { Subject, filter } from 'rxjs';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { ConfigFileSchema } from './models/config.models';
@@ -19,7 +18,6 @@ export class AppComponent {
   config$: Subject<ConfigFileSchema> = new Subject<ConfigFileSchema>();
 
   pendingConfig?: ConfigFileSchema;
-  schemaValidator?: Ajv;
   pendingConfigIsValid: Boolean = false;
   schemaLoaded: Boolean = false;
   config?: ConfigFileSchema;
@@ -37,8 +35,6 @@ export class AppComponent {
       this.config = currentConfig;
     });
     this.configService.getSchema().subscribe((schema) => {
-      this.schemaValidator = new Ajv();
-      this.schemaValidator.addSchema(schema, 'config');
       this.schemaService.setSchema(schema);
       this.schemaLoaded = true;
     });
@@ -48,7 +44,7 @@ export class AppComponent {
     this.pendingConfig = newConfig;
     this.pendingConfigIsValid = this.validatePendingConfig();
     if (!this.pendingConfigIsValid) {
-      console.error(this.schemaValidator?.errors);
+      console.error(this.schemaService.ajv?.errors);
     }
   }
 
@@ -96,8 +92,8 @@ export class AppComponent {
   }
 
   validatePendingConfig() {
-    if (this.schemaValidator) {
-      const valid = this.schemaValidator.validate('config', this.pendingConfig);
+    if (this.schemaService.ajv) {
+      const valid = this.schemaService.ajv.validate('Config', this.pendingConfig);
       return valid;
     }
     return false;
