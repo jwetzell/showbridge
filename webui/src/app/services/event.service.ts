@@ -20,7 +20,6 @@ export class EventService {
   reload() {
     try {
       this.socket = new WebSocket(this.baseUrl, 'webui');
-      // TODO (jwetzell): implement transform event messages in the actual router
       this.socket.onmessage = (message: MessageEvent) => {
         const messageObj = JSON.parse(message.data);
         switch (messageObj.eventType) {
