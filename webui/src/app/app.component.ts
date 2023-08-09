@@ -8,7 +8,7 @@ import { ConfigService } from './services/config.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
 import { downloadJSON } from './utils/utils';
-
+import { get } from 'lodash';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -55,15 +55,33 @@ export class AppComponent {
       });
       return;
     }
-    // TODO(jwetzell): handle http port change i.e prompt for redirect or just do it
     if (this.pendingConfig) {
       this.configService.uploadConfig(this.pendingConfig).subscribe((resp) => {
+        this.config = this.pendingConfig;
         this.pendingConfig = undefined;
         this.pendingConfigIsValid = false;
-        this.eventService.reload();
-        this.snackBar.open('Config saved successfully!', 'Save', {
-          duration: 3000,
-        });
+
+        const newHttpPort = get(this.config, 'http.params.port');
+
+        this.snackBar
+          .open('Config saved successfully!', 'Dismiss', {
+            duration: 3000,
+          })
+          .afterDismissed()
+          .subscribe((value) => {
+            if (newHttpPort && newHttpPort !== parseInt(location.port)) {
+              this.snackBar
+                .open('HTTP port changed redirecting...', 'Redirect', {
+                  duration: 3000,
+                })
+                .afterDismissed()
+                .subscribe((value) => {
+                  location.port = `${newHttpPort}`;
+                });
+            } else {
+              this.eventService.reload();
+            }
+          });
       });
     } else {
       console.error('pending config is null');
