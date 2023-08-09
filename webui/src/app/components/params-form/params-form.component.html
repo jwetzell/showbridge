@@ -44,7 +44,11 @@
         <ng-container *ngIf="!paramsFormInfo.formGroup.controls[key].valid">
           <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
         </ng-container>
-        <mat-icon matTooltip="{{ paramsFormInfo.paramsInfo[key].hint }}" class="ml-1">help_outline</mat-icon>
+        <div class="flex justify-center items-center">
+          <mat-icon matTooltip="{{ paramsFormInfo.paramsInfo[key].hint }}" class="ml-2 text-gray-200"
+            >help_outline</mat-icon
+          >
+        </div>
       </div>
     </div>
   </form>
