@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { ConfigFileSchema, ProtocolConfiguration } from 'src/app/models/config.models';
 
 @Component({
@@ -13,7 +14,7 @@ export class ConfigComponent {
   protocols = ['http', 'ws', 'osc', 'tcp', 'udp', 'midi', 'mqtt', 'cloud'];
 
   protocolUpdate(protocol: string, newProtocolConfig: ProtocolConfiguration) {
-    const newConfig = JSON.parse(JSON.stringify(this.config));
+    const newConfig = cloneDeep(this.config);
     newConfig[protocol] = newProtocolConfig;
     console.log(newConfig);
     this.updated.emit(newConfig);

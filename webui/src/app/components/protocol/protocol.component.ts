@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
 import { ItemInfo } from 'src/app/models/form.model';
 import { Trigger } from 'src/app/models/trigger.model';
@@ -39,7 +40,7 @@ export class ProtocolComponent {
       this.protocol?.triggers?.splice(index, 1);
     }
     if (!this.pendingUpdate) {
-      this.pendingUpdate = JSON.parse(JSON.stringify(this.protocol));
+      this.pendingUpdate = cloneDeep(this.protocol);
     }
     this.pendingUpdate?.triggers?.splice(index, 1);
     this.updated.emit(this.pendingUpdate);
@@ -49,7 +50,7 @@ export class ProtocolComponent {
     if (this.protocol) {
       if (this.protocol?.triggers !== undefined && this.protocol.triggers[index] !== undefined) {
         if (!this.pendingUpdate) {
-          this.pendingUpdate = JSON.parse(JSON.stringify(this.protocol));
+          this.pendingUpdate = cloneDeep(this.protocol);
         }
         if (this.pendingUpdate && this.pendingUpdate.triggers) {
           this.pendingUpdate.triggers[index] = {
@@ -68,7 +69,7 @@ export class ProtocolComponent {
       this.protocol.triggers = [];
     }
     if (!this.pendingUpdate) {
-      this.pendingUpdate = JSON.parse(JSON.stringify(this.protocol));
+      this.pendingUpdate = cloneDeep(this.protocol);
     }
     // TODO(jwetzell): find a way to dummy up the params field
     this.protocol?.triggers?.push({

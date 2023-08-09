@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { Trigger } from 'src/app/models/trigger.model';
@@ -43,21 +44,25 @@ export class TriggerComponent implements OnInit {
   }
 
   deleteAction(index: number) {
+    // TODO(jwetzell): figure this out properly
+
     if (this.trigger) {
       this.trigger?.actions?.splice(index, 1);
     }
     if (!this.pendingUpdate) {
-      this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
+      this.pendingUpdate = cloneDeep(this.trigger);
     }
     this.pendingUpdate?.actions?.splice(index, 1);
     this.updated.emit(this.pendingUpdate);
   }
 
   actionUpdated(index: number, action: Action) {
+    // TODO(jwetzell): figure this out properly
+
     if (this.trigger) {
       if (this.trigger?.actions !== undefined && this.trigger.actions[index] !== undefined) {
         if (!this.pendingUpdate) {
-          this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
+          this.pendingUpdate = cloneDeep(this.trigger);
         }
 
         if (this.pendingUpdate && this.pendingUpdate.actions) {
@@ -78,7 +83,7 @@ export class TriggerComponent implements OnInit {
       this.trigger.actions = [];
     }
     if (!this.pendingUpdate) {
-      this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
+      this.pendingUpdate = cloneDeep(this.trigger);
     }
 
     this.trigger?.actions?.push({
@@ -102,8 +107,10 @@ export class TriggerComponent implements OnInit {
   }
 
   update(trigger: Trigger) {
+    // TODO(jwetzell): figure this out properly
+
     if (!this.pendingUpdate) {
-      this.pendingUpdate = JSON.parse(JSON.stringify(this.trigger));
+      this.pendingUpdate = cloneDeep(this.trigger);
     }
 
     this.pendingUpdate = {

@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { tap, debounceTime } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { Transform } from 'src/app/models/transform.model';
@@ -45,10 +46,12 @@ export class ActionComponent implements OnInit {
   }
 
   transformUpdated(index: number, transform: Transform) {
+    // TODO(jwetzell): figure this out properly
+
     if (this.action) {
       if (this.action?.transforms !== undefined && this.action.transforms[index] !== undefined) {
         if (!this.pendingUpdate) {
-          this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
+          this.pendingUpdate = cloneDeep(this.action);
         }
         if (this.pendingUpdate && this.pendingUpdate?.transforms) {
           this.pendingUpdate.transforms[index] = {
@@ -67,11 +70,13 @@ export class ActionComponent implements OnInit {
   }
 
   deleteTransform(index: number) {
+    // TODO(jwetzell): figure this out properly
+
     if (this.action) {
       this.action?.transforms?.splice(index, 1);
     }
     if (!this.pendingUpdate) {
-      this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
+      this.pendingUpdate = cloneDeep(this.action);
     }
     this.pendingUpdate?.transforms?.splice(index, 1);
     this.updated.emit(this.pendingUpdate);
@@ -83,7 +88,7 @@ export class ActionComponent implements OnInit {
       this.action.transforms = [];
     }
     if (!this.pendingUpdate) {
-      this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
+      this.pendingUpdate = cloneDeep(this.action);
     }
 
     this.action?.transforms?.push({
@@ -103,8 +108,10 @@ export class ActionComponent implements OnInit {
   }
 
   update(action: Action) {
+    // TODO(jwetzell): figure this out properly
+
     if (!this.pendingUpdate) {
-      this.pendingUpdate = JSON.parse(JSON.stringify(this.action));
+      this.pendingUpdate = cloneDeep(this.action);
     }
     this.pendingUpdate = {
       ...this.pendingUpdate,

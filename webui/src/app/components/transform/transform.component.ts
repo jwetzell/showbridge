@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { tap, debounceTime } from 'rxjs';
 import { Transform } from 'src/app/models/transform.model';
 import { EventService } from 'src/app/services/event.service';
@@ -43,8 +44,10 @@ export class TransformComponent implements OnInit {
   }
 
   update(transform: Transform) {
+    // TODO(jwetzell): figure this out properly
+
     if (!this.pendingUpdate) {
-      this.pendingUpdate = JSON.parse(JSON.stringify(this.transform));
+      this.pendingUpdate = cloneDeep(this.transform);
     }
     this.pendingUpdate = {
       ...this.pendingUpdate,
