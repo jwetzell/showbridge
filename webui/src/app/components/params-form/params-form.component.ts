@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Subscription } from 'rxjs';
 import { ParamsFormInfo } from 'src/app/models/form.model';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -16,6 +17,7 @@ export class ParamsFormComponent implements OnInit {
   paramsSchema: any;
   paramsFormInfo?: ParamsFormInfo;
 
+  formGroupSubscription?: Subscription;
   paramsOptions: { display: string; paramsFormInfo: ParamsFormInfo; keys: string[]; schema: any }[] = [];
   paramsOptionsSelectedIndex: number = 0;
 
@@ -56,13 +58,17 @@ export class ParamsFormComponent implements OnInit {
       this.paramsFormInfo.formGroup.patchValue(this.data);
     }
 
-    this.paramsFormInfo?.formGroup.valueChanges.subscribe((value) => {
+    this.formGroupSubscription = this.paramsFormInfo?.formGroup.valueChanges.subscribe((value) => {
       this.formUpdated();
     });
   }
 
   paramsOptionsTabSelected(event: MatTabChangeEvent) {
-    // TODO(jwetzell): figure out how to handle params properties that have const requirements when switching tabs
+    // NOTE(jwetzell): no longer interested in the old formGroup valueChanges
+    if (this.formGroupSubscription) {
+      this.formGroupSubscription.unsubscribe();
+    }
+
     const paramsOption = this.paramsOptions[event.index];
 
     this.paramsSchema = paramsOption.schema;
@@ -77,15 +83,15 @@ export class ParamsFormComponent implements OnInit {
       }
     });
 
+    if (this.paramsFormInfo.formGroup) {
+      this.formGroupSubscription = this.paramsFormInfo.formGroup.valueChanges.subscribe((value) => {
+        this.formUpdated();
+      });
+    }
+
     if (this.data && this.paramsFormInfo.formGroup) {
       this.paramsFormInfo.formGroup.patchValue(this.data);
     }
-
-    this.formUpdated();
-
-    this.paramsFormInfo.formGroup.valueChanges.subscribe((value) => {
-      this.formUpdated();
-    });
   }
 
   formUpdated() {
