@@ -4,6 +4,14 @@
   </div>
 
   <ng-template #settingsDialogRef>
-    <app-params-form [parentSchema]="schema" [data]="data?.params" (updated)="paramsUpdated($event)"></app-params-form>
+    <div class="p-2">
+      <div class="flex text-gray-200 justify-around w-full mb-2">
+        {{ schema.title }}
+      </div>
+      <app-params-form
+        [parentSchema]="schema"
+        [data]="data?.params"
+        (updated)="paramsUpdated($event)"></app-params-form>
+    </div>
   </ng-template>
 </ng-container>
