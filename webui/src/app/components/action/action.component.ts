@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cloneDeep } from 'lodash';
-import { tap, debounceTime } from 'rxjs';
+import { cloneDeep, merge } from 'lodash';
+import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { Transform } from 'src/app/models/transform.model';
 import { EventService } from 'src/app/services/event.service';
@@ -46,22 +46,10 @@ export class ActionComponent implements OnInit {
   }
 
   transformUpdated(index: number, transform: Transform) {
-    // TODO(jwetzell): figure this out properly
-
-    if (this.action) {
-      if (this.action?.transforms !== undefined && this.action.transforms[index] !== undefined) {
-        if (!this.pendingUpdate) {
-          this.pendingUpdate = cloneDeep(this.action);
-        }
-        if (this.pendingUpdate && this.pendingUpdate?.transforms) {
-          this.pendingUpdate.transforms[index] = {
-            ...this.pendingUpdate.transforms[index],
-            ...transform,
-          };
-          console.log('action update called because of transform update');
-          this.updated.emit(this.pendingUpdate);
-        }
-      }
+    if (this.action?.transforms !== undefined && this.action.transforms[index] !== undefined) {
+      merge(this.action.transforms[index], transform);
+      this.pendingUpdate = cloneDeep(this.action);
+      this.updated.emit(this.pendingUpdate);
     }
   }
 
@@ -70,70 +58,35 @@ export class ActionComponent implements OnInit {
   }
 
   deleteTransform(index: number) {
-    // TODO(jwetzell): figure this out properly
-
-    if (this.action) {
-      this.action?.transforms?.splice(index, 1);
-    }
-    if (!this.pendingUpdate) {
-      this.pendingUpdate = cloneDeep(this.action);
-    }
-    this.pendingUpdate?.transforms?.splice(index, 1);
+    this.action?.transforms?.splice(index, 1);
+    this.pendingUpdate = cloneDeep(this.action);
     this.updated.emit(this.pendingUpdate);
   }
 
   addTransform(transformType: string) {
-    // TODO(jwetzell): figure this out properly
     if (this.action && this.action?.transforms === undefined) {
       this.action.transforms = [];
     }
-    if (!this.pendingUpdate) {
-      this.pendingUpdate = cloneDeep(this.action);
-    }
-
     this.action?.transforms?.push({
       type: transformType,
       enabled: true,
     });
 
-    if (this.pendingUpdate && this.pendingUpdate.transforms === undefined) {
-      this.pendingUpdate.transforms = [];
-    }
-
-    this.pendingUpdate?.transforms?.push({
-      type: transformType,
-      enabled: true,
-    });
+    this.pendingUpdate = cloneDeep(this.action);
     this.updated.emit(this.pendingUpdate);
   }
 
   update(action: Action) {
-    // TODO(jwetzell): figure this out properly
-
-    if (!this.pendingUpdate) {
-      this.pendingUpdate = cloneDeep(this.action);
-    }
-    this.pendingUpdate = {
-      ...this.pendingUpdate,
-      ...action,
-    };
-
-    this.action = {
-      ...this.pendingUpdate,
-      ...action,
-    };
+    merge(this.action, action);
+    this.pendingUpdate = cloneDeep(this.action);
     this.updated.emit(this.pendingUpdate);
   }
 
   drop(event: CdkDragDrop<string[]>) {
     if (this.action?.transforms !== undefined) {
       moveItemInArray(this.action?.transforms, event.previousIndex, event.currentIndex);
-      if (this.pendingUpdate && this.pendingUpdate.transforms) {
-        moveItemInArray(this.pendingUpdate.transforms, event.previousIndex, event.currentIndex);
-        this.updated.emit(this.pendingUpdate);
-      } else {
-        this.updated.emit(this.action);
-      }
+      this.pendingUpdate = cloneDeep(this.action);
+      this.updated.emit(this.pendingUpdate);
     }
   }
 }
