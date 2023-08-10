@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 export interface ItemInfo {
   name: string;
   type: string;
+  schema: any;
 }
 export interface ParamsFormInfo {
   formGroup: FormGroup;

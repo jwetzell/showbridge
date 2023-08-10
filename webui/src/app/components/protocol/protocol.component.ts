@@ -52,10 +52,8 @@ export class ProtocolComponent {
     if (this.protocol && this.protocol?.triggers === undefined) {
       this.protocol.triggers = [];
     }
-    this.protocol?.triggers?.push({
-      type: triggerType,
-      enabled: true,
-    });
+    const triggerTemplate = this.schemaService.getTemplateForTrigger(triggerType);
+    this.protocol?.triggers?.push(triggerTemplate);
     this.pendingUpdate = cloneDeep(this.protocol);
     this.updated.emit(this.pendingUpdate);
   }

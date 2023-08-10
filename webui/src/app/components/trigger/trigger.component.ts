@@ -62,10 +62,8 @@ export class TriggerComponent implements OnInit {
     if (this.trigger && this.trigger?.actions === undefined) {
       this.trigger.actions = [];
     }
-    this.trigger?.actions?.push({
-      type: actionType,
-      enabled: true,
-    });
+    const actionTemplate = this.schemaService.getTemplateForAction(actionType);
+    this.trigger?.actions?.push(actionTemplate);
     this.pendingUpdate = cloneDeep(this.trigger);
     this.updated.emit(this.pendingUpdate);
   }

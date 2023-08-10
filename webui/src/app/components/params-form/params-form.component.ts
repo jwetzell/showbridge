@@ -27,13 +27,13 @@ export class ParamsFormComponent implements OnInit {
     this.paramsSchema = this.parentSchema.properties?.params;
     if (this.paramsSchema) {
       if (this.paramsSchema.properties) {
-        this.paramsFormInfo = this.schemaService.getFormGroupFromParamsSchema(this.paramsSchema);
+        this.paramsFormInfo = this.schemaService.getFormInfoFromParamsSchema(this.paramsSchema);
       } else if (this.paramsSchema.oneOf) {
         this.paramsOptions = this.paramsSchema.oneOf.map((oneOf: any) => {
           const paramsOption = {
             display: oneOf.title,
             schema: oneOf,
-            paramsFormInfo: this.schemaService.getFormGroupFromParamsSchema(oneOf),
+            paramsFormInfo: this.schemaService.getFormInfoFromParamsSchema(oneOf),
           };
           return {
             ...paramsOption,

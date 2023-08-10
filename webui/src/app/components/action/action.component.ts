@@ -67,10 +67,8 @@ export class ActionComponent implements OnInit {
     if (this.action && this.action?.transforms === undefined) {
       this.action.transforms = [];
     }
-    this.action?.transforms?.push({
-      type: transformType,
-      enabled: true,
-    });
+    const transformTemplate = this.schemaService.getTemplateForTransform(transformType);
+    this.action?.transforms?.push(transformTemplate);
 
     this.pendingUpdate = cloneDeep(this.action);
     this.updated.emit(this.pendingUpdate);

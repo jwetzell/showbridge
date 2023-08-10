@@ -43,9 +43,6 @@ export class AppComponent {
 
     this.pendingConfig = newConfig;
     this.pendingConfigIsValid = this.validatePendingConfig();
-    if (!this.pendingConfigIsValid) {
-      console.error(this.schemaService.ajv?.errors);
-    }
   }
 
   applyConfig() {
@@ -116,10 +113,11 @@ export class AppComponent {
   }
 
   validatePendingConfig() {
-    if (this.schemaService.ajv) {
-      const valid = this.schemaService.ajv.validate('Config', this.pendingConfig);
-      return valid;
+    const errors = this.schemaService.validate(this.pendingConfig);
+    if (errors && errors.length === 0) {
+      return true;
     }
+    console.error(errors);
     return false;
   }
 }

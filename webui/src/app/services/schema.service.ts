@@ -5,6 +5,8 @@ import Ajv, { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { ConfigFileSchema } from '../models/config.models';
 import { ItemInfo, ParamsFormInfo } from '../models/form.model';
+import { Action } from '../models/action.model';
+import { Trigger } from '../models/trigger.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +21,7 @@ export class SchemaService {
 
   actionTypes: ItemInfo[] = [];
   transformTypes: ItemInfo[] = [];
+  triggerTypes: ItemInfo[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -26,6 +29,68 @@ export class SchemaService {
     this.http.get<JSONSchemaType<ConfigFileSchema>>(this.schemaUrl).subscribe((schema) => {
       this.setSchema(schema);
     });
+  }
+
+  validate(data: any): (string | undefined)[] {
+    if (this.schema && this.ajv) {
+      this.ajv.validate('Config', data);
+      if (this.ajv.errors) {
+        return this.ajv.errors
+          .filter((errorRecord) => errorRecord.message !== undefined)
+          .map((errorRecord) => errorRecord.message);
+      }
+    }
+    return [];
+  }
+
+  getErrorMessagesFromAjvErrors(data: any) {
+    if (this.ajv.errors && this.schema) {
+      console.log(this.ajv.errors);
+    }
+  }
+
+  getTemplateForAction(actionType: string): Action {
+    const template: Action = {
+      type: actionType,
+      transforms: [],
+      enabled: true,
+    };
+    const itemInfo = this.actionTypes.find((itemInfo) => itemInfo.type === actionType);
+    if (itemInfo?.schema?.required && itemInfo.schema.required.includes('params')) {
+      template.params = this.getTemplateForParamsSchema(itemInfo.schema.properties.params);
+    }
+    return template;
+  }
+
+  getTemplateForTrigger(triggerType: string): Trigger {
+    const template: Trigger = {
+      type: triggerType,
+      actions: [],
+      enabled: true,
+    };
+    const itemInfo = this.triggerTypes.find((itemInfo) => itemInfo.type === triggerType);
+    if (itemInfo?.schema?.required && itemInfo.schema.required.includes('params')) {
+      template.params = this.getTemplateForParamsSchema(itemInfo.schema.properties.params);
+    }
+    return template;
+  }
+
+  getTemplateForTransform(transformType: string): Trigger {
+    const template: Trigger = {
+      type: transformType,
+      enabled: true,
+    };
+    const itemInfo = this.transformTypes.find((itemInfo) => itemInfo.type === transformType);
+    if (itemInfo?.schema?.required && itemInfo.schema.required.includes('params')) {
+      template.params = this.getTemplateForParamsSchema(itemInfo.schema.properties.params);
+    }
+    return template;
+  }
+
+  getTemplateForParamsSchema(paramsSchema: any): any {
+    const paramsTemplate = {};
+    // TODO(jwetzell): make a smart version of this populating fields with defaults
+    return paramsTemplate;
   }
 
   setupForDummySite() {
@@ -39,8 +104,8 @@ export class SchemaService {
     this.ajv.addSchema(schema);
 
     this.populateActionTypes();
-
     this.populateTransformTypes();
+    this.populateTriggerTypes();
   }
 
   populateActionTypes() {
@@ -55,6 +120,7 @@ export class SchemaService {
             return {
               name: definition['title'],
               type: definition.properties?.type?.const,
+              schema: definition,
             };
           });
       }
@@ -73,6 +139,26 @@ export class SchemaService {
             return {
               name: definition['title'],
               type: definition.properties?.type?.const,
+              schema: definition,
+            };
+          });
+      }
+    }
+  }
+
+  populateTriggerTypes() {
+    if (this.schema) {
+      const definitions = this.schema.definitions;
+      if (definitions) {
+        this.triggerTypes = Object.keys(definitions)
+          .filter((definitionKey) => definitionKey.startsWith('Trigger'))
+          .map((definitionKey) => definitions[definitionKey])
+          .filter((definition) => definition.properties?.type?.const !== undefined)
+          .map((definition) => {
+            return {
+              name: definition['title'],
+              type: definition.properties?.type?.const,
+              schema: definition,
             };
           });
       }
@@ -148,7 +234,7 @@ export class SchemaService {
     }
   }
 
-  getFormGroupFromParamsSchema(schema: SomeJSONSchema): ParamsFormInfo {
+  getFormInfoFromParamsSchema(schema: SomeJSONSchema): ParamsFormInfo {
     const paramsFormInfo: ParamsFormInfo = {
       formGroup: new FormGroup({}),
       paramsInfo: {},
@@ -315,6 +401,7 @@ export class SchemaService {
                   types.push({
                     name: triggerSchema['title'],
                     type: triggerSchema.properties.type.const,
+                    schema: triggerSchema,
                   });
                 }
               }
