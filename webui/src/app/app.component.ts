@@ -30,6 +30,7 @@ export class AppComponent {
     private dialog: MatDialog
   ) {
     // this.configService.setupForDummySite();
+    // this.schemaService.setupForDummySite();
     this.schemaService.loadSchema();
     this.configService.getConfig().subscribe((currentConfig) => {
       this.config = currentConfig;
