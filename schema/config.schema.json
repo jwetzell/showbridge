@@ -438,6 +438,7 @@
               "additionalProperties": false
             },
             {
+              "title": "Single Room Output (Templated)",
               "properties": {
                 "_room": {
                   "description": "room to template and then send the message to",
@@ -448,6 +449,7 @@
               "additionalProperties": false
             },
             {
+              "title": "Multi Room Output (Templated)",
               "properties": {
                 "_rooms": {
                   "description": "array of rooms to template and then send the message to",
