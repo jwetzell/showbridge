@@ -7,13 +7,15 @@ export interface ItemInfo {
 }
 export interface ParamsFormInfo {
   formGroup: FormGroup;
-  paramsInfo: {
-    [key: string]: {
-      display: string;
-      hint: string;
-      type: string;
-      options?: string[];
-      const: boolean;
-    };
+  paramsInfo: ParamsInfo;
+}
+
+export interface ParamsInfo {
+  [key: string]: {
+    display: string;
+    hint: string;
+    type: string;
+    options?: string[];
+    const: boolean;
   };
 }
