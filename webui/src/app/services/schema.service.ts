@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import Ajv, { JSONSchemaType } from 'ajv';
@@ -9,12 +10,28 @@ import { ItemInfo, ParamsFormInfo } from '../models/form.model';
   providedIn: 'root',
 })
 export class SchemaService {
+  schemaUrl: string = '/config/schema';
   schema?: JSONSchemaType<ConfigFileSchema>;
+
+  isDummySite: boolean = false;
+
   ajv: Ajv = new Ajv();
+
   actionTypes: ItemInfo[] = [];
   transformTypes: ItemInfo[] = [];
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
+
+  loadSchema() {
+    this.http.get<JSONSchemaType<ConfigFileSchema>>(this.schemaUrl).subscribe((schema) => {
+      this.setSchema(schema);
+    });
+  }
+
+  setupForDummySite() {
+    this.schemaUrl = '/config.schema.json';
+    this.isDummySite = true;
+  }
 
   setSchema(schema: JSONSchemaType<ConfigFileSchema>) {
     this.schema = schema;
@@ -168,7 +185,6 @@ export class SchemaService {
               }
 
               if (paramSchema.pattern) {
-                console.log(paramSchema.pattern);
                 validators.push(Validators.pattern(new RegExp(paramSchema.pattern)));
               }
 
@@ -190,7 +206,6 @@ export class SchemaService {
               };
 
               if (paramSchema.enum) {
-                console.log(paramSchema.enum);
                 paramsFormInfo.paramsInfo[paramKey].options = paramSchema.enum;
               }
 

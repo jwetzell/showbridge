@@ -1,46 +1,45 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject, filter } from 'rxjs';
+import { get } from 'lodash';
+import { filter } from 'rxjs';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { ConfigFileSchema } from './models/config.models';
 import { ConfigService } from './services/config.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
 import { downloadJSON } from './utils/utils';
-import { get } from 'lodash';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  config$: Subject<ConfigFileSchema> = new Subject<ConfigFileSchema>();
+  config?: ConfigFileSchema;
 
   pendingConfig?: ConfigFileSchema;
   pendingConfigIsValid: Boolean = false;
-  schemaLoaded: Boolean = false;
-  config?: ConfigFileSchema;
+
+  shouldRedirect: boolean = false;
 
   constructor(
     private configService: ConfigService,
     public eventService: EventService,
-    private schemaService: SchemaService,
+    public schemaService: SchemaService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
     // this.configService.setupForDummySite();
+    this.schemaService.loadSchema();
     this.configService.getConfig().subscribe((currentConfig) => {
-      this.config$.next(currentConfig);
       this.config = currentConfig;
-    });
-    this.configService.getSchema().subscribe((schema) => {
-      this.schemaService.setSchema(schema);
-      this.schemaLoaded = true;
     });
   }
 
   configUpdated(newConfig: ConfigFileSchema) {
+    console.log('configUpdated');
+    console.log(newConfig);
+
     this.pendingConfig = newConfig;
     this.pendingConfigIsValid = this.validatePendingConfig();
     if (!this.pendingConfigIsValid) {
@@ -63,25 +62,32 @@ export class AppComponent {
 
         const newHttpPort = get(this.config, 'http.params.port');
 
-        this.snackBar
-          .open('Config saved successfully!', 'Dismiss', {
-            duration: 3000,
-          })
-          .afterDismissed()
-          .subscribe((value) => {
-            if (newHttpPort && newHttpPort !== parseInt(location.port)) {
-              this.snackBar
-                .open('HTTP port changed redirecting...', 'Redirect', {
-                  duration: 3000,
-                })
-                .afterDismissed()
-                .subscribe((value) => {
-                  location.port = `${newHttpPort}`;
-                });
-            } else {
-              this.eventService.reload();
-            }
-          });
+        if (newHttpPort && newHttpPort !== parseInt(location.port)) {
+          this.shouldRedirect = true;
+        }
+
+        const configAppliedSnackBar = this.snackBar.open('Config saved successfully!', 'Dismiss', {
+          duration: 3000,
+        });
+
+        configAppliedSnackBar.afterOpened().subscribe((value) => {
+          if (!this.shouldRedirect) {
+            this.eventService.reload();
+          }
+        });
+
+        configAppliedSnackBar.afterDismissed().subscribe((value) => {
+          if (this.shouldRedirect) {
+            this.snackBar
+              .open('HTTP port changed redirecting...', 'Redirect', {
+                duration: 3000,
+              })
+              .afterDismissed()
+              .subscribe((value) => {
+                location.port = `${newHttpPort}`;
+              });
+          }
+        });
       });
     } else {
       console.error('pending config is null');
@@ -98,7 +104,6 @@ export class AppComponent {
       .afterClosed()
       .pipe(filter((result) => !!result && result !== ''))
       .subscribe((result) => {
-        this.config$.next(result);
         this.config = result;
         this.configUpdated(result);
       });

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { JSONSchemaType } from 'ajv';
 import { ConfigFileSchema } from '../models/config.models';
 @Injectable({
   providedIn: 'root',
@@ -13,7 +12,6 @@ export class ConfigService {
 
   setupForDummySite() {
     this.configUrl = '/config.json';
-    this.configSchemaUrl = '/config.schema.json';
     this.isDummySite = true;
   }
 
@@ -27,9 +25,5 @@ export class ConfigService {
 
   getConfig() {
     return this.http.get<ConfigFileSchema>(this.configUrl);
-  }
-
-  getSchema() {
-    return this.http.get<JSONSchemaType<ConfigFileSchema>>(this.configSchemaUrl);
   }
 }
