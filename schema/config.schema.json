@@ -1494,6 +1494,12 @@
               "description": "name of the MIDI port to match against incoming messages",
               "type": "string"
             },
+            "channel": {
+              "description": "channel value to match against incoming the messages",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 16
+            },
             "note": {
               "description": "Note value to match against incoming the messages",
               "type": "integer",
@@ -1540,6 +1546,12 @@
             "port": {
               "description": "name of the MIDI port to match against incoming messages",
               "type": "string"
+            },
+            "channel": {
+              "description": "channel value to match against incoming the messages",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 16
             },
             "note": {
               "description": "note value to match against incoming the messages",
@@ -1588,6 +1600,12 @@
               "description": "name of the MIDI port to match against incoming messages",
               "type": "string"
             },
+            "channel": {
+              "description": "channel value to match against incoming the messages",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 16
+            },
             "control": {
               "description": "control number to match against incoming the messages",
               "type": "integer",
@@ -1634,6 +1652,12 @@
             "port": {
               "description": "name of the MIDI port to match against incoming messages",
               "type": "string"
+            },
+            "channel": {
+              "description": "channel value to match against incoming the messages",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 16
             },
             "program": {
               "description": "program number to match against incoming the messages",

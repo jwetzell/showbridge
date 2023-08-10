@@ -43,15 +43,23 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 - **bytes-equal**
     - bytes: array of bytes to match to the bytes of the incoming message (supports midi, tcp, udp, osc messages)
 - **midi-note-on**
-    - note: optional note value 0-127 to match the incoming note on message to. if excluded all incoming notes will fire this trigger
+    - port: optional name of the MIDI device to match the incoming message to
+    - channel: optional MIDI channel number 1-16 to match the incoming message to
+    - note: optional note value 0-127 to match the incoming note on message to
     - velocity: optional note velocity to match the incoming note on message to
 - **midi-note-off**
-    - note: optional note value 0-127 to match the incoming note off message to. if excluded all incoming notes will fire this trigger
+    - port: optional name of the MIDI device to match the incoming message to
+    - channel: optional MIDI channel number 1-16 to match the incoming message to
+    - note: optional note value 0-127 to match the incoming note off message to
     - velocity: optional note velocity to match the incoming note off message to
 - **midi-control-change**
+    - port: optional name of the MIDI device to match the incoming message to
+    - channel: optional MIDI channel number 1-16 to match the incoming message to
     - control: optional control number 0-127 to match the incoming message to
     - value: optional control value 0-127 to match the incoming message to
 - **midi-program-change**
+    - port: optional name of the MIDI device to match the incoming message to
+    - channel: optional MIDI channel number 1-16 to match the incoming message to
     - program: optional program number 0-127 to match the incoming message to
 - **osc-address**
     - address: the OSC address to match to incoming OSC messages. Supports address patterns according to the OSC spec.
