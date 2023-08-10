@@ -1,38 +1,31 @@
-<ng-container *ngIf="config$ | async as config">
-  <ng-container *ngIf="schemaLoaded">
-    <div class="flex flex-col h-screen max-h-screen">
-      <mat-toolbar color="primary">
-        <div *ngIf="eventService.socket?.readyState" class="w-3 h-3 mr-2 overflow-hidden rounded-full">
-          <ng-container [ngSwitch]="eventService.socket?.readyState">
-            <!-- CONNECTING -->
-            <div *ngSwitchCase="0" matTooltip="Connecting" class="w-full h-full bg-orange-300"></div>
-            <!-- OPEN -->
-            <div *ngSwitchCase="1" matTooltip="Connected" class="w-full h-full bg-green-400"></div>
-            <!-- CLOSING -->
-            <div *ngSwitchCase="2" matTooltip="Disconnecting" class="w-full h-full bg-orange-400"></div>
-            <!-- CLOSED -->
-            <div *ngSwitchCase="3" matTooltip="Disconnect" class="w-full h-full bg-red-400"></div>
-          </ng-container>
-        </div>
-        <span>showbridge</span>
-        <span class="flex-auto"></span>
-        <button mat-icon-button matTooltip="Download Config" (click)="downloadConfig()">
-          <mat-icon>download</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Import Config" (click)="importConfig()">
-          <mat-icon>upload</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Apply Config" *ngIf="pendingConfigIsValid" (click)="applyConfig()">
-          <mat-icon>save</mat-icon>
-        </button>
-        <div
-          *ngIf="pendingConfig && !pendingConfigIsValid"
-          class="flex items-center justify-center text-red-500 hover:cursor-pointer"
-          matTooltip="Config Errors">
-          <mat-icon>error</mat-icon>
-        </div>
-      </mat-toolbar>
-      <app-config class="flex-auto" [config]="config" (updated)="configUpdated($event)"></app-config>
-    </div>
-  </ng-container>
+<ng-container *ngIf="config && schemaService.schema">
+  <div class="flex flex-col h-screen max-h-screen">
+    <mat-toolbar color="primary">
+      <div *ngIf="eventService.status$ | async as connectionStatus" class="w-3 h-3 mr-2 overflow-hidden rounded-full">
+        <ng-container [ngSwitch]="connectionStatus">
+          <div *ngSwitchCase="'open'" matTooltip="Connected" class="w-full h-full bg-green-400"></div>
+          <div *ngSwitchCase="'closed'" matTooltip="Disconnected" class="w-full h-full bg-orange-400"></div>
+          <div *ngSwitchCase="'error'" matTooltip="Disconnected" class="w-full h-full bg-red-400"></div>
+        </ng-container>
+      </div>
+      <span>showbridge</span>
+      <span class="flex-auto"></span>
+      <button mat-icon-button matTooltip="Download Config" (click)="downloadConfig()">
+        <mat-icon>download</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Import Config" (click)="importConfig()">
+        <mat-icon>upload</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Apply Config" *ngIf="pendingConfigIsValid" (click)="applyConfig()">
+        <mat-icon>save</mat-icon>
+      </button>
+      <div
+        *ngIf="pendingConfig && !pendingConfigIsValid"
+        class="flex items-center justify-center text-red-500 hover:cursor-pointer"
+        matTooltip="Config Errors">
+        <mat-icon>error</mat-icon>
+      </div>
+    </mat-toolbar>
+    <app-config class="flex-auto" [config]="config" (updated)="configUpdated($event)"></app-config>
+  </div>
 </ng-container>

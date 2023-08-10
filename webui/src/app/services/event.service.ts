@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, filter } from 'rxjs';
+import { BehaviorSubject, Subject, filter } from 'rxjs';
 import { ActionEventData, MessageEventData, TransformEventData, TriggerEventData } from '../models/events.model';
 @Injectable({
   providedIn: 'root',
@@ -7,6 +7,8 @@ import { ActionEventData, MessageEventData, TransformEventData, TriggerEventData
 export class EventService {
   baseUrl: string = `ws://${location.host}`;
   socket?: WebSocket;
+
+  status$: BehaviorSubject<string> = new BehaviorSubject<string>('closed');
 
   private messageEvents$: Subject<MessageEventData> = new Subject<MessageEventData>();
   private triggerEvents$: Subject<TriggerEventData> = new Subject<TriggerEventData>();
@@ -20,6 +22,18 @@ export class EventService {
   reload() {
     try {
       this.socket = new WebSocket(this.baseUrl, 'webui');
+      this.socket.onopen = (ev) => {
+        this.status$.next('open');
+      };
+
+      this.socket.onclose = (ev) => {
+        this.status$.next('closed');
+      };
+
+      this.socket.onerror = (ev) => {
+        this.status$.next('error');
+      };
+
       this.socket.onmessage = (message: MessageEvent) => {
         const messageObj = JSON.parse(message.data);
         switch (messageObj.eventType) {
