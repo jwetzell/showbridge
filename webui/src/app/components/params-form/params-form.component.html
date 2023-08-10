@@ -7,19 +7,34 @@
   <form [formGroup]="paramsFormInfo.formGroup">
     <div class="flex flex-col">
       <div *ngFor="let key of paramKeys()" class="flex items-center m-1">
-        <label class="mr-2 text-gray-300">{{ paramsFormInfo.paramsInfo[key].display }}: </label>
+        <!-- TODO(jwetzell): figure out how to consolidate templated param into one input with a template toggle -->
+        <ng-container *ngIf="key.startsWith('_'); else noTooltip">
+          <label class="mr-2 text-gray-300" matTooltip="Templated">
+            {{ paramsFormInfo.paramsInfo[key].display }}:
+          </label>
+        </ng-container>
+        <ng-template #noTooltip>
+          <label class="mr-2 text-gray-300"> {{ paramsFormInfo.paramsInfo[key].display }}: </label>
+        </ng-template>
+
         <ng-container [ngSwitch]="paramsFormInfo.paramsInfo[key].type">
-          <input type="checkbox" *ngSwitchCase="'boolean'" [formControlName]="key" />
-          <input
-            type="number"
-            *ngSwitchCase="'number'"
-            class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-            [formControlName]="key" />
-          <input
-            type="number"
-            *ngSwitchCase="'integer'"
-            class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-            [formControlName]="key" />
+          <ng-container *ngSwitchCase="'boolean'">
+            <input type="checkbox" [formControlName]="key" />
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'number'">
+            <input
+              type="number"
+              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+              [formControlName]="key" />
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'integer'">
+            <input
+              type="number"
+              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+              [formControlName]="key" />
+          </ng-container>
 
           <ng-container *ngSwitchCase="'string'">
             <input
@@ -36,18 +51,17 @@
             </ng-template>
           </ng-container>
           <!-- TODO(jwetzell): figure out how to display params that are arrays or objects-->
-          <input
-            *ngSwitchDefault
-            class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-            [formControlName]="key" />
+          <ng-container *ngSwitchDefault>
+            <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key" />
+          </ng-container>
         </ng-container>
         <ng-container *ngIf="!paramsFormInfo.formGroup.controls[key].valid">
           <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
         </ng-container>
         <div class="flex items-center justify-center">
-          <mat-icon matTooltip="{{ paramsFormInfo.paramsInfo[key].hint }}" class="ml-2 text-gray-200"
-            >help_outline</mat-icon
-          >
+          <mat-icon matTooltip="{{ paramsFormInfo.paramsInfo[key].hint }}" class="ml-2 text-gray-200">
+            help_outline
+          </mat-icon>
         </div>
       </div>
     </div>
