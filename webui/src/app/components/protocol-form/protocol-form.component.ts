@@ -33,7 +33,6 @@ export class ProtocolFormComponent implements OnInit {
   }
 
   paramsUpdated(params: any) {
-    console.log('protocol params updated');
     this.updated.emit({ ...this.data, params });
   }
 
