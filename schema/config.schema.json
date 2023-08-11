@@ -1269,10 +1269,11 @@
           "type": "object",
           "properties": {
             "duration": {
-              "description": "time in ms to wait before executing the configured actions",
+              "description": "time in ms to wait",
               "type": "number"
             },
             "actions": {
+              "description": "array of actions to execute after delaying",
               "type": "array",
               "$ref": "#/definitions/ActionList"
             }
