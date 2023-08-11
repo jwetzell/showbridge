@@ -87,4 +87,44 @@ export class ActionComponent implements OnInit {
       this.updated.emit(this.pendingUpdate);
     }
   }
+
+  getSubActions(): Action[] | undefined {
+    if (this.action?.type === 'delay' && this.action.params && this.action.params['actions']) {
+      if (typeof this.action.params['actions'] === 'object') {
+        return this.action.params['actions'];
+      }
+    }
+    return undefined;
+  }
+
+  addSubAction(actionType: string) {
+    if (this.action?.params) {
+      if (this.action.params['actions'] === undefined) {
+        this.action.params['actions'] = [];
+      }
+      const actionTemplate = this.schemaService.getTemplateForAction(actionType);
+      this.action.params['actions'].push(actionTemplate);
+      this.pendingUpdate = cloneDeep(this.action);
+      this.updated.emit(this.pendingUpdate);
+    }
+  }
+
+  deleteSubAction(index: number) {
+    if (this.action?.params) {
+      this.action?.params['actions'].splice(index, 1);
+      this.pendingUpdate = cloneDeep(this.action);
+      this.updated.emit(this.pendingUpdate);
+    }
+  }
+
+  subActionUpdated(index: number, action: Action) {
+    if (this.action?.params) {
+      if (this.action?.params['actions'] !== undefined && this.action?.params['actions'][index] !== undefined) {
+        merge(this.action?.params['actions'][index], action);
+
+        this.pendingUpdate = cloneDeep(this.action);
+        this.updated.emit(this.pendingUpdate);
+      }
+    }
+  }
 }

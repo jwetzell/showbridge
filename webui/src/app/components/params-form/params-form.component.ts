@@ -65,7 +65,17 @@ export class ParamsFormComponent implements OnInit {
               dataToPatch[paramKey] = JSON.stringify(dataToPatch[paramKey]);
               break;
             case 'array':
-              dataToPatch[paramKey] = dataToPatch[paramKey].join(',');
+              dataToPatch[paramKey] = dataToPatch[paramKey]
+                .map((item: any) => {
+                  switch (typeof item) {
+                    case 'object':
+                      return JSON.stringify(item);
+
+                    default:
+                      return item;
+                  }
+                })
+                .join(',');
               break;
             default:
               break;

@@ -17,5 +17,6 @@ export interface ParamsInfo {
     type: string;
     options?: string[];
     const: boolean;
+    schema: any;
   };
 }

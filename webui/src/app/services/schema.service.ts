@@ -8,6 +8,7 @@ import { Action } from '../models/action.model';
 import { ConfigFileSchema } from '../models/config.models';
 import { ItemInfo, ParamsFormInfo } from '../models/form.model';
 import { Trigger } from '../models/trigger.model';
+import { catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -283,12 +284,19 @@ export class SchemaService {
               if (paramSchema.type === 'object') {
                 validators.push(this.objectValidator);
               }
+
+              if (paramSchema.type === 'array') {
+                if (paramSchema.$ref === '#/definitions/ActionList') {
+                  validators.push(this.subActionValidator);
+                }
+              }
               paramsFormInfo.formGroup.addControl(paramKey, new FormControl(formDefault, validators));
               paramsFormInfo.paramsInfo[paramKey] = {
                 display: paramKey,
                 type: paramSchema.type,
                 hint: paramSchema.description,
                 const: !!paramSchema.const,
+                schema: paramSchema,
               };
 
               if (paramSchema.enum) {
@@ -340,17 +348,27 @@ export class SchemaService {
                 if (paramValue.trim().length === 0) {
                   params[paramKey] = [];
                 } else {
-                  let itemsArray = paramValue.split(',').map((part: string) => part.trim());
                   if (paramSchema?.items?.type) {
                     if (paramSchema?.items?.type === 'integer') {
-                      itemsArray = itemsArray.map((item: any) => parseInt(item));
+                      params[paramKey] = paramValue
+                        .split(',')
+                        .map((part: string) => part.trim())
+                        .map((item: any) => parseInt(item));
                     } else if (paramSchema?.items?.type === 'number') {
-                      itemsArray = itemsArray.map((item: any) => parseFloat(item));
+                      params[paramKey] = paramValue
+                        .split(',')
+                        .map((part: string) => part.trim())
+                        .map((item: any) => parseFloat(item));
                     } else {
                       console.error(`schema-service: unhandled array schema type: ${paramSchema.type}`);
                     }
+                  } else if (paramSchema['$ref'] === '#/definitions/ActionList') {
+                    try {
+                      params[paramKey] = JSON.parse(`[${paramValue}]`);
+                    } catch (error) {
+                      noop();
+                    }
                   }
-                  params[paramKey] = itemsArray;
                 }
               }
 
@@ -420,6 +438,15 @@ export class SchemaService {
   objectValidator(control: AbstractControl): ValidationErrors | null {
     try {
       JSON.parse(control.value);
+      return null;
+    } catch (error) {
+      return { json: true };
+    }
+  }
+
+  subActionValidator(control: AbstractControl): ValidationErrors | null {
+    try {
+      JSON.parse(`[${control.value}]`);
       return null;
     } catch (error) {
       return { json: true };

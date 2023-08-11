@@ -1,47 +1,82 @@
 <ng-container *ngIf="action">
-  <div class="m-2" [style.opacity]="this.action.enabled ? '1.0' : '0.5'">
-    <div class="flex flex-col bg-gray-800 border-2 border-gray-200 border-solid">
-      <div class="flex w-full items-around">
-        <div>
-          <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
-        </div>
-        <div class="flex-auto text-gray-200">{{ action.type }}</div>
-        <div>
-          <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
-        </div>
-      </div>
-
-      <div class="m-2">
-        <app-object-form
-          [objectType]="'Action'"
-          [type]="action.type"
-          [data]="action"
-          (updated)="update($event)"></app-object-form>
-      </div>
-      <div cdkDropList (cdkDropListDropped)="drop($event)">
-        <div cdkDrag *ngFor="let transform of action.transforms; let i = index">
-          <app-transform
-            [path]="path + '/transforms/' + i"
-            [transform]="transform"
-            (delete)="deleteTransform(i)"
-            (updated)="transformUpdated(i, $event)"></app-transform>
-        </div>
-        <div *ngIf="schemaService.actionTypes.length > 0">
-          <div
-            class="flex items-center justify-center w-full bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
-            [matMenuTriggerFor]="addTransformMenu">
-            <mat-icon>add</mat-icon>
+  <div class="flex items-center">
+    <div class="m-2" [style.opacity]="this.action.enabled ? '1.0' : '0.5'">
+      <div class="flex flex-col bg-gray-800 border-2 border-gray-200 border-solid">
+        <div class="flex w-full items-around">
+          <div>
+            <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
           </div>
-          <mat-menu #addTransformMenu="matMenu">
-            <button
-              mat-menu-item
-              *ngFor="let transformType of schemaService.transformTypes"
-              (click)="addTransform(transformType.type)">
-              <span>{{ transformType.name }}</span>
-            </button>
-          </mat-menu>
+          <div class="flex-auto text-gray-200">{{ action.type }}</div>
+          <div>
+            <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
+          </div>
+        </div>
+
+        <div class="m-2">
+          <app-object-form
+            [objectType]="'Action'"
+            [type]="action.type"
+            [data]="action"
+            (updated)="update($event)"></app-object-form>
+        </div>
+        <div cdkDropList (cdkDropListDropped)="drop($event)">
+          <div cdkDrag *ngFor="let transform of action.transforms; let i = index">
+            <app-transform
+              [path]="path + '/transforms/' + i"
+              [transform]="transform"
+              (delete)="deleteTransform(i)"
+              (updated)="transformUpdated(i, $event)"></app-transform>
+          </div>
+          <div *ngIf="schemaService.actionTypes.length > 0">
+            <div
+              matTooltip="Add Transform"
+              class="flex items-center justify-center w-full bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
+              [matMenuTriggerFor]="addTransformMenu">
+              <mat-icon>add</mat-icon>
+            </div>
+            <mat-menu #addTransformMenu="matMenu">
+              <button
+                mat-menu-item
+                *ngFor="let transformType of schemaService.transformTypes"
+                (click)="addTransform(transformType.type)">
+                <span>{{ transformType.name }}</span>
+              </button>
+            </mat-menu>
+          </div>
         </div>
       </div>
     </div>
+    <ng-container *ngIf="action.type === 'delay'">
+      <div class="w-full h-full" *ngIf="schemaService.actionTypes.length > 0">
+        <div
+          matTooltip="Add Subaction"
+          class="flex items-center justify-center bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
+          [matMenuTriggerFor]="addActionMenu">
+          <mat-icon>add</mat-icon>
+        </div>
+        <mat-menu #addActionMenu="matMenu">
+          <button
+            mat-menu-item
+            *ngFor="let actionType of schemaService.actionTypes"
+            (click)="addSubAction(actionType.type)">
+            <span>{{ actionType.name }}</span>
+          </button>
+        </mat-menu>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="getSubActions() as subActions">
+      <ng-container *ngIf="subActions.length > 0">
+        <div class="flex flex-col items-center justify-center">
+          <mat-icon [style.color]="indicatorColor" class="scale-150">arrow_right</mat-icon>
+        </div>
+        <div *ngFor="let subAction of subActions; let i = index">
+          <app-action
+            [action]="subAction"
+            [path]="this.path + '/actions/' + i"
+            (delete)="deleteSubAction(i)"
+            (updated)="subActionUpdated(i, $event)"></app-action>
+        </div>
+      </ng-container>
+    </ng-container>
   </div>
 </ng-container>
