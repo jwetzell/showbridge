@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import Ajv, { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
+import { noop } from 'lodash';
+import { Action } from '../models/action.model';
 import { ConfigFileSchema } from '../models/config.models';
 import { ItemInfo, ParamsFormInfo } from '../models/form.model';
-import { Action } from '../models/action.model';
 import { Trigger } from '../models/trigger.model';
 
 @Injectable({
@@ -367,7 +368,11 @@ export class SchemaService {
               }
               break;
             case 'object':
-              params[paramKey] = JSON.parse(params[paramKey]);
+              try {
+                params[paramKey] = JSON.parse(params[paramKey]);
+              } catch (error) {
+                noop();
+              }
               break;
             default:
               console.log(`schema-service: unhandled param schema type: ${paramSchema.type}`);
