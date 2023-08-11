@@ -27,6 +27,7 @@
               type="number"
               class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
               [formControlName]="key" />
+            <mat-icon class="text-gray-200">123</mat-icon>
           </ng-container>
 
           <ng-container *ngSwitchCase="'integer'">
@@ -34,6 +35,7 @@
               type="number"
               class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
               [formControlName]="key" />
+            <mat-icon class="text-gray-200" matTooltip="Number">123</mat-icon>
           </ng-container>
 
           <ng-container *ngSwitchCase="'string'">
@@ -42,6 +44,8 @@
               *ngIf="!paramsFormInfo.paramsInfo[key].options; else stringSelectList"
               class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
               [formControlName]="key" />
+            <mat-icon class="text-gray-200" matTooltip="String">abc</mat-icon>
+
             <ng-template #stringSelectList>
               <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key">
                 <option *ngFor="let option of paramsFormInfo.paramsInfo[key].options" value="{{ option }}">
@@ -50,7 +54,19 @@
               </select>
             </ng-template>
           </ng-container>
-          <!-- TODO(jwetzell): figure out how to display params that are arrays or objects-->
+          <ng-container *ngSwitchCase="'array'">
+            <!-- TODO(jwetzell): figure out how to display arrays-->
+
+            <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key" />
+            <mat-icon class="text-gray-200" matTooltip="Comma separated list">data_array</mat-icon>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'object'">
+            <!-- TODO(jwetzell): figure out how to display objects-->
+
+            <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key" />
+            <mat-icon class="text-gray-200" matTooltip="JSON">data_object</mat-icon>
+          </ng-container>
           <ng-container *ngSwitchDefault>
             <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key" />
           </ng-container>
