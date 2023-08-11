@@ -241,7 +241,6 @@ export class SchemaService {
     };
     if (schema?.properties) {
       Object.entries(schema.properties).forEach(([paramKey, paramSchema]: [string, any]) => {
-        // TODO(jwetzell): handle params that are of array or object type
         if (paramSchema.type) {
           switch (paramSchema.type) {
             case 'string':

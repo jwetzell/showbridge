@@ -85,7 +85,7 @@ export class ParamsFormComponent implements OnInit {
 
     const allowedParamKeys = Object.keys(this.paramsSchema.properties);
     if (this.data) {
-      // TODO(jwetzell): remove keys that aren't allow in the new params variation
+      // NOTE(jwetzell): remove keys that aren't allow in the new params variation
       Object.keys(this.data).forEach((paramKey) => {
         if (allowedParamKeys && !allowedParamKeys.includes(paramKey)) {
           delete this.data[paramKey];
