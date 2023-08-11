@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { cloneDeep, has } from 'lodash';
 import { Subscription } from 'rxjs';
 import { ParamsFormInfo } from 'src/app/models/form.model';
 import { SchemaService } from 'src/app/services/schema.service';
@@ -55,7 +56,23 @@ export class ParamsFormComponent implements OnInit {
     }
 
     if (this.data && this.paramsFormInfo?.formGroup) {
-      this.paramsFormInfo.formGroup.patchValue(this.data);
+      // NOTE(jwetzell): prepare data for form patching
+      const dataToPatch = cloneDeep(this.data);
+      Object.entries(this.paramsFormInfo.paramsInfo).forEach(([paramKey, paramInfo]) => {
+        if (has(dataToPatch, paramKey)) {
+          switch (paramInfo.type) {
+            case 'object':
+              dataToPatch[paramKey] = JSON.stringify(dataToPatch[paramKey]);
+              break;
+            case 'array':
+              dataToPatch[paramKey] = dataToPatch[paramKey].join(',');
+              break;
+            default:
+              break;
+          }
+        }
+      });
+      this.paramsFormInfo.formGroup.patchValue(dataToPatch);
     }
 
     this.formGroupSubscription = this.paramsFormInfo?.formGroup.valueChanges.subscribe((value) => {
