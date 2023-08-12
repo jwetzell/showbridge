@@ -7,7 +7,7 @@
             <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
           </div>
           <div class="flex-auto text-gray-200" matTooltip="{{ action.comment }}">{{ action.type }}</div>
-          <div>
+          <div class="flex items-center justify-center" matTooltip="Delete">
             <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
           </div>
         </div>

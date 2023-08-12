@@ -13,6 +13,8 @@
         [data]="transform"
         (updated)="update($event)"></app-object-form>
     </div>
-    <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
+    <div class="flex items-center justify-center" matTooltip="Delete">
+      <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
+    </div>
   </div>
 </ng-container>
