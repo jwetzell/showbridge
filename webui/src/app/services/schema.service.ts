@@ -8,7 +8,6 @@ import { Action } from '../models/action.model';
 import { ConfigFileSchema } from '../models/config.models';
 import { ItemInfo, ParamsFormInfo } from '../models/form.model';
 import { Trigger } from '../models/trigger.model';
-import { catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
