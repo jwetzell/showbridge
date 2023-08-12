@@ -1,5 +1,8 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { cloneDeep, merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
@@ -17,12 +20,24 @@ export class TriggerComponent implements OnInit {
   @Output() updated: EventEmitter<Trigger> = new EventEmitter<Trigger>();
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
 
+  @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
+
+  schema: any;
+
   indicatorColor: string = 'gray';
   pendingUpdate?: Trigger;
 
+  formGroup: FormGroup = new FormGroup({
+    type: new FormControl('any'),
+    comment: new FormControl(''),
+    enabled: new FormControl(true),
+  });
+
   constructor(
     private eventService: EventService,
-    public schemaService: SchemaService
+    public schemaService: SchemaService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -41,12 +56,25 @@ export class TriggerComponent implements OnInit {
           this.indicatorColor = 'gray';
         });
     }
+
+    if (this.trigger?.type) {
+      this.schema = this.schemaService.getSchemaForObjectType('Trigger', this.trigger.type);
+      if (this.trigger && this.formGroup) {
+        this.formGroup.patchValue(this.trigger);
+      }
+      this.formGroup.valueChanges.subscribe((value) => {
+        this.update(value);
+      });
+    }
   }
 
   deleteAction(index: number) {
     this.trigger?.actions?.splice(index, 1);
     this.pendingUpdate = cloneDeep(this.trigger);
     this.updated.emit(this.pendingUpdate);
+    this.snackBar.open('Action Removed', 'Dismiss', {
+      duration: 3000,
+    });
   }
 
   actionUpdated(index: number, action: Action) {
@@ -83,6 +111,12 @@ export class TriggerComponent implements OnInit {
       moveItemInArray(this.trigger?.actions, event.previousIndex, event.currentIndex);
       this.pendingUpdate = cloneDeep(this.trigger);
       this.updated.emit(this.pendingUpdate);
+    }
+  }
+
+  openSettingsDialog() {
+    if (this.dialogRef) {
+      this.dialog.open(this.dialogRef);
     }
   }
 }

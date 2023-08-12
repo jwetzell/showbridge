@@ -5,17 +5,42 @@
     [style.align-items]="
       this.trigger.actions === undefined || this.trigger.actions.length === 0 ? 'center' : 'baseline'
     ">
-    <div class="flex flex-col my-3 ml-5 bg-gray-900 border-2 border-gray-500 border-solid trigger w-fit">
-      <div class="ml-2 text-gray-400" matTooltip="{{ trigger.comment }}">{{ trigger.type }}</div>
-      <div class="flex-auto m-2">
-        <app-object-form
-          [objectType]="'Trigger'"
-          [type]="trigger.type"
-          [data]="trigger"
-          (updated)="update($event)"></app-object-form>
+    <form [formGroup]="formGroup" class="h-full">
+      <div class="flex flex-col my-3 ml-5 bg-gray-900 border-2 border-gray-500 border-solid trigger w-fit">
+        <div class="flex items-center justify-center m-1">
+          <div class="flex-auto ml-2 text-gray-400 whitespace-nowrap w-fit" matTooltip="{{ trigger.comment }}">
+            {{ trigger.type }}
+          </div>
+          <div class="flex items-center mx-2" matTooltip="{{ trigger.enabled ? 'Disable' : 'Enable' }}">
+            <input type="checkbox" formControlName="enabled" />
+          </div>
+          <div class="flex items-center justify-center hover:cursor-pointer" matTooltip="Settings">
+            <mat-icon class="text-gray-500 hover:text-gray-400" (click)="openSettingsDialog()">settings</mat-icon>
+          </div>
+          <div
+            (click)="deleteMe()"
+            class="flex items-center justify-center w-full m-2 bg-transparent hover:cursor-pointer">
+            <mat-icon class="text-red-500" matTooltip="Delete">delete</mat-icon>
+          </div>
+        </div>
+        <ng-template #settingsDialogRef>
+          <div class="m-2">
+            <app-params-form
+              [parentSchema]="schema"
+              [data]="trigger.params"
+              (updated)="update($event)"></app-params-form>
+            <div class="flex items-center justify-center">
+              <div class="flex-auto">
+                <mat-form-field subscriptSizing="dynamic" class="w-full">
+                  <mat-label>comment: </mat-label>
+                  <textarea matInput type="text" formControlName="comment"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </ng-template>
       </div>
-      <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
-    </div>
+    </form>
     <div class="flex flex-col items-center justify-center">
       <mat-icon [style.color]="indicatorColor" class="scale-150">arrow_right</mat-icon>
     </div>
