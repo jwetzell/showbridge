@@ -1,6 +1,6 @@
 <ng-container *ngIf="config && schemaService.schema">
-  <div class="flex flex-col h-screen max-h-screen">
-    <mat-toolbar color="primary">
+  <div class="h-screen max-h-screen">
+    <mat-toolbar color="primary" class="fixed top-0 z-50">
       <div *ngIf="eventService.status$ | async as connectionStatus" class="w-3 h-3 mr-2 overflow-hidden rounded-full">
         <ng-container [ngSwitch]="connectionStatus">
           <div *ngSwitchCase="'open'" matTooltip="Connected" class="w-full h-full bg-green-400"></div>
@@ -26,6 +26,8 @@
         <mat-icon>error</mat-icon>
       </div>
     </mat-toolbar>
-    <app-config class="flex-auto" [config]="config" (updated)="configUpdated($event)"></app-config>
+    <div class="mt-16 -z-50">
+      <app-config class="flex-auto" [config]="config" (updated)="configUpdated($event)"></app-config>
+    </div>
   </div>
 </ng-container>

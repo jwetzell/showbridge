@@ -13,6 +13,7 @@ export class ConfigComponent {
 
   pendingUpdate?: ConfigFileSchema;
   protocols = ['http', 'ws', 'osc', 'tcp', 'udp', 'midi', 'mqtt', 'cloud'];
+  selectedProtocolType: string = this.protocols[0];
 
   protocolUpdate(protocolType: string, protocol: ProtocolConfiguration) {
     if (has(this.config, protocolType)) {
@@ -20,5 +21,10 @@ export class ConfigComponent {
       this.pendingUpdate = cloneDeep(this.config);
       this.updated.emit(this.pendingUpdate);
     }
+  }
+
+  selectProtocolType(protocolType: string) {
+    console.log(protocolType);
+    this.selectedProtocolType = protocolType;
   }
 }

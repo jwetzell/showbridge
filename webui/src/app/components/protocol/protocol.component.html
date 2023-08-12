@@ -6,7 +6,7 @@
         [data]="protocol"
         (updated)="protocolUpdated($event)"></app-protocol-form>
     </div>
-    <div class="flex-auto" cdkDropList (cdkDropListDropped)="drop($event)">
+    <div class="flex-auto mb-8" cdkDropList (cdkDropListDropped)="drop($event)">
       <div cdkDrag *ngFor="let trigger of protocol.triggers; let i = index">
         <app-trigger
           [path]="protocolType + '/triggers/' + i"
@@ -15,7 +15,7 @@
           (updated)="triggerUpdated(i, $event)"></app-trigger>
       </div>
     </div>
-    <div>
+    <div class="fixed bottom-0 w-full">
       <ng-container *ngIf="triggerTypes.length > 0">
         <div
           matTooltip="Add Trigger"

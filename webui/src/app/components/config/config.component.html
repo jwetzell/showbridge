@@ -1,10 +1,30 @@
 <ng-container *ngIf="config">
-  <mat-tab-group>
-    <mat-tab *ngFor="let protocol of protocols" [label]="protocol">
-      <app-protocol
-        [protocolType]="protocol"
-        [protocol]="config[protocol]"
-        (updated)="protocolUpdate(protocol, $event)"></app-protocol>
-    </mat-tab>
-  </mat-tab-group>
+  <div class="fixed z-50 flex justify-around w-full top-16">
+    <ng-container *ngFor="let protocol of protocols">
+      <ng-container *ngIf="selectedProtocolType === protocol; else notSelectedProtocol">
+        <div
+          (click)="selectProtocolType(protocol)"
+          class="flex items-center justify-center flex-auto h-12 border border-b-2 border-black border-solid cursor-pointer hover:bg-gray-700 bg-slate-800 border-b-blue-500">
+          <span class="text-gray-300">
+            {{ protocol }}
+          </span>
+        </div>
+      </ng-container>
+      <ng-template #notSelectedProtocol>
+        <div
+          (click)="selectProtocolType(protocol)"
+          class="flex items-center justify-center flex-auto h-12 border border-black border-solid cursor-pointer hover:bg-gray-700 bg-slate-800">
+          <span class="text-gray-300">
+            {{ protocol }}
+          </span>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+  <div *ngIf="selectedProtocolType" class="mb-16 mt-28">
+    <app-protocol
+      [protocolType]="selectedProtocolType"
+      [protocol]="config[selectedProtocolType]"
+      (updated)="protocolUpdate(selectedProtocolType, $event)"></app-protocol>
+  </div>
 </ng-container>
