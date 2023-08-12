@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { cloneDeep, merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
@@ -24,7 +25,8 @@ export class ActionComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
-    public schemaService: SchemaService
+    public schemaService: SchemaService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +63,9 @@ export class ActionComponent implements OnInit {
     this.action?.transforms?.splice(index, 1);
     this.pendingUpdate = cloneDeep(this.action);
     this.updated.emit(this.pendingUpdate);
+    this.snackBar.open('Transform Removed', 'Dismiss', {
+      duration: 3000,
+    });
   }
 
   addTransform(transformType: string) {

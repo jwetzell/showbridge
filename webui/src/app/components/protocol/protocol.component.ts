@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { cloneDeep, merge } from 'lodash';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
 import { ItemInfo } from 'src/app/models/form.model';
@@ -19,7 +20,10 @@ export class ProtocolComponent {
 
   pendingUpdate?: ProtocolConfiguration;
 
-  constructor(private schemaService: SchemaService) {}
+  constructor(
+    private schemaService: SchemaService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
     if (this.protocolType) {
@@ -37,6 +41,9 @@ export class ProtocolComponent {
     this.protocol?.triggers?.splice(index, 1);
     this.pendingUpdate = cloneDeep(this.protocol);
     this.updated.emit(this.pendingUpdate);
+    this.snackBar.open('Trigger Removed', 'Dismiss', {
+      duration: 3000,
+    });
   }
 
   triggerUpdated(index: number, trigger: Trigger) {
