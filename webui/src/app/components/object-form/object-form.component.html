@@ -1,12 +1,14 @@
 <ng-container *ngIf="formGroup">
   <form [formGroup]="formGroup" class="h-full">
     <div class="flex items-center justify-around h-full">
-      <div class="flex items-center mx-2">
+      <div class="flex items-center mx-2" matTooltip="{{ this.data?.enabled ? 'Disable' : 'Enable' }}">
         <label class="mr-1 text-gray-300">enabled:</label>
         <input type="checkbox" formControlName="enabled" />
       </div>
       <div class="flex items-center justify-center hover:cursor-pointer">
-        <mat-icon class="text-gray-500 hover:text-gray-400" (click)="openSettingsDialog()">settings</mat-icon>
+        <mat-icon class="text-gray-500 hover:text-gray-400" matTooltip="Settings" (click)="openSettingsDialog()"
+          >settings</mat-icon
+        >
       </div>
 
       <ng-template #settingsDialogRef>
