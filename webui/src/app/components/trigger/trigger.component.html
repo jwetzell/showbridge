@@ -6,7 +6,7 @@
       this.trigger.actions === undefined || this.trigger.actions.length === 0 ? 'center' : 'baseline'
     ">
     <div class="flex flex-col my-3 ml-5 bg-gray-900 border-2 border-gray-500 border-solid trigger w-fit">
-      <div class="ml-2 text-gray-400">{{ trigger.type }}</div>
+      <div class="ml-2 text-gray-400" matTooltip="{{ trigger.comment }}">{{ trigger.type }}</div>
       <div class="flex-auto m-2">
         <app-object-form
           [objectType]="'Trigger'"
