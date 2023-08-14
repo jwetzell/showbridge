@@ -20,6 +20,8 @@ export class ActionComponent implements OnInit {
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
   @Output() updated: EventEmitter<Action> = new EventEmitter<Action>();
 
+  schema: any;
+
   pendingUpdate?: Action;
   indicatorColor: string = 'gray';
 
@@ -44,6 +46,9 @@ export class ActionComponent implements OnInit {
         .subscribe((actionEvent) => {
           this.indicatorColor = 'gray';
         });
+    }
+    if (this.action?.type) {
+      this.schema = this.schemaService.getSchemaForObjectType('Action', this.action.type);
     }
   }
 

@@ -23,6 +23,7 @@ export class SchemaService {
   actionTypes: ObjectInfo[] = [];
   transformTypes: ObjectInfo[] = [];
   triggerTypes: ObjectInfo[] = [];
+  protocolTypes: ObjectInfo[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -111,6 +112,24 @@ export class SchemaService {
     this.populateActionTypes();
     this.populateTransformTypes();
     this.populateTriggerTypes();
+    this.populateProtocolTypes();
+  }
+
+  populateProtocolTypes() {
+    if (this.schema?.properties) {
+      const protocolKeys = Object.keys(this.schema.properties);
+      // protocolKeys.sort();
+      protocolKeys.forEach((protocolKey) => {
+        const protocolSchema = this.schema?.properties[protocolKey];
+        if (protocolSchema) {
+          this.protocolTypes.push({
+            name: protocolSchema.title,
+            type: protocolKey,
+            schema: this.schema?.properties[protocolKey],
+          });
+        }
+      });
+    }
   }
 
   populateActionTypes() {

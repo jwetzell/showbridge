@@ -1,6 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { cloneDeep, has, merge } from 'lodash';
 import { ConfigFileSchema, ProtocolConfiguration } from 'src/app/models/config.models';
+import { ProtocolComponent } from '../protocol/protocol.component';
+import { SchemaService } from 'src/app/services/schema.service';
+import { ObjectInfo } from 'src/app/models/form.model';
 
 @Component({
   selector: 'app-config',
@@ -10,10 +13,11 @@ import { ConfigFileSchema, ProtocolConfiguration } from 'src/app/models/config.m
 export class ConfigComponent {
   @Input() config!: ConfigFileSchema;
   @Output() updated: EventEmitter<ConfigFileSchema> = new EventEmitter<ConfigFileSchema>();
-
+  @ViewChild('protocolComponent') protocolComponent?: ProtocolComponent;
   pendingUpdate?: ConfigFileSchema;
-  protocols = ['http', 'ws', 'osc', 'tcp', 'udp', 'midi', 'mqtt', 'cloud'];
-  selectedProtocolType: string = this.protocols[0];
+  selectedProtocol: ObjectInfo = this.schemaService.protocolTypes[0];
+
+  constructor(public schemaService: SchemaService) {}
 
   protocolUpdate(protocolType: string, protocol: ProtocolConfiguration) {
     if (has(this.config, protocolType)) {
@@ -23,8 +27,13 @@ export class ConfigComponent {
     }
   }
 
-  selectProtocolType(protocolType: string) {
-    console.log(protocolType);
-    this.selectedProtocolType = protocolType;
+  selectProtocolType(protocol: ObjectInfo) {
+    this.selectedProtocol = protocol;
+  }
+
+  openProtocolSettingsDialog() {
+    if (this.protocolComponent) {
+      this.protocolComponent.openSettings.next(true);
+    }
   }
 }

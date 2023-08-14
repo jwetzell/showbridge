@@ -3,6 +3,7 @@ import { merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Transform } from 'src/app/models/transform.model';
 import { EventService } from 'src/app/services/event.service';
+import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
   selector: 'app-transform',
@@ -16,10 +17,14 @@ export class TransformComponent implements OnInit {
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
   @Output() updated: EventEmitter<Transform> = new EventEmitter<Transform>();
 
+  schema: any;
   indicatorColor: string = 'gray';
   pendingUpdate?: Transform;
 
-  constructor(private eventService: EventService) {}
+  constructor(
+    private eventService: EventService,
+    private schemaService: SchemaService
+  ) {}
 
   ngOnInit(): void {
     if (this.path) {
@@ -36,6 +41,10 @@ export class TransformComponent implements OnInit {
         .subscribe((transformEvent) => {
           this.indicatorColor = 'gray';
         });
+    }
+    if (this.transform?.type) {
+      this.schema = this.schemaService.getSchemaForObjectType('Transform', this.transform.type);
+      console.log(this.schema);
     }
   }
 

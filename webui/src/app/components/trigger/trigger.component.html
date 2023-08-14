@@ -1,4 +1,4 @@
-<ng-container *ngIf="trigger">
+<ng-container *ngIf="trigger && schema">
   <div
     class="flex w-fit"
     [style.opacity]="this.trigger.enabled ? '1.0' : '0.5'"
@@ -9,7 +9,7 @@
       <div class="flex flex-col my-3 ml-5 bg-gray-900 border-2 border-gray-500 border-solid trigger w-fit">
         <div class="flex items-center justify-center m-1">
           <div class="flex-auto ml-2 text-gray-400 whitespace-nowrap w-fit" matTooltip="{{ trigger.comment }}">
-            {{ trigger.type }}
+            {{ schema.title }}
           </div>
           <div class="flex items-center mx-2" matTooltip="{{ trigger.enabled ? 'Disable' : 'Enable' }}">
             <input type="checkbox" formControlName="enabled" />

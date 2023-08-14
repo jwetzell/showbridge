@@ -1,10 +1,19 @@
 <ng-container *ngIf="protocolType && protocol">
   <div class="flex flex-col h-full">
     <div>
-      <app-protocol-form
-        [type]="protocolType"
-        [data]="protocol"
-        (updated)="protocolUpdated($event)"></app-protocol-form>
+      <ng-container *ngIf="hasSettings && schema">
+        <ng-template #settingsDialogRef>
+          <div class="p-2">
+            <div class="flex justify-around w-full mb-2 text-gray-200">
+              {{ schema?.title }}
+            </div>
+            <app-params-form
+              [parentSchema]="schema"
+              [data]="protocol.params"
+              (updated)="protocolUpdated($event)"></app-params-form>
+          </div>
+        </ng-template>
+      </ng-container>
     </div>
     <div class="flex-auto mb-8" cdkDropList (cdkDropListDropped)="drop($event)">
       <div cdkDrag *ngFor="let trigger of protocol.triggers; let i = index">

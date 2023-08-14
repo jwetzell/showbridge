@@ -1,4 +1,4 @@
-<ng-container *ngIf="action">
+<ng-container *ngIf="action && schema">
   <div class="flex items-center" [style.opacity]="this.action.enabled ? '1.0' : '0.5'">
     <div class="m-2">
       <div class="flex flex-col bg-gray-800 border-2 border-gray-200 border-solid">
@@ -6,18 +6,14 @@
           <div>
             <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
           </div>
-          <div class="flex-auto text-gray-200" matTooltip="{{ action.comment }}">{{ action.type }}</div>
+          <div class="flex-auto text-gray-200" matTooltip="{{ action.comment }}">{{ schema.title }}</div>
           <div class="flex items-center justify-center" matTooltip="Delete">
             <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
           </div>
         </div>
 
         <div class="m-2">
-          <app-object-form
-            [objectType]="'Action'"
-            [type]="action.type"
-            [data]="action"
-            (updated)="update($event)"></app-object-form>
+          <app-object-form [schema]="schema" [data]="action" (updated)="update($event)"></app-object-form>
         </div>
         <div cdkDropList (cdkDropListDropped)="drop($event)">
           <div cdkDrag *ngFor="let transform of action.transforms; let i = index">

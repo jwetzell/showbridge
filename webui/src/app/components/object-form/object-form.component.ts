@@ -13,13 +13,11 @@ import { SchemaService } from 'src/app/services/schema.service';
   styleUrls: ['./object-form.component.css'],
 })
 export class ObjectFormComponent {
-  @Input() type?: string;
-  @Input() data?: Trigger;
-  @Input() objectType?: string;
+  @Input() schema?: any;
+  @Input() data?: Trigger | Action | Transform;
   @Output() updated: EventEmitter<Trigger | Action | Transform> = new EventEmitter<Trigger | Action | Transform>();
   @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
 
-  schema?: SomeJSONSchema;
   formGroup: FormGroup = new FormGroup({
     type: new FormControl('any'),
     comment: new FormControl(''),
@@ -32,15 +30,12 @@ export class ObjectFormComponent {
   ) {}
 
   ngOnInit(): void {
-    if (this.type && this.objectType) {
-      this.schema = this.schemaService.getSchemaForObjectType(this.objectType, this.type);
-      if (this.data && this.formGroup) {
-        this.formGroup.patchValue(this.data);
-      }
-      this.formGroup.valueChanges.subscribe((value) => {
-        this.formUpdated();
-      });
+    if (this.data && this.formGroup) {
+      this.formGroup.patchValue(this.data);
     }
+    this.formGroup.valueChanges.subscribe((value) => {
+      this.formUpdated();
+    });
   }
 
   formUpdated() {
