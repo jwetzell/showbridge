@@ -5,3 +5,4 @@ html
 .DS_store
 .cache
 .angular
+**/assets/css/tailwind.css
