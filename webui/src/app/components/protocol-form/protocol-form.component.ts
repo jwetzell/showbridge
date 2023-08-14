@@ -14,7 +14,7 @@ export class ProtocolFormComponent implements OnInit {
   @Output() updated: EventEmitter<ProtocolConfiguration> = new EventEmitter<ProtocolConfiguration>();
   @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
 
-  schema: any;
+  schema?: any;
 
   hasSettings: boolean = false;
 
@@ -26,7 +26,7 @@ export class ProtocolFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.type) {
       this.schema = this.schemaService.getSchemaForProtocol(this.type);
-      if (this.schema.properties.params) {
+      if (this.schema?.properties.params) {
         this.hasSettings = true;
       }
     }

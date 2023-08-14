@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import Ajv, { JSONSchemaType } from 'ajv';
+import Ajv, { ErrorObject, JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { noop } from 'lodash';
 import { Action } from '../models/action.model';
 import { ConfigFileSchema } from '../models/config.models';
-import { ItemInfo, ParamsFormInfo } from '../models/form.model';
+import { ObjectInfo, ParamsFormInfo } from '../models/form.model';
 import { Trigger } from '../models/trigger.model';
 
 @Injectable({
@@ -20,9 +20,9 @@ export class SchemaService {
 
   ajv: Ajv = new Ajv();
 
-  actionTypes: ItemInfo[] = [];
-  transformTypes: ItemInfo[] = [];
-  triggerTypes: ItemInfo[] = [];
+  actionTypes: ObjectInfo[] = [];
+  transformTypes: ObjectInfo[] = [];
+  triggerTypes: ObjectInfo[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -44,10 +44,14 @@ export class SchemaService {
     return [];
   }
 
-  getErrorMessagesFromAjvErrors(data: any) {
+  getErrorMessagesFromAjvErrors(): ErrorObject<string, Record<string, any>, unknown>[] {
     if (this.ajv.errors && this.schema) {
       console.log(this.ajv.errors);
     }
+    if (this.ajv.errors === null || this.ajv.errors === undefined) {
+      return [];
+    }
+    return this.ajv.errors;
   }
 
   getTemplateForAction(actionType: string): Action {
@@ -88,7 +92,7 @@ export class SchemaService {
     return template;
   }
 
-  getTemplateForParamsSchema(paramsSchema: any): any {
+  getTemplateForParamsSchema(paramsSchema: SomeJSONSchema): { [key: string]: any } {
     const paramsTemplate = {};
     // TODO(jwetzell): make a smart version of this populating fields with defaults
     return paramsTemplate;
@@ -215,7 +219,7 @@ export class SchemaService {
     }
   }
 
-  matchParamsDataToSchema(data: any, schemas: any[]) {
+  matchParamsDataToSchema(data: any, schemas: SomeJSONSchema[]) {
     const matchingSchemaIndex = schemas.findIndex((schema) => {
       return this.ajv.validate(schema, data);
     });
@@ -223,16 +227,6 @@ export class SchemaService {
       return matchingSchemaIndex;
     }
     return 0;
-  }
-
-  getParamsForProtocol(protocol: string) {
-    if (this.schema) {
-      if (this.schema.properties[protocol]) {
-        return this.schema.properties.protocol;
-      }
-    } else {
-      console.error('schema is null');
-    }
   }
 
   getFormInfoFromParamsSchema(schema: SomeJSONSchema): ParamsFormInfo {
@@ -318,7 +312,7 @@ export class SchemaService {
     return paramsFormInfo;
   }
 
-  cleanParams(paramsSchema: any, params: any): any {
+  cleanParams(paramsSchema: SomeJSONSchema, params: any): any {
     Object.keys(params).forEach((paramKey) => {
       // delete null/undefined params
       if (params[paramKey] === undefined || params[paramKey] === null) {
@@ -401,8 +395,8 @@ export class SchemaService {
     return params;
   }
 
-  getTriggerTypesForProtocol(protocolType: string): ItemInfo[] {
-    const types: ItemInfo[] = [];
+  getTriggerTypesForProtocol(protocolType: string): ObjectInfo[] {
+    const types: ObjectInfo[] = [];
     if (!this.schema) {
       return types;
     }
@@ -452,12 +446,8 @@ export class SchemaService {
     }
   }
 
-  configValidator(validateSchema: any) {
+  configValidator(validateSchema: JSONSchemaType<ConfigFileSchema>) {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!validateSchema) {
-        return null;
-      }
-
       try {
         const configObj = JSON.parse(control.value);
         if (this.ajv.validate(validateSchema, configObj)) {

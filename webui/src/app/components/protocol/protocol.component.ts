@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cloneDeep, merge } from 'lodash';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
-import { ItemInfo } from 'src/app/models/form.model';
+import { ObjectInfo } from 'src/app/models/form.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -16,7 +16,7 @@ export class ProtocolComponent {
   @Input() protocolType?: string;
   @Input() protocol?: ProtocolConfiguration;
   @Output() updated: EventEmitter<ProtocolConfiguration> = new EventEmitter<ProtocolConfiguration>();
-  triggerTypes: ItemInfo[] = [];
+  triggerTypes: ObjectInfo[] = [];
 
   pendingUpdate?: ProtocolConfiguration;
 

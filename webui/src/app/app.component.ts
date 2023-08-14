@@ -109,7 +109,13 @@ export class AppComponent {
 
   downloadConfig() {
     const configToDownload = this.pendingConfig ? this.pendingConfig : this.config;
-    downloadJSON(configToDownload, 'config.json');
+    if (configToDownload) {
+      downloadJSON(configToDownload, 'config.json');
+    } else {
+      this.snackBar.open('No config to download.', 'Dismiss', {
+        duration: 3000,
+      });
+    }
   }
 
   validatePendingConfig() {

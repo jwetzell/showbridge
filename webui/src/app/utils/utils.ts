@@ -1,4 +1,4 @@
-export function downloadJSON(data: any, filename: string) {
+export function downloadJSON(data: object, filename: string) {
   const content = JSON.stringify(data, null, 2);
   const dataUri = URL.createObjectURL(
     new Blob([content], {

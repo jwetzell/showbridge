@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { cloneDeep, has } from 'lodash';
 import { Subscription } from 'rxjs';
 import { ParamsFormInfo } from 'src/app/models/form.model';
@@ -11,21 +12,21 @@ import { SchemaService } from 'src/app/services/schema.service';
   styleUrls: ['./params-form.component.css'],
 })
 export class ParamsFormComponent implements OnInit {
-  @Input() parentSchema: any;
+  @Input() parentSchema?: SomeJSONSchema;
   @Input() data?: any;
   @Output() updated: EventEmitter<any> = new EventEmitter<any>();
 
-  paramsSchema: any;
+  paramsSchema?: SomeJSONSchema;
   paramsFormInfo?: ParamsFormInfo;
 
   formGroupSubscription?: Subscription;
-  paramsOptions: { display: string; paramsFormInfo: ParamsFormInfo; keys: string[]; schema: any }[] = [];
+  paramsOptions: { display: string; paramsFormInfo: ParamsFormInfo; keys: string[]; schema: SomeJSONSchema }[] = [];
   paramsOptionsSelectedIndex: number = 0;
 
   constructor(private schemaService: SchemaService) {}
 
   ngOnInit(): void {
-    this.paramsSchema = this.parentSchema.properties?.params;
+    this.paramsSchema = this.parentSchema?.properties?.params;
     if (this.paramsSchema) {
       if (this.paramsSchema.properties) {
         this.paramsFormInfo = this.schemaService.getFormInfoFromParamsSchema(this.paramsSchema);
@@ -110,7 +111,7 @@ export class ParamsFormComponent implements OnInit {
       }
     });
 
-    const allowedParamKeys = Object.keys(this.paramsSchema.properties);
+    const allowedParamKeys = Object.keys(this.paramsSchema?.properties);
     if (this.data) {
       // NOTE(jwetzell): remove keys that aren't allow in the new params variation
       Object.keys(this.data).forEach((paramKey) => {
@@ -132,8 +133,12 @@ export class ParamsFormComponent implements OnInit {
   }
 
   formUpdated() {
-    const params = this.schemaService.cleanParams(this.paramsSchema, this.paramsFormInfo?.formGroup.value);
-    this.updated.emit(params);
+    if (this.paramsSchema) {
+      const params = this.schemaService.cleanParams(this.paramsSchema, this.paramsFormInfo?.formGroup.value);
+      this.updated.emit(params);
+    } else {
+      console.error('params-form: no paramsSchema loaded');
+    }
   }
 
   paramKeys() {

@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
 
-export interface ItemInfo {
+export interface ObjectInfo {
   name: string;
   type: string;
   schema: any;

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { Action } from 'src/app/models/action.model';
 import { Transform } from 'src/app/models/transform.model';
 import { Trigger } from 'src/app/models/trigger.model';
@@ -18,7 +19,7 @@ export class ObjectFormComponent {
   @Output() updated: EventEmitter<Trigger | Action | Transform> = new EventEmitter<Trigger | Action | Transform>();
   @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
 
-  schema: any;
+  schema?: SomeJSONSchema;
   formGroup: FormGroup = new FormGroup({
     type: new FormControl('any'),
     comment: new FormControl(''),

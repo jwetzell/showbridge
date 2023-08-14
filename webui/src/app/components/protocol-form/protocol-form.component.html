@@ -1,4 +1,4 @@
-<ng-container *ngIf="hasSettings">
+<ng-container *ngIf="hasSettings && schema">
   <div class="flex items-center hover:cursor-pointer">
     <mat-icon class="text-gray-500 hover:text-gray-400" (click)="openSettingsDialog()">settings</mat-icon>
   </div>
@@ -6,7 +6,7 @@
   <ng-template #settingsDialogRef>
     <div class="p-2">
       <div class="flex justify-around w-full mb-2 text-gray-200">
-        {{ schema.title }}
+        {{ schema?.title }}
       </div>
       <app-params-form
         [parentSchema]="schema"

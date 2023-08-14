@@ -15,7 +15,7 @@ export class ImportConfigComponent {
     private schemaService: SchemaService,
     public dialogRef: MatDialogRef<ImportConfigComponent>
   ) {
-    if (schemaService.schema) {
+    if (this.schemaService.schema !== undefined) {
       this.formGroup = new FormGroup({
         config: new FormControl(null, [Validators.required, schemaService.configValidator(this.schemaService.schema)]),
       });
