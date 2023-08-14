@@ -116,7 +116,7 @@ function showSettingsWindow() {
 function getIPAddresses() {
   const allInterfaces = networkInterfaces();
   const validAddresses = [];
-  Object.entries(allInterfaces).forEach(([interfaceName, addresses]) => {
+  Object.values(allInterfaces).forEach((addresses) => {
     const goodAddresses = addresses.filter((address) => !address.internal);
     validAddresses.push(...goodAddresses);
   });
