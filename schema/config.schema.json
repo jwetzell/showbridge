@@ -6,7 +6,7 @@
   "type": "object",
   "properties": {
     "http": {
-      "title": "HTTP configuration",
+      "title": "HTTP",
       "type": "object",
       "properties": {
         "params": {
@@ -45,7 +45,7 @@
       "additionalProperties": false
     },
     "ws": {
-      "title": "WebSocket configuration",
+      "title": "WebSocket",
       "type": "object",
       "properties": {
         "triggers": {
@@ -65,7 +65,7 @@
       "additionalProperties": false
     },
     "osc": {
-      "title": "OSC configuration",
+      "title": "OSC",
       "type": "object",
       "properties": {
         "triggers": {
@@ -86,47 +86,8 @@
       "required": ["triggers"],
       "additionalProperties": false
     },
-    "midi": {
-      "title": "MIDI configuration",
-      "type": "object",
-      "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "virtualInputName": {
-              "description": "Name of the virtual MIDI Input port",
-              "type": "string"
-            },
-            "virtualOutputName": {
-              "description": "Name of the virtual MIDI Output port",
-              "type": "string"
-            }
-          },
-          "required": [],
-          "additionalProperties": false
-        },
-        "triggers": {
-          "description": "array of triggers",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerBytesEqual" },
-              { "$ref": "#/definitions/TriggerMIDINoteOff" },
-              { "$ref": "#/definitions/TriggerMIDINoteOn" },
-              { "$ref": "#/definitions/TriggerMIDIControlChange" },
-              { "$ref": "#/definitions/TriggerMIDIProgramChange" },
-              { "$ref": "#/definitions/TriggerAny" }
-            ]
-          }
-        }
-      },
-      "required": ["triggers"],
-      "additionalProperties": false
-    },
     "tcp": {
-      "title": "TCP configuration",
+      "title": "TCP",
       "type": "object",
       "properties": {
         "params": {
@@ -166,7 +127,7 @@
       "additionalProperties": false
     },
     "udp": {
-      "title": "UDP configuration",
+      "title": "UDP",
       "type": "object",
       "properties": {
         "params": {
@@ -205,8 +166,47 @@
       "required": ["triggers", "params"],
       "additionalProperties": false
     },
+    "midi": {
+      "title": "MIDI",
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object",
+          "properties": {
+            "virtualInputName": {
+              "description": "Name of the virtual MIDI Input port",
+              "type": "string"
+            },
+            "virtualOutputName": {
+              "description": "Name of the virtual MIDI Output port",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "triggers": {
+          "description": "array of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerMIDINoteOff" },
+              { "$ref": "#/definitions/TriggerMIDINoteOn" },
+              { "$ref": "#/definitions/TriggerMIDIControlChange" },
+              { "$ref": "#/definitions/TriggerMIDIProgramChange" },
+              { "$ref": "#/definitions/TriggerAny" }
+            ]
+          }
+        }
+      },
+      "required": ["triggers"],
+      "additionalProperties": false
+    },
     "mqtt": {
-      "title": "MQTT configuration",
+      "title": "MQTT",
       "type": "object",
       "properties": {
         "params": {
@@ -249,7 +249,7 @@
       "additionalProperties": false
     },
     "cloud": {
-      "title": "Cloud configuration",
+      "title": "Cloud",
       "type": "object",
       "properties": {
         "params": {
@@ -318,10 +318,9 @@
         ]
       }
     },
-
     "ActionLog": {
       "$schema": "http://json-schema.org/draft-07/schema",
-      "title": "Log Action",
+      "title": "Log",
       "description": "This action logs out the incoming message",
       "type": "object",
       "properties": {
@@ -346,7 +345,7 @@
     },
     "ActionStore": {
       "$schema": "http://json-schema.org/draft-07/schema",
-      "title": "Store Action",
+      "title": "Store",
       "description": "This action stores the configured value in a global vars object. Which will be made available when templating things.",
       "type": "object",
       "properties": {
@@ -394,7 +393,7 @@
     },
     "ActionCloudOutput": {
       "$schema": "http://json-schema.org/draft-07/schema",
-      "title": "Cloud Output Action",
+      "title": "Cloud Output",
       "description": "This action will send the incoming message to the specified cloud room",
       "type": "object",
       "properties": {
@@ -474,7 +473,7 @@
       "additionalProperties": false
     },
     "ActionMIDIOutput": {
-      "title": "MIDI Output Action",
+      "title": "MIDI Output",
       "description": "This action will output MIDI using raw MIDI data byte array",
       "type": "object",
       "properties": {
@@ -775,7 +774,7 @@
       "additionalProperties": false
     },
     "ActionForward": {
-      "title": "Forward Action",
+      "title": "Forward",
       "description": "This action will forward the incoming message to the configured destination",
       "type": "object",
       "properties": {
@@ -822,7 +821,7 @@
       "additionalProperties": false
     },
     "ActionOSCOutput": {
-      "title": "OSC Output Action",
+      "title": "OSC Output",
       "description": "This action will send an OSC message to the configure address:port with the configured address and args",
       "type": "object",
       "properties": {
@@ -885,7 +884,7 @@
       "additionalProperties": false
     },
     "ActionUDPOutput": {
-      "title": "UDP Output Action",
+      "title": "UDP Output",
       "description": "This action will send a UDP packet to the configured address:port with the configured contents",
       "type": "object",
       "properties": {
@@ -1003,7 +1002,7 @@
       "additionalProperties": false
     },
     "ActionTCPOutput": {
-      "title": "TCP Output Action",
+      "title": "TCP Output",
       "description": "This action will send a TCP packet to the configured address:port with the configured contents",
       "type": "object",
       "properties": {
@@ -1141,7 +1140,7 @@
       "additionalProperties": false
     },
     "ActionShell": {
-      "title": "Shell Command Action",
+      "title": "Shell Command",
       "description": "This action will execute the configured shell command on the system that is running the router",
       "type": "object",
       "properties": {
@@ -1193,7 +1192,7 @@
       "additionalProperties": false
     },
     "ActionHTTP": {
-      "title": "HTTP Action",
+      "title": "HTTP Request",
       "description": "This command will make the configured http call",
       "type": "object",
       "properties": {
@@ -1250,7 +1249,7 @@
       "additionalProperties": false
     },
     "ActionDelay": {
-      "title": "Delay Action",
+      "title": "Delay",
       "description": "This action will execute the configured actions after the configured amount of time",
       "type": "object",
       "properties": {
@@ -1291,8 +1290,7 @@
       "additionalProperties": false
     },
     "ActionMQTTOutput": {
-      "$schema": "http://json-schema.org/draft-07/schema",
-      "title": "MQTT Output Action",
+      "title": "MQTT Output",
       "description": "This action publishes an MQTT message",
       "type": "object",
       "properties": {
@@ -1339,7 +1337,7 @@
     },
 
     "TriggerAny": {
-      "title": "Any Trigger",
+      "title": "Any",
       "description": "This trigger will match any message",
       "type": "object",
       "properties": {
@@ -1364,7 +1362,7 @@
     },
 
     "TriggerOSCAddress": {
-      "title": "OSC Address Trigger",
+      "title": "OSC Address",
       "description": "This trigger will match osc messages by address",
       "type": "object",
       "properties": {
@@ -1401,7 +1399,7 @@
     },
 
     "TriggerSender": {
-      "title": "Sender Trigger",
+      "title": "Sender",
       "description": "This trigger will match messages by sender",
       "type": "object",
       "properties": {
@@ -1437,7 +1435,7 @@
       "additionalProperties": false
     },
     "TriggerBytesEqual": {
-      "title": "Bytes Equal Trigger",
+      "title": "Bytes Equal",
       "description": "This trigger will match incoming messages bytes to the ones set in params property",
       "type": "object",
       "properties": {
@@ -1478,7 +1476,7 @@
       "additionalProperties": false
     },
     "TriggerMIDINoteOff": {
-      "title": "MIDI Note Off Trigger",
+      "title": "MIDI Note Off",
       "description": "The trigger will match incoming MIDI note off events",
       "type": "object",
       "properties": {
@@ -1531,7 +1529,7 @@
       "additionalProperties": false
     },
     "TriggerMIDINoteOn": {
-      "title": "MIDI Note On Trigger",
+      "title": "MIDI Note On",
       "description": "The trigger will match incoming MIDI note on events",
       "type": "object",
       "properties": {
@@ -1584,7 +1582,7 @@
       "additionalProperties": false
     },
     "TriggerMIDIControlChange": {
-      "title": "MIDI Control Change Trigger",
+      "title": "MIDI Control Change",
       "description": "The trigger will match incoming MIDI control events",
       "type": "object",
       "properties": {
@@ -1637,7 +1635,7 @@
       "additionalProperties": false
     },
     "TriggerMIDIProgramChange": {
-      "title": "MIDI Program Change Trigger",
+      "title": "MIDI Program Change",
       "description": "The trigger will match incoming MIDI program events",
       "type": "object",
       "properties": {
@@ -1684,7 +1682,7 @@
       "additionalProperties": false
     },
     "TriggerRegex": {
-      "title": "Regex Trigger",
+      "title": "Regex",
       "description": "This trigger will match the incoming message properties to the regex patterns",
       "type": "object",
       "properties": {
@@ -1748,7 +1746,7 @@
     },
 
     "TransformScale": {
-      "title": "Scale Transform",
+      "title": "Scale",
       "description": "This transform will scale the incoming message property",
       "type": "object",
       "properties": {
@@ -1799,7 +1797,7 @@
       "additionalProperties": false
     },
     "TransformRound": {
-      "title": "Round Transform",
+      "title": "Round",
       "description": "This transform will round the incoming message property",
       "type": "object",
       "properties": {
@@ -1832,7 +1830,7 @@
       "additionalProperties": false
     },
     "TransformFloor": {
-      "title": "Floor Transform",
+      "title": "Floor",
       "description": "This transform will floor the incoming message property",
       "type": "object",
       "properties": {
@@ -1865,7 +1863,7 @@
       "additionalProperties": false
     },
     "TransformLog": {
-      "title": "Log Transform",
+      "title": "Log",
       "description": "This transform will take the log of the incoming message property",
       "type": "object",
       "properties": {
@@ -1902,7 +1900,7 @@
       "additionalProperties": false
     },
     "TransformPower": {
-      "title": "Power Transform",
+      "title": "Power",
       "description": "This transform will take the configured power of the incoming message property",
       "type": "object",
       "properties": {
@@ -1939,7 +1937,7 @@
       "additionalProperties": false
     },
     "TransformMap": {
-      "title": "Map Transform",
+      "title": "Map",
       "description": "This transform will map the incoming message property",
       "type": "object",
       "properties": {
@@ -1976,7 +1974,7 @@
       "additionalProperties": false
     },
     "TransformTemplate": {
-      "title": "Template Transform",
+      "title": "Template",
       "description": "This transform will template the incoming message property",
       "type": "object",
       "properties": {
