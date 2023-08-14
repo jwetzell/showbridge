@@ -13,15 +13,13 @@
   "repository": "https://github.com/jwetzell/showbridge",
   "type": "commonjs",
   "scripts": {
-    "build:linux": "electron-builder -l",
-    "build:mac": "electron-builder -m",
-    "build:win": "electron-builder -w",
     "tailwind": "tailwindcss build -i tailwind.css -o assets/css/tailwind.css",
     "bundle:dev": "ncc build ../main.js -o ../dist/bundle --target es2020 && cp -r ../node_modules/@julusian/midi/prebuilds ../dist/bundle",
     "prestart": "npm run tailwind && npm run bundle:dev",
     "start": "electron main.js",
-    "preelectron": "npm run tailwind",
-    "electron": "electron main.js",
+    "build:linux": "electron-builder -l",
+    "build:mac": "electron-builder -m",
+    "build:win": "electron-builder -w",
     "release": "electron-builder"
   },
   "dependencies": {

@@ -5,11 +5,10 @@
   "bin": "main.js",
   "scripts": {
     "pretty": "prettier --write lib/*",
-    "dev": "nodemon --exec 'node main.js -d -c config/dev.json -h webui'",
-    "test": "node tests/test.js",
-    "prepackage": "rimraf dist/bin",
-    "package": "pkg .",
-    "electron": "cd launcher && npm run start"
+    "test:lib": "node tests/test.js",
+    "prebuild": "rimraf dist/bin",
+    "build": "pkg .",
+    "dev": "nodemon --exec 'node main.js -d -c config/dev.json -h webui'"
   },
   "author": {
     "name": "Joel Wetzell",
