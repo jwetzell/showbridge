@@ -18,8 +18,8 @@
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/theme.css", "src/styles.css", "src/tailwind.css"],
+            "assets": ["src/assets"],
+            "styles": ["src/assets/css/theme.css", "src/assets/css/styles.css", "src/assets/css/tailwind.css"],
             "scripts": []
           },
           "configurations": {
@@ -72,8 +72,8 @@
           "options": {
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/theme.css", "src/styles.css", "src/tailwind.css"],
+            "assets": ["src/assets"],
+            "styles": ["src/assets/css/theme.css", "src/assets/css/styles.css", "src/assets/css/tailwind.css"],
             "scripts": []
           }
         }
