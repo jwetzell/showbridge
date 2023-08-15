@@ -19,7 +19,7 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/assets"],
-            "styles": ["src/assets/css/theme.css", "src/assets/css/styles.css", "src/assets/css/tailwind.css"],
+            "styles": ["src/assets/css/theme.css", "src/assets/css/styles.css", "tailwind.css"],
             "scripts": []
           },
           "configurations": {
@@ -73,7 +73,7 @@
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "assets": ["src/assets"],
-            "styles": ["src/assets/css/theme.css", "src/assets/css/styles.css", "src/assets/css/tailwind.css"],
+            "styles": ["src/assets/css/theme.css", "src/assets/css/styles.css", "tailwind.css"],
             "scripts": []
           }
         }
