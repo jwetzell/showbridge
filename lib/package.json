@@ -33,8 +33,7 @@
     "pino-pretty": "^10.2.0",
     "slip": "^1.0.2",
     "socket.io-client": "^4.7.2",
-    "superagent": "^8.1.0",
+    "superagent": "^8.1.2",
     "ws": "^8.13.0"
-  },
-  "devDependencies": {}
+  }
 }
