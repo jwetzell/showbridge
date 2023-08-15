@@ -15,10 +15,7 @@ jobs:
           node-version: 18
           cache: 'npm'
       - run: npm ci
-      - run: npm ci
-        working-directory: ./launcher
-      - run: npm ci
-        working-directory: ./webui
+      - run: node scripts/clean_install.js
       - run: npm run release
         working-directory: ./launcher
   build-windows:
@@ -30,10 +27,7 @@ jobs:
           node-version: 18
           cache: 'npm'
       - run: npm ci
-      - run: npm ci
-        working-directory: ./launcher
-      - run: npm ci
-        working-directory: ./webui
+      - run: node scripts/clean_install.js
       - run: npm run release
         working-directory: ./launcher
   build-macos:
@@ -50,9 +44,6 @@ jobs:
           node-version: 18
           cache: 'npm'
       - run: npm ci
-      - run: npm ci
-        working-directory: ./launcher
-      - run: npm ci
-        working-directory: ./webui
+      - run: node scripts/clean_install.js
       - run: npm run release
         working-directory: ./launcher

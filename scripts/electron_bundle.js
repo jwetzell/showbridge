@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
-const fs = require('fs-extra');
 const path = require('path');
+const fs = require('fs-extra');
 const downloadNode = require('./download_node').default;
 
 exports.default = async function (context) {
@@ -43,11 +43,11 @@ exports.default = async function (context) {
       process.exit(1);
   }
 
-  const midiPrebuildSourcePath = '../node_modules/@julusian/midi/prebuilds';
+  const midiPrebuildSourcePath = '../lib/node_modules/@julusian/midi/prebuilds';
   const midiPrebuildDestPath = path.join(bundlePathBase, 'prebuilds');
 
   if (!fs.existsSync(path.join(midiPrebuildSourcePath, `midi-${platform}-${arch}`))) {
-    console.log(`midi prebuild does not exist for platform ${platform}-${arch}`);
+    console.error(`midi prebuild does not exist for platform ${platform}-${arch}`);
     process.exit(1);
   }
   console.log('copying midi prebuild');
