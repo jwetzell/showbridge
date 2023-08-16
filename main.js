@@ -115,7 +115,6 @@ process.on('message', (message) => {
       break;
     case 'destroy':
       router.stop();
-      process.exit(0);
     // eslint-disable-next-line no-fallthrough
     default:
       logger.error(`app: unhandled process event type = ${message.eventType}`);
@@ -124,3 +123,13 @@ process.on('message', (message) => {
 });
 
 router.start();
+
+router.on('stopped', () => {
+  logger.info('app: router has stopped exiting...');
+  process.exit(0);
+});
+
+process.once('SIGINT', (signal) => {
+  logger.info('app: shutting down router');
+  router.stop();
+});
