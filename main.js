@@ -129,7 +129,7 @@ router.on('stopped', () => {
   process.exit(0);
 });
 
-process.once('SIGINT', (signal) => {
+process.once('SIGINT', () => {
   logger.info('app: shutting down router');
   router.stop();
 });

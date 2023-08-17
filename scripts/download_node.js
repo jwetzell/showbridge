@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
-const fs = require('fs-extra');
 const path = require('path');
+const fs = require('fs-extra');
 
 exports.default = async function (context) {
   const cacheDir = '../.cache/node';
