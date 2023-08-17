@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist/bin",
     "bundle:dev": "ncc build main.js -o dist/bundle --target es2020 && cp -r lib/node_modules/@julusian/midi/prebuilds dist/bundle",
     "build": "pkg .",
-    "dev": "nodemon --exec 'node main.js -d -c config/dev.json -h webui'",
+    "dev": "nodemon --exec 'node main.js -d -c config/dev.json -h dist/webui'",
     "start": "node main.js"
   },
   "author": {
