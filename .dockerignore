@@ -1,0 +1,6 @@
+dist/
+tests/
+node_modules/
+.DS_store
+.cache/
+.angular/
