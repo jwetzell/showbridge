@@ -63,7 +63,7 @@
     <ng-container *ngIf="getSubActions() as subActions">
       <ng-container *ngIf="subActions.length > 0">
         <div class="flex flex-col items-center justify-center">
-          <mat-icon [style.color]="indicatorColor" class="scale-150">arrow_right</mat-icon>
+          <mat-icon class="scale-150 text-gray-400">arrow_right</mat-icon>
         </div>
         <div *ngFor="let subAction of subActions; let i = index">
           <app-action
