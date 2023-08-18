@@ -1,12 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
 // NOTE(jwetzell): HEAVY inspiration from https://github.com/bitfocus/companion/launcher
 
+const path = require('path');
+const { networkInterfaces } = require('os');
 const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell } = require('electron');
 
-const path = require('path');
 const fs = require('fs-extra');
 const respawn = require('respawn');
-const { networkInterfaces } = require('os');
 const defaultConfig = require('../config/default.json');
 
 let rootPath = process.resourcesPath;
@@ -364,7 +364,6 @@ app.whenReady().then(() => {
     showbridgeProcess.on('exit', (code) => {
       console.log(`showbridge process exited: ${code}`);
       if (!restartProcess) {
-        // TODO(jwetzell) figure out why this doesn't exit on built mac app
         app.exit();
       }
     });
@@ -435,7 +434,6 @@ app.whenReady().then(() => {
         if (config.http.params.address !== undefined && config.http.params.address !== '0.0.0.0') {
           addressToOpen = config.http.params.address;
         }
-        // TODO(jwetzell)
         shell.openExternal(`http://${addressToOpen}:${config.http.params.port}`);
       } else {
         dialog.showErrorBox('Error', 'HTTP server does not seem to be setup right.');
