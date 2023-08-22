@@ -10,11 +10,12 @@
     <div class="flex flex-col items-center justify-center w-full h-full">
       <div class="flex flex-col flex-grow overflow-scroll">
         <h1 class="text-center">HTTP</h1>
-        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+        <div class="flex flex-col items-center justify-center p-3 m-2 border-2 border-gray-900 border-solid rounded-md">
           <div>
             <label for="http-address-select">Address</label>
             <select id="http-address-select">
               <option value="0.0.0.0">All</option>
+              <option value="127.0.0.1">localhost</option>
             </select>
           </div>
 
@@ -25,11 +26,12 @@
         </div>
 
         <h1 class="text-center">TCP</h1>
-        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+        <div class="flex flex-col items-center justify-center p-3 m-2 border-2 border-gray-900 border-solid rounded-md">
           <div>
             <label for="tcp-address-select">Address</label>
             <select id="tcp-address-select">
               <option value="0.0.0.0">All</option>
+              <option value="127.0.0.1">localhost</option>
             </select>
           </div>
 
@@ -40,11 +42,12 @@
         </div>
 
         <h1 class="text-center">UDP</h1>
-        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+        <div class="flex flex-col items-center justify-center p-3 m-2 border-2 border-gray-900 border-solid rounded-md">
           <div>
             <label for="udp-address-select">Address</label>
             <select id="udp-address-select">
               <option value="0.0.0.0">All</option>
+              <option value="127.0.0.1">localhost</option>
             </select>
           </div>
 
@@ -55,7 +58,7 @@
         </div>
 
         <h1 class="text-center">MIDI</h1>
-        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+        <div class="flex flex-col items-center justify-center p-3 m-2 border-2 border-gray-900 border-solid rounded-md">
           <div>
             <label for="midi-input-name-input">Input Name</label>
             <input type="text" id="midi-input-name-input" minlength="1" required />
@@ -68,7 +71,7 @@
         </div>
 
         <h1 class="text-center">MQTT</h1>
-        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+        <div class="flex flex-col items-center justify-center p-3 m-2 border-2 border-gray-900 border-solid rounded-md">
           <div>
             <label for="mqtt-broker-url-input">Broker URL</label>
             <input id="mqtt-broker-url-input" placeholder="mqtt://localhost:1883" />
@@ -86,7 +89,7 @@
         </div>
 
         <h1 class="text-center">Cloud</h1>
-        <div class="border-solid border-gray-900 border-2 m-2 rounded-md p-3 flex flex-col justify-center items-center">
+        <div class="flex flex-col items-center justify-center p-3 m-2 border-2 border-gray-900 border-solid rounded-md">
           <div>
             <label for="cloud-url-input">URL</label>
             <input id="cloud-url-input" placeholder="https://showbridge-cloud.jwetzell.com" />

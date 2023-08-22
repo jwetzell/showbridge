@@ -24,9 +24,11 @@ electron.send('load_addresses');
 
 electron.on('ip_addresses', (event, addresses) => {
   addresses.forEach((address) => {
-    httpAddressSelect.add(new Option(address.address, address.address));
-    tcpAddressSelect.add(new Option(address.address, address.address));
-    udpAddressSelect.add(new Option(address.address, address.address));
+    if (address.family === 'IPv4') {
+      httpAddressSelect.add(new Option(address.address, address.address));
+      tcpAddressSelect.add(new Option(address.address, address.address));
+      udpAddressSelect.add(new Option(address.address, address.address));
+    }
   });
 
   electron.send('load_current_config');
