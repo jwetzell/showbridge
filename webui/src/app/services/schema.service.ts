@@ -5,7 +5,7 @@ import Ajv, { ErrorObject, JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { noop } from 'lodash';
 import { Action } from '../models/action.model';
-import { ConfigFileSchema } from '../models/config.models';
+import { ConfigFile } from '../models/config.models';
 import { ObjectInfo, ParamsFormInfo } from '../models/form.model';
 import { Trigger } from '../models/trigger.model';
 
@@ -14,7 +14,7 @@ import { Trigger } from '../models/trigger.model';
 })
 export class SchemaService {
   schemaUrl: string = '/config/schema';
-  schema?: JSONSchemaType<ConfigFileSchema>;
+  schema?: JSONSchemaType<ConfigFile>;
 
   isDummySite: boolean = false;
 
@@ -28,7 +28,7 @@ export class SchemaService {
   constructor(private http: HttpClient) {}
 
   loadSchema() {
-    this.http.get<JSONSchemaType<ConfigFileSchema>>(this.schemaUrl).subscribe((schema) => {
+    this.http.get<JSONSchemaType<ConfigFile>>(this.schemaUrl).subscribe((schema) => {
       this.setSchema(schema);
     });
   }
@@ -104,7 +104,7 @@ export class SchemaService {
     this.isDummySite = true;
   }
 
-  setSchema(schema: JSONSchemaType<ConfigFileSchema>) {
+  setSchema(schema: JSONSchemaType<ConfigFile>) {
     this.schema = schema;
 
     this.ajv.addSchema(schema);
@@ -467,7 +467,7 @@ export class SchemaService {
     }
   }
 
-  configValidator(validateSchema: JSONSchemaType<ConfigFileSchema>) {
+  configValidator(validateSchema: JSONSchemaType<ConfigFile>) {
     return (control: AbstractControl): ValidationErrors | null => {
       try {
         const configObj = JSON.parse(control.value);

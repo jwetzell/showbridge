@@ -19,7 +19,6 @@ export class CopyService {
     if (this.history.length > this.maxHistoryLength) {
       this.history.splice(0, 1);
     }
-    console.log(this.history);
   }
 
   getClipboardForType(type: 'Trigger' | 'Action' | 'Transform'): Observable<CopyObject | undefined> {

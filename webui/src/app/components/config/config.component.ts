@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { ConfigFileSchema } from 'src/app/models/config.models';
+import { ConfigFile } from 'src/app/models/config.models';
 import { ObjectInfo } from 'src/app/models/form.model';
 import { SchemaService } from 'src/app/services/schema.service';
 import { ProtocolComponent } from '../protocol/protocol.component';
@@ -10,10 +10,10 @@ import { ProtocolComponent } from '../protocol/protocol.component';
   styleUrls: ['./config.component.css'],
 })
 export class ConfigComponent {
-  @Input() config!: ConfigFileSchema;
+  @Input() config!: ConfigFile;
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   @ViewChild('protocolComponent') protocolComponent?: ProtocolComponent;
-  pendingUpdate?: ConfigFileSchema;
+  pendingUpdate?: ConfigFile;
   selectedProtocol: ObjectInfo = this.schemaService.protocolTypes[0];
 
   constructor(public schemaService: SchemaService) {}

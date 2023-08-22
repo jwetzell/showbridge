@@ -1,6 +1,6 @@
 import { Trigger } from './trigger.model';
 
-export interface ConfigFileSchema {
+export interface ConfigFile {
   [key: string]: ProtocolConfiguration;
 }
 
@@ -33,3 +33,10 @@ export type TriggerType =
   | 'osc-address'
   | 'regex'
   | 'sender';
+
+export interface ConfigState {
+  config: ConfigFile;
+  timestamp: number;
+  isLive: boolean;
+  isCurrent: boolean;
+}
