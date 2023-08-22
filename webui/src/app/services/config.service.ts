@@ -55,6 +55,7 @@ export class ConfigService {
   }
 
   pushConfigState(config: ConfigFile, isLive: boolean = false, isCurrent: boolean = false): ConfigState {
+    // TODO(jwetzell): find a way to debounce configState updates
     //mark any configState that has the same config as live as well
     if (isLive) {
       this.configStateHistory.forEach((configState) => {
