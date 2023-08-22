@@ -10,6 +10,11 @@
           <div class="flex items-center justify-center" matTooltip="Delete">
             <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
           </div>
+          <div
+            (click)="copyMe()"
+            class="flex items-center justify-center w-full m-2 bg-transparent hover:cursor-pointer">
+            <mat-icon class="text-green-500" matTooltip="Copy">content_copy</mat-icon>
+          </div>
         </div>
 
         <div class="m-2">
@@ -38,6 +43,13 @@
                 <span>{{ transformType.name }}</span>
               </button>
             </mat-menu>
+            <div
+              *ngIf="copyService.getClipboardForType('Transform') | async as copyObject"
+              (click)="pasteTransform(copyObject)"
+              matTooltip="Paste Transform"
+              class="flex items-center justify-center w-full bg-green-700 hover:cursor-pointer hover:bg-green-500">
+              <mat-icon>content_paste</mat-icon>
+            </div>
           </div>
         </div>
       </div>
@@ -63,7 +75,7 @@
     <ng-container *ngIf="getSubActions() as subActions">
       <ng-container *ngIf="subActions.length > 0">
         <div class="flex flex-col items-center justify-center">
-          <mat-icon class="scale-150 text-gray-400">arrow_right</mat-icon>
+          <mat-icon class="text-gray-400 scale-150">arrow_right</mat-icon>
         </div>
         <div *ngFor="let subAction of subActions; let i = index">
           <app-action

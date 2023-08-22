@@ -12,5 +12,8 @@
     <div class="flex items-center justify-center" matTooltip="Delete">
       <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
     </div>
+    <div (click)="copyMe()" class="flex items-center justify-center w-full m-2 bg-transparent hover:cursor-pointer">
+      <mat-icon class="text-green-500" matTooltip="Copy">content_copy</mat-icon>
+    </div>
   </div>
 </ng-container>

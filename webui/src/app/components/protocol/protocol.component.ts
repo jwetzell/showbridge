@@ -5,8 +5,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { cloneDeep, merge } from 'lodash';
 import { Subject } from 'rxjs';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
+import { CopyObject } from 'src/app/models/copy-object.model';
 import { ObjectInfo } from 'src/app/models/form.model';
 import { Trigger } from 'src/app/models/trigger.model';
+import { CopyService } from 'src/app/services/copy.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
@@ -28,12 +30,14 @@ export class ProtocolComponent {
   schema?: any;
 
   hasSettings: boolean = false;
-
   constructor(
     private schemaService: SchemaService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    public copyService: CopyService
+  ) {
+    this;
+  }
 
   ngOnInit() {
     this.openSettings.subscribe((val) => {
@@ -98,5 +102,18 @@ export class ProtocolComponent {
     if (this.dialogRef) {
       this.dialog.open(this.dialogRef);
     }
+  }
+
+  pasteTrigger(copyObject: CopyObject) {
+    if (this.protocol && this.protocol?.triggers === undefined) {
+      this.protocol.triggers = [];
+    }
+    this.protocol?.triggers?.push(copyObject.object);
+    this.pendingUpdate = cloneDeep(this.protocol);
+    this.updated.emit(this.pendingUpdate);
+  }
+
+  validCopyObject(copyObject: CopyObject) {
+    return copyObject && this.triggerTypes.find((objectInfo) => objectInfo.type === copyObject.object.type);
   }
 }

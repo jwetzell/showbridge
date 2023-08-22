@@ -6,7 +6,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { cloneDeep, merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
+import { CopyObject } from 'src/app/models/copy-object.model';
 import { Trigger } from 'src/app/models/trigger.model';
+import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
 import { SchemaService } from 'src/app/services/schema.service';
 @Component({
@@ -37,7 +39,8 @@ export class TriggerComponent implements OnInit {
     private eventService: EventService,
     public schemaService: SchemaService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public copyService: CopyService
   ) {}
 
   ngOnInit() {
@@ -118,5 +121,28 @@ export class TriggerComponent implements OnInit {
     if (this.dialogRef) {
       this.dialog.open(this.dialogRef);
     }
+  }
+
+  copyMe() {
+    if (this.pendingUpdate !== undefined) {
+      this.copyService.setCopyObject({
+        type: 'Trigger',
+        object: this.pendingUpdate,
+      });
+    } else if (this.trigger !== undefined) {
+      this.copyService.setCopyObject({
+        type: 'Trigger',
+        object: this.trigger,
+      });
+    }
+  }
+
+  pasteAction(copyObject: CopyObject) {
+    if (this.trigger && this.trigger?.actions === undefined) {
+      this.trigger.actions = [];
+    }
+    this.trigger?.actions?.push(copyObject.object);
+    this.pendingUpdate = cloneDeep(this.trigger);
+    this.updated.emit(this.pendingUpdate);
   }
 }

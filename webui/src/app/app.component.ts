@@ -6,6 +6,7 @@ import { filter } from 'rxjs';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { ConfigFileSchema } from './models/config.models';
 import { ConfigService } from './services/config.service';
+import { CopyService } from './services/copy.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
 import { downloadJSON } from './utils/utils';
@@ -27,13 +28,21 @@ export class AppComponent {
     public eventService: EventService,
     public schemaService: SchemaService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private copyService: CopyService
   ) {
     // this.configService.setupForDummySite();
     // this.schemaService.setupForDummySite();
     this.schemaService.loadSchema();
     this.configService.getConfig().subscribe((currentConfig) => {
       this.config = currentConfig;
+    });
+
+    this.copyService.currentCopyObject.pipe(filter((val) => !!val)).subscribe((object) => {
+      console.log(object);
+      this.snackBar.open(`${object?.type} copied...`, 'Dismiss', {
+        duration: 3000,
+      });
     });
   }
 

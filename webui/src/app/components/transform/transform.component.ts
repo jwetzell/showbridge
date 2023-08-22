@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Transform } from 'src/app/models/transform.model';
+import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -23,7 +24,8 @@ export class TransformComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
-    private schemaService: SchemaService
+    private schemaService: SchemaService,
+    private copyService: CopyService
   ) {}
 
   ngOnInit(): void {
@@ -55,5 +57,19 @@ export class TransformComponent implements OnInit {
   update(transform: Transform) {
     merge(this.transform, transform);
     this.updated.emit(this.transform);
+  }
+
+  copyMe() {
+    if (this.pendingUpdate !== undefined) {
+      this.copyService.setCopyObject({
+        type: 'Transform',
+        object: this.pendingUpdate,
+      });
+    } else if (this.transform !== undefined) {
+      this.copyService.setCopyObject({
+        type: 'Transform',
+        object: this.transform,
+      });
+    }
   }
 }

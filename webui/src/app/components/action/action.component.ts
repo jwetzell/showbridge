@@ -4,7 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { cloneDeep, merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
+import { CopyObject } from 'src/app/models/copy-object.model';
 import { Transform } from 'src/app/models/transform.model';
+import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -28,7 +30,8 @@ export class ActionComponent implements OnInit {
   constructor(
     private eventService: EventService,
     public schemaService: SchemaService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public copyService: CopyService
   ) {}
 
   ngOnInit(): void {
@@ -136,5 +139,28 @@ export class ActionComponent implements OnInit {
         this.updated.emit(this.pendingUpdate);
       }
     }
+  }
+
+  copyMe() {
+    if (this.pendingUpdate !== undefined) {
+      this.copyService.setCopyObject({
+        type: 'Action',
+        object: this.pendingUpdate,
+      });
+    } else if (this.action !== undefined) {
+      this.copyService.setCopyObject({
+        type: 'Action',
+        object: this.action,
+      });
+    }
+  }
+
+  pasteTransform(copyObject: CopyObject) {
+    if (this.action && this.action?.transforms === undefined) {
+      this.action.transforms = [];
+    }
+    this.action?.transforms?.push(copyObject.object);
+    this.pendingUpdate = cloneDeep(this.action);
+    this.updated.emit(this.pendingUpdate);
   }
 }
