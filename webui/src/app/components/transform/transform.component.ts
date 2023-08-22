@@ -46,7 +46,6 @@ export class TransformComponent implements OnInit {
     }
     if (this.transform?.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Transform', this.transform.type);
-      console.log(this.schema);
     }
   }
 
