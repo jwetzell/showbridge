@@ -33,7 +33,7 @@
             <app-params-form
               [parentSchema]="schema"
               [data]="trigger.params"
-              (updated)="update($event)"></app-params-form>
+              (updated)="paramsUpdated($event)"></app-params-form>
             <div class="flex items-center justify-center">
               <div class="flex-auto">
                 <mat-form-field subscriptSizing="dynamic" class="w-full">

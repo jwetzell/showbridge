@@ -109,6 +109,12 @@ export class TriggerComponent implements OnInit {
     this.updated.emit(this.pendingUpdate);
   }
 
+  paramsUpdated(params: any) {
+    merge(this.trigger?.params, params);
+    this.pendingUpdate = cloneDeep(this.trigger);
+    this.updated.emit(this.pendingUpdate);
+  }
+
   drop(event: CdkDragDrop<string[]>) {
     if (this.trigger?.actions !== undefined) {
       moveItemInArray(this.trigger?.actions, event.previousIndex, event.currentIndex);

@@ -371,8 +371,10 @@ export class SchemaService {
                         .split(',')
                         .map((part: string) => part.trim())
                         .map((item: any) => parseFloat(item));
+                    } else if (paramSchema?.items?.type === 'string') {
+                      params[paramKey] = paramValue.split(',').map((part: string) => part.trim());
                     } else {
-                      console.error(`schema-service: unhandled array schema type: ${paramSchema.type}`);
+                      console.error(`schema-service: unhandled array schema type: ${paramSchema?.items?.type}`);
                     }
                   } else if (paramSchema['$ref'] === '#/definitions/ActionList') {
                     try {
