@@ -26,7 +26,7 @@
               [path]="path + '/transforms/' + i"
               [transform]="transform"
               (delete)="deleteTransform(i)"
-              (updated)="transformUpdated(i, $event)"></app-transform>
+              (updated)="transformUpdated()"></app-transform>
           </div>
           <div *ngIf="schemaService.actionTypes.length > 0">
             <div
@@ -82,7 +82,7 @@
             [action]="subAction"
             [path]="this.path + '/actions/' + i"
             (delete)="deleteSubAction(i)"
-            (updated)="subActionUpdated(i, $event)"></app-action>
+            (updated)="subActionUpdated()"></app-action>
         </div>
       </ng-container>
     </ng-container>

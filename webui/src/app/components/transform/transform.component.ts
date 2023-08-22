@@ -16,11 +16,10 @@ export class TransformComponent implements OnInit {
   @Input() path?: string;
 
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
-  @Output() updated: EventEmitter<Transform> = new EventEmitter<Transform>();
+  @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   schema: any;
   indicatorColor: string = 'gray';
-  pendingUpdate?: Transform;
 
   constructor(
     private eventService: EventService,
@@ -55,16 +54,11 @@ export class TransformComponent implements OnInit {
 
   update(transform: Transform) {
     merge(this.transform, transform);
-    this.updated.emit(this.transform);
+    this.updated.emit(true);
   }
 
   copyMe() {
-    if (this.pendingUpdate !== undefined) {
-      this.copyService.setCopyObject({
-        type: 'Transform',
-        object: this.pendingUpdate,
-      });
-    } else if (this.transform !== undefined) {
+    if (this.transform !== undefined) {
       this.copyService.setCopyObject({
         type: 'Transform',
         object: this.transform,

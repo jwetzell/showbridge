@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { cloneDeep, has, merge } from 'lodash';
-import { ConfigFileSchema, ProtocolConfiguration } from 'src/app/models/config.models';
-import { ProtocolComponent } from '../protocol/protocol.component';
-import { SchemaService } from 'src/app/services/schema.service';
+import { ConfigFileSchema } from 'src/app/models/config.models';
 import { ObjectInfo } from 'src/app/models/form.model';
+import { SchemaService } from 'src/app/services/schema.service';
+import { ProtocolComponent } from '../protocol/protocol.component';
 
 @Component({
   selector: 'app-config',
@@ -12,19 +11,15 @@ import { ObjectInfo } from 'src/app/models/form.model';
 })
 export class ConfigComponent {
   @Input() config!: ConfigFileSchema;
-  @Output() updated: EventEmitter<ConfigFileSchema> = new EventEmitter<ConfigFileSchema>();
+  @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   @ViewChild('protocolComponent') protocolComponent?: ProtocolComponent;
   pendingUpdate?: ConfigFileSchema;
   selectedProtocol: ObjectInfo = this.schemaService.protocolTypes[0];
 
   constructor(public schemaService: SchemaService) {}
 
-  protocolUpdate(protocolType: string, protocol: ProtocolConfiguration) {
-    if (has(this.config, protocolType)) {
-      merge(this.config[protocolType], protocol);
-      this.pendingUpdate = cloneDeep(this.config);
-      this.updated.emit(this.pendingUpdate);
-    }
+  protocolUpdate() {
+    this.updated.emit(true);
   }
 
   selectProtocolType(protocol: ObjectInfo) {

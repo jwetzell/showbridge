@@ -10,7 +10,7 @@
             <app-params-form
               [parentSchema]="schema"
               [data]="protocol.params"
-              (updated)="protocolUpdated($event)"></app-params-form>
+              (updated)="protocolParamsUpdated($event)"></app-params-form>
           </div>
         </ng-template>
       </ng-container>
@@ -21,7 +21,7 @@
           [path]="protocolType + '/triggers/' + i"
           [trigger]="trigger"
           (delete)="deleteTrigger(i)"
-          (updated)="triggerUpdated(i, $event)"></app-trigger>
+          (updated)="triggerUpdated()"></app-trigger>
       </div>
     </div>
     <div class="fixed bottom-0 w-full">

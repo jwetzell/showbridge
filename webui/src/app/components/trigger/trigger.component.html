@@ -56,7 +56,7 @@
             [path]="path + '/actions/' + i"
             [action]="action"
             (delete)="deleteAction(i)"
-            (updated)="actionUpdated(i, $event)"></app-action>
+            (updated)="actionUpdated()"></app-action>
         </div>
       </div>
       <div class="w-full" *ngIf="schemaService.actionTypes.length > 0">

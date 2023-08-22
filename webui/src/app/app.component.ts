@@ -18,13 +18,10 @@ import { downloadJSON } from './utils/utils';
 export class AppComponent {
   config?: ConfigFileSchema;
 
-  pendingConfig?: ConfigFileSchema;
-  pendingConfigIsValid: Boolean = false;
-
   shouldRedirect: boolean = false;
 
   constructor(
-    private configService: ConfigService,
+    public configService: ConfigService,
     public eventService: EventService,
     public schemaService: SchemaService,
     private snackBar: MatSnackBar,
@@ -36,6 +33,7 @@ export class AppComponent {
     this.schemaService.loadSchema();
     this.configService.getConfig().subscribe((currentConfig) => {
       this.config = currentConfig;
+      this.configService.pushConfigState(currentConfig);
     });
 
     this.copyService.currentCopyObject.pipe(filter((val) => !!val)).subscribe((object) => {
@@ -46,12 +44,12 @@ export class AppComponent {
     });
   }
 
-  configUpdated(newConfig: ConfigFileSchema) {
+  configUpdated() {
     console.log('configUpdated');
-    console.log(newConfig);
-
-    this.pendingConfig = newConfig;
-    this.pendingConfigIsValid = this.validatePendingConfig();
+    console.log(this.config);
+    if (this.config) {
+      this.configService.pushConfigState(this.config);
+    }
   }
 
   applyConfig() {
@@ -61,11 +59,11 @@ export class AppComponent {
       });
       return;
     }
-    if (this.pendingConfig) {
-      this.configService.uploadConfig(this.pendingConfig).subscribe((resp) => {
-        this.config = this.pendingConfig;
-        this.pendingConfig = undefined;
-        this.pendingConfigIsValid = false;
+    if (this.config) {
+      this.configService.uploadConfig(this.config).subscribe((resp) => {
+        if (this.config) {
+          this.configService.pushConfigState(this.config);
+        }
 
         const newHttpPort = get(this.config, 'http.params.port');
 
@@ -112,27 +110,17 @@ export class AppComponent {
       .pipe(filter((result) => !!result && result !== ''))
       .subscribe((result) => {
         this.config = result;
-        this.configUpdated(result);
+        this.configUpdated();
       });
   }
 
   downloadConfig() {
-    const configToDownload = this.pendingConfig ? this.pendingConfig : this.config;
-    if (configToDownload) {
-      downloadJSON(configToDownload, 'config.json');
+    if (this.config) {
+      downloadJSON(this.config, 'config.json');
     } else {
       this.snackBar.open('No config to download.', 'Dismiss', {
         duration: 3000,
       });
     }
-  }
-
-  validatePendingConfig() {
-    const errors = this.schemaService.validate(this.pendingConfig);
-    if (errors && errors.length === 0) {
-      return true;
-    }
-    console.error(errors);
-    return false;
   }
 }

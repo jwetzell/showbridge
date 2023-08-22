@@ -16,18 +16,23 @@
       <button mat-icon-button matTooltip="Import Config" (click)="importConfig()">
         <mat-icon>upload</mat-icon>
       </button>
-      <button mat-icon-button matTooltip="Apply Config" *ngIf="pendingConfigIsValid" (click)="applyConfig()">
-        <mat-icon>save</mat-icon>
-      </button>
-      <div
-        *ngIf="pendingConfig && !pendingConfigIsValid"
-        class="flex items-center justify-center text-red-500 hover:cursor-pointer"
-        matTooltip="Config Errors">
-        <mat-icon>error</mat-icon>
-      </div>
+      <ng-container *ngIf="configService.configChangeHistory.length > 1">
+        <button
+          mat-icon-button
+          matTooltip="Apply Config"
+          *ngIf="configService.pendingConfigIsValid; else configError"
+          (click)="applyConfig()">
+          <mat-icon>save</mat-icon>
+        </button>
+        <ng-template #configError>
+          <div class="flex items-center justify-center text-red-500 hover:cursor-pointer" matTooltip="Config Errors">
+            <mat-icon>error</mat-icon>
+          </div>
+        </ng-template>
+      </ng-container>
     </mat-toolbar>
     <div class="mt-16 -z-50">
-      <app-config class="flex-auto" [config]="config" (updated)="configUpdated($event)"></app-config>
+      <app-config class="flex-auto" [config]="config" (updated)="configUpdated()"></app-config>
     </div>
   </div>
 </ng-container>

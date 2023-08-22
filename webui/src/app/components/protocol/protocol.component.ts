@@ -2,12 +2,11 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cloneDeep, merge } from 'lodash';
+import { merge } from 'lodash';
 import { Subject } from 'rxjs';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
 import { CopyObject } from 'src/app/models/copy-object.model';
 import { ObjectInfo } from 'src/app/models/form.model';
-import { Trigger } from 'src/app/models/trigger.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -20,12 +19,10 @@ export class ProtocolComponent {
   @Input() protocolType?: string;
   @Input() protocol?: ProtocolConfiguration;
   @Input() openSettings: Subject<boolean> = new Subject<boolean>();
-  @Output() updated: EventEmitter<ProtocolConfiguration> = new EventEmitter<ProtocolConfiguration>();
+  @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
   triggerTypes: ObjectInfo[] = [];
-
-  pendingUpdate?: ProtocolConfiguration;
 
   schema?: any;
 
@@ -56,28 +53,21 @@ export class ProtocolComponent {
     }
   }
 
-  protocolUpdated(updatedProtocol: ProtocolConfiguration) {
-    merge(this.protocol, updatedProtocol);
-    this.pendingUpdate = cloneDeep(this.protocol);
-    this.updated.emit(this.pendingUpdate);
+  protocolParamsUpdated(params: any) {
+    merge(this.protocol?.params, params);
+    this.updated.emit(true);
   }
 
   deleteTrigger(index: number) {
     this.protocol?.triggers?.splice(index, 1);
-    this.pendingUpdate = cloneDeep(this.protocol);
-    this.updated.emit(this.pendingUpdate);
+    this.updated.emit(true);
     this.snackBar.open('Trigger Removed', 'Dismiss', {
       duration: 3000,
     });
   }
 
-  triggerUpdated(index: number, trigger: Trigger) {
-    if (this.protocol?.triggers !== undefined && this.protocol.triggers[index] !== undefined) {
-      merge(this.protocol.triggers[index], trigger);
-
-      this.pendingUpdate = cloneDeep(this.protocol);
-      this.updated.emit(this.pendingUpdate);
-    }
+  triggerUpdated() {
+    this.updated.emit(true);
   }
 
   addTrigger(triggerType: string) {
@@ -86,15 +76,13 @@ export class ProtocolComponent {
     }
     const triggerTemplate = this.schemaService.getTemplateForTrigger(triggerType);
     this.protocol?.triggers?.push(triggerTemplate);
-    this.pendingUpdate = cloneDeep(this.protocol);
-    this.updated.emit(this.pendingUpdate);
+    this.updated.emit(true);
   }
 
   drop(event: CdkDragDrop<string[]>) {
     if (this.protocol?.triggers !== undefined) {
       moveItemInArray(this.protocol?.triggers, event.previousIndex, event.currentIndex);
-      this.pendingUpdate = cloneDeep(this.protocol);
-      this.updated.emit(this.pendingUpdate);
+      this.updated.emit(true);
     }
   }
 
@@ -109,8 +97,7 @@ export class ProtocolComponent {
       this.protocol.triggers = [];
     }
     this.protocol?.triggers?.push(copyObject.object);
-    this.pendingUpdate = cloneDeep(this.protocol);
-    this.updated.emit(this.pendingUpdate);
+    this.updated.emit(true);
   }
 
   validCopyObject(copyObject: CopyObject) {

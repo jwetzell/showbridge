@@ -3,9 +3,8 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cloneDeep, merge } from 'lodash';
+import { merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
-import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { CopyService } from 'src/app/services/copy.service';
@@ -19,7 +18,7 @@ import { SchemaService } from 'src/app/services/schema.service';
 export class TriggerComponent implements OnInit {
   @Input() path?: string;
   @Input() trigger?: Trigger;
-  @Output() updated: EventEmitter<Trigger> = new EventEmitter<Trigger>();
+  @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
@@ -27,7 +26,7 @@ export class TriggerComponent implements OnInit {
   schema: any;
 
   indicatorColor: string = 'gray';
-  pendingUpdate?: Trigger;
+  // pendingUpdate?: Trigger;
 
   formGroup: FormGroup = new FormGroup({
     type: new FormControl('any'),
@@ -73,20 +72,14 @@ export class TriggerComponent implements OnInit {
 
   deleteAction(index: number) {
     this.trigger?.actions?.splice(index, 1);
-    this.pendingUpdate = cloneDeep(this.trigger);
-    this.updated.emit(this.pendingUpdate);
+    this.updated.emit(true);
     this.snackBar.open('Action Removed', 'Dismiss', {
       duration: 3000,
     });
   }
 
-  actionUpdated(index: number, action: Action) {
-    if (this.trigger?.actions !== undefined && this.trigger.actions[index] !== undefined) {
-      merge(this.trigger.actions[index], action);
-
-      this.pendingUpdate = cloneDeep(this.trigger);
-      this.updated.emit(this.pendingUpdate);
-    }
+  actionUpdated() {
+    this.updated.emit(true);
   }
 
   addAction(actionType: string) {
@@ -95,8 +88,7 @@ export class TriggerComponent implements OnInit {
     }
     const actionTemplate = this.schemaService.getTemplateForAction(actionType);
     this.trigger?.actions?.push(actionTemplate);
-    this.pendingUpdate = cloneDeep(this.trigger);
-    this.updated.emit(this.pendingUpdate);
+    this.updated.emit(true);
   }
 
   deleteMe() {
@@ -105,21 +97,20 @@ export class TriggerComponent implements OnInit {
 
   update(trigger: Trigger) {
     merge(this.trigger, trigger);
-    this.pendingUpdate = cloneDeep(this.trigger);
-    this.updated.emit(this.pendingUpdate);
+    this.updated.emit(true);
   }
 
   paramsUpdated(params: any) {
-    merge(this.trigger?.params, params);
-    this.pendingUpdate = cloneDeep(this.trigger);
-    this.updated.emit(this.pendingUpdate);
+    if (this.trigger) {
+      this.trigger.params = params;
+    }
+    this.updated.emit(true);
   }
 
   drop(event: CdkDragDrop<string[]>) {
     if (this.trigger?.actions !== undefined) {
       moveItemInArray(this.trigger?.actions, event.previousIndex, event.currentIndex);
-      this.pendingUpdate = cloneDeep(this.trigger);
-      this.updated.emit(this.pendingUpdate);
+      this.updated.emit(true);
     }
   }
 
@@ -130,12 +121,7 @@ export class TriggerComponent implements OnInit {
   }
 
   copyMe() {
-    if (this.pendingUpdate !== undefined) {
-      this.copyService.setCopyObject({
-        type: 'Trigger',
-        object: this.pendingUpdate,
-      });
-    } else if (this.trigger !== undefined) {
+    if (this.trigger !== undefined) {
       this.copyService.setCopyObject({
         type: 'Trigger',
         object: this.trigger,
@@ -148,7 +134,6 @@ export class TriggerComponent implements OnInit {
       this.trigger.actions = [];
     }
     this.trigger?.actions?.push(copyObject.object);
-    this.pendingUpdate = cloneDeep(this.trigger);
-    this.updated.emit(this.pendingUpdate);
+    this.updated.emit(true);
   }
 }
