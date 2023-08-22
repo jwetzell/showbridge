@@ -16,7 +16,7 @@
       <mat-icon>upload</mat-icon>
     </button>
     <ng-container *ngIf="configService.configStateHistory.length > 1">
-      <button mat-icon-button matTooltip="Undo" [matMenuTriggerFor]="historyMenu">
+      <button mat-icon-button matTooltip="Revert" [matMenuTriggerFor]="historyMenu">
         <mat-icon>undo</mat-icon>
       </button>
       <mat-menu #historyMenu="matMenu">
@@ -25,7 +25,7 @@
           *ngFor="let configState of configService.configStateHistory"
           (click)="loadConfigState(configState)">
           <span
-            >{{ configState.timestamp | date: 'M/d/yy h:mm:ss' }} {{ configState.isLive ? '(live)' : '' }}
+            >{{ configState.timestamp | timeago }} {{ configState.isLive ? '(live)' : '' }}
             {{ configState.isCurrent ? '(current)' : '' }}</span
           >
         </button>

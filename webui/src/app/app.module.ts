@@ -16,6 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TimeagoModule } from 'ngx-timeago';
 import { AppComponent } from './app.component';
 import { ActionComponent } from './components/action/action.component';
 import { ConfigComponent } from './components/config/config.component';
@@ -59,6 +60,7 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     MatDialogModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    TimeagoModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],
