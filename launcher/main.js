@@ -7,6 +7,7 @@ const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell } = req
 
 const fs = require('fs-extra');
 const respawn = require('respawn');
+const fileStreamRotator = require('file-stream-rotator');
 const defaultConfig = require('../config/default.json');
 
 let rootPath = process.resourcesPath;
@@ -20,6 +21,8 @@ let settingsWin;
 let tray;
 let configDir;
 let configFilePath;
+let logsDir;
+let rotatingLogStream;
 
 function toggleWindow() {
   if (win.isVisible()) {
@@ -177,7 +180,7 @@ function writeConfigToDisk(filePath, configObj) {
   if (fs.existsSync(filePath)) {
     console.log('backing up current config');
     try {
-      fs.moveSync(filePath, `${filePath}.bak`, {
+      fs.moveSync(filePath, `${filePath}.${Date.now()}.bak`, {
         overwrite: true,
       });
     } catch (error) {
@@ -257,15 +260,22 @@ if (!lock) {
     'Looks like showbridge is already running. Only one instance at a time is allowed.'
   );
   app.quit();
-}
-
-app.whenReady().then(() => {
-  if (!lock) {
-    console.error('showbridge already running skipping setup');
-    return;
-  }
-
+} else {
   configDir = path.join(app.getPath('appData'), '/showbridge/');
+
+  logsDir = path.join(configDir, 'logs');
+  // TODO(jwetzell): add logging for launcher logs. Use these log files for the logs view
+  // TODO(jwetzell): add menu links to open the config directory
+  rotatingLogStream = fileStreamRotator.getStream({
+    filename: path.join(logsDir, 'showbridge-%DATE%'),
+    extension: '.log',
+    frequency: 'daily',
+    date_format: 'YYYY-MM-DD',
+    size: '100m',
+    max_logs: '7d',
+    audit_file: path.join(logsDir, 'audit.json'),
+  });
+
   console.log(`config dir exists: ${fs.existsSync(configDir)}`);
 
   if (!fs.existsSync(configDir)) {
@@ -286,181 +296,202 @@ app.whenReady().then(() => {
     writeConfigToDisk(configFilePath, defaultConfig);
   }
 
-  try {
-    createWindow();
-    createTray();
-
-    const nodeBin = getNodeBinaryLocation(app.isPackaged);
-
-    if (!nodeBin) {
-      dialog.showErrorBox('Unable to start', 'Failed to find node binary to run');
-      app.exit(11);
+  app.whenReady().then(() => {
+    if (!lock) {
+      console.error('showbridge already running skipping setup');
+      return;
     }
 
-    showbridgeProcess = respawn(
-      () => [nodeBin, path.join(rootPath, './dist/bundle/index.js'), '-c', configFilePath, '-h', './dist/webui', '-t'],
-      {
-        name: 'showbridge process',
-        maxRestarts: 3,
-        sleep: 1000,
-        kill: 5000,
-        cwd: rootPath,
-        stdio: [null, null, null, 'ipc'],
+    try {
+      createWindow();
+      createTray();
+
+      const nodeBin = getNodeBinaryLocation(app.isPackaged);
+
+      if (!nodeBin) {
+        dialog.showErrorBox('Unable to start', 'Failed to find node binary to run');
+        app.exit(11);
       }
-    );
 
-    showbridgeProcess.on('start', () => {
-      if (showbridgeProcess.child) {
-        showbridgeProcess.child.on('message', (message) => {
-          switch (message.eventType) {
-            case 'config_valid':
-              dialog
-                .showMessageBox(win, {
-                  type: 'question',
-                  buttons: ['Apply', 'Cancel'],
-                  defaultId: 0,
-                  title: 'Apply Config',
-                  message: 'This looks like a valid config JSON file. Would you like to apply it?',
-                })
-                .then((response) => {
-                  if (response.response === 0) {
-                    writeConfigToDisk(configFilePath, message.config);
-                    reloadConfigFromDisk(configFilePath);
-                  }
-                });
-              break;
-            case 'config_error':
-              // TODO(jwetzell): format these errors better
-              win.webContents.send('config_error', message.errors);
-              dialog.showErrorBox('Error', message.errors.map((error) => error.message).join('\n'));
-              break;
-            case 'config_updated':
-              // TODO(jwetzell): add rollback
-              writeConfigToDisk(configFilePath, message.config);
-              break;
-            case 'message':
-              if (win && win.isVisible()) {
-                win.webContents.send('message', message.message);
-              }
-              break;
-            default:
-              console.error(`unhandled message from showbridge process`);
-              console.error(message);
-              break;
-          }
-        });
-      }
-    });
+      showbridgeProcess = respawn(
+        () => [
+          nodeBin,
+          path.join(rootPath, './dist/bundle/index.js'),
+          '-c',
+          configFilePath,
+          '-h',
+          './dist/webui',
+          '-t',
+        ],
+        {
+          name: 'showbridge process',
+          maxRestarts: 3,
+          sleep: 1000,
+          kill: 5000,
+          cwd: rootPath,
+          stdio: [null, null, null, 'ipc'],
+        }
+      );
 
-    showbridgeProcess.on('stop', () => {
-      console.log('showbridge process stopped');
-    });
-
-    showbridgeProcess.on('spawn', () => {
-      // TODO(jwetzell): catch loops in underlying command crashing
-      console.log('showbridge process spawned');
-    });
-
-    showbridgeProcess.on('exit', (code) => {
-      console.log(`showbridge process exited: ${code}`);
-      if (!restartProcess) {
-        app.exit();
-      }
-    });
-
-    showbridgeProcess.on('stdout', (data) => {
-      console.log(data.toString());
-      if (logWin && !logWin.isDestroyed()) {
-        logWin.webContents.send('log', data.toString());
-      }
-    });
-
-    showbridgeProcess.on('stderr', (data) => {
-      console.log(data.toString());
-      if (logWin && !logWin.isDestroyed()) {
-        logWin.webContents.send('log', data.toString());
-      }
-    });
-
-    showbridgeProcess.on('warn', (err) => {
-      console.error(err);
-    });
-
-    showbridgeProcess.start();
-  } catch (error) {
-    dialog.showErrorBox('Error', error);
-  }
-
-  // NOTE(jwetzell) load config file from drag/drop
-  ipcMain.on('check_config', (event, file) => {
-    loadConfigFromFile(file.path);
-  });
-
-  // NOTE(jwetzell) open config file from file browser
-  ipcMain.on('load_config_from_file', () => {
-    dialog
-      .showOpenDialog(win, {
-        title: 'Open Config File',
-        buttonLabel: 'Apply',
-        filters: [{ name: 'json', extensions: ['json'] }],
-        multiSelections: false,
-      })
-      .then((resp) => {
-        if (!resp.canceled) {
-          if (resp.filePaths.length > 0) {
-            loadConfigFromFile(resp.filePaths[0]);
-          }
+      showbridgeProcess.on('start', () => {
+        if (showbridgeProcess.child) {
+          showbridgeProcess.child.on('message', (message) => {
+            switch (message.eventType) {
+              case 'config_valid':
+                dialog
+                  .showMessageBox(win, {
+                    type: 'question',
+                    buttons: ['Apply', 'Cancel'],
+                    defaultId: 0,
+                    title: 'Apply Config',
+                    message: 'This looks like a valid config JSON file. Would you like to apply it?',
+                  })
+                  .then((response) => {
+                    if (response.response === 0) {
+                      writeConfigToDisk(configFilePath, message.config);
+                      reloadConfigFromDisk(configFilePath);
+                    }
+                  });
+                break;
+              case 'config_error':
+                // TODO(jwetzell): format these errors better
+                win.webContents.send('config_error', message.errors);
+                dialog.showErrorBox('Error', message.errors.map((error) => error.message).join('\n'));
+                break;
+              case 'config_updated':
+                // TODO(jwetzell): add rollback
+                writeConfigToDisk(configFilePath, message.config);
+                break;
+              case 'message':
+                if (win && win.isVisible()) {
+                  win.webContents.send('message', message.message);
+                }
+                break;
+              default:
+                console.error(`unhandled message from showbridge process`);
+                console.error(message);
+                break;
+            }
+          });
         }
       });
-  });
 
-  ipcMain.on('quit', () => {
-    quitApp();
-  });
+      showbridgeProcess.on('stop', () => {
+        console.log('showbridge process stopped');
+      });
 
-  ipcMain.on('show_logs', () => {
-    showLogWindow();
-  });
+      showbridgeProcess.on('spawn', () => {
+        // TODO(jwetzell): catch loops in underlying command crashing
+        console.log('showbridge process spawned');
+      });
 
-  ipcMain.on('show_settings', () => {
-    showSettingsWindow();
-  });
-
-  ipcMain.on('show_ui', () => {
-    try {
-      const config = fs.readJSONSync(configFilePath);
-      if (config.http.params.port) {
-        let addressToOpen = 'localhost';
-        if (config.http.params.address !== undefined && config.http.params.address !== '0.0.0.0') {
-          addressToOpen = config.http.params.address;
+      showbridgeProcess.on('exit', (code) => {
+        console.log(`showbridge process exited: ${code}`);
+        if (!restartProcess) {
+          app.exit();
         }
-        shell.openExternal(`http://${addressToOpen}:${config.http.params.port}`);
-      } else {
-        dialog.showErrorBox('Error', 'HTTP server does not seem to be setup right.');
-      }
+      });
+
+      showbridgeProcess.on('stdout', (data) => {
+        console.log(data.toString());
+        if (logWin && !logWin.isDestroyed()) {
+          logWin.webContents.send('log', data.toString());
+        }
+        if (rotatingLogStream) {
+          rotatingLogStream.write(data);
+        }
+      });
+
+      showbridgeProcess.on('stderr', (data) => {
+        console.log(data.toString());
+        if (logWin && !logWin.isDestroyed()) {
+          logWin.webContents.send('log', data.toString());
+        }
+        if (rotatingLogStream) {
+          rotatingLogStream.write(data);
+        }
+      });
+
+      showbridgeProcess.on('warn', (err) => {
+        console.error(err);
+      });
+
+      showbridgeProcess.start();
     } catch (error) {
-      dialog.showErrorBox('Error', 'Problem determining current router settings');
+      dialog.showErrorBox('Error', error);
     }
-  });
 
-  ipcMain.on('load_addresses', () => {
-    if (settingsWin && settingsWin.isVisible()) {
-      settingsWin.webContents.send('ip_addresses', getIPAddresses());
-    }
-  });
+    // NOTE(jwetzell) load config file from drag/drop
+    ipcMain.on('check_config', (event, file) => {
+      loadConfigFromFile(file.path);
+    });
 
-  ipcMain.on('load_current_config', () => {
-    if (settingsWin && settingsWin.isVisible()) {
-      settingsWin.webContents.send('current_config', getConfigObject(configFilePath));
-    }
-  });
+    // NOTE(jwetzell) open config file from file browser
+    ipcMain.on('load_config_from_file', () => {
+      dialog
+        .showOpenDialog(win, {
+          title: 'Open Config File',
+          buttonLabel: 'Apply',
+          filters: [{ name: 'json', extensions: ['json'] }],
+          multiSelections: false,
+        })
+        .then((resp) => {
+          if (!resp.canceled) {
+            if (resp.filePaths.length > 0) {
+              loadConfigFromFile(resp.filePaths[0]);
+            }
+          }
+        });
+    });
 
-  ipcMain.on('apply_config_from_object', (event, config) => {
-    writeConfigToDisk(configFilePath, config);
-    // TODO(jwetzell): error handling
-    reloadConfigFromDisk(configFilePath);
+    ipcMain.on('quit', () => {
+      quitApp();
+    });
+
+    ipcMain.on('show_logs', () => {
+      showLogWindow();
+    });
+
+    ipcMain.on('show_settings', () => {
+      showSettingsWindow();
+    });
+
+    ipcMain.on('show_ui', () => {
+      try {
+        const config = fs.readJSONSync(configFilePath);
+        if (config.http.params.port) {
+          let addressToOpen = 'localhost';
+          if (config.http.params.address !== undefined && config.http.params.address !== '0.0.0.0') {
+            addressToOpen = config.http.params.address;
+          }
+          shell.openExternal(`http://${addressToOpen}:${config.http.params.port}`);
+        } else {
+          dialog.showErrorBox('Error', 'HTTP server does not seem to be setup right.');
+        }
+      } catch (error) {
+        dialog.showErrorBox('Error', 'Problem determining current router settings');
+      }
+    });
+
+    ipcMain.on('load_addresses', () => {
+      if (settingsWin && settingsWin.isVisible()) {
+        settingsWin.webContents.send('ip_addresses', getIPAddresses());
+      }
+    });
+
+    ipcMain.on('load_current_config', () => {
+      if (settingsWin && settingsWin.isVisible()) {
+        settingsWin.webContents.send('current_config', getConfigObject(configFilePath));
+      }
+    });
+
+    ipcMain.on('apply_config_from_object', (event, config) => {
+      writeConfigToDisk(configFilePath, config);
+      // TODO(jwetzell): error handling
+      reloadConfigFromDisk(configFilePath);
+    });
   });
-});
+}
 
 app.on('will-quit', () => {
   console.log('app will quit');
