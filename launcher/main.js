@@ -5,6 +5,7 @@ const path = require('path');
 const { networkInterfaces } = require('os');
 const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell } = require('electron');
 
+const Tail = require('tail').Tail;
 const fs = require('fs-extra');
 const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
@@ -23,6 +24,7 @@ let configDir;
 let configFilePath;
 let logsDir;
 let rotatingLogStream;
+let currentLogFile;
 
 function toggleWindow() {
   if (win.isVisible()) {
@@ -214,6 +216,29 @@ function reloadConfigFromDisk(filePath) {
   }
 }
 
+function getConfigBackupList() {
+  if (configDir) {
+    const files = fs.readdirSync(configDir).filter((file) => file.startsWith('config.json.'));
+    const configBackups = files.map((fileName) => {
+      let configBackupDate;
+      const fileNameParts = fileName.split('.');
+      if (fileNameParts.length === 4) {
+        try {
+          configBackupDate = parseInt(fileNameParts[2], 10);
+        } catch (error) {
+          console.error('config file not formatted normally');
+        }
+      }
+      return {
+        filePath: path.join(configDir, fileName),
+        timestamp: configBackupDate,
+      };
+    });
+    return configBackups;
+  }
+  return [];
+}
+
 function loadConfigFromFile(filePath) {
   if (fs.existsSync(filePath)) {
     try {
@@ -232,6 +257,15 @@ function loadConfigFromFile(filePath) {
     }
   } else {
     dialog.showErrorBox('Error', `Cannot find file: ${path}`);
+  }
+}
+
+function loadCurrentLogFile() {
+  if (logsDir) {
+    const logFiles = fs.readdirSync(logsDir).filter((filename) => filename.endsWith('.log'));
+    if (logFiles.length > 0) {
+      currentLogFile = path.join(logsDir, logFiles[0]);
+    }
   }
 }
 
@@ -262,7 +296,6 @@ if (!lock) {
   app.quit();
 } else {
   configDir = path.join(app.getPath('appData'), '/showbridge/');
-
   logsDir = path.join(configDir, 'logs');
   // TODO(jwetzell): add logging for launcher logs. Use these log files for the logs view
   // TODO(jwetzell): add menu links to open the config directory
@@ -275,6 +308,8 @@ if (!lock) {
     max_logs: '7d',
     audit_file: path.join(logsDir, 'audit.json'),
   });
+
+  loadCurrentLogFile();
 
   console.log(`config dir exists: ${fs.existsSync(configDir)}`);
 
@@ -393,20 +428,12 @@ if (!lock) {
       });
 
       showbridgeProcess.on('stdout', (data) => {
-        console.log(data.toString());
-        if (logWin && !logWin.isDestroyed()) {
-          logWin.webContents.send('log', data.toString());
-        }
         if (rotatingLogStream) {
           rotatingLogStream.write(data);
         }
       });
 
       showbridgeProcess.on('stderr', (data) => {
-        console.log(data.toString());
-        if (logWin && !logWin.isDestroyed()) {
-          logWin.webContents.send('log', data.toString());
-        }
         if (rotatingLogStream) {
           rotatingLogStream.write(data);
         }
@@ -420,6 +447,15 @@ if (!lock) {
     } catch (error) {
       dialog.showErrorBox('Error', error);
     }
+
+    ipcMain.on('get_config_backups', () => {
+      if (win && win.isVisible()) {
+        console.log('get config backups called');
+        const configBackups = getConfigBackupList();
+
+        win.webContents.send('config_backups', configBackups);
+      }
+    });
 
     // NOTE(jwetzell) load config file from drag/drop
     ipcMain.on('check_config', (event, file) => {
@@ -450,6 +486,22 @@ if (!lock) {
 
     ipcMain.on('show_logs', () => {
       showLogWindow();
+    });
+
+    ipcMain.on('log_win_loaded', () => {
+      loadCurrentLogFile();
+      if (currentLogFile) {
+        const tail = new Tail(currentLogFile, {
+          fromBeginning: true,
+        });
+        tail.on('line', (data) => {
+          if (logWin && !logWin.isDestroyed()) {
+            logWin.webContents.send('log', data.toString());
+          }
+        });
+      } else {
+        console.error('current log file not set');
+      }
     });
 
     ipcMain.on('show_settings', () => {

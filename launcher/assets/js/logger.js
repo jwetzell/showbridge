@@ -9,3 +9,5 @@ electron.on('log', (event, log) => {
   logsElement.appendChild(logEntryElement);
   logsWrapperElement.scrollTo(0, logsWrapperElement.scrollHeight);
 });
+
+electron.send('log_win_loaded');
