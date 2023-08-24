@@ -24,17 +24,49 @@
             "enabled": true
           },
           {
-            "type": "log",
-            "transforms": [
-              {
-                "type": "template",
-                "params": {
-                  "property": "originalUrl",
-                  "template": "hello"
+            "type": "delay",
+            "params": {
+              "duration": 1000,
+              "actions": [
+                {
+                  "type": "log",
+                  "transforms": [
+                    {
+                      "type": "template",
+                      "params": {
+                        "property": "originalUrl",
+                        "template": "hello"
+                      },
+                      "enabled": true
+                    }
+                  ],
+                  "enabled": true
                 },
-                "enabled": true
-              }
-            ],
+                {
+                  "type": "delay",
+                  "params": {
+                    "duration": 1000,
+                    "actions": [
+                      {
+                        "type": "log",
+                        "transforms": [
+                          {
+                            "type": "template",
+                            "params": {
+                              "property": "originalUrl",
+                              "template": "hello"
+                            },
+                            "enabled": true
+                          }
+                        ],
+                        "enabled": true
+                      }
+                    ]
+                  },
+                  "enabled": true
+                }
+              ]
+            },
             "enabled": true
           }
         ],
