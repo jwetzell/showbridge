@@ -7,8 +7,7 @@
     "pretty": "prettier --write lib/*",
     "test:lib": "node tests/test.js",
     "prebuild": "rimraf dist/bin",
-    "bundle:dev": "ncc build main.js -o dist/bundle --target es2020 && cp -r lib/node_modules/@julusian/midi/prebuilds dist/bundle",
-    "build": "pkg .",
+    "bundle:dev": "ncc build main.js -o dist/bundle && cp -r lib/node_modules/@julusian/midi/prebuilds dist/bundle",
     "dev": "nodemon --exec 'node main.js -d -c config/dev.json -h dist/webui'",
     "start": "node main.js"
   },
@@ -38,18 +37,6 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.10.0",
     "nodemon": "^3.0.1",
-    "pkg": "^5.8.1",
     "prettier": "^3.0.2"
-  },
-  "pkg": {
-    "targets": [
-      "node18-linux-x64",
-      "node18-win-x64",
-      "node18-macos-x64"
-    ],
-    "outputPath": "dist/bin",
-    "assets": [
-      "node_modules/thread-stream"
-    ]
   }
 }

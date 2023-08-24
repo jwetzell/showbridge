@@ -11,15 +11,15 @@
 
 ### How to use
 - Install
-    - prebuilt binaries (check the releases section)
-    - build from source: clone and run `npm install && npm run build` to build binaries located at `dist/bin`
+    - desktop launcher (check the releases section) this is the preffered way.
+    - build from source: clone and run `npm install && node scripts/clean_install.js && npm run start`
     - via npm: `npm install -g showbridge` or run directly with npx `npx showbridge@latest -c config.json`
 - Create config file
     - sorry, this is the worst part [JSON Schema](https://showbridge.jwetzell.com/docs/schema/config)
     - good idea to start with [default.json](config/default.json)
 - Run
-    - `showbridge -c config.json`
-    - if you would like to turn on debug logging use the `-d` or `--debug` flag
+    - `npm run start -- -c config.json`
+    - if you would like to turn on debug or trace logging use the `-d/t` or `--debug/trace` flag
     - if no config file is specified then a [default config](config/default.json) will be used
 
 ## The _Basics_

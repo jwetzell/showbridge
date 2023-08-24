@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Main library for showbridge protocol router",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "pretty": "prettier --write ./**/*"
   },
@@ -26,7 +27,7 @@
     "ajv": "^8.12.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "mqtt": "^4.3.7",
     "osc-min": "^1.1.2",
     "pino": "^8.15.0",
