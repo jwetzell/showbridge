@@ -263,8 +263,9 @@ function loadConfigFromFile(filePath) {
 function loadCurrentLogFile() {
   if (logsDir) {
     const logFiles = fs.readdirSync(logsDir).filter((filename) => filename.endsWith('.log'));
+    logFiles.sort();
     if (logFiles.length > 0) {
-      currentLogFile = path.join(logsDir, logFiles[0]);
+      currentLogFile = path.join(logsDir, logFiles[logFiles.length - 1]);
     }
   }
 }
