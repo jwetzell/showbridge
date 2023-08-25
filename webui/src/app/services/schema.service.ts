@@ -332,7 +332,6 @@ export class SchemaService {
   }
 
   cleanParams(paramsSchema: SomeJSONSchema, params: any): any {
-    console.log(params);
     Object.keys(params).forEach((paramKey) => {
       // delete null/undefined params
       if (params[paramKey] === undefined || params[paramKey] === null) {
