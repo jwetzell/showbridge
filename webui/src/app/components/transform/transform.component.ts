@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Transform } from 'src/app/models/transform.model';
 import { CopyService } from 'src/app/services/copy.service';
@@ -53,7 +52,7 @@ export class TransformComponent implements OnInit {
   }
 
   update(transform: Transform) {
-    merge(this.transform, transform);
+    this.transform = transform;
     this.updated.emit(true);
   }
 

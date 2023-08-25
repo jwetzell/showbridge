@@ -2,8 +2,6 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { merge } from 'lodash';
-import { Subject } from 'rxjs';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
 import { CopyObject } from 'src/app/models/copy-object.model';
 import { ObjectInfo } from 'src/app/models/form.model';
@@ -18,7 +16,6 @@ import { SchemaService } from 'src/app/services/schema.service';
 export class ProtocolComponent {
   @Input() protocolType?: string;
   @Input() protocol?: ProtocolConfiguration;
-  @Input() openSettings: Subject<boolean> = new Subject<boolean>();
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
@@ -36,14 +33,6 @@ export class ProtocolComponent {
     this;
   }
 
-  ngOnInit() {
-    this.openSettings.subscribe((val) => {
-      if (val) {
-        this.openSettingsDialog();
-      }
-    });
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (this.protocolType) {
       this.triggerTypes = this.schemaService.getTriggerTypesForProtocol(this.protocolType);
@@ -54,7 +43,9 @@ export class ProtocolComponent {
   }
 
   protocolParamsUpdated(params: any) {
-    merge(this.protocol?.params, params);
+    if (this.protocol) {
+      this.protocol.params = params;
+    }
     this.updated.emit(true);
   }
 

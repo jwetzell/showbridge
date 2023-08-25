@@ -1,7 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
@@ -80,7 +79,7 @@ export class ActionComponent implements OnInit {
   }
 
   update(action: Action) {
-    merge(this.action, action);
+    this.action = action;
     this.updated.emit(true);
   }
 

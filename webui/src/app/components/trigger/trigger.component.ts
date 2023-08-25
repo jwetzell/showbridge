@@ -3,7 +3,6 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { CopyObject } from 'src/app/models/copy-object.model';
 import { Trigger } from 'src/app/models/trigger.model';
@@ -96,7 +95,7 @@ export class TriggerComponent implements OnInit {
   }
 
   update(trigger: Trigger) {
-    merge(this.trigger, trigger);
+    this.trigger = trigger;
     this.updated.emit(true);
   }
 
