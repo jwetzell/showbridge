@@ -20,7 +20,14 @@
         <div class="m-2">
           <app-object-form [schema]="schema" [data]="action" (updated)="update($event)"></app-object-form>
         </div>
-        <div cdkDropList (cdkDropListDropped)="drop($event)">
+        <div
+          *ngIf="action.transforms"
+          id="{{ getListId() }}"
+          cdkDropList
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListConnectedTo]="eventService.actionIdList"
+          [cdkDropListData]="action.transforms">
+          <div *ngIf="action.transforms.length === 0" class="w-full h-6"></div>
           <div cdkDrag *ngFor="let transform of action.transforms; let i = index">
             <app-transform
               [path]="path + '/transforms/' + i"
@@ -28,28 +35,28 @@
               (delete)="deleteTransform(i)"
               (updated)="transformUpdated()"></app-transform>
           </div>
-          <div *ngIf="schemaService.actionTypes.length > 0">
-            <div
-              matTooltip="Add Transform"
-              class="flex items-center justify-center w-full bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
-              [matMenuTriggerFor]="addTransformMenu">
-              <mat-icon>add</mat-icon>
-            </div>
-            <mat-menu #addTransformMenu="matMenu">
-              <button
-                mat-menu-item
-                *ngFor="let transformType of schemaService.transformTypes"
-                (click)="addTransform(transformType.type)">
-                <span>{{ transformType.name }}</span>
-              </button>
-            </mat-menu>
-            <div
-              *ngIf="copyService.getClipboardForType('Transform') | async as copyObject"
-              (click)="pasteTransform(copyObject)"
-              matTooltip="Paste Transform"
-              class="flex items-center justify-center w-full bg-green-700 hover:cursor-pointer hover:bg-green-500">
-              <mat-icon>content_paste</mat-icon>
-            </div>
+        </div>
+        <div *ngIf="schemaService.actionTypes.length > 0">
+          <div
+            matTooltip="Add Transform"
+            class="flex items-center justify-center w-full bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
+            [matMenuTriggerFor]="addTransformMenu">
+            <mat-icon>add</mat-icon>
+          </div>
+          <mat-menu #addTransformMenu="matMenu">
+            <button
+              mat-menu-item
+              *ngFor="let transformType of schemaService.transformTypes"
+              (click)="addTransform(transformType.type)">
+              <span>{{ transformType.name }}</span>
+            </button>
+          </mat-menu>
+          <div
+            *ngIf="copyService.getClipboardForType('Transform') | async as copyObject"
+            (click)="pasteTransform(copyObject)"
+            matTooltip="Paste Transform"
+            class="flex items-center justify-center w-full bg-green-700 hover:cursor-pointer hover:bg-green-500">
+            <mat-icon>content_paste</mat-icon>
           </div>
         </div>
       </div>

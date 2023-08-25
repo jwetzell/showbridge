@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
 import { CopyObject } from 'src/app/models/copy-object.model';
 import { ObjectInfo } from 'src/app/models/form.model';
+import { Trigger } from 'src/app/models/trigger.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -29,9 +30,7 @@ export class ProtocolComponent {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     public copyService: CopyService
-  ) {
-    this;
-  }
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.protocolType) {
@@ -70,7 +69,7 @@ export class ProtocolComponent {
     this.updated.emit(true);
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<Trigger[]>) {
     if (this.protocol?.triggers !== undefined) {
       moveItemInArray(this.protocol?.triggers, event.previousIndex, event.currentIndex);
       this.updated.emit(true);

@@ -15,6 +15,9 @@ export class EventService {
   private actionEvents$: Subject<ActionEventData> = new Subject<ActionEventData>();
   private transformEvents$: Subject<TransformEventData> = new Subject<TransformEventData>();
 
+  public triggerIdList: string[] = [];
+  public actionIdList: string[] = [];
+
   constructor() {
     this.reload();
   }

@@ -1,9 +1,10 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { debounceTime, tap } from 'rxjs';
+import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { CopyService } from 'src/app/services/copy.service';
@@ -34,7 +35,7 @@ export class TriggerComponent implements OnInit {
   });
 
   constructor(
-    private eventService: EventService,
+    public eventService: EventService,
     public schemaService: SchemaService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
@@ -106,9 +107,14 @@ export class TriggerComponent implements OnInit {
     this.updated.emit(true);
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    if (this.trigger?.actions !== undefined) {
-      moveItemInArray(this.trigger?.actions, event.previousIndex, event.currentIndex);
+  drop(event: CdkDragDrop<Action[]>) {
+    if (event.previousContainer === event.container) {
+      if (this.trigger?.actions !== undefined) {
+        moveItemInArray(this.trigger?.actions, event.previousIndex, event.currentIndex);
+        this.updated.emit(true);
+      }
+    } else {
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       this.updated.emit(true);
     }
   }
@@ -134,5 +140,16 @@ export class TriggerComponent implements OnInit {
     }
     this.trigger?.actions?.push(copyObject.object);
     this.updated.emit(true);
+  }
+
+  getListId(): string {
+    if (this.path) {
+      const id = this.path.replaceAll('/', '.');
+      if (!this.eventService.triggerIdList.includes(id)) {
+        this.eventService.triggerIdList.push(id);
+      }
+      return id;
+    }
+    return '';
   }
 }

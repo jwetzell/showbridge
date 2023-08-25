@@ -1,9 +1,10 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
+import { Transform } from 'src/app/models/transform.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
 import { SchemaService } from 'src/app/services/schema.service';
@@ -25,7 +26,7 @@ export class ActionComponent implements OnInit {
   indicatorColor: string = 'gray';
 
   constructor(
-    private eventService: EventService,
+    public eventService: EventService,
     public schemaService: SchemaService,
     private snackBar: MatSnackBar,
     public copyService: CopyService
@@ -49,6 +50,9 @@ export class ActionComponent implements OnInit {
     }
     if (this.action?.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Action', this.action.type);
+    }
+    if (this.action && this.action?.transforms === undefined) {
+      this.action.transforms = [];
     }
   }
 
@@ -83,9 +87,14 @@ export class ActionComponent implements OnInit {
     this.updated.emit(true);
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    if (this.action?.transforms !== undefined) {
-      moveItemInArray(this.action?.transforms, event.previousIndex, event.currentIndex);
+  drop(event: CdkDragDrop<Transform[]>) {
+    if (event.previousContainer === event.container) {
+      if (this.action?.transforms !== undefined) {
+        moveItemInArray(this.action?.transforms, event.previousIndex, event.currentIndex);
+        this.updated.emit(true);
+      }
+    } else {
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       this.updated.emit(true);
     }
   }
@@ -99,7 +108,16 @@ export class ActionComponent implements OnInit {
     return undefined;
   }
 
-  addSubAction(actionType: string) {}
+  addSubAction(actionType: string) {
+    if (this.action?.params) {
+      if (this.action.params['actions'] === undefined) {
+        this.action.params['actions'] = [];
+      }
+      const actionTemplate = this.schemaService.getTemplateForAction(actionType);
+      this.action.params['actions'].push(actionTemplate);
+      this.updated.emit(true);
+    }
+  }
 
   deleteSubAction(index: number) {
     if (this.action?.params) {
@@ -127,5 +145,16 @@ export class ActionComponent implements OnInit {
     }
     this.action?.transforms?.push(copyObject.object);
     this.updated.emit(true);
+  }
+
+  getListId(): string {
+    if (this.path) {
+      const id = this.path.replaceAll('/', '.');
+      if (!this.eventService.actionIdList.includes(id)) {
+        this.eventService.actionIdList.push(id);
+      }
+      return id;
+    }
+    return '';
   }
 }
