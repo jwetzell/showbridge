@@ -17,8 +17,6 @@ export class ConfigComponent {
   constructor(public schemaService: SchemaService) {}
 
   protocolUpdate() {
-    console.log('config updated');
-    console.log(this.config);
     this.updated.emit(true);
   }
 
