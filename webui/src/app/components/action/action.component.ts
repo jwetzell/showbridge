@@ -1,6 +1,9 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
@@ -21,15 +24,24 @@ export class ActionComponent implements OnInit {
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
+  @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
+
   schema: any;
 
   indicatorColor: string = 'gray';
+
+  formGroup: FormGroup = new FormGroup({
+    type: new FormControl('any'),
+    comment: new FormControl(''),
+    enabled: new FormControl(true),
+  });
 
   constructor(
     public eventService: EventService,
     public schemaService: SchemaService,
     private snackBar: MatSnackBar,
-    public copyService: CopyService
+    public copyService: CopyService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +66,18 @@ export class ActionComponent implements OnInit {
     if (this.action && this.action?.transforms === undefined) {
       this.action.transforms = [];
     }
+
+    if (this.action && this.formGroup) {
+      this.formGroup.patchValue(this.action);
+    }
+    this.formGroup.valueChanges.subscribe((value) => {
+      this.formUpdated();
+    });
+  }
+
+  formUpdated() {
+    merge(this.action, this.formGroup.value);
+    this.updated.emit(true);
   }
 
   transformUpdated() {
@@ -82,8 +106,15 @@ export class ActionComponent implements OnInit {
     this.updated.emit(true);
   }
 
-  update(action: Action) {
-    this.action = action;
+  update() {
+    this.updated.emit(true);
+  }
+
+  paramsUpdated(params: any) {
+    if (this.action) {
+      this.action.params = params;
+    }
+
     this.updated.emit(true);
   }
 
@@ -156,5 +187,11 @@ export class ActionComponent implements OnInit {
       return id;
     }
     return '';
+  }
+
+  openSettingsDialog() {
+    if (this.dialogRef) {
+      this.dialog.open(this.dialogRef);
+    }
   }
 }

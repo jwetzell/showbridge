@@ -21,7 +21,6 @@ import { AppComponent } from './app.component';
 import { ActionComponent } from './components/action/action.component';
 import { ConfigComponent } from './components/config/config.component';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
-import { ObjectFormComponent } from './components/object-form/object-form.component';
 import { ParamsFormComponent } from './components/params-form/params-form.component';
 import { ProtocolComponent } from './components/protocol/protocol.component';
 import { TransformComponent } from './components/transform/transform.component';
@@ -35,7 +34,6 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     ActionComponent,
     TriggerComponent,
     ProtocolComponent,
-    ObjectFormComponent,
     ParamsFormComponent,
     ImportConfigComponent,
   ],

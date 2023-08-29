@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { merge } from 'lodash';
 import { debounceTime, tap } from 'rxjs';
 import { Transform } from 'src/app/models/transform.model';
 import { CopyService } from 'src/app/services/copy.service';
@@ -16,6 +19,13 @@ export class TransformComponent implements OnInit {
 
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
+
+  formGroup: FormGroup = new FormGroup({
+    type: new FormControl('any'),
+    comment: new FormControl(''),
+    enabled: new FormControl(true),
+  });
 
   schema: any;
   indicatorColor: string = 'gray';
@@ -23,7 +33,8 @@ export class TransformComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private schemaService: SchemaService,
-    private copyService: CopyService
+    private copyService: CopyService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -45,14 +56,33 @@ export class TransformComponent implements OnInit {
     if (this.transform?.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Transform', this.transform.type);
     }
+
+    if (this.transform && this.formGroup) {
+      this.formGroup.patchValue(this.transform);
+    }
+    this.formGroup.valueChanges.subscribe((value) => {
+      this.formUpdated();
+    });
+  }
+
+  formUpdated() {
+    merge(this.transform, this.formGroup.value);
+    this.updated.emit(true);
+  }
+
+  paramsUpdated(params: any) {
+    if (this.transform) {
+      this.transform.params = params;
+    }
+
+    this.updated.emit(true);
   }
 
   deleteMe() {
     this.delete.emit(this.path);
   }
 
-  update(transform: Transform) {
-    this.transform = transform;
+  update() {
     this.updated.emit(true);
   }
 
@@ -62,6 +92,12 @@ export class TransformComponent implements OnInit {
         type: 'Transform',
         object: this.transform,
       });
+    }
+  }
+
+  openSettingsDialog() {
+    if (this.dialogRef) {
+      this.dialog.open(this.dialogRef);
     }
   }
 }
