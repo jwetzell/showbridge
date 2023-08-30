@@ -7,6 +7,7 @@ import { CopyObject } from '../models/copy-object.model';
 })
 export class CopyService {
   private maxHistoryLength: number = 20;
+  // TODO(jwetzell): actually implement copy history
   history: CopyObject[] = [];
 
   currentCopyObject: BehaviorSubject<CopyObject | undefined> = new BehaviorSubject<CopyObject | undefined>(undefined);

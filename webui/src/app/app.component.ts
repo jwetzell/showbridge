@@ -31,12 +31,15 @@ export class AppComponent {
     // this.configService.setupForDummySite();
     // this.schemaService.setupForDummySite();
     this.schemaService.loadSchema();
+
+    // NOTE(jwetzell): allows configstate to be updated via code
     this.configService.currentlyShownConfigState.subscribe((currentConfig) => {
       if (currentConfig) {
         this.currentlyShownConfigState = currentConfig;
       }
     });
 
+    // NOTE(jwetzell): notify user when currently copied obect is updated
     this.copyService.currentCopyObject.pipe(filter((val) => !!val)).subscribe((object) => {
       this.snackBar.open(`${object?.type} copied...`, 'Dismiss', {
         duration: 3000,
@@ -53,17 +56,21 @@ export class AppComponent {
   }
 
   applyConfig() {
+    // TODO(jwetzell): try to figure how to get rid of this
     if (this.configService.isDummySite) {
       this.snackBar.open('Dummy site nothing to save to!', 'Save', {
         duration: 3000,
       });
       return;
     }
+
+    // NOTE(jwetzell): update config via HTTP endpoint
     if (this.currentlyShownConfigState) {
       this.configService.uploadConfig(this.currentlyShownConfigState.config).subscribe((resp) => {
         if (this.currentlyShownConfigState) {
           this.configService.setCurrentlyLiveConfigState(this.currentlyShownConfigState);
 
+          // NOTE(jwetzell): check for a updated HTTP port
           const newHttpPort = get(this.currentlyShownConfigState.config, 'http.params.port');
 
           if (newHttpPort && newHttpPort !== parseInt(location.port)) {
@@ -75,6 +82,7 @@ export class AppComponent {
           });
 
           configAppliedSnackBar.afterOpened().subscribe((value) => {
+            // NOTE(jwetzell): reload right away if not HTTP port change
             if (!this.shouldRedirect) {
               this.eventService.reload();
             }
@@ -82,6 +90,7 @@ export class AppComponent {
 
           configAppliedSnackBar.afterDismissed().subscribe((value) => {
             if (this.shouldRedirect) {
+              // NOTE(jwetzell): notify user that we are redirecting
               this.snackBar
                 .open('HTTP port changed redirecting...', 'Redirect', {
                   duration: 3000,
@@ -126,6 +135,7 @@ export class AppComponent {
     }
   }
 
+  // NOTE(jwetzell): load configstate from revisions history
   loadConfigState(configState: ConfigState) {
     this.configService.updateCurrentlyShownConfig(configState);
   }

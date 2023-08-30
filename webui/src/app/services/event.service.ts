@@ -37,6 +37,7 @@ export class EventService {
         this.status$.next('error');
       };
 
+      // NOTE(jwetzell): websocket messages from router to webui
       this.socket.onmessage = (message: MessageEvent) => {
         const messageObj = JSON.parse(message.data);
         switch (messageObj.eventType) {
