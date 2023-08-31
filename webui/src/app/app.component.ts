@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 import { filter } from 'rxjs';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { ConfigState } from './models/config.models';

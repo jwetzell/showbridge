@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import Ajv, { ErrorObject, JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
-import { noop } from 'lodash';
+import { noop } from 'lodash-es';
 import { Action } from '../models/action.model';
 import { ConfigFile } from '../models/config.models';
 import { ObjectInfo, ParamsFormInfo } from '../models/form.model';

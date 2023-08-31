@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { cloneDeep, isEqual, orderBy } from 'lodash';
+import { cloneDeep, isEqual, orderBy } from 'lodash-es';
 import { BehaviorSubject } from 'rxjs';
 import { ConfigFile, ConfigState } from '../models/config.models';
 import { SchemaService } from './schema.service';

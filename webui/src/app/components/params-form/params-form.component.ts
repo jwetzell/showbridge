@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
-import { cloneDeep, has } from 'lodash';
+import { cloneDeep, has } from 'lodash-es';
 import { Subscription } from 'rxjs';
 import { ParamsFormInfo } from 'src/app/models/form.model';
 import { SchemaService } from 'src/app/services/schema.service';

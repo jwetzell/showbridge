@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { merge } from 'lodash';
+import { merge } from 'lodash-es';
 import { debounceTime, tap } from 'rxjs';
 import { Transform } from 'src/app/models/transform.model';
 import { CopyService } from 'src/app/services/copy.service';
