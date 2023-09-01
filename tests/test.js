@@ -8,7 +8,7 @@ import('../lib/index.js').then(({ Config, Router, Utils, Messages }) => {
 
   const { OSCMessage, MIDIMessage, UDPMessage, TCPMessage, MQTTMessage, WebSocketMessage, HTTPMessage } = Messages;
 
-  logger.info(`app: loading test config`);
+  logger.info(`test: loading test config`);
   const config = new Config(testConfig, schema);
   const router = new Router(config);
 
