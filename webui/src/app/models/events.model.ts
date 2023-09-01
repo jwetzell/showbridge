@@ -3,14 +3,14 @@ import { Transform } from './transform.model';
 import { Trigger } from './trigger.model';
 
 export interface MessageEventData {
-  messageType: string;
+  eventType: 'message';
   data: {
     [key: string]: any;
   };
 }
 
 export interface TriggerEventData {
-  messageType: string;
+  eventType: 'trigger';
   data: {
     path: string;
     fired: boolean;
@@ -19,7 +19,7 @@ export interface TriggerEventData {
 }
 
 export interface ActionEventData {
-  messageType: string;
+  eventType: 'action';
   data: {
     path: string;
     fired: boolean;
@@ -28,10 +28,27 @@ export interface ActionEventData {
 }
 
 export interface TransformEventData {
-  messageType: string;
+  eventType: 'transform';
   data: {
     path: string;
     fired: boolean;
     transform: Transform;
   };
+}
+
+export interface ProtocolStatusEventData {
+  eventType: 'protocol_status';
+  data: {
+    cloud: CloudStatus;
+    mqtt: MQTTStatus;
+  };
+}
+
+export interface CloudStatus {
+  connected: boolean;
+  id?: string;
+}
+
+export interface MQTTStatus {
+  connected: boolean;
 }

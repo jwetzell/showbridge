@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, filter } from 'rxjs';
-import { ActionEventData, MessageEventData, TransformEventData, TriggerEventData } from '../models/events.model';
+import {
+  ActionEventData,
+  MessageEventData,
+  ProtocolStatusEventData,
+  TransformEventData,
+  TriggerEventData,
+} from '../models/events.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,6 +20,7 @@ export class EventService {
   private triggerEvents$: Subject<TriggerEventData> = new Subject<TriggerEventData>();
   private actionEvents$: Subject<ActionEventData> = new Subject<ActionEventData>();
   private transformEvents$: Subject<TransformEventData> = new Subject<TransformEventData>();
+  public protocolStatus$: Subject<ProtocolStatusEventData> = new Subject<ProtocolStatusEventData>();
 
   public triggerIdList: string[] = [];
   public actionIdList: string[] = [];
@@ -27,6 +34,10 @@ export class EventService {
       this.socket = new WebSocket(this.baseUrl, 'webui');
       this.socket.onopen = (ev) => {
         this.status$.next('open');
+        if (this.socket) {
+          // TODO(jwetzell): periodically check for status updates or have router detect status changes and send
+          this.socket.send('protocol_status');
+        }
       };
 
       this.socket.onclose = (ev) => {
@@ -52,6 +63,9 @@ export class EventService {
             break;
           case 'transform':
             this.transformEvents$.next(messageObj);
+            break;
+          case 'protocol_status':
+            this.protocolStatus$.next(messageObj);
             break;
           default:
             console.log(`unhandled websocket message type = ${messageObj.eventType}`);
