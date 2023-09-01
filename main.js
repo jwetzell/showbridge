@@ -55,7 +55,7 @@ import('./lib/index.js').then(({ Config, Router, Utils }) => {
       const filePath = path.resolve(options.html);
       router.servePath(filePath);
     } else {
-      console.error(`provided html path = ${options.html} does not seem to exist skipping...`);
+      logger.error(`app: provided html path = ${options.html} does not seem to exist skipping...`);
     }
   }
 
