@@ -117,7 +117,7 @@ import('./lib/index.js').then(({ Config, Router, Utils }) => {
       case 'destroy':
         logger.info('app: process received a request to tear down');
         router.stop();
-      // eslint-disable-next-line no-fallthrough
+        break;
       default:
         logger.error(`app: unhandled process event type = ${message.eventType}`);
         break;
