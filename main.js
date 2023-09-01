@@ -115,6 +115,7 @@ import('./lib/index.js').then(({ Config, Router, Utils }) => {
         }
         break;
       case 'destroy':
+        logger.info('app: process received a request to tear down');
         router.stop();
       // eslint-disable-next-line no-fallthrough
       default:
