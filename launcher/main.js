@@ -353,11 +353,11 @@ if (!lock) {
         () => [
           nodeBin,
           path.join(rootPath, './dist/bundle/index.js'),
-          '-c',
+          '--config',
           configFilePath,
-          '-h',
+          '--webui',
           './dist/webui',
-          '-t',
+          '--trace',
         ],
         {
           name: 'showbridge process',

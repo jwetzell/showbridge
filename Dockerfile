@@ -12,4 +12,4 @@ COPY main.js main.js
 COPY lib lib
 COPY schema schema
 COPY config config
-ENTRYPOINT [ "node", "main.js", "-h","dist/webui"]
+ENTRYPOINT [ "node", "main.js", "--webui","dist/webui"]

@@ -8,19 +8,20 @@ const defaultConfig = require('./config/default.json');
 const packageInfo = require('./package.json');
 const schema = require('./schema/config.schema.json');
 
+program.name(packageInfo.name);
+program.version(packageInfo.version);
+program.description('Simple protocol router /s');
+program.option('-c, --config <path>', 'location of config file', undefined);
+program.option('-w, --webui <path>', 'location of webui html to serve', undefined);
+program.option('-d, --debug', 'turn on debug logging', false);
+program.option('-t, --trace', 'turn on trace logging', false);
+program.parse(process.argv);
+
+const options = program.opts();
+const isChildProcess = process.send !== undefined;
+
 import('./lib/index.js').then(({ Config, Router, Utils }) => {
   const logger = Utils.logger;
-
-  program.name(packageInfo.name).description('Simple protocol router /s');
-  program.option('-c, --config <path>', 'location of config file', undefined);
-  program.option('-h, --html <path>', 'location of html to serve', undefined);
-  program.option('-d, --debug', 'turn on debug logging', false);
-  program.option('-t, --trace', 'turn on trace logging', false);
-  program.parse(process.argv);
-
-  const options = program.opts();
-
-  const isChildProcess = process.send !== undefined;
 
   if (options.debug) {
     logger.level = 20;
@@ -33,6 +34,7 @@ import('./lib/index.js').then(({ Config, Router, Utils }) => {
   logger.debug(`app: starting ${packageInfo.name} version: ${packageInfo.version}`);
 
   let config = {};
+
   // if there is a config argument load it as the config
   if (options.config) {
     try {
@@ -50,12 +52,12 @@ import('./lib/index.js').then(({ Config, Router, Utils }) => {
   }
 
   const router = new Router(config);
-  if (options.html) {
-    if (existsSync(options.html)) {
-      const filePath = path.resolve(options.html);
+  if (options.webui) {
+    if (existsSync(options.webui)) {
+      const filePath = path.resolve(options.webui);
       router.servePath(filePath);
     } else {
-      logger.error(`app: provided html path = ${options.html} does not seem to exist skipping...`);
+      logger.error(`app: provided webui path = ${options.webui} does not seem to exist skipping...`);
     }
   }
 

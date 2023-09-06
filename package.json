@@ -8,7 +8,7 @@
     "test:lib": "node tests/test.js",
     "prebuild": "rimraf dist/bin",
     "bundle:dev": "ncc build main.js -o dist/bundle && cp -r lib/node_modules/@julusian/midi/prebuilds dist/bundle",
-    "dev": "nodemon --exec 'node main.js -d -c config/dev.json -h dist/webui'",
+    "dev": "nodemon --exec 'node main.js -d -c config/dev.json --webui dist/webui'",
     "start": "node main.js"
   },
   "author": {
@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@vercel/ncc": "^0.36.1",
-    "esbuild": "^0.19.2",
     "eslint": "^8.48.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.0.0",
