@@ -11,7 +11,7 @@ import {
   providedIn: 'root',
 })
 export class EventService {
-  baseUrl: string = `ws://${location.host}`;
+  baseUrl: string = `${window.location.protocol.replace('http', 'ws')}//${location.host}`;
   socket?: WebSocket;
 
   status$: BehaviorSubject<string> = new BehaviorSubject<string>('closed');
