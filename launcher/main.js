@@ -287,6 +287,18 @@ function getNodeBinaryLocation(isPackaged) {
   return nodeBin;
 }
 
+function getShowbridgeLocation(isPackaged) {
+  let showbridgePath = null;
+
+  if (!isPackaged) {
+    showbridgePath = './launcher/node_modules/showbridge/main.js';
+  } else {
+    showbridgePath = './dist/bundle/index.js';
+  }
+
+  return showbridgePath;
+}
+
 const lock = app.requestSingleInstanceLock();
 
 if (!lock) {
@@ -349,10 +361,17 @@ if (!lock) {
         app.exit(11);
       }
 
+      const showbridgePath = getShowbridgeLocation(app.isPackaged);
+
+      if (!showbridgePath) {
+        dialog.showErrorBox('Unable to start', 'Failed to find showbridge app to run');
+        app.exit(11);
+      }
+
       showbridgeProcess = respawn(
         () => [
           nodeBin,
-          path.join(rootPath, './dist/bundle/index.js'),
+          path.join(rootPath, showbridgePath),
           '--config',
           configFilePath,
           '--webui',

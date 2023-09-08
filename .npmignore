@@ -8,3 +8,7 @@ tests
 .prettierignore
 .eslintrc.js
 .nvmrc
+dist
+lib
+.cache
+Dockerfile

@@ -20,7 +20,7 @@ program.parse(process.argv);
 const options = program.opts();
 const isChildProcess = process.send !== undefined;
 
-import('./lib/index.js').then(({ Config, Router, Utils }) => {
+import('showbridge-lib').then(({ Config, Router, Utils }) => {
   const logger = Utils.logger;
 
   if (options.debug) {

@@ -14,7 +14,10 @@ exports.default = async function (context) {
 
   console.log('bundling main.js');
   execSync(
-    `ncc build ${path.join(__dirname, '../main.js')} -o ${path.join(__dirname, '../dist/bundle')} --target es2020`,
+    `ncc build ${path.join(__dirname, '../launcher/node_modules/showbridge/main.js')} -o ${path.join(
+      __dirname,
+      '../dist/bundle'
+    )} --target es2020`,
     {
       stdio: 'inherit',
     }
@@ -43,7 +46,7 @@ exports.default = async function (context) {
       process.exit(1);
   }
 
-  const midiPrebuildSourcePath = '../lib/node_modules/@julusian/midi/prebuilds';
+  const midiPrebuildSourcePath = '../launcher/node_modules/@julusian/midi/prebuilds';
   const midiPrebuildDestPath = path.join(bundlePathBase, 'prebuilds');
 
   if (!fs.existsSync(path.join(midiPrebuildSourcePath, `midi-${platform}-${arch}`))) {

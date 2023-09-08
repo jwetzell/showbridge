@@ -7,7 +7,6 @@
     "pretty": "prettier --write lib/*",
     "test:lib": "node tests/test.js",
     "prebuild": "rimraf dist/bin",
-    "bundle:dev": "ncc build main.js -o dist/bundle && cp -r lib/node_modules/@julusian/midi/prebuilds dist/bundle",
     "dev": "nodemon --exec 'node main.js -d -c config/dev.json --webui dist/webui'",
     "start": "node main.js"
   },
@@ -28,7 +27,8 @@
   "dependencies": {
     "commander": "^11.0.0",
     "fs-extra": "^11.1.1",
-    "rimraf": "^5.0.1"
+    "rimraf": "^5.0.1",
+    "showbridge-lib": "0.1.1"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.38.0",
