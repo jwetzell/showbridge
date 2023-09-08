@@ -11,7 +11,7 @@
 
 ### How to use
 - Install
-    - desktop launcher (check the releases section) this is the preffered way.
+    - desktop launcher (check the releases section) this is the easiest method to get up and running and includes the web user interface.
     - build from source: clone and run `npm install && node scripts/clean_install.js && npm run start`
     - via npm: `npm install -g showbridge` or run directly with npx `npx showbridge@latest -c config.json`
 - Create config file
@@ -23,6 +23,7 @@
     - if no config file is specified then a [default config](config/default.json) will be used
 
 ## The _Basics_
+- router: throughout documentation I will use the term router to refer to configured/running instance of showbridge
 - triggers: when a message comes in triggers enforce some criteria on the incoming message. If a message "ticks all the boxes" the actions of the trigger are then performed. triggers do not stack each trigger in the array is evaluated in isolation.
 - actions: actions are what should be done as a result of a trigger being well triggered, actions can transform the message that they act on using transforms
 - transforms: transforms transform messages, the transformations are localized to the action the transform is a part of
@@ -134,8 +135,8 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 
 
 ## Templating
-Alright there is a lot of references to templating. There is no secret sauce it is simply [lodash templating](https://lodash.com/docs/4.17.15#template) which is compatible with JS template literals (backtick strings)
-- **examples**: assume incoming message is a midi note on message on channel 1 with note value = 60 and velocity = 127
+Alright there has been a lot of references to templating. There is no secret sauce it is simply [lodash templating](https://lodash.com/docs/4.17.15#template) which is compatible with JS template literals (backtick strings)
+- **examples**: assume an incoming message is a midi note_on message on channel 1 with note value = 60 and velocity = 127
     - `"/midi/${msg.channel}/${msg.status}/${msg.note}"` -> `/midi/1/note_on/60`
     - `"${msg.velocity - 10}"` -> `117`
     - `"${msg.note + 12}"` -> `72`
@@ -166,7 +167,7 @@ For templating purposes (any param starting with an underscore `_`) the incoming
     - topic: the topic of the published MQTT message
 - **osc**
     - address: address of the incoming osc message /an/osc/address
-    - addressParts: an array of address i.e. ["an","osc","address"] 
+    - addressParts: an array of address segments i.e. ["an","osc","address"] 
     - args: array of args of the incoming osc message [0,"1",2.0]
     - bytes: the osc message as bytes
 - **tcp**
@@ -179,13 +180,16 @@ For templating purposes (any param starting with an underscore `_`) the incoming
     - payload: ws message content (if this is JSON it will be parsed into an object)
 
 ## Connecting instances remotely?
-Remotely connecting two or more router instances is supported via the cloud config sections. The routers can send messages through the cloud server using the cloud-output action mentioned above. To control what messages routers are listening to when multiple routers are connected to the same cloud server the concept of rooms is used. A room is simply a string i.e 'room1', 'super-secret-room-name', etc. when a cloud-output action is used the configured room(s) property of that action controls what room(s) the message will be sent to. The room(s) property of the cloud params controls what room(s) a router is joined to. When a cloud-output sends a message to a room that a router is configured to be in then the router will receive the message sent and process it as if it was a native message.
+Remotely connecting two or more router instances is supported via [showbridge-cloud](https://github.com/jwetzell/showbridge-cloud). The only configuration necessary is the url of the cloud server (for a **publicly** available server you can use https://showbridg-cloud.jwetzell.com) the other necessary configuration option is room(s) explained below.
+
+Routers can send messages through the cloud server using the cloud-output action mentioned above. To control what messages routers are listening to when multiple routers are connected to the same cloud server the concept of rooms is used. A room is simply a string i.e 'room1', 'super-secret-room-name', etc. when a cloud-output action is used the configured room(s) property of that action controls what room(s) the message will be sent to. The room(s) property of the cloud params controls what room(s) a router is joined to. When a cloud-output sends a message to a room that a router is configured to be in then the router will receive the message sent and process it as if it was a native message.
+
 ### Cloud Example: not sure this will make things any more clear but....
-- assume all routers are configure to connect to the same cloud server
+- assume all routers are configured to connect to the same cloud server
 - router1 is setup to join `room1` and log all midi-note-on messages
 - router2 is setup to join `room1` and `room2` and log all midi-note-on messages
 - router3 is not setup to be a part of any room
     - router3 is configured with a midi-note-on trigger with a cloud-output action that has rooms = ["room1","room2"]
-- router3 now receives a midi note_on message the cloud-output action will cause the following
+- router3 now receives a midi note_on message. The cloud-output action will cause the following.
     - router1 will log a midi-note-on message
     - router2 will log 2 midi-note-on messages (this is because it is joined to 2 rooms and the cloud-output action was configured to send the message to both of the rooms that router2 was joined to)
