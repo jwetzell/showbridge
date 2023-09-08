@@ -12,11 +12,8 @@ FROM node:18-alpine
 WORKDIR /app
 COPY package.json .
 RUN npm install
-COPY ./lib/package.json ./lib/package.json
-RUN cd lib && npm install
 COPY --from=build /build/dist/webui /app/webui
 COPY main.js main.js
-COPY lib lib
 COPY schema schema
 COPY config config
 ENTRYPOINT [ "node", "main.js", "--webui","webui"]
