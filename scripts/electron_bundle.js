@@ -12,16 +12,10 @@ exports.default = async function (context) {
   }
   console.log('bundling things up for electron app');
 
-  console.log('bundling main.js');
-  execSync(
-    `ncc build ${path.join(__dirname, '../launcher/node_modules/showbridge/main.js')} -o ${path.join(
-      __dirname,
-      '../dist/bundle'
-    )} --target es2020`,
-    {
-      stdio: 'inherit',
-    }
-  );
+  console.log('building tailwind.css');
+  execSync(`npm run tailwind`, {
+    stdio: 'inherit',
+  });
 
   console.log('building webui');
   execSync(`cd ../webui && npm install && npm run build`, {
