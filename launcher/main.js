@@ -291,9 +291,9 @@ function getShowbridgeLocation(isPackaged) {
   let showbridgePath = null;
 
   if (!isPackaged) {
-    showbridgePath = './launcher/node_modules/showbridge/main.js';
+    showbridgePath = './main.js';
   } else {
-    showbridgePath = './dist/bundle/index.js';
+    showbridgePath = './showbridge/main.js';
   }
 
   return showbridgePath;
@@ -565,6 +565,7 @@ if (!lock) {
   });
 }
 
+// TODO(jwetzell): better quiting logic as it doesn't always seem to quit right
 app.on('will-quit', () => {
   console.log('app will quit');
   if (showbridgeProcess) {
@@ -578,6 +579,7 @@ app.on('will-quit', () => {
 });
 
 app.on('window-all-closed', () => {
+  console.log('app window all closed');
   if (showbridgeProcess) {
     restartProcess = false;
     if (showbridgeProcess.child) {
