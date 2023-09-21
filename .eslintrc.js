@@ -14,5 +14,6 @@ module.exports = {
     'class-methods-use-this': 'off',
     'import/extensions': 'off',
     'import/no-relative-packages': 'off',
+    'import/no-cycle': 'off',
   },
 };

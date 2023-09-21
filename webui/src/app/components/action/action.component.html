@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="action.type === 'delay'">
+    <ng-container *ngIf="action.type === 'delay' || action.type === 'random'">
       <div class="w-full h-full" *ngIf="schemaService.actionTypes.length > 0">
         <div
           matTooltip="Add Subaction"

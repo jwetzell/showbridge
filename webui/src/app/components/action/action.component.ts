@@ -131,7 +131,11 @@ export class ActionComponent implements OnInit {
   }
 
   getSubActions(): Action[] | undefined {
-    if (this.action?.type === 'delay' && this.action.params && this.action.params['actions']) {
+    if (
+      (this.action?.type === 'delay' || this.action?.type === 'random') &&
+      this.action.params &&
+      this.action.params['actions']
+    ) {
       if (typeof this.action.params['actions'] === 'object') {
         return this.action.params['actions'];
       }

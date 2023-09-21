@@ -314,7 +314,8 @@
           { "$ref": "#/definitions/ActionHTTP" },
           { "$ref": "#/definitions/ActionMQTTOutput" },
           { "$ref": "#/definitions/ActionCloudOutput" },
-          { "$ref": "#/definitions/ActionDelay" }
+          { "$ref": "#/definitions/ActionDelay" },
+          { "$ref": "#/definitions/ActionRandom" }
         ]
       }
     },
@@ -1237,6 +1238,43 @@
             }
           },
           "required": ["method"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this action is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "ActionRandom": {
+      "title": "Random",
+      "description": "This action will execute a randomly selected action from the configured subactions",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "random"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
+        },
+        "params": {
+          "description": "random action params",
+          "type": "object",
+          "properties": {
+            "actions": {
+              "description": "array of actions to randomly pick from",
+              "type": "array",
+              "$ref": "#/definitions/ActionList"
+            }
+          },
+          "required": ["actions"],
           "additionalProperties": false
         },
         "enabled": {
