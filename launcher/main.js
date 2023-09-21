@@ -293,7 +293,7 @@ function getShowbridgeLocation(isPackaged) {
   if (!isPackaged) {
     showbridgePath = './main.js';
   } else {
-    showbridgePath = './showbridge/main.js';
+    showbridgePath = './dist/bundle/index.js';
   }
 
   return showbridgePath;

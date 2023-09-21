@@ -90,10 +90,6 @@
     },
     "extraResources": [
       {
-        "from": "./node_modules/showbridge",
-        "to": "./showbridge"
-      },
-      {
         "from": "../dist/bundle",
         "to": "./dist/bundle"
       },

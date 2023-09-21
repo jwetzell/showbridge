@@ -17,6 +17,17 @@ exports.default = async function (context) {
     stdio: 'inherit',
   });
 
+  console.log('bundling showbridge main.js');
+  execSync(
+    `ncc build ${path.join(__dirname, '../launcher/node_modules/showbridge/main.js')} -o ${path.join(
+      __dirname,
+      '../dist/bundle'
+    )} --target es2020`,
+    {
+      stdio: 'inherit',
+    }
+  );
+
   console.log('building webui');
   execSync(`cd ../webui && npm install && npm run build`, {
     stdio: 'inherit',
