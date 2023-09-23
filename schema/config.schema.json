@@ -36,7 +36,9 @@
             "oneOf": [
               { "$ref": "#/definitions/TriggerSender" },
               { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerAny" }
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerAnd" },
+              { "$ref": "#/definitions/TriggerOr" }
             ]
           }
         }
@@ -56,7 +58,9 @@
             "oneOf": [
               { "$ref": "#/definitions/TriggerSender" },
               { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerAny" }
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerOr" },
+              { "$ref": "#/definitions/TriggerAnd" }
             ]
           }
         }
@@ -78,7 +82,9 @@
               { "$ref": "#/definitions/TriggerRegex" },
               { "$ref": "#/definitions/TriggerBytesEqual" },
               { "$ref": "#/definitions/TriggerOSCAddress" },
-              { "$ref": "#/definitions/TriggerAny" }
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerOr" },
+              { "$ref": "#/definitions/TriggerAnd" }
             ]
           }
         }
@@ -118,7 +124,9 @@
               { "$ref": "#/definitions/TriggerRegex" },
               { "$ref": "#/definitions/TriggerSender" },
               { "$ref": "#/definitions/TriggerBytesEqual" },
-              { "$ref": "#/definitions/TriggerAny" }
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerOr" },
+              { "$ref": "#/definitions/TriggerAnd" }
             ]
           }
         }
@@ -158,7 +166,9 @@
               { "$ref": "#/definitions/TriggerRegex" },
               { "$ref": "#/definitions/TriggerSender" },
               { "$ref": "#/definitions/TriggerBytesEqual" },
-              { "$ref": "#/definitions/TriggerAny" }
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerOr" },
+              { "$ref": "#/definitions/TriggerAnd" }
             ]
           }
         }
@@ -197,7 +207,9 @@
               { "$ref": "#/definitions/TriggerMIDINoteOn" },
               { "$ref": "#/definitions/TriggerMIDIControlChange" },
               { "$ref": "#/definitions/TriggerMIDIProgramChange" },
-              { "$ref": "#/definitions/TriggerAny" }
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerOr" },
+              { "$ref": "#/definitions/TriggerAnd" }
             ]
           }
         }
@@ -241,7 +253,12 @@
           "type": "array",
           "items": {
             "type": "object",
-            "oneOf": [{ "$ref": "#/definitions/TriggerRegex" }, { "$ref": "#/definitions/TriggerAny" }]
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerOr" },
+              { "$ref": "#/definitions/TriggerAnd" }
+            ]
           }
         }
       },
@@ -1371,6 +1388,103 @@
         }
       },
       "required": ["type", "params", "enabled"],
+      "additionalProperties": false
+    },
+
+    "TriggerList": {
+      "description": "List of triggers",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          { "$ref": "#/definitions/TriggerAny" },
+          { "$ref": "#/definitions/TriggerOr" },
+          { "$ref": "#/definitions/TriggerAnd" },
+          { "$ref": "#/definitions/TriggerRegex" },
+          { "$ref": "#/definitions/TriggerSender" },
+          { "$ref": "#/definitions/TriggerBytesEqual" },
+          { "$ref": "#/definitions/TriggerOSCAddress" },
+          { "$ref": "#/definitions/TriggerMIDINoteOff" },
+          { "$ref": "#/definitions/TriggerMIDINoteOn" },
+          { "$ref": "#/definitions/TriggerMIDIControlChange" },
+          { "$ref": "#/definitions/TriggerMIDIProgramChange" }
+        ]
+      }
+    },
+
+    "TriggerOr": {
+      "title": "Or",
+      "description": "This trigger will match messages that match one of the configured triggers",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "or"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "description": "Or trigger params",
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "description": "list of triggers",
+              "type": "array",
+              "$ref": "#/definitions/TriggerList"
+            }
+          },
+          "required": ["triggers"],
+          "additionalProperties": false
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled"],
+      "additionalProperties": false
+    },
+
+    "TriggerAnd": {
+      "title": "And",
+      "description": "This trigger will match messages that match all the triggers",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "and"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "description": "And trigger params",
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "description": "list of triggers",
+              "type": "array",
+              "$ref": "#/definitions/TriggerList"
+            }
+          },
+          "required": ["triggers"],
+          "additionalProperties": false
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled"],
       "additionalProperties": false
     },
 
