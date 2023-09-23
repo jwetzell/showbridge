@@ -23,7 +23,8 @@ let tray;
 let configDir;
 let configFilePath;
 let logsDir;
-let rotatingLogStream;
+let showbridgeLogStream;
+let routerLogStream;
 let currentLogFile;
 
 function toggleWindow() {
@@ -312,14 +313,24 @@ if (!lock) {
   logsDir = path.join(configDir, 'logs');
   // TODO(jwetzell): add logging for launcher logs. Use these log files for the logs view
   // TODO(jwetzell): add menu links to open the config directory
-  rotatingLogStream = fileStreamRotator.getStream({
+  showbridgeLogStream = fileStreamRotator.getStream({
     filename: path.join(logsDir, 'showbridge-%DATE%'),
     extension: '.log',
     frequency: 'daily',
     date_format: 'YYYY-MM-DD',
     size: '100m',
     max_logs: '7d',
-    audit_file: path.join(logsDir, 'audit.json'),
+    audit_file: path.join(logsDir, 'showbridge-audit.json'),
+  });
+
+  routerLogStream = fileStreamRotator.getStream({
+    filename: path.join(logsDir, 'router-%DATE%'),
+    extension: '.log',
+    frequency: 'daily',
+    date_format: 'YYYY-MM-DD',
+    size: '100m',
+    max_logs: '7d',
+    audit_file: path.join(logsDir, 'router-audit.json'),
   });
 
   loadCurrentLogFile();
@@ -418,8 +429,18 @@ if (!lock) {
                 writeConfigToDisk(configFilePath, message.config);
                 break;
               case 'message':
+                if (routerLogStream) {
+                  routerLogStream.write(`${JSON.stringify(message)}\n`);
+                }
                 if (win && win.isVisible()) {
                   win.webContents.send('message', message.message);
+                }
+                break;
+              case 'trigger':
+              case 'action':
+              case 'transform':
+                if (routerLogStream) {
+                  routerLogStream.write(`${JSON.stringify(message)}\n`);
                 }
                 break;
               default:
@@ -448,14 +469,14 @@ if (!lock) {
       });
 
       showbridgeProcess.on('stdout', (data) => {
-        if (rotatingLogStream) {
-          rotatingLogStream.write(data);
+        if (showbridgeLogStream) {
+          showbridgeLogStream.write(data);
         }
       });
 
       showbridgeProcess.on('stderr', (data) => {
-        if (rotatingLogStream) {
-          rotatingLogStream.write(data);
+        if (showbridgeLogStream) {
+          showbridgeLogStream.write(data);
         }
       });
 

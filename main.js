@@ -70,11 +70,38 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
     }
   });
 
-  router.on('message', (message) => {
+  router.on('message', (messageEvent) => {
     if (isChildProcess) {
       process.send({
         eventType: 'message',
-        message,
+        ...messageEvent,
+      });
+    }
+  });
+
+  router.on('trigger', (triggerEvent) => {
+    if (isChildProcess) {
+      process.send({
+        eventType: 'trigger',
+        ...triggerEvent,
+      });
+    }
+  });
+
+  router.on('action', (actionEvent) => {
+    if (isChildProcess) {
+      process.send({
+        eventType: 'action',
+        ...actionEvent,
+      });
+    }
+  });
+
+  router.on('transform', (transformEvent) => {
+    if (isChildProcess) {
+      process.send({
+        eventType: 'transform',
+        ...transformEvent,
       });
     }
   });
