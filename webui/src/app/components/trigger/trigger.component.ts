@@ -18,6 +18,7 @@ import { SchemaService } from 'src/app/services/schema.service';
 export class TriggerComponent implements OnInit {
   @Input() path?: string;
   @Input() trigger?: Trigger;
+  @Input() showActions: boolean = true;
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
 
@@ -151,5 +152,40 @@ export class TriggerComponent implements OnInit {
       return id;
     }
     return '';
+  }
+
+  getSubTriggers(): Action[] | undefined {
+    if (
+      (this.trigger?.type === 'and' || this.trigger?.type === 'or') &&
+      this.trigger.params &&
+      this.trigger.params['triggers']
+    ) {
+      if (typeof this.trigger.params['triggers'] === 'object') {
+        return this.trigger.params['triggers'];
+      }
+    }
+    return undefined;
+  }
+
+  deleteSubTrigger(index: number) {
+    if (this.trigger?.params) {
+      this.trigger?.params['triggers'].splice(index, 1);
+      this.updated.emit(true);
+    }
+  }
+
+  subTriggerUpdated() {
+    this.updated.emit(true);
+  }
+
+  addSubTrigger(triggerType: string) {
+    if (this.trigger?.params) {
+      if (this.trigger.params['triggers'] === undefined) {
+        this.trigger.params['triggers'] = [];
+      }
+      const triggerTemplate = this.schemaService.getTemplateForAction(triggerType);
+      this.trigger.params['triggers'].push(triggerTemplate);
+      this.updated.emit(true);
+    }
   }
 }
