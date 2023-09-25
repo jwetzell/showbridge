@@ -36,7 +36,7 @@ export class EventService {
         this.status$.next('open');
         if (this.socket) {
           // TODO(jwetzell): periodically check for status updates or have router detect status changes and send
-          this.socket.send('protocol_status');
+          this.socket.send('getProtocolStatus');
         }
       };
 
@@ -52,7 +52,7 @@ export class EventService {
       this.socket.onmessage = (message: MessageEvent) => {
         const messageObj = JSON.parse(message.data);
         switch (messageObj.eventType) {
-          case 'message':
+          case 'messageIn':
             this.messageEvents$.next(messageObj);
             break;
           case 'trigger':
@@ -64,7 +64,7 @@ export class EventService {
           case 'transform':
             this.transformEvents$.next(messageObj);
             break;
-          case 'protocol_status':
+          case 'protocolStatus':
             this.protocolStatus$.next(messageObj);
             break;
           default:

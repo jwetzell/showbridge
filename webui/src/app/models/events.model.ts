@@ -3,7 +3,7 @@ import { Transform } from './transform.model';
 import { Trigger } from './trigger.model';
 
 export interface MessageEventData {
-  eventType: 'message';
+  eventType: 'messageIn';
   data: {
     [key: string]: any;
   };
@@ -37,7 +37,7 @@ export interface TransformEventData {
 }
 
 export interface ProtocolStatusEventData {
-  eventType: 'protocol_status';
+  eventType: 'protoclStatus';
   data: {
     cloud: CloudStatus;
     mqtt: MQTTStatus;
