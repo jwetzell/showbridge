@@ -471,7 +471,7 @@ if (!lock) {
       showbridgeProcess.on('exit', (code) => {
         console.log(`app: showbridge process exited: ${code}`);
         if (!restartProcess) {
-          app.exit();
+          app.quit();
         }
       });
 
