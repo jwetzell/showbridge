@@ -22,3 +22,6 @@ general build/dev scripts
 ## [schema](./schema/)
 schema for the router config JSON file
 - would be nice to split this up
+
+## [cloud](./cloud/)
+source for cloud server portion of showbridge
