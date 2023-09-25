@@ -239,7 +239,7 @@ function reloadConfigFromDisk(filePath) {
     try {
       const config = JSON.parse(fs.readFileSync(filePath));
       showbridgeProcess.child.send({
-        eventType: 'update_config',
+        eventType: 'updateConfig',
         config,
       });
     } catch (error) {
@@ -282,7 +282,7 @@ function loadConfigFromFile(filePath) {
       if (showbridgeProcess) {
         if (showbridgeProcess.child) {
           showbridgeProcess.child.send({
-            eventType: 'check_config',
+            eventType: 'checkConfig',
             config: newConfigObj,
           });
         }
@@ -291,7 +291,7 @@ function loadConfigFromFile(filePath) {
       dialog.showErrorBox('Error', error.toString());
     }
   } else {
-    dialog.showErrorBox('Error', `Cannot find file: ${path}`);
+    dialog.showErrorBox('Error', `Cannot find file: ${filePath}`);
   }
 }
 
@@ -410,7 +410,7 @@ if (!lock) {
         if (showbridgeProcess.child) {
           showbridgeProcess.child.on('message', (message) => {
             switch (message.eventType) {
-              case 'config_valid':
+              case 'configValid':
                 dialog
                   .showMessageBox(mainWin, {
                     type: 'question',
@@ -426,21 +426,21 @@ if (!lock) {
                     }
                   });
                 break;
-              case 'config_error':
+              case 'configError':
                 // TODO(jwetzell): format these errors better
-                mainWin.webContents.send('config_error', message.errors);
+                mainWin.webContents.send('configError', message.errors);
                 dialog.showErrorBox('Error', message.errors.map((error) => error.message).join('\n'));
                 break;
-              case 'config_updated':
+              case 'configUpdated':
                 // TODO(jwetzell): add rollback
                 writeConfigToDisk(configFilePath, message.config);
                 break;
-              case 'message':
+              case 'messageIn':
                 if (routerLogStream) {
                   routerLogStream.write(`${JSON.stringify(message)}\n`);
                 }
                 if (mainWin && mainWin.isVisible()) {
-                  mainWin.webContents.send('message', message.message);
+                  mainWin.webContents.send('messageIn', message.message);
                 }
                 break;
               case 'trigger':
@@ -511,22 +511,19 @@ if (!lock) {
       dialog.showErrorBox('Error', error);
     }
 
-    ipcMain.on('get_config_backups', () => {
-      if (mainWin && mainWin.isVisible()) {
-        console.log('app: get config backups called');
-        const configBackups = getConfigBackupList();
-
-        mainWin.webContents.send('config_backups', configBackups);
-      }
+    ipcMain.handle('getConfigBackups', () => {
+      console.log('app: get config backups called');
+      const configBackups = getConfigBackupList();
+      return configBackups;
     });
 
     // NOTE(jwetzell) load config file from drag/drop
-    ipcMain.on('load_config_from_file', (event, file) => {
+    ipcMain.on('loadConfigFromFile', (event, file) => {
       loadConfigFromFile(file.path);
     });
 
     // NOTE(jwetzell) open config file from file browser
-    ipcMain.on('load_config_from_file_browser', () => {
+    ipcMain.on('loadConfigFromFileBrowser', () => {
       dialog
         .showOpenDialog(mainWin, {
           title: 'Open Config File',
@@ -547,11 +544,11 @@ if (!lock) {
       quitApp();
     });
 
-    ipcMain.on('show_logs', () => {
+    ipcMain.on('showLogs', () => {
       showLogWindow();
     });
 
-    ipcMain.on('log_win_loaded', () => {
+    ipcMain.on('logWinLoaded', () => {
       loadCurrentLogFile();
       if (currentLogFile) {
         const tail = new Tail(currentLogFile, {
@@ -567,11 +564,11 @@ if (!lock) {
       }
     });
 
-    ipcMain.on('show_settings', () => {
+    ipcMain.on('showSettings', () => {
       showSettingsWindow();
     });
 
-    ipcMain.on('show_ui', () => {
+    ipcMain.on('showUI', () => {
       try {
         const config = fs.readJSONSync(configFilePath);
         if (config.http.params.port) {
@@ -588,19 +585,11 @@ if (!lock) {
       }
     });
 
-    ipcMain.on('load_addresses', () => {
-      if (settingsWin && settingsWin.isVisible()) {
-        settingsWin.webContents.send('ip_addresses', getIPAddresses());
-      }
-    });
+    ipcMain.handle('getIPAddresses', () => getIPAddresses());
 
-    ipcMain.on('load_current_config', () => {
-      if (settingsWin && settingsWin.isVisible()) {
-        settingsWin.webContents.send('current_config', getConfigObject(configFilePath));
-      }
-    });
+    ipcMain.handle('getCurrentConfig', () => getConfigObject(configFilePath));
 
-    ipcMain.on('apply_config_from_object', (event, config) => {
+    ipcMain.on('loadConfigFromObject', (event, config) => {
       writeConfigToDisk(configFilePath, config);
       // TODO(jwetzell): error handling
       reloadConfigFromDisk(configFilePath);

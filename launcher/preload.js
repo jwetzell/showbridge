@@ -8,4 +8,5 @@ contextBridge.exposeInMainWorld('electron', {
       callback(event, ...args);
     });
   },
+  invoke: ipcRenderer.invoke,
 });
