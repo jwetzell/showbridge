@@ -5,14 +5,14 @@ const dragContainer = document.getElementById('drag-drop-container');
 const messageIndicator = document.getElementById('message-indicator');
 
 dragContainer.onclick = () => {
-  window.electron.send('load_config_from_file');
+  window.electron.send('load_config_from_file_browser');
 };
 
 dragContainer.ondrop = (event) => {
   event.preventDefault();
   if (event.dataTransfer.files.length > 0) {
     const file = event.dataTransfer.files[0];
-    window.electron.send('check_config', { name: file.name, path: file.path });
+    window.electron.send('load_config_from_file', { name: file.name, path: file.path });
   }
 };
 

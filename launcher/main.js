@@ -16,7 +16,7 @@ let rootPath = process.resourcesPath;
 let restartProcess = true;
 
 let showbridgeProcess;
-let win;
+let mainWin;
 let logWin;
 let settingsWin;
 let tray;
@@ -27,12 +27,31 @@ let showbridgeLogStream;
 let routerLogStream;
 let currentLogFile;
 
-function toggleWindow() {
-  if (win.isVisible()) {
-    win.hide();
+function toggleWindow(window) {
+  if (window.isVisible()) {
+    window.hide();
   } else {
-    win.show();
-    win.focus();
+    window.show();
+    window.focus();
+  }
+}
+
+function shutdown() {
+  if (showbridgeProcess) {
+    if (showbridgeProcess.status !== 'running') {
+      app.quit();
+    } else if (showbridgeProcess.child) {
+      restartProcess = false;
+      showbridgeProcess.child.send({
+        eventType: 'destroy',
+      });
+    } else {
+      console.log('app: could not determine how to safely shutdown closing app right away');
+      app.quit();
+    }
+  } else {
+    console.log('app: could not determine how to safely shutdown closing app right away');
+    app.quit();
   }
 }
 
@@ -45,14 +64,7 @@ function quitApp() {
     })
     .then((resp) => {
       if (resp.response === 0) {
-        if (showbridgeProcess) {
-          restartProcess = false;
-          if (showbridgeProcess.child) {
-            showbridgeProcess.child.send({
-              eventType: 'destroy',
-            });
-          }
-        }
+        shutdown();
       }
     });
 }
@@ -71,32 +83,6 @@ function createLogWindow() {
   // logWin.webContents.openDevTools();
 }
 
-function showLogWindow() {
-  if (logWin === undefined || logWin.isDestroyed()) {
-    createLogWindow();
-  } else {
-    logWin.show();
-    logWin.focus();
-  }
-}
-
-function createWindow() {
-  win = new BrowserWindow({
-    width: 200,
-    height: 200,
-    frame: false,
-    resizable: false,
-    roundedCorners: true,
-    transparent: true,
-    icon: path.join(__dirname, './assets/images/icon512x512.png'),
-    webPreferences: {
-      nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js'),
-    },
-  });
-  win.loadFile('index.html');
-}
-
 function createSettingsWindow() {
   settingsWin = new BrowserWindow({
     width: 450,
@@ -110,6 +96,15 @@ function createSettingsWindow() {
   settingsWin.loadFile('settings.html');
 }
 
+function showLogWindow() {
+  if (logWin === undefined || logWin.isDestroyed()) {
+    createLogWindow();
+  } else {
+    logWin.show();
+    logWin.focus();
+  }
+}
+
 function showSettingsWindow() {
   if (settingsWin === undefined || settingsWin.isDestroyed()) {
     createSettingsWindow();
@@ -117,6 +112,23 @@ function showSettingsWindow() {
     settingsWin.show();
     settingsWin.focus();
   }
+}
+
+function createMainWindow() {
+  mainWin = new BrowserWindow({
+    width: 200,
+    height: 200,
+    frame: false,
+    resizable: false,
+    roundedCorners: true,
+    transparent: true,
+    icon: path.join(__dirname, './assets/images/icon512x512.png'),
+    webPreferences: {
+      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  });
+  mainWin.loadFile('index.html');
 }
 
 function getIPAddresses() {
@@ -144,7 +156,9 @@ function createTray() {
   menu.append(
     new MenuItem({
       label: 'Show/Hide Window',
-      click: toggleWindow,
+      click: () => {
+        toggleWindow(mainWin);
+      },
     })
   );
   menu.append(
@@ -157,7 +171,7 @@ function createTray() {
     new MenuItem({
       label: 'Open DevTools',
       click: () => {
-        win.webContents.openDevTools({
+        mainWin.webContents.openDevTools({
           mode: 'detach',
         });
       },
@@ -307,11 +321,11 @@ if (!lock) {
     'Already Running?',
     'Looks like showbridge is already running. Only one instance at a time is allowed.'
   );
-  app.quit();
+  shutdown();
 } else {
   configDir = path.join(app.getPath('appData'), '/showbridge/');
   logsDir = path.join(configDir, 'logs');
-  // TODO(jwetzell): add logging for launcher logs. Use these log files for the logs view
+  // TODO(jwetzell): add logging for launcher logs.
   // TODO(jwetzell): add menu links to open the config directory
   showbridgeLogStream = fileStreamRotator.getStream({
     filename: path.join(logsDir, 'showbridge-%DATE%'),
@@ -351,18 +365,18 @@ if (!lock) {
   console.log(`app is packaged: ${app.isPackaged}`);
 
   if (!fs.existsSync(configFilePath)) {
-    console.log('populating config.json with default config');
+    console.log('app: populating config.json with default config');
     writeConfigToDisk(configFilePath, defaultConfig);
   }
 
   app.whenReady().then(() => {
     if (!lock) {
-      console.error('showbridge already running skipping setup');
+      console.error('app: showbridge already running skipping setup');
       return;
     }
 
     try {
-      createWindow();
+      createMainWindow();
       createTray();
 
       const nodeBin = getNodeBinaryLocation(app.isPackaged);
@@ -387,12 +401,12 @@ if (!lock) {
           configFilePath,
           '--webui',
           './dist/webui',
-          '--trace',
+          app.isPackaged ? '' : '--trace',
         ],
         {
           name: 'showbridge process',
           maxRestarts: 3,
-          sleep: 1000,
+          sleep: 500,
           kill: 5000,
           cwd: rootPath,
           stdio: [null, null, null, 'ipc'],
@@ -405,7 +419,7 @@ if (!lock) {
             switch (message.eventType) {
               case 'config_valid':
                 dialog
-                  .showMessageBox(win, {
+                  .showMessageBox(mainWin, {
                     type: 'question',
                     buttons: ['Apply', 'Cancel'],
                     defaultId: 0,
@@ -421,7 +435,7 @@ if (!lock) {
                 break;
               case 'config_error':
                 // TODO(jwetzell): format these errors better
-                win.webContents.send('config_error', message.errors);
+                mainWin.webContents.send('config_error', message.errors);
                 dialog.showErrorBox('Error', message.errors.map((error) => error.message).join('\n'));
                 break;
               case 'config_updated':
@@ -432,8 +446,8 @@ if (!lock) {
                 if (routerLogStream) {
                   routerLogStream.write(`${JSON.stringify(message)}\n`);
                 }
-                if (win && win.isVisible()) {
-                  win.webContents.send('message', message.message);
+                if (mainWin && mainWin.isVisible()) {
+                  mainWin.webContents.send('message', message.message);
                 }
                 break;
               case 'trigger':
@@ -468,6 +482,22 @@ if (!lock) {
         }
       });
 
+      showbridgeProcess.on('crash', () => {
+        console.log('app: showbridge process crashed');
+        // TODO(jwetzell): Add some instructions for users to either report or diagnose
+        dialog
+          .showMessageBox(undefined, {
+            title: 'showbridge',
+            message: 'Showbridge process has crashed. Check logs',
+            buttons: ['Ok'],
+          })
+          .then((resp) => {
+            if (resp.response === 0) {
+              shutdown();
+            }
+          });
+      });
+
       showbridgeProcess.on('stdout', (data) => {
         if (showbridgeLogStream) {
           showbridgeLogStream.write(data);
@@ -490,23 +520,23 @@ if (!lock) {
     }
 
     ipcMain.on('get_config_backups', () => {
-      if (win && win.isVisible()) {
-        console.log('get config backups called');
+      if (mainWin && mainWin.isVisible()) {
+        console.log('app: get config backups called');
         const configBackups = getConfigBackupList();
 
-        win.webContents.send('config_backups', configBackups);
+        mainWin.webContents.send('config_backups', configBackups);
       }
     });
 
     // NOTE(jwetzell) load config file from drag/drop
-    ipcMain.on('check_config', (event, file) => {
+    ipcMain.on('load_config_from_file', (event, file) => {
       loadConfigFromFile(file.path);
     });
 
     // NOTE(jwetzell) open config file from file browser
-    ipcMain.on('load_config_from_file', () => {
+    ipcMain.on('load_config_from_file_browser', () => {
       dialog
-        .showOpenDialog(win, {
+        .showOpenDialog(mainWin, {
           title: 'Open Config File',
           buttonLabel: 'Apply',
           filters: [{ name: 'json', extensions: ['json'] }],
@@ -541,7 +571,7 @@ if (!lock) {
           }
         });
       } else {
-        console.error('current log file not set');
+        console.error('app: current log file not set');
       }
     });
 
@@ -586,34 +616,17 @@ if (!lock) {
   });
 }
 
-// TODO(jwetzell): better quiting logic as it doesn't always seem to quit right
 app.on('will-quit', () => {
-  console.log('app will quit');
-  if (showbridgeProcess) {
-    restartProcess = false;
-    if (showbridgeProcess.child) {
-      showbridgeProcess.child.send({
-        eventType: 'destroy',
-      });
-    }
-  }
+  console.log('app: will quit');
 });
 
 app.on('window-all-closed', () => {
-  console.log('app window all closed');
-  if (showbridgeProcess) {
-    restartProcess = false;
-    if (showbridgeProcess.child) {
-      showbridgeProcess.child.send({
-        eventType: 'destroy',
-      });
-    }
-  }
-  app.quit();
+  console.log('app: window all closed');
+  shutdown();
 });
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    createMainWindow();
   }
 });
