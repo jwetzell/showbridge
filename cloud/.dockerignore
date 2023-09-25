@@ -1,0 +1,13 @@
+node_modules
+dist
+.env
+Dockerfile
+.vscode
+.drone.yml
+.eslintrc.js
+.nvmrc
+.prettierignore
+.prettierrc.js
+README.md
+.git
+.gitignore

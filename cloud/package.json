@@ -1,0 +1,47 @@
+{
+  "name": "showbridge-cloud",
+  "version": "0.1.1",
+  "description": "Cloud server for proxying messages between showbridge instances",
+  "main": "src/main.js",
+  "bin": "src/main.js",
+  "scripts": {
+    "dev": "nodemon src/main.js | pino-pretty",
+    "start": "node src/main.js"
+  },
+  "author": {
+    "name": "Joel Wetzell",
+    "email": "me@jwetzell.com",
+    "url": "https://jwetzell.com"
+  },
+  "keywords": [
+    "show",
+    "control",
+    "protocol",
+    "bridge",
+    "cloud",
+    "router",
+    "theatre"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://git.jwetzell.com/jwetzell/showbridge-cloud.git"
+  },
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "@socket.io/admin-ui": "^0.5.1",
+    "@socket.io/redis-streams-adapter": "^0.1.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "pino": "^8.15.0",
+    "redis": "^4.6.7",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.47.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.10.0",
+    "nodemon": "^3.0.1",
+    "pino-pretty": "^10.2.0",
+    "prettier": "^3.0.2"
+  }
+}
