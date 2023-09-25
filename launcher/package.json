@@ -19,6 +19,7 @@
     "build:linux": "electron-builder -l",
     "build:mac": "electron-builder -m",
     "build:win": "electron-builder -w",
+    "build": "electron-builder -mwl",
     "release": "electron-builder"
   },
   "dependencies": {
