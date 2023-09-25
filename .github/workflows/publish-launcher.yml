@@ -6,7 +6,7 @@ env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  build-linux-and-windows:
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,7 +17,19 @@ jobs:
       - run: sudo apt-get install -y libasound2-dev
       - run: npm ci
       - run: node scripts/clean_install.js
-      - run: npm run release -- --linux --windows
+      - run: npm run release
+        working-directory: ./launcher
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      - run: npm ci
+      - run: node scripts/clean_install.js
+      - run: npm run release
         working-directory: ./launcher
   build-macos:
     runs-on: macos-latest
