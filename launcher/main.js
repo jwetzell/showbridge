@@ -11,7 +11,7 @@ const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
 const defaultConfig = require('../config/default.json');
 
-let rootPath = process.resourcesPath;
+const rootPath = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 
 let restartProcess = true;
 
@@ -20,11 +20,29 @@ let mainWin;
 let logWin;
 let settingsWin;
 let tray;
-let configDir;
-let configFilePath;
-let logsDir;
-let showbridgeLogStream;
-let routerLogStream;
+const configDir = path.join(app.getPath('appData'), '/showbridge/');
+const configFilePath = path.join(configDir, 'config.json');
+const logsDir = path.join(configDir, 'logs');
+const showbridgeLogStream = fileStreamRotator.getStream({
+  filename: path.join(logsDir, 'showbridge-%DATE%'),
+  extension: '.log',
+  frequency: 'daily',
+  date_format: 'YYYY-MM-DD',
+  size: '100m',
+  max_logs: '7d',
+  audit_file: path.join(logsDir, 'showbridge-audit.json'),
+});
+
+const routerLogStream = fileStreamRotator.getStream({
+  filename: path.join(logsDir, 'router-%DATE%'),
+  extension: '.log',
+  frequency: 'daily',
+  date_format: 'YYYY-MM-DD',
+  size: '100m',
+  max_logs: '7d',
+  audit_file: path.join(logsDir, 'router-audit.json'),
+});
+
 let currentLogFile;
 
 function toggleWindow(window) {
@@ -231,6 +249,7 @@ function reloadConfigFromDisk(filePath) {
   }
 }
 
+// TODO(jwetzell): add ability to load backup JSON files
 function getConfigBackupList() {
   if (configDir) {
     const files = fs.readdirSync(configDir).filter((file) => file.startsWith('config.json.'));
@@ -323,46 +342,19 @@ if (!lock) {
   );
   shutdown();
 } else {
-  configDir = path.join(app.getPath('appData'), '/showbridge/');
-  logsDir = path.join(configDir, 'logs');
   // TODO(jwetzell): add logging for launcher logs.
   // TODO(jwetzell): add menu links to open the config directory
-  showbridgeLogStream = fileStreamRotator.getStream({
-    filename: path.join(logsDir, 'showbridge-%DATE%'),
-    extension: '.log',
-    frequency: 'daily',
-    date_format: 'YYYY-MM-DD',
-    size: '100m',
-    max_logs: '7d',
-    audit_file: path.join(logsDir, 'showbridge-audit.json'),
-  });
-
-  routerLogStream = fileStreamRotator.getStream({
-    filename: path.join(logsDir, 'router-%DATE%'),
-    extension: '.log',
-    frequency: 'daily',
-    date_format: 'YYYY-MM-DD',
-    size: '100m',
-    max_logs: '7d',
-    audit_file: path.join(logsDir, 'router-audit.json'),
-  });
 
   loadCurrentLogFile();
 
-  console.log(`config dir exists: ${fs.existsSync(configDir)}`);
+  console.log(`app: config dir exists: ${fs.existsSync(configDir)}`);
 
   if (!fs.existsSync(configDir)) {
     fs.mkdirSync(configDir);
   }
-  configFilePath = path.join(configDir, 'config.json');
-  console.log(`config file exists: ${fs.existsSync(configFilePath)}`);
+  console.log(`app: config file exists: ${fs.existsSync(configFilePath)}`);
 
-  rootPath = process.resourcesPath;
-  if (!app.isPackaged) {
-    rootPath = path.join(__dirname, '..');
-  }
-
-  console.log(`app is packaged: ${app.isPackaged}`);
+  console.log(`app: ${app.isPackaged ? 'is' : 'is not'} packaged: `);
 
   if (!fs.existsSync(configFilePath)) {
     console.log('app: populating config.json with default config');
