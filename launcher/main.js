@@ -99,8 +99,7 @@ function createLogWindow() {
     },
   });
   logWin.removeMenu();
-  logWin.loadFile('logger.html');
-  // logWin.webContents.openDevTools();
+  logWin.loadFile('html/logger.html');
 }
 
 function createSettingsWindow() {
@@ -113,7 +112,7 @@ function createSettingsWindow() {
     },
   });
   settingsWin.removeMenu();
-  settingsWin.loadFile('settings.html');
+  settingsWin.loadFile('html/settings.html');
 }
 
 function showLogWindow() {
