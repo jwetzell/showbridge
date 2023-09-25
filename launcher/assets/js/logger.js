@@ -10,4 +10,4 @@ electron.on('log', (event, log) => {
   logsWrapperElement.scrollTo(0, logsWrapperElement.scrollHeight);
 });
 
-electron.send('log_win_loaded');
+electron.send('logWinLoaded');

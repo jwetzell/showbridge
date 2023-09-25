@@ -61,19 +61,19 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
     }
   }
 
-  router.on('config_updated', (updatedConfig) => {
+  router.on('configUpdated', (updatedConfig) => {
     if (isChildProcess) {
       process.send({
-        eventType: 'config_updated',
+        eventType: 'configUpdated',
         config: updatedConfig,
       });
     }
   });
 
-  router.on('message', (messageEvent) => {
+  router.on('messageIn', (messageEvent) => {
     if (isChildProcess) {
       process.send({
-        eventType: 'message',
+        eventType: 'messageIn',
         ...messageEvent,
       });
     }
@@ -108,19 +108,19 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
 
   process.on('message', (message) => {
     switch (message.eventType) {
-      case 'check_config':
+      case 'checkConfig':
         try {
           const newConfig = new Config(message.config, schema);
           if (isChildProcess) {
             process.send({
-              eventType: 'config_valid',
+              eventType: 'configValid',
               config: newConfig.toJSON(),
             });
           }
         } catch (errors) {
           if (isChildProcess) {
             process.send({
-              eventType: 'config_error',
+              eventType: 'configError',
               errors,
             });
           }
@@ -128,7 +128,7 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
           logger.error(errors.toString());
         }
         break;
-      case 'update_config':
+      case 'updateConfig':
         try {
           router.config = new Config(message.config, schema);
           router.reload();
@@ -137,7 +137,7 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
           logger.error('app: errors loading config');
           if (isChildProcess) {
             process.send({
-              eventType: 'config_error',
+              eventType: 'configError',
               errors,
             });
           }

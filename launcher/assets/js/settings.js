@@ -20,9 +20,7 @@ const saveButton = document.getElementById('save-settings');
 
 let currentConfig;
 
-electron.send('load_addresses');
-
-electron.on('ip_addresses', (event, addresses) => {
+electron.invoke('getIPAddresses').then((addresses) => {
   addresses.forEach((address) => {
     if (address.family === 'IPv4') {
       httpAddressSelect.add(new Option(address.address, address.address));
@@ -31,57 +29,55 @@ electron.on('ip_addresses', (event, addresses) => {
     }
   });
 
-  electron.send('load_current_config');
-});
+  electron.invoke('getCurrentConfig').then((config) => {
+    currentConfig = config;
 
-electron.on('current_config', (event, config) => {
-  currentConfig = config;
+    // Load HTTP config
+    if (currentConfig.http.params.address && currentConfig.http.params.address !== '0.0.0.0') {
+      httpAddressSelect.value = currentConfig.http.params.address;
+    } else {
+      httpAddressSelect.value = undefined;
+    }
+    httpPortInput.value = currentConfig.http.params.port;
 
-  // Load HTTP config
-  if (currentConfig.http.params.address && currentConfig.http.params.address !== '0.0.0.0') {
-    httpAddressSelect.value = currentConfig.http.params.address;
-  } else {
-    httpAddressSelect.value = undefined;
-  }
-  httpPortInput.value = currentConfig.http.params.port;
+    // Load TCP config
+    if (currentConfig.tcp.params.address && currentConfig.tcp.params.address !== '0.0.0.0') {
+      tcpAddressSelect.value = currentConfig.tcp.params.address;
+    } else {
+      tcpAddressSelect.value = undefined;
+    }
+    tcpPortInput.value = currentConfig.tcp.params.port;
 
-  // Load TCP config
-  if (currentConfig.tcp.params.address && currentConfig.tcp.params.address !== '0.0.0.0') {
-    tcpAddressSelect.value = currentConfig.tcp.params.address;
-  } else {
-    tcpAddressSelect.value = undefined;
-  }
-  tcpPortInput.value = currentConfig.tcp.params.port;
+    // Load UDP config
+    if (currentConfig.udp.params.address && currentConfig.udp.params.address !== '0.0.0.0') {
+      udpAddressSelect.value = currentConfig.udp.params.address;
+    } else {
+      udpAddressSelect.value = undefined;
+    }
+    udpPortInput.value = currentConfig.udp.params.port;
 
-  // Load UDP config
-  if (currentConfig.udp.params.address && currentConfig.udp.params.address !== '0.0.0.0') {
-    udpAddressSelect.value = currentConfig.udp.params.address;
-  } else {
-    udpAddressSelect.value = undefined;
-  }
-  udpPortInput.value = currentConfig.udp.params.port;
+    // Load MIDI settings
+    if (currentConfig.midi.params.virtualInputName) {
+      midiInputNameInput.value = currentConfig.midi.params.virtualInputName;
+    }
 
-  // Load MIDI settings
-  if (currentConfig.midi.params.virtualInputName) {
-    midiInputNameInput.value = currentConfig.midi.params.virtualInputName;
-  }
+    if (currentConfig.midi.params.virtualOutputName) {
+      midiOutputNameInput.value = currentConfig.midi.params.virtualOutputName;
+    }
 
-  if (currentConfig.midi.params.virtualOutputName) {
-    midiOutputNameInput.value = currentConfig.midi.params.virtualOutputName;
-  }
+    // Load Cloud settings
+    cloudURLInput.value = currentConfig.cloud.params.url;
 
-  // Load Cloud settings
-  cloudURLInput.value = currentConfig.cloud.params.url;
+    // Load MQTT settings
+    mqttBrokerURLInput.value = currentConfig.mqtt.params.broker;
+    if (currentConfig.mqtt.params.broker === undefined || currentConfig.mqtt.params.broker === '') {
+      mqttBrokerUsernameInput.disabled = true;
+      mqttBrokerPasswordInput.disabled = true;
+    }
 
-  // Load MQTT settings
-  mqttBrokerURLInput.value = currentConfig.mqtt.params.broker;
-  if (currentConfig.mqtt.params.broker === undefined || currentConfig.mqtt.params.broker === '') {
-    mqttBrokerUsernameInput.disabled = true;
-    mqttBrokerPasswordInput.disabled = true;
-  }
-
-  mqttBrokerUsernameInput.value = currentConfig.mqtt.params.username ? currentConfig.mqtt.params.username : '';
-  mqttBrokerPasswordInput.value = currentConfig.mqtt.params.password ? currentConfig.mqtt.params.password : '';
+    mqttBrokerUsernameInput.value = currentConfig.mqtt.params.username ? currentConfig.mqtt.params.username : '';
+    mqttBrokerPasswordInput.value = currentConfig.mqtt.params.password ? currentConfig.mqtt.params.password : '';
+  });
 });
 
 // setup current address info
@@ -141,6 +137,7 @@ mqttBrokerPasswordInput.onchange = (event) => {
   currentConfig.mqtt.params.password = event.target.value;
 };
 
+// TODO(jwetzell): bad config checking
 saveButton.onclick = () => {
-  electron.send('apply_config_from_object', currentConfig);
+  electron.send('loadConfigFromObject', currentConfig);
 };
