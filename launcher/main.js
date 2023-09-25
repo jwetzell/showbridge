@@ -31,6 +31,7 @@ const showbridgeLogStream = fileStreamRotator.getStream({
   size: '100m',
   max_logs: '7d',
   audit_file: path.join(logsDir, 'showbridge-audit.json'),
+  stdio: true,
 });
 
 const routerLogStream = fileStreamRotator.getStream({
@@ -59,6 +60,7 @@ function shutdown() {
     if (showbridgeProcess.status !== 'running') {
       app.quit();
     } else if (showbridgeProcess.child) {
+      console.log('app: sending destroy to showbridge process');
       restartProcess = false;
       showbridgeProcess.child.send({
         eventType: 'destroy',
@@ -97,8 +99,7 @@ function createLogWindow() {
     },
   });
   logWin.removeMenu();
-  logWin.loadFile('logger.html');
-  // logWin.webContents.openDevTools();
+  logWin.loadFile('html/logger.html');
 }
 
 function createSettingsWindow() {
@@ -111,7 +112,7 @@ function createSettingsWindow() {
     },
   });
   settingsWin.removeMenu();
-  settingsWin.loadFile('settings.html');
+  settingsWin.loadFile('html/settings.html');
 }
 
 function showLogWindow() {
@@ -213,7 +214,7 @@ function createTray() {
 function writeConfigToDisk(filePath, configObj) {
   // TODO(jwetzell): add error handling
   if (fs.existsSync(filePath)) {
-    console.log('backing up current config');
+    console.log('app: backing up current config');
     try {
       fs.moveSync(filePath, `${filePath}.${Date.now()}.bak`, {
         overwrite: true,
@@ -224,7 +225,7 @@ function writeConfigToDisk(filePath, configObj) {
   }
 
   try {
-    console.log('saving new config');
+    console.log('app: saving new config');
     fs.writeJSONSync(filePath, configObj, {
       spaces: 2,
     });
@@ -260,7 +261,7 @@ function getConfigBackupList() {
         try {
           configBackupDate = parseInt(fileNameParts[2], 10);
         } catch (error) {
-          console.error('config file not formatted normally');
+          console.error('app: config file not formatted normally');
         }
       }
       return {
@@ -450,7 +451,7 @@ if (!lock) {
                 }
                 break;
               default:
-                console.error(`unhandled message from showbridge process`);
+                console.error(`app: unhandled message from showbridge process`);
                 console.error(message);
                 break;
             }
@@ -459,18 +460,17 @@ if (!lock) {
       });
 
       showbridgeProcess.on('stop', () => {
-        console.log('showbridge process stopped');
+        console.log('app: showbridge process stopped');
       });
 
       showbridgeProcess.on('spawn', () => {
-        // TODO(jwetzell): catch loops in underlying command crashing
-        console.log('showbridge process spawned');
+        console.log('app: showbridge process spawned');
       });
 
       showbridgeProcess.on('exit', (code) => {
-        console.log(`showbridge process exited: ${code}`);
+        console.log(`app: showbridge process exited: ${code}`);
         if (!restartProcess) {
-          app.exit();
+          app.quit();
         }
       });
 
