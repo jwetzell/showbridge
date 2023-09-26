@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, filter } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, filter, timer } from 'rxjs';
 import {
   ActionEventData,
   MessageEventData,
@@ -25,6 +25,8 @@ export class EventService {
   public triggerIdList: string[] = [];
   public actionIdList: string[] = [];
 
+  private protocolStatusSubscription?: Subscription;
+
   constructor() {
     this.reload();
   }
@@ -34,14 +36,23 @@ export class EventService {
       this.socket = new WebSocket(this.baseUrl, 'webui');
       this.socket.onopen = (ev) => {
         this.status$.next('open');
-        if (this.socket) {
-          // TODO(jwetzell): periodically check for status updates or have router detect status changes and send
-          this.socket.send('getProtocolStatus');
-        }
+        this.protocolStatusSubscription = timer(0, 5000).subscribe(() => {
+          if (this.socket && this.socket.readyState === this.socket.OPEN) {
+            this.socket.send('getProtocolStatus');
+          }
+        });
       };
 
       this.socket.onclose = (ev) => {
+        if (this.protocolStatusSubscription) {
+          this.protocolStatusSubscription.unsubscribe();
+        }
         this.status$.next('closed');
+
+        // TODO(jwetzell): this could probably be better done
+        setTimeout(() => {
+          this.reload();
+        }, 2000);
       };
 
       this.socket.onerror = (ev) => {
@@ -65,6 +76,7 @@ export class EventService {
             this.transformEvents$.next(messageObj);
             break;
           case 'protocolStatus':
+            console.log(messageObj);
             this.protocolStatus$.next(messageObj);
             break;
           default:
@@ -74,6 +86,7 @@ export class EventService {
         }
       };
     } catch (error) {
+      console.error('problem connecting to ws');
       console.error(error);
     }
   }
