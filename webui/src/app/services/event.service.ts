@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, filter } from 'rxjs';
+import { BehaviorSubject, Subject, filter, timer } from 'rxjs';
 import {
   ActionEventData,
   MessageEventData,
@@ -34,10 +34,11 @@ export class EventService {
       this.socket = new WebSocket(this.baseUrl, 'webui');
       this.socket.onopen = (ev) => {
         this.status$.next('open');
-        if (this.socket) {
-          // TODO(jwetzell): periodically check for status updates or have router detect status changes and send
-          this.socket.send('getProtocolStatus');
-        }
+        timer(0, 5000).subscribe(() => {
+          if (this.socket) {
+            this.socket.send('getProtocolStatus');
+          }
+        });
       };
 
       this.socket.onclose = (ev) => {
