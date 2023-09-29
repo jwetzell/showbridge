@@ -305,23 +305,6 @@ function loadCurrentLogFile() {
   }
 }
 
-function getNodeBinaryLocation(isPackaged) {
-  let nodeBin = null;
-
-  if (!isPackaged) {
-    nodeBin = 'node';
-  } else {
-    const nodeBinPath = process.platform === 'win32' ? 'node/node.exe' : 'node/bin/node';
-
-    const potentialNodePath = path.join(rootPath, nodeBinPath);
-
-    if (fs.pathExistsSync(potentialNodePath)) {
-      nodeBin = potentialNodePath;
-    }
-  }
-  return nodeBin;
-}
-
 function getShowbridgeLocation(isPackaged) {
   let showbridgePath = null;
 
@@ -331,7 +314,7 @@ function getShowbridgeLocation(isPackaged) {
     showbridgePath = './dist/bundle/index.js';
   }
 
-  return showbridgePath;
+  return path.join(rootPath, showbridgePath);
 }
 
 const lock = app.requestSingleInstanceLock();
@@ -372,13 +355,6 @@ if (!lock) {
       createMainWindow();
       createTray();
 
-      const nodeBin = getNodeBinaryLocation(app.isPackaged);
-
-      if (!nodeBin) {
-        dialog.showErrorBox('Unable to start', 'Failed to find node binary to run');
-        app.exit(11);
-      }
-
       const showbridgePath = getShowbridgeLocation(app.isPackaged);
 
       if (!showbridgePath) {
@@ -387,15 +363,7 @@ if (!lock) {
       }
 
       showbridgeProcess = respawn(
-        () => [
-          nodeBin,
-          path.join(rootPath, showbridgePath),
-          '--config',
-          configFilePath,
-          '--webui',
-          './dist/webui',
-          app.isPackaged ? '' : '--trace',
-        ],
+        () => [showbridgePath, '--config', configFilePath, '--webui', './dist/webui', app.isPackaged ? '' : '--trace'],
         {
           name: 'showbridge process',
           maxRestarts: 3,
@@ -403,6 +371,7 @@ if (!lock) {
           kill: 5000,
           cwd: rootPath,
           stdio: [null, null, null, 'ipc'],
+          fork: true,
         }
       );
 
@@ -555,6 +524,7 @@ if (!lock) {
           fromBeginning: true,
         });
         tail.on('line', (data) => {
+          console.log(data);
           if (logWin && !logWin.isDestroyed()) {
             logWin.webContents.send('log', data.toString());
           }
