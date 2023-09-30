@@ -513,6 +513,10 @@
               "title": "MIDI Bytes",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "bytes": {
                   "description": "MIDI data to be sent as an array of 3 bytes",
                   "type": "array",
@@ -532,6 +536,10 @@
               "title": "MIDI Note Off Message",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -563,6 +571,10 @@
               "title": "MIDI Note On Message",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -594,6 +606,10 @@
               "title": "MIDI Polyphonic Aftertouch",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -625,6 +641,10 @@
               "title": "MIDI Control Change",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -656,6 +676,10 @@
               "title": "MIDI Program Change",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -681,6 +705,10 @@
               "title": "MIDI Channel Aftertouch",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -706,6 +734,10 @@
               "title": "MIDI Pitch Bend",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -731,6 +763,10 @@
               "title": "MIDI Start",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -744,6 +780,10 @@
               "title": "MIDI Continue",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -757,6 +797,10 @@
               "title": "MIDI Stop",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -770,6 +814,10 @@
               "title": "MIDI Reset",
               "type": "object",
               "properties": {
+                "port": {
+                  "description": "the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",

@@ -97,6 +97,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
     - _string: templated string to send
     - string: static string to send
 - **midi-output**
+    - port: optional name of the port to send the message to. defaults to virtual output
     - bytes: byte array of midi data [status + channel, data1, data2]
     - status: midi status (i.e note_on, note_off, program_change, etc.)
     - note: note value (note_off,, note_on, polyphonic_aftertouch)
