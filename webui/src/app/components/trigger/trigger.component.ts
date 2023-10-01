@@ -179,6 +179,12 @@ export class TriggerComponent implements OnInit {
   }
 
   addSubTrigger(triggerType: string) {
+    if (this.trigger && this.trigger?.params === undefined) {
+      this.trigger.params = {
+        triggers: [],
+      };
+    }
+
     if (this.trigger?.params) {
       if (this.trigger.params['triggers'] === undefined) {
         this.trigger.params['triggers'] = [];
