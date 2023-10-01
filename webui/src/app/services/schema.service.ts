@@ -382,6 +382,9 @@ export class SchemaService {
                     } catch (error) {
                       noop();
                     }
+                  } else {
+                    // NOTE(jwetzell): default to comma-separated strings
+                    params[paramKey] = paramValue.split(',').map((part: string) => part.trim());
                   }
                 }
               }
