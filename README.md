@@ -15,7 +15,7 @@
     - build from source: clone and run `npm install && node scripts/clean_install.js && npm run start`
     - via npm: `npm install -g showbridge` or run directly with npx `npx showbridge@latest -c config.json`
 - Create config file
-    - sorry, this is the worst part [JSON Schema](https://showbridge.jwetzell.com/docs/schema/config)
+    - sorry, this is the worst part [JSON Schema](https://docs.showbridge.io/schema/config)
     - good idea to start with [default.json](config/default.json)
 - Run
     - `npm run start -- -c config.json`
@@ -187,7 +187,7 @@ For templating purposes (any param starting with an underscore `_`) the incoming
     - payload: ws message content (if this is JSON it will be parsed into an object)
 
 ## Connecting instances remotely?
-Remotely connecting two or more router instances is supported via [showbridge-cloud](https://github.com/jwetzell/showbridge-cloud). The only configuration necessary is the url of the cloud server (for a **publicly** available server you can use https://showbridg-cloud.jwetzell.com) the other necessary configuration option is room(s) explained below.
+Remotely connecting two or more router instances is supported via [showbridge-cloud](https://github.com/jwetzell/showbridge-cloud). The only configuration necessary is the url of the cloud server (for a **publicly** available server you can use https://cloud.showbridge.io) the other necessary configuration option is room(s) explained below.
 
 Routers can send messages through the cloud server using the cloud-output action mentioned above. To control what messages routers are listening to when multiple routers are connected to the same cloud server the concept of rooms is used. A room is simply a string i.e 'room1', 'super-secret-room-name', etc. when a cloud-output action is used the configured room(s) property of that action controls what room(s) the message will be sent to. The room(s) property of the cloud params controls what room(s) a router is joined to. When a cloud-output sends a message to a room that a router is configured to be in then the router will receive the message sent and process it as if it was a native message.
 

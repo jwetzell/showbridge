@@ -183,7 +183,7 @@
   },
   "cloud": {
     "params": {
-      "url": "",
+      "url": "https://cloud.showbridge.io",
       "rooms": ["example-room"]
     }
   }
