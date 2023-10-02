@@ -9,18 +9,40 @@
 - mqtt
 - midi
 
-### How to use
-- Install
-    - desktop launcher (check the releases section) this is the easiest method to get up and running and includes the web user interface.
-    - build from source: clone and run `npm install && node scripts/clean_install.js && npm run start`
-    - via npm: `npm install -g showbridge` or run directly with npx `npx showbridge@latest -c config.json`
-- Create config file
-    - sorry, this is the worst part [JSON Schema](https://docs.showbridge.io/schema/config)
-    - good idea to start with [default.json](config/default.json)
-- Run
-    - `npm run start -- -c config.json`
+### How to run
+- Launcher
+  - download/install launcher (check the releases section) this is the easiest method to get up and running and includes the web interface
+  - run showbridge!
+- NPM
+  - **NOTE**: this does not include the web interface
+  - create a config file (see below)
+  - optionally install globally: `npm install -g showbridge`
+  - run
+    - if installed globally: `showbridge -c config.json`
+    - via npx: `npx showbridge@latest -c config.json`
+  - use the `-h` flag to see available flags
+- Source
+  - clone repo
+  - install dependencies: `npm install && node scripts/clean_install.js`
+  - run: `npm run start -- -c config.json`
     - if you would like to turn on debug or trace logging use the `-d/t` or `--debug/trace` flag
     - if no config file is specified then a [default config](config/default.json) will be used
+  - if you would like the webui it will need to be built
+    - `cd webui`
+    - `npm run build`
+  - to include the webui just relaunch showbridge by running: `npm run start -- -c config.json --webui dist/webui`
+  - to run the launcher which will include webui if built
+    - `cd launcher`
+    - `npm run start`
+## Config File (sorry)
+The showbridge router's config is entirely controlled by a JSON config file. This file can be made by hand or edited via the web interface included with the launcher. The router WILL NOT start up with an invalid config file. I do provide some starter/example configs to look at to get a general idea of what one entails. 
+
+Resources
+- the [JSON Schema](https://docs.showbridge.io/schema/config) used to validate the config file
+- good idea to start with [default.json](config/default.json)
+- [random examples](config/examples/)
+- the [demo](https://demo.showbridge.io) site can be used to import/edit/create configs that can be downloaded
+    
 
 ## The _Basics_
 - router: throughout documentation I will use the term router to refer to configured/running instance of showbridge
@@ -39,7 +61,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 - **and**
     - triggers: array of triggers. All triggers must pass the message for this trigger to fire
 - **or**
-    - triggers: array of triggers. At least on of the triggers must pass for this trigger to fire
+    - triggers: array of triggers. At least one of the triggers must pass for this trigger to fire
 - **regex**
     - patterns: a list of regex patterns as strings
     - properties: a list of properties to test with their respective patterns, must be 1:1 
@@ -107,7 +129,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
     - pressure: pressure value (polyphonic_aftertouch, channel_aftertouch)
     - value: value (control_change, pitch_bend)
 - **delay**
-    - duration: time in ms to wait befor executing the defined actions
+    - duration: time in ms to wait before executing the defined actions
     - actions: array of actions to execute
 - **random**
     - actions: array of actions to randomly pick from
