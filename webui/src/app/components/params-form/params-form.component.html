@@ -8,12 +8,12 @@
     <div class="flex flex-col">
       <div *ngFor="let key of paramKeys()" class="flex items-center m-1">
         <!-- TODO(jwetzell): figure out how to consolidate templated param into one input with a template toggle -->
-        <ng-container *ngIf="key.startsWith('_'); else noTooltip">
+        <ng-container *ngIf="paramsFormInfo.paramsInfo[key].isTemplated; else noTemplatedTooltip">
           <label class="mr-2 text-gray-300" matTooltip="Templated">
             {{ paramsFormInfo.paramsInfo[key].display }}:
           </label>
         </ng-container>
-        <ng-template #noTooltip>
+        <ng-template #noTemplatedTooltip>
           <label class="mr-2 text-gray-300"> {{ paramsFormInfo.paramsInfo[key].display }}: </label>
         </ng-template>
 

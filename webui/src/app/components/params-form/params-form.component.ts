@@ -104,7 +104,7 @@ export class ParamsFormComponent implements OnInit {
 
     // NOTE(jwetzell): prune params that MUST change from the data when switch paramOptions
     Object.entries(this.paramsFormInfo.paramsInfo).forEach(([paramKey, paramInfo]) => {
-      if (paramInfo.const && this.data) {
+      if (paramInfo.isConst && this.data) {
         if (this.data[paramKey]) {
           delete this.data[paramKey];
         }

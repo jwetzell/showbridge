@@ -297,7 +297,8 @@ export class SchemaService {
                 display: paramKey,
                 type: paramSchema.type,
                 hint: paramSchema.description,
-                const: !!paramSchema.const,
+                isConst: !!paramSchema.const,
+                isTemplated: paramKey.startsWith('_'),
                 schema: paramSchema,
               };
 

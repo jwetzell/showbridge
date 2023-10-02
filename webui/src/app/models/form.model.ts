@@ -17,7 +17,8 @@ export interface ParamsInfo {
     type: string;
     placeholder?: string;
     options?: string[];
-    const: boolean;
+    isTemplated: boolean;
+    isConst: boolean;
     schema: any;
   };
 }
