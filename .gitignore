@@ -1,7 +1,5 @@
-node
 node_modules
 dist
 .DS_store
-.cache
 .angular
 **/assets/css/tailwind.css
