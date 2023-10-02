@@ -57,14 +57,20 @@
           <ng-container *ngSwitchCase="'array'">
             <!-- TODO(jwetzell): figure out how to display arrays-->
 
-            <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key" />
+            <input
+              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+              [formControlName]="key"
+              [placeholder]="paramsFormInfo.paramsInfo[key].placeholder" />
             <mat-icon class="text-gray-200" matTooltip="Comma separated list">data_array</mat-icon>
           </ng-container>
 
           <ng-container *ngSwitchCase="'object'">
             <!-- TODO(jwetzell): figure out how to display objects-->
 
-            <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key" />
+            <input
+              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+              [formControlName]="key"
+              [placeholder]="paramsFormInfo.paramsInfo[key].placeholder" />
             <mat-icon class="text-gray-200" matTooltip="JSON">data_object</mat-icon>
           </ng-container>
           <ng-container *ngSwitchDefault>
