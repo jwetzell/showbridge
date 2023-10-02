@@ -293,16 +293,6 @@ export class SchemaService {
                 }
               }
 
-              if (paramSchema.type === 'object') {
-                validators.push(this.objectValidator);
-              }
-
-              if (paramSchema.type === 'array') {
-                if (paramSchema.$ref === '#/definitions/ActionList') {
-                  validators.push(this.subActionValidator);
-                }
-              }
-              paramsFormInfo.formGroup.addControl(paramKey, new FormControl(formDefault, validators));
               paramsFormInfo.paramsInfo[paramKey] = {
                 display: paramKey,
                 type: paramSchema.type,
@@ -310,6 +300,22 @@ export class SchemaService {
                 const: !!paramSchema.const,
                 schema: paramSchema,
               };
+
+              if (paramSchema.type === 'array') {
+                paramsFormInfo.paramsInfo[paramKey].placeholder = paramKey.startsWith('_')
+                  ? '${msg.prop1}, ${msg.prop2}'
+                  : 'item1, item2, item3';
+                if (paramSchema.$ref === '#/definitions/ActionList') {
+                  validators.push(this.subActionValidator);
+                }
+              }
+
+              if (paramSchema.type === 'object') {
+                paramsFormInfo.paramsInfo[paramKey].placeholder = '{"key": "value"}';
+                validators.push(this.objectValidator);
+              }
+
+              paramsFormInfo.formGroup.addControl(paramKey, new FormControl(formDefault, validators));
 
               if (paramSchema.enum) {
                 paramsFormInfo.paramsInfo[paramKey].options = paramSchema.enum;

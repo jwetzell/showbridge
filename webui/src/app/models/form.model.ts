@@ -15,6 +15,7 @@ export interface ParamsInfo {
     display: string;
     hint: string;
     type: string;
+    placeholder?: string;
     options?: string[];
     const: boolean;
     schema: any;
