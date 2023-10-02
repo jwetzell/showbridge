@@ -39,7 +39,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 - **and**
     - triggers: array of triggers. All triggers must pass the message for this trigger to fire
 - **or**
-    - triggers: array of triggers. At least on of the triggers must pass for this trigger to fire
+    - triggers: array of triggers. At least one of the triggers must pass for this trigger to fire
 - **regex**
     - patterns: a list of regex patterns as strings
     - properties: a list of properties to test with their respective patterns, must be 1:1 
