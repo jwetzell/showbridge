@@ -274,7 +274,6 @@ export class SchemaService {
               }
 
               // NOTE(jwetzell): add as many validators as we can
-
               if (paramSchema.minimum) {
                 validators.push(Validators.min(paramSchema.minimum));
               }
@@ -316,7 +315,13 @@ export class SchemaService {
                 validators.push(this.objectValidator);
               }
 
-              paramsFormInfo.formGroup.addControl(paramKey, new FormControl(formDefault, validators));
+              paramsFormInfo.formGroup.addControl(
+                paramKey,
+                new FormControl(
+                  { value: formDefault, disabled: paramsFormInfo.paramsInfo[paramKey].isConst },
+                  validators
+                )
+              );
 
               if (paramSchema.enum) {
                 paramsFormInfo.paramsInfo[paramKey].options = paramSchema.enum;
@@ -351,15 +356,21 @@ export class SchemaService {
         if (paramSchema.type) {
           switch (paramSchema.type) {
             case 'integer':
-              const paramValue = parseInt(params[paramKey]);
+              // NOTE(jwetzell): delete
+              var paramValue = parseInt(params[paramKey]);
               if (Number.isNaN(paramValue)) {
                 delete params[paramKey];
               } else {
-                params[paramKey] = parseInt(params[paramKey]);
+                params[paramKey] = paramValue;
               }
               break;
             case 'number':
-              params[paramKey] = parseFloat(params[paramKey]);
+              var paramValue = parseFloat(params[paramKey]);
+              if (Number.isNaN(paramValue)) {
+                delete params[paramKey];
+              } else {
+                params[paramKey] = paramValue;
+              }
               break;
             case 'array':
               if (!Array.isArray(params[paramKey])) {
