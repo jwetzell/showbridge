@@ -1,7 +1,7 @@
 {
   "name": "showbridge-launcher",
   "description": "Desktop app to launch and configure showbridge",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "main": "main.js",
   "license": "MIT",
   "private": true,
@@ -41,7 +41,6 @@
     "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
     "icon": "./assets/images/icon512x512.png",
     "beforePack": "../scripts/electron_bundle.js",
-    "afterPack": "../scripts/cleanup.js",
     "directories": {
       "output": "../dist/electron-output/"
     },
@@ -93,10 +92,6 @@
       {
         "from": "../dist/bundle",
         "to": "./dist/bundle"
-      },
-      {
-        "from": "../node",
-        "to": "./node"
       },
       {
         "from": "../config",
