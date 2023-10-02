@@ -1,0 +1,97 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Color Palettes
+$showbridge-primary-palette: (
+  50: #e4f2ff,
+  100: #bdddff,
+  200: #93c8ff,
+  300: #68b2ff,
+  400: #4ba1ff,
+  500: #3991ff,
+  600: #3b83f6,
+  700: #3a70e2,
+  800: #395ecf,
+  900: #353eaf,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+);
+
+$showbridge-warn-palette: (
+  50: #fcedef,
+  100: #f9d3d4,
+  200: #e6a5a0,
+  300: #d9857c,
+  400: #e26e5c,
+  500: #e46546,
+  600: #d75d44,
+  700: #c5543e,
+  800: #b84e39,
+  900: #a9442e,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+);
+
+$showbridge-accent-palette: (
+  50: #eceff1,
+  100: #cfd8dc,
+  200: #b0bec5,
+  300: #90a4ae,
+  400: #78909c,
+  500: #607d8b,
+  600: #546e7a,
+  700: #455a64,
+  800: #37474f,
+  900: #263238,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+);
+
+$my-primary: mat.define-palette($showbridge-primary-palette, 600);
+$my-accent: mat.define-palette($showbridge-accent-palette, 200);
+$my-warn: mat.define-palette($showbridge-warn-palette, 400);
+
+$my-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $my-primary,
+      accent: $my-accent,
+      warn: $my-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($my-theme);
