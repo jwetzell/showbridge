@@ -3,7 +3,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { cloneDeep, has } from 'lodash-es';
 import { Subscription } from 'rxjs';
-import { ParamsFormInfo } from 'src/app/models/form.model';
+import { ParamInfo, ParamsFormInfo } from 'src/app/models/form.model';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
@@ -146,5 +146,9 @@ export class ParamsFormComponent implements OnInit {
       return Object.keys(this.paramsFormInfo?.formGroup.controls);
     }
     return [];
+  }
+
+  getParamInfo(key: string): ParamInfo | undefined {
+    return this.paramsFormInfo?.paramsInfo[key];
   }
 }
