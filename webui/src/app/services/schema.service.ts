@@ -254,6 +254,7 @@ export class SchemaService {
       paramsInfo: {},
     };
     if (schema?.properties) {
+      const paramKeys = Object.keys(schema.properties);
       Object.entries(schema.properties).forEach(([paramKey, paramSchema]: [string, any]) => {
         if (paramSchema.type) {
           switch (paramSchema.type) {
@@ -298,6 +299,7 @@ export class SchemaService {
                 hint: paramSchema.description,
                 isConst: !!paramSchema.const,
                 isTemplated: paramKey.startsWith('_'),
+                canTemplate: paramKeys.includes(`_${paramKey}`),
                 schema: paramSchema,
               };
 
