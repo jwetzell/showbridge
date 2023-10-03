@@ -7,11 +7,12 @@ import {
   TransformEventData,
   TriggerEventData,
 } from '../models/events.model';
+import { SettingsService } from './settings.service';
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
-  baseUrl: string = `${window.location.protocol.replace('http', 'ws')}//${location.host}`;
+  websocketUrl?: URL;
   socket?: WebSocket;
 
   status$: BehaviorSubject<string> = new BehaviorSubject<string>('closed');
@@ -27,63 +28,69 @@ export class EventService {
 
   private protocolStatusSubscription?: Subscription;
 
-  constructor() {
-    this.reload();
+  constructor(private settingsService: SettingsService) {
+    settingsService.websocketUrl.subscribe((url) => {
+      console.log(`websocket url: ${url}`);
+      this.websocketUrl = url;
+      this.reload();
+    });
   }
 
   reload() {
     try {
-      this.socket = new WebSocket(this.baseUrl, 'webui');
-      this.socket.onopen = (ev) => {
-        this.status$.next('open');
-        this.protocolStatusSubscription = timer(0, 5000).subscribe(() => {
-          if (this.socket && this.socket.readyState === this.socket.OPEN) {
-            this.socket.send('getProtocolStatus');
+      if (this.websocketUrl) {
+        this.socket = new WebSocket(this.websocketUrl, 'webui');
+        this.socket.onopen = (ev) => {
+          this.status$.next('open');
+          this.protocolStatusSubscription = timer(0, 5000).subscribe(() => {
+            if (this.socket && this.socket.readyState === this.socket.OPEN) {
+              this.socket.send('getProtocolStatus');
+            }
+          });
+        };
+
+        this.socket.onclose = (ev) => {
+          if (this.protocolStatusSubscription) {
+            this.protocolStatusSubscription.unsubscribe();
           }
-        });
-      };
+          this.status$.next('closed');
 
-      this.socket.onclose = (ev) => {
-        if (this.protocolStatusSubscription) {
-          this.protocolStatusSubscription.unsubscribe();
-        }
-        this.status$.next('closed');
+          // TODO(jwetzell): this could probably be better done
+          setTimeout(() => {
+            this.reload();
+          }, 2000);
+        };
 
-        // TODO(jwetzell): this could probably be better done
-        setTimeout(() => {
-          this.reload();
-        }, 2000);
-      };
+        this.socket.onerror = (ev) => {
+          this.status$.next('error');
+        };
 
-      this.socket.onerror = (ev) => {
-        this.status$.next('error');
-      };
-
-      // NOTE(jwetzell): websocket messages from router to webui
-      this.socket.onmessage = (message: MessageEvent) => {
-        const messageObj = JSON.parse(message.data);
-        switch (messageObj.eventType) {
-          case 'messageIn':
-            this.messageEvents$.next(messageObj);
-            break;
-          case 'trigger':
-            this.triggerEvents$.next(messageObj);
-            break;
-          case 'action':
-            this.actionEvents$.next(messageObj);
-            break;
-          case 'transform':
-            this.transformEvents$.next(messageObj);
-            break;
-          case 'protocolStatus':
-            this.protocolStatus$.next(messageObj);
-            break;
-          default:
-            console.log(`unhandled websocket message type = ${messageObj.eventType}`);
-            console.log(messageObj);
-            break;
-        }
-      };
+        // NOTE(jwetzell): websocket messages from router to webui
+        this.socket.onmessage = (message: MessageEvent) => {
+          const messageObj = JSON.parse(message.data);
+          switch (messageObj.eventType) {
+            case 'messageIn':
+              this.messageEvents$.next(messageObj);
+              break;
+            case 'trigger':
+              this.triggerEvents$.next(messageObj);
+              break;
+            case 'action':
+              this.actionEvents$.next(messageObj);
+              break;
+            case 'transform':
+              this.transformEvents$.next(messageObj);
+              break;
+            case 'protocolStatus':
+              this.protocolStatus$.next(messageObj);
+              break;
+            default:
+              console.log(`unhandled websocket message type = ${messageObj.eventType}`);
+              console.log(messageObj);
+              break;
+          }
+        };
+      }
     } catch (error) {
       console.error('problem connecting to ws');
       console.error(error);

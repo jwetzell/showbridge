@@ -4,12 +4,12 @@ import { cloneDeep, isEqual, orderBy } from 'lodash-es';
 import { BehaviorSubject } from 'rxjs';
 import { ConfigFile, ConfigState } from '../models/config.models';
 import { SchemaService } from './schema.service';
+import { SettingsService } from './settings.service';
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  configUrl: string = '/config';
-  isDummySite: boolean = false;
+  configUrl?: URL;
 
   configStateHistory: ConfigState[] = [];
   pendingConfigIsValid: Boolean = false;
@@ -20,28 +20,38 @@ export class ConfigService {
 
   constructor(
     private http: HttpClient,
-    private schemaService: SchemaService
-  ) {}
-
-  loadConfig() {
-    this.http.get<ConfigFile>(this.configUrl).subscribe((config) => {
-      const initialConfigState = this.pushConfigState(config, true, true);
-      this.currentlyShownConfigState.next(initialConfigState);
+    private schemaService: SchemaService,
+    private settingsService: SettingsService
+  ) {
+    settingsService.configUrl.subscribe((url) => {
+      console.log(`config url: ${url.toString()}`);
+      this.configUrl = url;
+      this.loadConfig();
     });
   }
 
-  setupForDummySite() {
-    this.configUrl = '/config.json';
-    this.loadConfig();
-    this.isDummySite = true;
+  loadConfig() {
+    if (this.configUrl) {
+      this.http.get<ConfigFile>(this.configUrl.toString()).subscribe((config) => {
+        console.log(config);
+        const initialConfigState = this.pushConfigState(config, true, true);
+        this.currentlyShownConfigState.next(initialConfigState);
+      });
+    } else {
+      throw new Error('config: no config url set');
+    }
   }
 
   uploadConfig(config: ConfigFile) {
-    return this.http.post(this.configUrl, config, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    if (this.configUrl) {
+      return this.http.post(this.configUrl.toString(), config, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } else {
+      throw new Error('config: no config url set');
+    }
   }
 
   updateCurrentlyShownConfig(configState: ConfigState) {
