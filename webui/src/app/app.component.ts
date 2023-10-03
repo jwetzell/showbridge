@@ -32,6 +32,7 @@ export class AppComponent {
   ) {
     // this.configService.setupForDummySite();
     // this.schemaService.setupForDummySite();
+    this.configService.loadConfig();
     this.schemaService.loadSchema();
 
     // NOTE(jwetzell): allows configstate to be updated via code
