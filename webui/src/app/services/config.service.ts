@@ -9,7 +9,6 @@ import { SchemaService } from './schema.service';
 })
 export class ConfigService {
   configUrl: string = '/config';
-  configSchemaUrl: string = '/config/schema';
   isDummySite: boolean = false;
 
   configStateHistory: ConfigState[] = [];
@@ -22,7 +21,9 @@ export class ConfigService {
   constructor(
     private http: HttpClient,
     private schemaService: SchemaService
-  ) {
+  ) {}
+
+  loadConfig() {
     this.http.get<ConfigFile>(this.configUrl).subscribe((config) => {
       const initialConfigState = this.pushConfigState(config, true, true);
       this.currentlyShownConfigState.next(initialConfigState);
@@ -31,10 +32,7 @@ export class ConfigService {
 
   setupForDummySite() {
     this.configUrl = '/config.json';
-    this.http.get<ConfigFile>(this.configUrl).subscribe((config) => {
-      const initialConfigState = this.pushConfigState(config, true, true);
-      this.currentlyShownConfigState.next(initialConfigState);
-    });
+    this.loadConfig();
     this.isDummySite = true;
   }
 
