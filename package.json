@@ -1,6 +1,6 @@
 {
   "name": "showbridge",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Simple Protocol Router /s",
   "bin": "main.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "commander": "^11.0.0",
     "fs-extra": "^11.1.1",
     "rimraf": "^5.0.1",
-    "showbridge-lib": "0.2.4"
+    "showbridge-lib": "0.2.5"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.38.0",
