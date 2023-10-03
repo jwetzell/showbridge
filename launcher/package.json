@@ -26,7 +26,7 @@
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.1.1",
     "respawn": "^2.6.0",
-    "showbridge": "0.2.8",
+    "showbridge": "0.2.9",
     "tail": "^2.2.6"
   },
   "devDependencies": {
