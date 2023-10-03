@@ -8,15 +8,14 @@ import { Action } from '../models/action.model';
 import { ConfigFile } from '../models/config.models';
 import { ObjectInfo, ParamsFormInfo } from '../models/form.model';
 import { Trigger } from '../models/trigger.model';
+import { SettingsService } from './settings.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SchemaService {
-  schemaUrl: string = '/config/schema';
+  schemaUrl?: URL;
   schema?: JSONSchemaType<ConfigFile>;
-
-  isDummySite: boolean = false;
 
   ajv: Ajv = new Ajv();
 
@@ -25,12 +24,25 @@ export class SchemaService {
   triggerTypes: ObjectInfo[] = [];
   protocolTypes: ObjectInfo[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private settingsService: SettingsService
+  ) {
+    settingsService.schemaUrl.subscribe((url) => {
+      console.log(`schema url: ${url.toString()}`);
+      this.schemaUrl = url;
+      this.loadSchema();
+    });
+  }
 
   loadSchema() {
-    this.http.get<JSONSchemaType<ConfigFile>>(this.schemaUrl).subscribe((schema) => {
-      this.setSchema(schema);
-    });
+    if (this.schemaUrl) {
+      this.http.get<JSONSchemaType<ConfigFile>>(this.schemaUrl.toString()).subscribe((schema) => {
+        this.setSchema(schema);
+      });
+    } else {
+      throw new Error('schema: no schema url set');
+    }
   }
 
   validate(data: any): (string | undefined)[] {
@@ -99,13 +111,16 @@ export class SchemaService {
     return paramsTemplate;
   }
 
-  setupForDummySite() {
-    this.schemaUrl = '/config.schema.json';
-    this.isDummySite = true;
-  }
-
   setSchema(schema: JSONSchemaType<ConfigFile>) {
     this.schema = schema;
+
+    if (this.ajv.getSchema('Config') !== undefined) {
+      this.ajv.removeSchema('Config');
+    }
+    this.actionTypes = [];
+    this.transformTypes = [];
+    this.triggerTypes = [];
+    this.protocolTypes = [];
 
     this.ajv.addSchema(schema);
 

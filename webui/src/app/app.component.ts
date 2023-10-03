@@ -11,6 +11,7 @@ import { ConfigService } from './services/config.service';
 import { CopyService } from './services/copy.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
+import { SettingsService } from './services/settings.service';
 import { downloadJSON } from './utils/utils';
 @Component({
   selector: 'app-root',
@@ -28,13 +29,10 @@ export class AppComponent {
     public schemaService: SchemaService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private copyService: CopyService
+    private copyService: CopyService,
+    public settingsService: SettingsService
   ) {
-    // this.configService.setupForDummySite();
-    // this.schemaService.setupForDummySite();
-    this.configService.loadConfig();
-    this.schemaService.loadSchema();
-
+    // settingsService.setupForDummySite();
     // NOTE(jwetzell): allows configstate to be updated via code
     this.configService.currentlyShownConfigState.subscribe((currentConfig) => {
       if (currentConfig) {
@@ -60,7 +58,7 @@ export class AppComponent {
 
   applyConfig() {
     // TODO(jwetzell): try to figure how to get rid of this
-    if (this.configService.isDummySite) {
+    if (this.settingsService.isDummySite) {
       this.snackBar.open('Dummy site nothing to save to!', 'Save', {
         duration: 3000,
       });
@@ -77,7 +75,9 @@ export class AppComponent {
           const newHttpPort = get(this.currentlyShownConfigState.config, 'http.params.port');
 
           if (newHttpPort && newHttpPort !== parseInt(location.port)) {
-            this.shouldRedirect = true;
+            if (this.settingsService.baseUrl === window.location.href) {
+              this.shouldRedirect = true;
+            }
           }
 
           const configAppliedSnackBar = this.snackBar.open('Config applied successfully!', 'Dismiss', {
