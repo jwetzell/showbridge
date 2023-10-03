@@ -41,6 +41,7 @@ export interface ProtocolStatusEventData {
   data: {
     cloud: CloudStatus;
     mqtt: MQTTStatus;
+    midi: MIDIStatus;
   };
 }
 
@@ -51,4 +52,13 @@ export interface CloudStatus {
 
 export interface MQTTStatus {
   connected: boolean;
+}
+
+export interface MIDIStatus {
+  devices: MIDIDeviceInfo[];
+}
+
+export interface MIDIDeviceInfo {
+  type: string;
+  name: string;
 }
