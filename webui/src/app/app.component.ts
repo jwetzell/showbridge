@@ -4,7 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { get } from 'lodash-es';
 import { filter } from 'rxjs';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
+import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
 import { ConfigState } from './models/config.models';
+import { MIDIStatus } from './models/events.model';
 import { ConfigService } from './services/config.service';
 import { CopyService } from './services/copy.service';
 import { EventService } from './services/event.service';
@@ -138,5 +140,13 @@ export class AppComponent {
   // NOTE(jwetzell): load configstate from revisions history
   loadConfigState(configState: ConfigState) {
     this.configService.updateCurrentlyShownConfig(configState);
+  }
+
+  openMIDIInfo(midiProtocolStatus: MIDIStatus) {
+    this.dialog.open(MIDIInfoDialogComponent, {
+      data: midiProtocolStatus,
+      width: '50%',
+      height: '50%',
+    });
   }
 }

@@ -22,6 +22,13 @@
         matTooltip="MQTT Connected">
         <mat-icon fontSet="material-icons-outlined">rss_feed</mat-icon>
       </div>
+      <div
+        *ngIf="protocolStatus.data.midi.devices.length > 0"
+        class="flex items-center justify-center ml-2 cursor-pointer"
+        (click)="openMIDIInfo(protocolStatus.data.midi)"
+        matTooltip="Show MIDI Info">
+        <mat-icon fontSet="material-icons-outlined">cable</mat-icon>
+      </div>
     </ng-container>
     <span class="flex-auto"></span>
     <button mat-icon-button matTooltip="Download Config" (click)="downloadConfig()">
