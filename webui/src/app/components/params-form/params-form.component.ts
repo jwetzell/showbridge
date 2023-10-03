@@ -3,7 +3,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { cloneDeep, has } from 'lodash-es';
 import { Subscription } from 'rxjs';
-import { ParamsFormInfo } from 'src/app/models/form.model';
+import { ParamInfo, ParamsFormInfo } from 'src/app/models/form.model';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
@@ -104,7 +104,7 @@ export class ParamsFormComponent implements OnInit {
 
     // NOTE(jwetzell): prune params that MUST change from the data when switch paramOptions
     Object.entries(this.paramsFormInfo.paramsInfo).forEach(([paramKey, paramInfo]) => {
-      if (paramInfo.const && this.data) {
+      if (paramInfo.isConst && this.data) {
         if (this.data[paramKey]) {
           delete this.data[paramKey];
         }
@@ -146,5 +146,9 @@ export class ParamsFormComponent implements OnInit {
       return Object.keys(this.paramsFormInfo?.formGroup.controls);
     }
     return [];
+  }
+
+  getParamInfo(key: string): ParamInfo | undefined {
+    return this.paramsFormInfo?.paramsInfo[key];
   }
 }

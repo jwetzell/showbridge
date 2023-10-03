@@ -11,13 +11,17 @@ export interface ParamsFormInfo {
 }
 
 export interface ParamsInfo {
-  [key: string]: {
-    display: string;
-    hint: string;
-    type: string;
-    placeholder?: string;
-    options?: string[];
-    const: boolean;
-    schema: any;
-  };
+  [key: string]: ParamInfo;
+}
+
+export interface ParamInfo {
+  display: string;
+  hint: string;
+  type: string;
+  placeholder?: string;
+  options?: string[];
+  isTemplated: boolean;
+  canTemplate: boolean;
+  isConst: boolean;
+  schema: any;
 }

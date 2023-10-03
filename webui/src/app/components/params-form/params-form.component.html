@@ -7,84 +7,82 @@
   <form [formGroup]="paramsFormInfo.formGroup">
     <div class="flex flex-col">
       <div *ngFor="let key of paramKeys()" class="flex items-center m-1">
-        <!-- TODO(jwetzell): figure out how to consolidate templated param into one input with a template toggle -->
-        <ng-container *ngIf="key.startsWith('_'); else noTooltip">
-          <label class="mr-2 text-gray-300" matTooltip="Templated">
-            {{ paramsFormInfo.paramsInfo[key].display }}:
-          </label>
+        <ng-container *ngIf="getParamInfo(key) as paramInfo">
+          <!-- TODO(jwetzell): figure out how to consolidate templated param into one input with a template toggle -->
+          <ng-container *ngIf="paramInfo.isTemplated; else noTemplatedTooltip">
+            <label class="mr-2 text-gray-300" matTooltip="Templated"> {{ paramInfo.display }}: </label>
+          </ng-container>
+          <ng-template #noTemplatedTooltip>
+            <label class="mr-2 text-gray-300"> {{ paramInfo.display }}: </label>
+          </ng-template>
+
+          <ng-container [ngSwitch]="paramInfo.type">
+            <ng-container *ngSwitchCase="'boolean'">
+              <input type="checkbox" [formControlName]="key" />
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'number'">
+              <input
+                type="number"
+                class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                [formControlName]="key" />
+              <mat-icon class="text-gray-200">123</mat-icon>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'integer'">
+              <input
+                type="number"
+                class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                [formControlName]="key" />
+              <mat-icon class="text-gray-200" matTooltip="Number">123</mat-icon>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'string'">
+              <input
+                type="text"
+                *ngIf="!paramInfo.options; else stringSelectList"
+                class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                [formControlName]="key" />
+              <mat-icon class="text-gray-200" matTooltip="String">abc</mat-icon>
+
+              <ng-template #stringSelectList>
+                <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key">
+                  <option *ngFor="let option of paramInfo.options" value="{{ option }}">
+                    {{ option }}
+                  </option>
+                </select>
+              </ng-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="'array'">
+              <!-- TODO(jwetzell): figure out how to display arrays-->
+              <input
+                class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                [formControlName]="key"
+                [placeholder]="paramInfo.placeholder" />
+              <mat-icon class="text-gray-200" matTooltip="Comma separated list">data_array</mat-icon>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'object'">
+              <!-- TODO(jwetzell): figure out how to display objects-->
+
+              <input
+                class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                [formControlName]="key"
+                [placeholder]="paramInfo.placeholder" />
+              <mat-icon class="text-gray-200" matTooltip="JSON">data_object</mat-icon>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key" />
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="!paramsFormInfo.formGroup.controls[key].valid">
+            <!-- TODO(jwetzell): better error displaying maybe even at a higher level to know which form has errors if none open -->
+            <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
+          </ng-container>
+          <div class="flex items-center justify-center">
+            <mat-icon matTooltip="{{ paramInfo.hint }}" class="ml-2 text-gray-200"> help_outline </mat-icon>
+          </div>
         </ng-container>
-        <ng-template #noTooltip>
-          <label class="mr-2 text-gray-300"> {{ paramsFormInfo.paramsInfo[key].display }}: </label>
-        </ng-template>
-
-        <ng-container [ngSwitch]="paramsFormInfo.paramsInfo[key].type">
-          <ng-container *ngSwitchCase="'boolean'">
-            <input type="checkbox" [formControlName]="key" />
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'number'">
-            <input
-              type="number"
-              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-              [formControlName]="key" />
-            <mat-icon class="text-gray-200">123</mat-icon>
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'integer'">
-            <input
-              type="number"
-              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-              [formControlName]="key" />
-            <mat-icon class="text-gray-200" matTooltip="Number">123</mat-icon>
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'string'">
-            <input
-              type="text"
-              *ngIf="!paramsFormInfo.paramsInfo[key].options; else stringSelectList"
-              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-              [formControlName]="key" />
-            <mat-icon class="text-gray-200" matTooltip="String">abc</mat-icon>
-
-            <ng-template #stringSelectList>
-              <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key">
-                <option *ngFor="let option of paramsFormInfo.paramsInfo[key].options" value="{{ option }}">
-                  {{ option }}
-                </option>
-              </select>
-            </ng-template>
-          </ng-container>
-          <ng-container *ngSwitchCase="'array'">
-            <!-- TODO(jwetzell): figure out how to display arrays-->
-
-            <input
-              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-              [formControlName]="key"
-              [placeholder]="paramsFormInfo.paramsInfo[key].placeholder" />
-            <mat-icon class="text-gray-200" matTooltip="Comma separated list">data_array</mat-icon>
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'object'">
-            <!-- TODO(jwetzell): figure out how to display objects-->
-
-            <input
-              class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-              [formControlName]="key"
-              [placeholder]="paramsFormInfo.paramsInfo[key].placeholder" />
-            <mat-icon class="text-gray-200" matTooltip="JSON">data_object</mat-icon>
-          </ng-container>
-          <ng-container *ngSwitchDefault>
-            <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key" />
-          </ng-container>
-        </ng-container>
-        <ng-container *ngIf="!paramsFormInfo.formGroup.controls[key].valid">
-          <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
-        </ng-container>
-        <div class="flex items-center justify-center">
-          <mat-icon matTooltip="{{ paramsFormInfo.paramsInfo[key].hint }}" class="ml-2 text-gray-200">
-            help_outline
-          </mat-icon>
-        </div>
       </div>
     </div>
   </form>
