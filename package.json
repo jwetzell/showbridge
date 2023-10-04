@@ -6,9 +6,10 @@
   "scripts": {
     "pretty": "prettier --write lib/*",
     "test:lib": "node tests/test.js",
-    "predev": "node scripts/setup_dev.js",
-    "dev": "nodemon --exec 'node main.js -d -c config/dev.json --webui dist/webui'",
-    "start": "node main.js"
+    "predev": "node scripts/setup_dev.js && cd webui && npm run build",
+    "dev": "nodemon --ignore dist --ignore webui --ignore launcher --exec 'node main.js -d -c config/dev.json --webui dist/webui'",
+    "start": "node main.js",
+    "install:all": "node scripts/clean_install.js"
   },
   "author": {
     "name": "Joel Wetzell",

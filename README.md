@@ -23,7 +23,7 @@
   - use the `-h` flag to see available flags
 - Source
   - clone repo
-  - install dependencies: `npm install && node scripts/clean_install.js`
+  - install dependencies: `npm install && npm run install:all`
   - run: `npm run start -- -c config.json`
     - if you would like to turn on debug or trace logging use the `-d/t` or `--debug/trace` flag
     - if no config file is specified then a [default config](config/default.json) will be used

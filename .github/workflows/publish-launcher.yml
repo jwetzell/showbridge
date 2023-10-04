@@ -16,7 +16,7 @@ jobs:
           cache: 'npm'
       - run: sudo apt-get install -y libasound2-dev
       - run: npm ci
-      - run: node scripts/clean_install.js
+      - run: npm run install:all
       - run: npm run release
         working-directory: ./launcher
   build-windows:
@@ -28,7 +28,7 @@ jobs:
           node-version: 18
           cache: 'npm'
       - run: npm ci
-      - run: node scripts/clean_install.js
+      - run: npm run install:all
       - run: npm run release
         working-directory: ./launcher
   build-macos:
@@ -45,6 +45,6 @@ jobs:
           node-version: 18
           cache: 'npm'
       - run: npm ci
-      - run: node scripts/clean_install.js
+      - run: npm run install:all
       - run: npm run release
         working-directory: ./launcher

@@ -7,6 +7,7 @@ const projectFolders = [
   path.resolve(__dirname, '../lib'),
   path.resolve(__dirname, '../launcher'),
   path.resolve(__dirname, '../webui'),
+  path.resolve(__dirname, '../cloud'),
 ];
 const modulefolders = projectFolders.map((projectFolder) => path.join(projectFolder, 'node_modules'));
 
