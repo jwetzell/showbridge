@@ -1,17 +1,35 @@
-## Simple protocol router _/s_
+<div align="center">
+
+# showbridge
+
+![npm](https://img.shields.io/npm/v/showbridge-lib?label=lib)
+![npm](https://img.shields.io/npm/v/showbridge?label=main.js)
+![GitHub release (with filter)](https://img.shields.io/github/v/release/jwetzell/showbridge?label=launcher)
+
+
+
+Simple protocol router _/s_
+
+[Run](#how-to-run) •
+[Config File](#config-file) •
+[Structure](#structure) •
+[Templating](#templating) •
+[Cloud](#cloud)
+
+</div>
 
 ### Supported Protocols
-- http
-- websocket
-- osc (via udp and tcp)
-- tcp
-- udp
-- mqtt
-- midi
+- HTTP
+- WebSocket
+- OSC (via UDP and TCP)
+- UDP
+- TCP
+- MQTT
+- MIDI
 
 ### How to run
 - Launcher
-  - download/install launcher (check the releases section) this is the easiest method to get up and running and includes the web interface
+  - download/install [launcher](https://github.com/jwetzell/showbridge/releases) this is the easiest method to get up and running and includes the web interface
   - run showbridge!
 - NPM
   - **NOTE**: this does not include the web interface
@@ -31,10 +49,11 @@
     - `cd webui`
     - `npm run build`
   - to include the webui just relaunch showbridge by running: `npm run start -- -c config.json --webui dist/webui`
-  - to run the launcher which will include webui if built
+  - to run the launcher (these steps will also build the webui)
     - `cd launcher`
     - `npm run start`
-## Config File (sorry)
+
+## Config File
 The showbridge router's config is entirely controlled by a JSON config file. This file can be made by hand or edited via the web interface included with the launcher. The router WILL NOT start up with an invalid config file. I do provide some starter/example configs to look at to get a general idea of what one entails. 
 
 Resources
@@ -50,7 +69,7 @@ Resources
 - actions: actions are what should be done as a result of a trigger being well triggered, actions can transform the message that they act on using transforms
 - transforms: transforms transform messages, the transformations are localized to the action the transform is a part of
 
-## Structure
+# Structure
 Every piece (triggers, actions, transforms) have a shared JSON structure
 - type: string that denotes the type of the trigger/action/transform
 - params: an object that holds the config for the trigger/action/transform
@@ -163,7 +182,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
     - template: the template that will be evaluated and then set as the value of the msg.property
 
 
-## Templating
+# Templating
 Alright there has been a lot of references to templating. There is no secret sauce it is simply [lodash templating](https://lodash.com/docs/4.17.15#template) which is compatible with JS template literals (backtick strings)
 - **examples**: assume an incoming message is a midi note_on message on channel 1 with note value = 60 and velocity = 127
     - `"/midi/${msg.channel}/${msg.status}/${msg.note}"` -> `/midi/1/note_on/60`
@@ -208,8 +227,10 @@ For templating purposes (any param starting with an underscore `_`) the incoming
 - **websocket**
     - payload: ws message content (if this is JSON it will be parsed into an object)
 
+# Cloud
+
 ## Connecting instances remotely?
-Remotely connecting two or more router instances is supported via [showbridge-cloud](https://github.com/jwetzell/showbridge-cloud). The only configuration necessary is the url of the cloud server (for a **publicly** available server you can use https://cloud.showbridge.io) the other necessary configuration option is room(s) explained below.
+Remotely connecting two or more router instances is supported via [showbridge cloud](./cloud). The only configuration necessary is the url of the cloud server (for a **publicly** available server you can use https://cloud.showbridge.io) the other necessary configuration option is room(s) explained below.
 
 Routers can send messages through the cloud server using the cloud-output action mentioned above. To control what messages routers are listening to when multiple routers are connected to the same cloud server the concept of rooms is used. A room is simply a string i.e 'room1', 'super-secret-room-name', etc. when a cloud-output action is used the configured room(s) property of that action controls what room(s) the message will be sent to. The room(s) property of the cloud params controls what room(s) a router is joined to. When a cloud-output sends a message to a room that a router is configured to be in then the router will receive the message sent and process it as if it was a native message.
 
