@@ -1,5 +1,13 @@
 # showbridge
 
+
+## Running for development
+After cloning the repo and running `npm install` it would be useful to run `npm run install:all` this will install the dependencies for all the sub projects (see below) that need them. This gets things into a good starting place for development.
+
+
+I have done my best to include a dev script for all of the folders below where it makes sense. So simply running `npm run dev` should get you into a running state. This will either be a live-reload process where changes will be detected and rebuilt or the current piece will be built with what is in your working directory and launched (launcher). The script should also take care of the linking for the libraries (showbridge, showbridge-lib) where necessary. 
+
+# Summary of folders
 ## [lib](./lib/)
 lib is the actual meat of showbridge defining a library that is than wrapped up and fronted by other sections
 
