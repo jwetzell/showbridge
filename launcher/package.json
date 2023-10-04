@@ -14,12 +14,13 @@
   "type": "commonjs",
   "scripts": {
     "tailwind": "tailwindcss build -i tailwind.css -o assets/css/tailwind.css",
-    "prestart": "npm run tailwind",
+    "prestart": "npm run tailwind && cd ../webui && npm run build",
     "start": "electron main.js",
+    "dev": "node ../scripts/setup_dev.js && npm run start",
     "build:linux": "electron-builder -l",
     "build:mac": "electron-builder -m",
     "build:win": "electron-builder -w",
-    "build": "electron-builder -mwl",
+    "build:all": "electron-builder -mwl",
     "release": "electron-builder"
   },
   "dependencies": {
