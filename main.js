@@ -31,7 +31,7 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
     logger.level = 10;
   }
 
-  logger.debug(`app: starting ${packageInfo.name} version: ${packageInfo.version}`);
+  logger.info(`app: starting ${packageInfo.name} version: ${packageInfo.version}`);
 
   let config = {};
 
