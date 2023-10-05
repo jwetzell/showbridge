@@ -29,16 +29,16 @@ Simple protocol router _/s_
 
 ### How to run
 - Launcher
-  - download/install [launcher](https://github.com/jwetzell/showbridge/releases) this is the easiest method to get up and running and includes the web interface
+  - download/install [launcher](https://github.com/jwetzell/showbridge/releases) this is the easiest method to get up and running and includes the web interface and logging
   - run showbridge!
 - NPM
-  - **NOTE**: this does not include the web interface
   - create a config file (see below)
   - optionally install globally: `npm install -g showbridge`
   - run
     - if installed globally: `showbridge -c config.json`
     - via npx: `npx showbridge@latest -c config.json`
-  - use the `-h` flag to see available flags
+  - this method still has the web interface available via HTTP
+  - use the `-h` flag to see other available flags
 - Source
   - clone repo
   - install dependencies: `npm install && npm run install:all`
