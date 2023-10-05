@@ -3,13 +3,19 @@
   "version": "0.2.9",
   "description": "Simple Protocol Router /s",
   "bin": "main.js",
+  "files":[
+    "dist/webui",
+    "config",
+    "schema"
+  ],
   "scripts": {
     "pretty": "prettier --write lib/*",
     "test:lib": "node tests/test.js",
     "predev": "node scripts/setup_dev.js && cd webui && npm run build",
     "dev": "nodemon --ignore dist --ignore webui --ignore launcher --exec 'node main.js -d -c config/dev.json --webui dist/webui'",
     "start": "node main.js",
-    "install:all": "node scripts/clean_install.js"
+    "install:all": "node scripts/clean_install.js",
+    "prepack": "cd webui && npm install && npm run build"
   },
   "author": {
     "name": "Joel Wetzell",
