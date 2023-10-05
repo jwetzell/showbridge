@@ -12,7 +12,7 @@ program.name(packageInfo.name);
 program.version(packageInfo.version);
 program.description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);
-program.option('-w, --webui <path>', 'location of webui html to serve', undefined);
+program.option('-w, --webui <path>', 'location of webui html to serve', path.join(__dirname,'dist/webui'));
 program.option('-d, --debug', 'turn on debug logging', false);
 program.option('-t, --trace', 'turn on trace logging', false);
 program.parse(process.argv);
@@ -31,7 +31,7 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
     logger.level = 10;
   }
 
-  logger.debug(`app: starting ${packageInfo.name} version: ${packageInfo.version}`);
+  logger.info(`app: starting ${packageInfo.name} version: ${packageInfo.version}`);
 
   let config = {};
 
