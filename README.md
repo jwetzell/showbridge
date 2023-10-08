@@ -65,7 +65,7 @@ Resources
 
 ## The _Basics_
 - router: throughout documentation I will use the term router to refer to configured/running instance of showbridge
-- triggers: when a message comes in triggers enforce some criteria on the incoming message. If a message "ticks all the boxes" the actions of the trigger are then performed. triggers do not stack each trigger in the array is evaluated in isolation.
+- triggers: when a message comes in triggers enforce some criteria on the incoming message. If a message "ticks all the boxes" the actions of the trigger are then performed. Triggers can have subTriggers which are further evaluated if the trigger is "fired". Triggers do not stack each trigger in the array is evaluated in isolation.
 - actions: actions are what should be done as a result of a trigger being well triggered, actions can transform the message that they act on using transforms
 - transforms: transforms transform messages, the transformations are localized to the action the transform is a part of
 
@@ -77,10 +77,6 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 
 ## Triggers
 - **any**: fires for any incoming message
-- **and**
-    - triggers: array of triggers. All triggers must pass the message for this trigger to fire
-- **or**
-    - triggers: array of triggers. At least one of the triggers must pass for this trigger to fire
 - **regex**
     - patterns: a list of regex patterns as strings
     - properties: a list of properties to test with their respective patterns, must be 1:1 
