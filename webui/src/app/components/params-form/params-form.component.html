@@ -1,7 +1,7 @@
 <ng-container *ngIf="parentSchema && paramsFormInfo">
   <ng-container *ngIf="paramsOptions.length > 1">
     <mat-tab-group [selectedIndex]="paramsOptionsSelectedIndex" (selectedTabChange)="paramsOptionsTabSelected($event)">
-      <mat-tab *ngFor="let paramsOption of paramsOptions" label="{{ paramsOption.display }}"></mat-tab>
+      <mat-tab *ngFor="let paramsOption of paramsOptions" [label]="paramsOption.display"></mat-tab>
     </mat-tab-group>
   </ng-container>
   <form [formGroup]="paramsFormInfo.formGroup">
@@ -47,7 +47,7 @@
 
               <ng-template #stringSelectList>
                 <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="key">
-                  <option *ngFor="let option of paramInfo.options" value="{{ option }}">
+                  <option *ngFor="let option of paramInfo.options" [value]="option">
                     {{ option }}
                   </option>
                 </select>
@@ -80,7 +80,7 @@
             <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
           </ng-container>
           <div class="flex items-center justify-center">
-            <mat-icon matTooltip="{{ paramInfo.hint }}" class="ml-2 text-gray-200"> help_outline </mat-icon>
+            <mat-icon [matTooltip]="paramInfo.hint" class="ml-2 text-gray-200"> help_outline </mat-icon>
           </div>
         </ng-container>
       </div>

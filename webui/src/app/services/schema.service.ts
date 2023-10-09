@@ -84,6 +84,7 @@ export class SchemaService {
     const template: Trigger = {
       type: triggerType,
       actions: [],
+      subTriggers: [],
       enabled: true,
     };
     const itemInfo = this.triggerTypes.find((itemInfo) => itemInfo.type === triggerType);
