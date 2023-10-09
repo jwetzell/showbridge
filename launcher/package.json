@@ -1,7 +1,7 @@
 {
   "name": "showbridge-launcher",
   "description": "Desktop app to launch and configure showbridge",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "main": "main.js",
   "license": "MIT",
   "private": true,
@@ -16,7 +16,7 @@
     "tailwind": "tailwindcss build -i tailwind.css -o assets/css/tailwind.css",
     "prestart": "npm run tailwind && cd ../webui && npm run build",
     "start": "electron main.js",
-    "predev":"node ../scripts/setup_dev.js",
+    "predev": "node ../scripts/setup_dev.js",
     "dev": "npm run start",
     "build:linux": "electron-builder -l",
     "build:mac": "electron-builder -m",
@@ -28,7 +28,7 @@
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.1.1",
     "respawn": "^2.6.0",
-    "showbridge": "0.2.9",
+    "showbridge": "0.3.2",
     "tail": "^2.2.6"
   },
   "devDependencies": {

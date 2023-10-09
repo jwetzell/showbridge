@@ -154,22 +154,9 @@ export class TriggerComponent implements OnInit {
     return '';
   }
 
-  getSubTriggers(): Action[] | undefined {
-    if (
-      (this.trigger?.type === 'and' || this.trigger?.type === 'or') &&
-      this.trigger.params &&
-      this.trigger.params['triggers']
-    ) {
-      if (typeof this.trigger.params['triggers'] === 'object') {
-        return this.trigger.params['triggers'];
-      }
-    }
-    return undefined;
-  }
-
   deleteSubTrigger(index: number) {
-    if (this.trigger?.params) {
-      this.trigger?.params['triggers'].splice(index, 1);
+    if (this.trigger?.subTriggers) {
+      this.trigger?.subTriggers.splice(index, 1);
       this.updated.emit(true);
     }
   }
@@ -179,18 +166,16 @@ export class TriggerComponent implements OnInit {
   }
 
   addSubTrigger(triggerType: string) {
-    if (this.trigger && this.trigger?.params === undefined) {
-      this.trigger.params = {
-        triggers: [],
-      };
+    if (this.trigger && this.trigger?.subTriggers === undefined) {
+      this.trigger.subTriggers = [];
     }
 
-    if (this.trigger?.params) {
-      if (this.trigger.params['triggers'] === undefined) {
-        this.trigger.params['triggers'] = [];
+    if (this.trigger?.subTriggers) {
+      if (this.trigger.subTriggers === undefined) {
+        this.trigger.subTriggers = [];
       }
-      const triggerTemplate = this.schemaService.getTemplateForAction(triggerType);
-      this.trigger.params['triggers'].push(triggerTemplate);
+      const triggerTemplate = this.schemaService.getTemplateForTrigger(triggerType);
+      this.trigger.subTriggers.push(triggerTemplate);
       this.updated.emit(true);
     }
   }

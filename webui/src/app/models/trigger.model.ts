@@ -7,5 +7,6 @@ export interface Trigger {
     [key: string]: any;
   };
   actions?: Action[];
+  subTriggers?: Trigger[];
   enabled: boolean;
 }

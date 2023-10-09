@@ -5,11 +5,13 @@
     <div class="flex items-center justify-center">
       <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
     </div>
-    <div class="flex-auto text-gray-400" matTooltip="{{ transform.comment }}">{{ schema.title }}</div>
+    <div class="flex-auto text-gray-400" [matTooltip]="transform.comment ? transform.comment : ''">
+      {{ schema.title }}
+    </div>
     <div class="ml-2">
       <form [formGroup]="formGroup" class="h-full">
         <div class="flex items-center justify-around h-full">
-          <div class="flex items-center mx-2" matTooltip="{{ this.transform.enabled ? 'Disable' : 'Enable' }}">
+          <div class="flex items-center mx-2" [matTooltip]="this.transform.enabled ? 'Disable' : 'Enable'">
             <label class="mr-1 text-gray-300">enabled:</label>
             <input type="checkbox" formControlName="enabled" />
           </div>

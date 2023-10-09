@@ -6,7 +6,9 @@
           <div class="flex items-center justify-center">
             <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
           </div>
-          <div class="flex items-center justify-start flex-auto mr-3 text-gray-200" matTooltip="{{ action.comment }}">
+          <div
+            class="flex items-center justify-start flex-auto mr-3 text-gray-200"
+            [matTooltip]="action.comment ? action.comment : ''">
             {{ schema.title }}
           </div>
           <div class="flex items-center justify-center hover:cursor-pointer">
@@ -25,7 +27,7 @@
         <div class="m-2">
           <form [formGroup]="formGroup" class="h-full">
             <div class="flex items-center justify-around h-full">
-              <div class="flex items-center mx-2" matTooltip="{{ action.enabled ? 'Disable' : 'Enable' }}">
+              <div class="flex items-center mx-2" [matTooltip]="action.enabled ? 'Disable' : 'Enable'">
                 <label class="mr-1 text-gray-300">enabled:</label>
                 <input type="checkbox" formControlName="enabled" />
               </div>
@@ -51,7 +53,7 @@
         </div>
         <div
           *ngIf="action.transforms"
-          id="{{ getListId() }}"
+          [id]="getListId()"
           cdkDropList
           (cdkDropListDropped)="drop($event)"
           [cdkDropListConnectedTo]="eventService.actionIdList"

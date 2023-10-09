@@ -8,10 +8,12 @@
     <form [formGroup]="formGroup" class="h-full">
       <div class="flex flex-col my-3 ml-5 bg-gray-900 border-2 border-gray-500 border-solid trigger w-fit">
         <div class="flex items-center justify-center m-1">
-          <div class="flex-auto ml-2 text-gray-400 whitespace-nowrap w-fit" matTooltip="{{ trigger.comment }}">
+          <div
+            class="flex-auto ml-2 text-gray-400 whitespace-nowrap w-fit"
+            [matTooltip]="trigger.comment ? trigger.comment : ''">
             {{ schema.title }}
           </div>
-          <div class="flex items-center mx-2" matTooltip="{{ trigger.enabled ? 'Disable' : 'Enable' }}">
+          <div class="flex items-center mx-2" [matTooltip]="trigger.enabled ? 'Disable' : 'Enable'">
             <input type="checkbox" formControlName="enabled" />
           </div>
           <div class="flex items-center justify-center hover:cursor-pointer" matTooltip="Settings">
@@ -28,19 +30,19 @@
             <mat-icon class="text-green-500" matTooltip="Copy">content_copy</mat-icon>
           </div>
         </div>
-        <ng-container *ngIf="getSubTriggers() as subTriggers">
+        <ng-container *ngIf="trigger.subTriggers as subTriggers">
           <ng-container *ngIf="subTriggers.length > 0">
             <div *ngFor="let subTrigger of subTriggers; let i = index" class="mr-2">
               <app-trigger
                 [trigger]="subTrigger"
-                [path]="this.path + '/triggers/' + i"
-                [showActions]="false"
+                [path]="this.path + '/subTriggers/' + i"
+                [showActions]="true"
                 (delete)="deleteSubTrigger(i)"
                 (updated)="subTriggerUpdated()"></app-trigger>
             </div>
           </ng-container>
         </ng-container>
-        <ng-container *ngIf="trigger.type === 'and' || trigger.type === 'or'">
+        <ng-container>
           <div class="w-full h-full" *ngIf="schemaService.triggerTypes.length > 0">
             <div
               matTooltip="Add Subtrigger"
@@ -80,9 +82,9 @@
       <div class="flex flex-col items-center justify-center">
         <mat-icon [style.color]="indicatorColor" class="scale-150">arrow_right</mat-icon>
       </div>
-      <div *ngIf="trigger.actions">
+      <div *ngIf="trigger.actions" class="mb-2">
         <div
-          id="{{ getListId() }}"
+          [id]="getListId()"
           cdkDropList
           (cdkDropListDropped)="drop($event)"
           [cdkDropListConnectedTo]="eventService.triggerIdList"
