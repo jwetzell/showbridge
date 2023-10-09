@@ -106,10 +106,6 @@ export class ActionComponent implements OnInit {
     this.updated.emit(true);
   }
 
-  update() {
-    this.updated.emit(true);
-  }
-
   paramsUpdated(params: any) {
     if (this.action) {
       this.action.params = params;

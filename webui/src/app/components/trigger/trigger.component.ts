@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { merge } from 'lodash-es';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
@@ -66,9 +67,14 @@ export class TriggerComponent implements OnInit {
         this.formGroup.patchValue(this.trigger);
       }
       this.formGroup.valueChanges.subscribe((value) => {
-        this.update(value);
+        this.formUpdated();
       });
     }
+  }
+
+  formUpdated() {
+    merge(this.trigger, this.formGroup.value);
+    this.updated.emit(true);
   }
 
   deleteAction(index: number) {
@@ -94,11 +100,6 @@ export class TriggerComponent implements OnInit {
 
   deleteMe() {
     this.delete.emit(this.path);
-  }
-
-  update(trigger: Trigger) {
-    this.trigger = trigger;
-    this.updated.emit(true);
   }
 
   paramsUpdated(params: any) {
