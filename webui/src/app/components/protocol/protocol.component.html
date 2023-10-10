@@ -20,7 +20,7 @@
         </ng-template>
       </ng-container>
     </div>
-    <div class="flex-auto mb-8 overflow-scroll" cdkDropList (cdkDropListDropped)="drop($event)">
+    <div class="flex-auto mb-8" cdkDropList (cdkDropListDropped)="drop($event)">
       <div cdkDrag *ngFor="let trigger of protocol.triggers; let i = index">
         <app-trigger
           [path]="protocolType + '/triggers/' + i"
