@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'schema/**'
 jobs:
   build-docs:
     runs-on: ubuntu-latest
