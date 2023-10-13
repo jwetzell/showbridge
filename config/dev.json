@@ -8,7 +8,7 @@
       {
         "type": "regex",
         "params": {
-          "patterns": ["test"],
+          "patterns": ["/test.*"],
           "properties": ["originalUrl"]
         },
         "actions": [
@@ -22,65 +22,21 @@
               "protocol": "udp"
             },
             "enabled": true
-          },
-          {
-            "type": "delay",
-            "params": {
-              "duration": 1000,
-              "actions": [
-                {
-                  "type": "log",
-                  "transforms": [
-                    {
-                      "type": "template",
-                      "params": {
-                        "property": "originalUrl",
-                        "template": "hello"
-                      },
-                      "enabled": true
-                    }
-                  ],
-                  "enabled": true
-                },
-                {
-                  "type": "delay",
-                  "params": {
-                    "duration": 1000,
-                    "actions": [
-                      {
-                        "type": "log",
-                        "transforms": [
-                          {
-                            "type": "template",
-                            "params": {
-                              "property": "originalUrl",
-                              "template": "hello"
-                            },
-                            "enabled": true
-                          }
-                        ],
-                        "enabled": true
-                      }
-                    ]
-                  },
-                  "enabled": true
-                }
-              ]
-            },
-            "enabled": true
           }
         ],
-        "enabled": true
-      },
-      {
-        "type": "regex",
-        "params": {
-          "patterns": ["hello"],
-          "properties": ["originalUrl"]
-        },
-        "actions": [
+        "subTriggers": [
           {
-            "type": "log",
+            "type": "regex",
+            "params": {
+              "patterns": ["/testing"],
+              "properties": ["originalUrl"]
+            },
+            "actions": [
+              {
+                "type": "log",
+                "enabled": true
+              }
+            ],
             "enabled": true
           }
         ],

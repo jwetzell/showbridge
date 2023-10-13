@@ -12,7 +12,7 @@ program.name(packageInfo.name);
 program.version(packageInfo.version);
 program.description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);
-program.option('-w, --webui <path>', 'location of webui html to serve', path.join(__dirname,'dist/webui'));
+program.option('-w, --webui <path>', 'location of webui html to serve', path.join(__dirname, 'dist/webui'));
 program.option('-d, --debug', 'turn on debug logging', false);
 program.option('-t, --trace', 'turn on trace logging', false);
 program.parse(process.argv);
@@ -35,7 +35,7 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
 
   let config = {};
 
-  // if there is a config argument load it as the config
+  // NOTE(jwetzell): if there is a config argument load it as the config
   if (options.config) {
     try {
       logger.debug(`app: loading config from ${options.config}`);
@@ -46,7 +46,7 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
       logger.error(error);
     }
   } else {
-    // if not load a default
+    // NOTE(jwetzell): if not load a default
     logger.debug(`app: loading default config`);
     config = new Config(defaultConfig, schema);
   }

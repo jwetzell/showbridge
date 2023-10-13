@@ -28,7 +28,6 @@ export class TriggerComponent implements OnInit {
   schema: any;
 
   indicatorColor: string = 'gray';
-  // pendingUpdate?: Trigger;
 
   formGroup: FormGroup = new FormGroup({
     type: new FormControl('any'),
