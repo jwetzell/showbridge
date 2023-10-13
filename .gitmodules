@@ -1,0 +1,3 @@
+[submodule "cloud/admin-ui"]
+	path = cloud/admin-ui
+	url = https://github.com/socketio/socket.io-admin-ui

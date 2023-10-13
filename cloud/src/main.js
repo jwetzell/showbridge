@@ -6,8 +6,17 @@ const { createAdapter } = require('@socket.io/redis-streams-adapter');
 const { createClient } = require('redis');
 const bcrypt = require('bcrypt');
 const pino = require('pino');
-
+const express = require('express');
+const { createServer } = require('http');
+const path = require('path');
 require('dotenv').config();
+
+const app = express();
+
+// NOTE(jwetzell): load socket.io admin-ui on /ui
+app.use('/ui', express.static(path.join(__dirname, '../admin-ui/ui/dist')));
+
+const httpServer = createServer(app);
 
 const logger = pino();
 
@@ -23,7 +32,7 @@ if (process.env.LOG_LEVEL) {
 }
 
 function setupServer(redisClient) {
-  const io = new Server({
+  const io = new Server(httpServer, {
     cors: {
       origin: 'https://admin.socket.io',
       credentials: true,
@@ -72,7 +81,7 @@ function setupServer(redisClient) {
   });
 
   const listenPort = process.env.PORT ? process.env.PORT : 8888;
-  io.listen(listenPort);
+  httpServer.listen(listenPort);
 }
 
 if (process.env.REDIS_URL) {
