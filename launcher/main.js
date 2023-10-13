@@ -250,7 +250,7 @@ function reloadConfigFromDisk(filePath) {
   }
 }
 
-// TODO(jwetzell): add ability to load backup JSON files
+// TODO(jwetzell): add ability to load backup JSON files from UI
 function getConfigBackupList() {
   if (configDir) {
     const files = fs.readdirSync(configDir).filter((file) => file.startsWith('config.json.'));

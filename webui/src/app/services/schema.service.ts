@@ -134,7 +134,6 @@ export class SchemaService {
   populateProtocolTypes() {
     if (this.schema?.properties) {
       const protocolKeys = Object.keys(this.schema.properties);
-      // protocolKeys.sort();
       protocolKeys.forEach((protocolKey) => {
         const protocolSchema = this.schema?.properties[protocolKey];
         if (protocolSchema) {
