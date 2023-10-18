@@ -1,0 +1,30 @@
+name: check-format-lint
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-check-script:
+    name: Run Check Script
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+          cache: 'npm'
+      
+      - name: Install Node.js dependencies
+        run: npm ci
+      
+      - name: Install eslint
+        run: npm install -g eslint
+      
+      - name: Run check script
+        run: node scripts/check_format_lint.js
+      
