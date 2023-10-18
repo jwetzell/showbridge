@@ -4,9 +4,6 @@
   "description": "Main library for showbridge protocol router",
   "main": "index.js",
   "type": "module",
-  "scripts": {
-    "pretty": "prettier --write ./**/*"
-  },
   "author": {
     "name": "Joel Wetzell",
     "email": "me@jwetzell.com",

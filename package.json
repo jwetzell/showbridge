@@ -9,7 +9,6 @@
     "schema"
   ],
   "scripts": {
-    "pretty": "prettier --write lib/*",
     "test:lib": "node tests/test.js",
     "predev": "node scripts/setup_dev.js && cd webui && npm run build",
     "dev": "nodemon --ignore dist --ignore webui --ignore launcher --exec 'node main.js -d -c config/dev.json --webui dist/webui'",
@@ -39,9 +38,9 @@
   },
   "devDependencies": {
     "@vercel/ncc": "^0.38.0",
-    "eslint": "^8.48.0",
-    "eslint-config-airbnb": "^19.0.4",
+    "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-config-airbnb": "^19.0.4",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3"
   }
