@@ -6,7 +6,7 @@ on:
 
 jobs:
   run-check-script:
-    name: Run Check Script
+    name: Run Format Check Script
     runs-on: ubuntu-latest
 
     steps:
@@ -19,8 +19,11 @@ jobs:
           node-version: 18
           cache: 'npm'
       
-      - name: Install Node.js dependencies
+      - name: Install root Node.js dependencies
         run: npm ci
+      
+      - name: Install all Node.js dependencies
+        run: npm run install:all
       
       - name: Install eslint
         run: npm install -g eslint
