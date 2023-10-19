@@ -4,6 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "showbridge-lib"
   - package-ecosystem: "npm"
     directory: "/lib"
     schedule:
@@ -12,6 +14,8 @@ updates:
     directory: "/launcher"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "showbridge"
   - package-ecosystem: "npm"
     directory: "/webui"
     schedule:
