@@ -1,0 +1,27 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/lib"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/launcher"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/webui"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/cloud"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+   
