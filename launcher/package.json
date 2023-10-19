@@ -28,7 +28,7 @@
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.1.1",
     "respawn": "^2.6.0",
-    "showbridge": "0.3.2",
+    "showbridge": "0.3.3",
     "tail": "^2.2.6"
   },
   "devDependencies": {
@@ -98,10 +98,6 @@
       {
         "from": "../config",
         "to": "./config"
-      },
-      {
-        "from": "../dist/webui",
-        "to": "./dist/webui"
       }
     ]
   }
