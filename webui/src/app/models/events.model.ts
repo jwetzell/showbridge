@@ -2,63 +2,63 @@ import { Action } from './action.model';
 import { Transform } from './transform.model';
 import { Trigger } from './trigger.model';
 
-export interface MessageEventData {
+export type MessageEventData = {
   eventType: 'messageIn';
   data: {
     [key: string]: any;
   };
-}
+};
 
-export interface TriggerEventData {
+export type TriggerEventData = {
   eventType: 'trigger';
   data: {
     path: string;
     fired: boolean;
     trigger: Trigger;
   };
-}
+};
 
-export interface ActionEventData {
+export type ActionEventData = {
   eventType: 'action';
   data: {
     path: string;
     fired: boolean;
     action: Action;
   };
-}
+};
 
-export interface TransformEventData {
+export type TransformEventData = {
   eventType: 'transform';
   data: {
     path: string;
     fired: boolean;
     transform: Transform;
   };
-}
+};
 
-export interface ProtocolStatusEventData {
+export type ProtocolStatusEventData = {
   eventType: 'protoclStatus';
   data: {
     cloud: CloudStatus;
     mqtt: MQTTStatus;
     midi: MIDIStatus;
   };
-}
+};
 
-export interface CloudStatus {
+export type CloudStatus = {
   connected: boolean;
   id?: string;
-}
+};
 
-export interface MQTTStatus {
+export type MQTTStatus = {
   connected: boolean;
-}
+};
 
-export interface MIDIStatus {
+export type MIDIStatus = {
   devices: MIDIDeviceInfo[];
-}
+};
 
-export interface MIDIDeviceInfo {
+export type MIDIDeviceInfo = {
   type: string;
   name: string;
-}
+};

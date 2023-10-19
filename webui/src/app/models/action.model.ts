@@ -1,6 +1,6 @@
 import { Transform } from './transform.model';
 
-export interface Action {
+export type Action = {
   type: string;
   comment?: string;
   params?: {
@@ -8,4 +8,4 @@ export interface Action {
   };
   transforms?: Transform[];
   enabled: boolean;
-}
+};

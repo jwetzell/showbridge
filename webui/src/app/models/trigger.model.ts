@@ -1,6 +1,6 @@
 import { Action } from './action.model';
 
-export interface Trigger {
+export type Trigger = {
   type: string;
   comment?: string;
   params?: {
@@ -9,4 +9,4 @@ export interface Trigger {
   actions?: Action[];
   subTriggers?: Trigger[];
   enabled: boolean;
-}
+};

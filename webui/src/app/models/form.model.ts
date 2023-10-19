@@ -1,20 +1,21 @@
 import { FormGroup } from '@angular/forms';
 
-export interface ObjectInfo {
+export type ObjectInfo = {
   name: string;
   type: string;
   schema: any;
-}
-export interface ParamsFormInfo {
+};
+
+export type ParamsFormInfo = {
   formGroup: FormGroup;
   paramsInfo: ParamsInfo;
-}
+};
 
-export interface ParamsInfo {
+export type ParamsInfo = {
   [key: string]: ParamInfo;
-}
+};
 
-export interface ParamInfo {
+export type ParamInfo = {
   display: string;
   hint: string;
   type: string;
@@ -24,4 +25,4 @@ export interface ParamInfo {
   canTemplate: boolean;
   isConst: boolean;
   schema: any;
-}
+};
