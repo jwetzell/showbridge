@@ -1,17 +1,17 @@
 import { Trigger } from './trigger.model';
 
-export interface ConfigFile {
+export type ConfigFile = {
   [key: string]: ProtocolConfiguration;
-}
+};
 
-export interface ProtocolConfiguration {
+export type ProtocolConfiguration = {
   params?: {
     [k: string]: string | number;
   };
   triggers?: Trigger[];
-}
+};
 
-export interface CloudConfiguration {
+export type CloudConfiguration = {
   params:
     | {
         url: string;
@@ -21,22 +21,11 @@ export interface CloudConfiguration {
         url: string;
         rooms: string[];
       };
-}
+};
 
-export type MessageType = 'ws' | 'osc' | 'http' | 'midi' | 'udp' | 'tcp' | 'mqtt';
-export type TriggerType =
-  | 'bytes-equal'
-  | 'midi-control-change'
-  | 'midi-note-off'
-  | 'midi-note-on'
-  | 'midi-program-change'
-  | 'osc-address'
-  | 'regex'
-  | 'sender';
-
-export interface ConfigState {
+export type ConfigState = {
   config: ConfigFile;
   timestamp: number;
   isLive: boolean;
   isCurrent: boolean;
-}
+};
