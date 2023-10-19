@@ -362,18 +362,15 @@ if (!lock) {
         app.exit(11);
       }
 
-      showbridgeProcess = respawn(
-        () => [showbridgePath, '--config', configFilePath, '--webui', './dist/webui', app.isPackaged ? '' : '--trace'],
-        {
-          name: 'showbridge process',
-          maxRestarts: 3,
-          sleep: 500,
-          kill: 5000,
-          cwd: rootPath,
-          stdio: [null, null, null, 'ipc'],
-          fork: true,
-        }
-      );
+      showbridgeProcess = respawn(() => [showbridgePath, '--config', configFilePath, app.isPackaged ? '' : '--trace'], {
+        name: 'showbridge process',
+        maxRestarts: 3,
+        sleep: 500,
+        kill: 5000,
+        cwd: rootPath,
+        stdio: [null, null, null, 'ipc'],
+        fork: true,
+      });
 
       showbridgeProcess.on('start', () => {
         if (showbridgeProcess.child) {
