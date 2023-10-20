@@ -61,7 +61,9 @@
         }
       ],
       "hardenedRuntime": true,
-      "notarize": "notarytool",
+      "notarize": {
+        "teamId": "JHA7H7P56J"
+      },
       "publish": [
         "github"
       ]
