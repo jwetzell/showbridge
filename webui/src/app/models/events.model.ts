@@ -5,7 +5,7 @@ import { Trigger } from './trigger.model';
 export type MessageEventData = {
   eventType: 'messageIn';
   data: {
-    [key: string]: any;
+    type: string;
   };
 };
 
