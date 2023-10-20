@@ -61,6 +61,7 @@
         }
       ],
       "hardenedRuntime": true,
+      "notarize": "notarytool",
       "publish": [
         "github"
       ]
