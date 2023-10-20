@@ -17,7 +17,7 @@ export class EventService {
 
   status$: BehaviorSubject<string> = new BehaviorSubject<string>('closed');
 
-  private messageEvents$: Subject<MessageEventData> = new Subject<MessageEventData>();
+  private messageInEvents$: Subject<MessageEventData> = new Subject<MessageEventData>();
   private triggerEvents$: Subject<TriggerEventData> = new Subject<TriggerEventData>();
   private actionEvents$: Subject<ActionEventData> = new Subject<ActionEventData>();
   private transformEvents$: Subject<TransformEventData> = new Subject<TransformEventData>();
@@ -70,7 +70,7 @@ export class EventService {
           const messageObj = JSON.parse(message.data);
           switch (messageObj.eventType) {
             case 'messageIn':
-              this.messageEvents$.next(messageObj);
+              this.messageInEvents$.next(messageObj);
               break;
             case 'trigger':
               this.triggerEvents$.next(messageObj);
