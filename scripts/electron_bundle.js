@@ -17,7 +17,6 @@ exports.default = async function (context) {
   });
 
   console.log('bundling showbridge main.js');
-
   const bundleCommand = [
     'ncc build',
     path.join(__dirname, '../launcher/node_modules/showbridge/main.js'),
@@ -29,11 +28,6 @@ exports.default = async function (context) {
     stdio: 'inherit',
   });
 
-  console.log('building webui');
-  execSync(`cd ../webui && npm install && npm run build`, {
-    stdio: 'inherit',
-  });
-  // await downloadNode(context);
   const platform = context.packager.platform.nodeName;
 
   let arch;

@@ -1,7 +1,6 @@
 const cp = require('child_process');
 const path = require('path');
 const os = require('os');
-const { rimrafSync } = require('rimraf');
 
 const projectFolders = [
   path.resolve(__dirname, '../lib'),
@@ -9,10 +8,6 @@ const projectFolders = [
   path.resolve(__dirname, '../webui'),
   path.resolve(__dirname, '../cloud'),
 ];
-const modulefolders = projectFolders.map((projectFolder) => path.join(projectFolder, 'node_modules'));
-
-console.log('removing node_modules folders');
-rimrafSync(modulefolders);
 
 projectFolders.forEach((projectFolder) => {
   console.log(`spawning npm ci process for ${projectFolder}`);
