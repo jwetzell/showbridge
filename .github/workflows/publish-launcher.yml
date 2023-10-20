@@ -15,8 +15,14 @@ jobs:
           node-version: 18
           cache: 'npm'
       - run: sudo apt-get install -y libasound2-dev
-      - run: npm ci
-      - run: npm run install:all
+
+      - name: Install main Node.js Dependencies
+        run: npm ci
+
+      - name: Install launcher Node.js Dependencies
+        run: npm ci
+        working-directory: './launcher'
+
       - run: npm run release
         working-directory: ./launcher
   build-windows:
@@ -27,8 +33,14 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-      - run: npm ci
-      - run: npm run install:all
+
+      - name: Install main Node.js Dependencies
+        run: npm ci
+
+      - name: Install launcher Node.js Dependencies
+        run: npm ci
+        working-directory: './launcher'
+
       - run: npm run release
         working-directory: ./launcher
   build-macos:
@@ -44,7 +56,13 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-      - run: npm ci
-      - run: npm run install:all
+
+      - name: Install main Node.js Dependencies
+        run: npm ci
+
+      - name: Install launcher Node.js Dependencies
+        run: npm ci
+        working-directory: './launcher'
+
       - run: npm run release
         working-directory: ./launcher
