@@ -1,0 +1,36 @@
+name: publish-lib-docs
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lib/**'
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install Node.js dependencies
+        run: npm insall
+        working-directory: ./lib
+
+      - run: npm run docs
+        working-directory: ./lib
+
+      - name: publish docs
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{secrets.FTP_URL}}
+          username: ${{secrets.FTP_USERNAME}}
+          password: ${{secrets.FTP_PASSWORD}}
+          local-dir: ./lib/dist/docs/
+          server-dir: lib/
+          port: 21
+          protocol: ftps
