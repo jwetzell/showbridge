@@ -3,22 +3,22 @@ changelog:
     authors:
       - dependabot
   categories:
-    - title: Cloud
+    - title: Cloud ☁️
       labels:
         - cloud
-    - title: Core Library
+    - title: Core Library 🛠
       labels:
         - lib
-    - title: Electron Launcher
+    - title: Electron Launcher 🖥️
       labels:
         - launcher
-    - title: Config Schema
+    - title: Config Schema {}
       labels:
         - schema
-    - title: CLI
+    - title: CLI ⌨️
       labels:
         - main
-    - title: Web UI
+    - title: Web UI 🌐
       labels:
         - webui
     - title: Other Changes
