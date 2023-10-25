@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "predocs": "rimraf dist/docs",
-    "docs": "jsdoc -c .jsdoc.config.json -d dist/docs -r ./"
+    "docs": "jsdoc -c .jsdoc.config.json -d dist/docs -r ./ docs/README.md"
   },
   "author": {
     "name": "Joel Wetzell",
