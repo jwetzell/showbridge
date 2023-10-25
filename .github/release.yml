@@ -1,0 +1,26 @@
+changelog:
+  exclude:
+    authors:
+      - dependabot
+  categories:
+    - title: Cloud
+      labels:
+        - cloud
+    - title: Core Library
+      labels:
+        - lib
+    - title: Electron Launcher
+      labels:
+        - launcher
+    - title: Config Schema
+      labels:
+        - schema
+    - title: CLI
+      labels:
+        - main
+    - title: Web UI
+      labels:
+        - webui
+    - title: Other Changes
+      labels:
+        - '*'
