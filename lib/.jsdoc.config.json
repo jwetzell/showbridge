@@ -13,5 +13,8 @@
   "templates": {
     "cleverLinks": false,
     "monospaceLinks": false
+  },
+  "opts": {
+    "template": "node_modules/clean-jsdoc-theme"
   }
 }
