@@ -4,6 +4,10 @@
   "description": "Main library for showbridge protocol router",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "predocs": "rimraf dist/docs",
+    "docs": "jsdoc -c .jsdoc.config.json -d dist/docs -r ./"
+  },
   "author": {
     "name": "Joel Wetzell",
     "email": "me@jwetzell.com",
@@ -33,5 +37,9 @@
     "socket.io-client": "^4.7.2",
     "superagent": "^8.1.2",
     "ws": "^8.14.0"
+  },
+  "devDependencies": {
+    "jsdoc": "^4.0.2",
+    "rimraf": "^5.0.5"
   }
 }
