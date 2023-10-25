@@ -188,6 +188,14 @@ function createTray() {
   );
   menu.append(
     new MenuItem({
+      label: 'Open Config Dir',
+      click: () => {
+        shell.openPath(configDir);
+      },
+    })
+  );
+  menu.append(
+    new MenuItem({
       label: 'Open DevTools',
       click: () => {
         mainWin.webContents.openDevTools({
