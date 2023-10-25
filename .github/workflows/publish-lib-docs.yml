@@ -18,7 +18,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Node.js dependencies
-        run: npm insall
+        run: npm ci
         working-directory: ./lib
 
       - run: npm run docs
