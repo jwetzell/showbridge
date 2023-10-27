@@ -324,7 +324,7 @@ function getShowbridgeLocation(isPackaged) {
   if (!isPackaged) {
     showbridgePath = '../main.js';
   } else {
-    showbridgePath = './dist/main/index.js';
+    showbridgePath = './app.asar.unpacked/node_modules/showbridge/main.js';
   }
 
   return path.join(rootPath, showbridgePath);
@@ -375,7 +375,6 @@ if (!lock) {
         app.exit(11);
       }
 
-      // TODO: it would be nice if the packaged launcher could just call the script in node_modules
       showbridgeProcess = respawn(() => [showbridgePath, '--config', configFilePath, app.isPackaged ? '' : '--trace'], {
         name: 'showbridge process',
         maxRestarts: 3,

@@ -37,10 +37,9 @@
     "showbridge-lib": "0.3.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.38.0",
     "eslint": "^8.51.0",
-    "eslint-config-prettier": "^9.0.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.0.0",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3"
   }
