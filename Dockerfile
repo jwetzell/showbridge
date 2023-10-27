@@ -1,4 +1,4 @@
-FROM node:18-alpine as build
+FROM node:20-alpine as build
 WORKDIR /build
 COPY ./webui/package.json ./webui/package.json
 RUN cd webui && npm install
@@ -8,7 +8,7 @@ RUN pwd
 RUN ls
 
 
-FROM node:18-alpine
+FROM node:20-alpine
 WORKDIR /app
 COPY package.json .
 RUN npm install
