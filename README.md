@@ -148,7 +148,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
     - actions: array of actions to execute
 - **random**
     - actions: array of actions to randomly pick from
-- log: action takes no params and will simply log the incoming message out useful for debugging triggers
+- **log**: action takes no params and will simply log the incoming message out useful for debugging triggers
 - **shell**
     - _command: JS literal template of shell command to run has access to msg properties
     - command: shell command to run _command has priority
