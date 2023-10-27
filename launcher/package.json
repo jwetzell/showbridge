@@ -42,10 +42,12 @@
     "appId": "showbridge.jwetzell.com",
     "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
     "icon": "./src/assets/images/icon512x512.png",
-    "beforePack": "./electron_bundle.js",
     "directories": {
       "output": "./dist/electron-output/"
     },
+    "asarUnpack": [
+      "node_modules/showbridge/**/*"
+    ],
     "electronLanguages": [
       "en-US"
     ],
@@ -92,10 +94,6 @@
       ]
     },
     "extraResources": [
-      {
-        "from": "./dist/main",
-        "to": "./dist/main"
-      },
       {
         "from": "../config",
         "to": "./config"
