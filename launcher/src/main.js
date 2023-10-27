@@ -9,7 +9,7 @@ const Tail = require('tail').Tail;
 const fs = require('fs-extra');
 const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
-const defaultConfig = require('../config/default.json');
+const defaultConfig = require('../../config/default.json');
 
 const rootPath = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 
@@ -99,7 +99,7 @@ function createLogWindow() {
     },
   });
   logWin.removeMenu();
-  logWin.loadFile('html/logger.html');
+  logWin.loadFile(path.join(__dirname, 'html/logger.html'));
 }
 
 function createSettingsWindow() {
@@ -112,7 +112,7 @@ function createSettingsWindow() {
     },
   });
   settingsWin.removeMenu();
-  settingsWin.loadFile('html/settings.html');
+  settingsWin.loadFile(path.join(__dirname, 'html/settings.html'));
 }
 
 function showLogWindow() {
@@ -147,7 +147,7 @@ function createMainWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-  mainWin.loadFile('index.html');
+  mainWin.loadFile(path.join(__dirname, 'index.html'));
 }
 
 function getIPAddresses() {
@@ -314,12 +314,17 @@ function loadCurrentLogFile() {
 }
 
 function getShowbridgeLocation(isPackaged) {
+  if (rootPath === undefined) {
+    console.error('app: no rootPath cannot get showbridgePath');
+    return null;
+  }
+
   let showbridgePath = null;
 
   if (!isPackaged) {
-    showbridgePath = './main.js';
+    showbridgePath = '../main.js';
   } else {
-    showbridgePath = './dist/bundle/index.js';
+    showbridgePath = './dist/main/index.js';
   }
 
   return path.join(rootPath, showbridgePath);
@@ -370,6 +375,7 @@ if (!lock) {
         app.exit(11);
       }
 
+      // TODO: it would be nice if the packaged launcher could just call the script in node_modules
       showbridgeProcess = respawn(() => [showbridgePath, '--config', configFilePath, app.isPackaged ? '' : '--trace'], {
         name: 'showbridge process',
         maxRestarts: 3,

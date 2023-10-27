@@ -12,7 +12,7 @@ FROM node:18-alpine
 WORKDIR /app
 COPY package.json .
 RUN npm install
-COPY --from=build /build/dist/webui /app/webui
+COPY --from=build /build/webui/dist/webui /app/webui
 COPY main.js main.js
 COPY schema schema
 COPY config config

@@ -3,10 +3,10 @@ const path = require('path');
 const fs = require('fs-extra');
 
 exports.default = async function (context) {
-  const bundlePathBase = '../dist/bundle';
+  const bundlePathBase = './dist/main';
 
   if (fs.existsSync(bundlePathBase)) {
-    console.log('removing existing bundle');
+    console.log('removing existing main bundle');
     fs.removeSync(bundlePathBase);
   }
   console.log('bundling things up for electron app');
@@ -19,8 +19,8 @@ exports.default = async function (context) {
   console.log('bundling showbridge main.js');
   const bundleCommand = [
     'ncc build',
-    path.join(__dirname, '../launcher/node_modules/showbridge/main.js'),
-    `--out ${path.join(__dirname, '../dist/bundle')}`,
+    path.join(__dirname, './node_modules/showbridge/main.js'),
+    `--out ${path.join(__dirname, bundlePathBase)}`,
     '--minify',
   ].join(' ');
 
@@ -46,7 +46,7 @@ exports.default = async function (context) {
       process.exit(1);
   }
 
-  const midiPrebuildSourcePath = '../launcher/node_modules/@julusian/midi/prebuilds';
+  const midiPrebuildSourcePath = './node_modules/@julusian/midi/prebuilds';
   const midiPrebuildDestPath = path.join(bundlePathBase, 'prebuilds');
 
   if (!fs.existsSync(path.join(midiPrebuildSourcePath, `midi-${platform}-${arch}`))) {
