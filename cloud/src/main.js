@@ -5,10 +5,10 @@ const { instrument } = require('@socket.io/admin-ui');
 const { createAdapter } = require('@socket.io/redis-streams-adapter');
 const { createClient } = require('redis');
 const bcrypt = require('bcrypt');
-const pino = require('pino');
 const express = require('express');
 const { createServer } = require('http');
 const path = require('path');
+const { logger, sendToDiscord } = require('./utils');
 require('dotenv').config();
 
 const app = express();
@@ -17,19 +17,6 @@ const app = express();
 app.use('/ui', express.static(path.join(__dirname, '../admin-ui/ui/dist')));
 
 const httpServer = createServer(app);
-
-const logger = pino();
-
-if (process.env.LOG_LEVEL) {
-  try {
-    const logLevel = parseInt(process.env.LOG_LEVEL, 10);
-    logger.level = logLevel;
-  } catch (error) {
-    logger.error(
-      `cloud: unable to set logger level to <${process.env.LOG_LEVEL}>. see pino log levels for valid options`
-    );
-  }
-}
 
 function setupServer(redisClient) {
   const io = new Server(httpServer, {
@@ -62,11 +49,13 @@ function setupServer(redisClient) {
 
   io.on('connection', (socket) => {
     logger.info(`cloud: socket ${socket.id} connected`);
+    sendToDiscord(`socket ${socket.id} connected`);
     socket.on('join', (rooms) => {
       if (rooms) {
         if (Array.isArray(rooms)) {
           rooms.forEach((room) => {
-            logger.info(`cloud: socket <${socket.id}> joined to room <${room}>`);
+            logger.info(`cloud: socket ${socket.id} joined to room ${room}`);
+            sendToDiscord(`socket ${socket.id} joined to room ${room}`);
           });
           socket.join(rooms);
         }
@@ -77,6 +66,11 @@ function setupServer(redisClient) {
       logger.debug(`cloud: proxying message to room ${room}`);
       logger.trace(msgObj);
       io.to(room).emit('message', msgObj);
+    });
+
+    socket.on('disconnect', () => {
+      sendToDiscord(`socket ${socket.id} disconnected`);
+      logger.info(`cloud: socket ${socket.id} disconnected`);
     });
   });
 
