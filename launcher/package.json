@@ -2,7 +2,7 @@
   "name": "showbridge-launcher",
   "description": "Desktop app to launch and configure showbridge",
   "version": "0.2.7",
-  "main": "main.js",
+  "main": "src/main.js",
   "license": "MIT",
   "private": true,
   "author": {
@@ -13,9 +13,9 @@
   "repository": "https://github.com/jwetzell/showbridge",
   "type": "commonjs",
   "scripts": {
-    "tailwind": "tailwindcss build -i tailwind.css -o assets/css/tailwind.css",
+    "tailwind": "tailwindcss build -i tailwind.css -o src/assets/css/tailwind.css",
     "prestart": "npm run tailwind && cd ../webui && npm run build",
-    "start": "electron main.js",
+    "start": "electron .",
     "predev": "node ../scripts/setup_dev.js",
     "dev": "npm run start",
     "build:linux": "electron-builder -l",
@@ -41,10 +41,10 @@
     "productName": "showbridge",
     "appId": "showbridge.jwetzell.com",
     "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
-    "icon": "./assets/images/icon512x512.png",
-    "beforePack": "../scripts/electron_bundle.js",
+    "icon": "./src/assets/images/icon512x512.png",
+    "beforePack": "./electron_bundle.js",
     "directories": {
-      "output": "../dist/electron-output/"
+      "output": "./dist/electron-output/"
     },
     "electronLanguages": [
       "en-US"
@@ -83,9 +83,7 @@
         {
           "target": "AppImage",
           "arch": [
-            "x64",
-            "arm64",
-            "armv7l"
+            "x64"
           ]
         }
       ],
@@ -95,8 +93,8 @@
     },
     "extraResources": [
       {
-        "from": "../dist/bundle",
-        "to": "./dist/bundle"
+        "from": "./dist/main",
+        "to": "./dist/main"
       },
       {
         "from": "../config",

@@ -4,14 +4,14 @@
   "description": "Simple Protocol Router /s",
   "bin": "main.js",
   "files": [
-    "dist/webui",
+    "webui/dist/webui",
     "config",
     "schema"
   ],
   "scripts": {
     "test:lib": "node tests/test.js",
     "predev": "node scripts/setup_dev.js && cd webui && npm run build",
-    "dev": "nodemon --ignore dist --ignore webui --ignore launcher --exec 'node --inspect main.js -d -c config/dev.json --webui dist/webui'",
+    "dev": "nodemon --ignore dist --ignore webui --ignore launcher --exec 'node --inspect main.js -d -c config/dev.json --webui webui/dist/webui'",
     "start": "node main.js",
     "install:all": "node scripts/clean_install.js",
     "prepack": "cd webui && npm install && npm run build"

@@ -48,7 +48,7 @@ Simple protocol router _/s_
   - if you would like the webui it will need to be built
     - `cd webui`
     - `npm run build`
-  - to include the webui just relaunch showbridge by running: `npm run start -- -c config.json --webui dist/webui`
+  - to include the webui just relaunch showbridge by running: `npm run start -- -c config.json --webui webui/dist/webui`
   - to run the launcher (these steps will also build the webui)
     - `cd launcher`
     - `npm run start`
