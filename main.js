@@ -4,7 +4,7 @@
 const { readFileSync, existsSync } = require('fs');
 const path = require('path');
 const { program } = require('commander');
-const defaultConfig = require('./config/default.json');
+const defaultConfig = require('./examples/config/default.json');
 const packageInfo = require('./package.json');
 const schema = require('./schema/config.schema.json');
 

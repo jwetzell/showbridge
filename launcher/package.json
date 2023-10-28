@@ -95,8 +95,8 @@
     },
     "extraResources": [
       {
-        "from": "../config",
-        "to": "./config"
+        "from": "../examples/config/default.json",
+        "to": "./examples/config/default.json"
       }
     ]
   }
