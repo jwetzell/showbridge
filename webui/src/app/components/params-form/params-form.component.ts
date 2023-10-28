@@ -23,6 +23,8 @@ export class ParamsFormComponent implements OnInit {
   paramsOptions: { display: string; paramsFormInfo: ParamsFormInfo; keys: string[]; schema: SomeJSONSchema }[] = [];
   paramsOptionsSelectedIndex: number = 0;
 
+  keysToTemplate: Set<string> = new Set<string>();
+
   constructor(private schemaService: SchemaService) {}
 
   ngOnInit(): void {
@@ -59,6 +61,7 @@ export class ParamsFormComponent implements OnInit {
     if (this.data && this.paramsFormInfo?.formGroup) {
       // NOTE(jwetzell): prepare data for form patching
       const dataToPatch = cloneDeep(this.data);
+      console.log(JSON.parse(JSON.stringify(dataToPatch)));
       Object.entries(this.paramsFormInfo.paramsInfo).forEach(([paramKey, paramInfo]) => {
         if (has(dataToPatch, paramKey)) {
           switch (paramInfo.type) {
@@ -81,6 +84,13 @@ export class ParamsFormComponent implements OnInit {
             default:
               break;
           }
+        }
+      });
+
+      console.log(dataToPatch);
+      Object.entries(dataToPatch).forEach(([key, value]) => {
+        if (key.startsWith('_') && value !== undefined) {
+          this.keysToTemplate.add(key.substring(1));
         }
       });
       this.paramsFormInfo.formGroup.patchValue(dataToPatch);
@@ -134,7 +144,12 @@ export class ParamsFormComponent implements OnInit {
 
   formUpdated() {
     if (this.paramsSchema) {
-      const params = this.schemaService.cleanParams(this.paramsSchema, this.paramsFormInfo?.formGroup.value);
+      const params = this.schemaService.cleanParams(
+        this.paramsSchema,
+        this.paramsFormInfo?.formGroup.value,
+        this.keysToTemplate
+      );
+      console.log(params);
       this.updated.emit(params);
     } else {
       console.error('params-form: no paramsSchema loaded');
@@ -143,12 +158,41 @@ export class ParamsFormComponent implements OnInit {
 
   paramKeys() {
     if (this.paramsFormInfo) {
-      return Object.keys(this.paramsFormInfo?.formGroup.controls);
+      return Object.keys(this.paramsFormInfo?.formGroup.controls).filter((key) => {
+        if (this.keysToTemplate.has(key)) {
+          return false;
+        }
+        if (key.startsWith('_') && !this.keysToTemplate.has(key.substring(1))) {
+          return false;
+        }
+        return true;
+      });
     }
     return [];
   }
 
   getParamInfo(key: string): ParamInfo | undefined {
     return this.paramsFormInfo?.paramsInfo[key];
+  }
+
+  toggleTemplate(key: string) {
+    // TODO(jwetzell): maybe copy data over to the other key's form control?
+    if (key.startsWith('_')) {
+      key = key.substring(1);
+    }
+    if (this.keysToTemplate.has(key)) {
+      this.keysToTemplate.delete(key);
+    } else {
+      this.keysToTemplate.add(key);
+    }
+    this.formUpdated();
+  }
+
+  baseKeyIsTemplated(key: string): boolean {
+    if (key.startsWith('_')) {
+      key = key.substring(1);
+    }
+
+    return this.keysToTemplate.has(key);
   }
 }
