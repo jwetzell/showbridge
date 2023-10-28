@@ -87,12 +87,13 @@ export class ParamsFormComponent implements OnInit {
         }
       });
 
-      console.log(dataToPatch);
+      //NOTE(jwetzell): initialize keysToTemplate
       Object.entries(dataToPatch).forEach(([key, value]) => {
         if (key.startsWith('_') && value !== undefined) {
           this.keysToTemplate.add(key.substring(1));
         }
       });
+
       this.paramsFormInfo.formGroup.patchValue(dataToPatch);
     }
 
@@ -123,7 +124,7 @@ export class ParamsFormComponent implements OnInit {
 
     const allowedParamKeys = Object.keys(this.paramsSchema?.properties);
     if (this.data) {
-      // NOTE(jwetzell): remove keys that aren't allow in the new params variation
+      // NOTE(jwetzell): remove keys that aren't allowed in the new params variation
       Object.keys(this.data).forEach((paramKey) => {
         if (allowedParamKeys && !allowedParamKeys.includes(paramKey)) {
           delete this.data[paramKey];
@@ -162,6 +163,8 @@ export class ParamsFormComponent implements OnInit {
         if (this.keysToTemplate.has(key)) {
           return false;
         }
+
+        // NOTE(jwezell): exclude template keys that aren't supposed to be
         if (key.startsWith('_') && !this.keysToTemplate.has(key.substring(1))) {
           return false;
         }
@@ -190,9 +193,8 @@ export class ParamsFormComponent implements OnInit {
 
   baseKeyIsTemplated(key: string): boolean {
     if (key.startsWith('_')) {
-      key = key.substring(1);
+      return this.keysToTemplate.has(key.substring(1));
     }
-
     return this.keysToTemplate.has(key);
   }
 }
