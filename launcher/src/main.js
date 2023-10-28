@@ -9,7 +9,7 @@ const Tail = require('tail').Tail;
 const fs = require('fs-extra');
 const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
-const defaultConfig = require('../../config/default.json');
+const defaultConfig = require('../../examples/config/default.json');
 
 const rootPath = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 

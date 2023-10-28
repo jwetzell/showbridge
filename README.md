@@ -44,7 +44,7 @@ Simple protocol router _/s_
   - install dependencies: `npm install && npm run install:all`
   - run: `npm run start -- -c config.json`
     - if you would like to turn on debug or trace logging use the `-d/t` or `--debug/trace` flag
-    - if no config file is specified then a [default config](config/default.json) will be used
+    - if no config file is specified then a [default config](examples/config/default.json) will be used
   - if you would like the webui it will need to be built
     - `cd webui`
     - `npm run build`
@@ -58,7 +58,7 @@ The showbridge router's config is entirely controlled by a JSON config file. Thi
 
 Resources
 - the [JSON Schema](https://docs.showbridge.io/schema/config) used to validate the config file
-- good idea to start with [default.json](config/default.json)
+- good idea to start with [default.json](examples/config/default.json)
 - [random examples](config/examples/)
 - the [demo](https://demo.showbridge.io) site can be used to import/edit/create configs that can be downloaded
     
