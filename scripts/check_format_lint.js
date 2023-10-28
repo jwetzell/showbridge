@@ -4,13 +4,13 @@ const eslintPaths = ['./lib', './cloud', './tests', './launcher', './main.js'];
 
 const pathsWithErrors = [];
 
-console.log(`Running eslint on: ${eslintPaths.join(', ')}`);
+console.log(`Running eslint on:\n${eslintPaths.join('\n')}`);
 eslintPaths.forEach((path) => {
   const eslintProcess = cp.spawnSync('eslint', [path], {
     stdio: 'inherit',
   });
 
-  if (eslintProcess.status > 0) {
+  if (eslintProcess.error || eslintProcess.status > 0) {
     pathsWithErrors.push(path);
   }
 });
