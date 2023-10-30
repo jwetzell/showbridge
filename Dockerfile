@@ -9,11 +9,14 @@ RUN ls
 
 
 FROM node:20-alpine
+ENV NODE_ENV production
+RUN apk add --no-cache tini
 WORKDIR /app
-COPY package.json .
+COPY --chown=node:node package.json .
 RUN npm install
-COPY --from=build /build/webui/dist/webui /app/webui
-COPY main.js main.js
-COPY schema schema
-COPY config config
-ENTRYPOINT [ "node", "main.js", "--webui","webui"]
+COPY --chown=node:node --from=build /build/webui/dist/webui /app/webui/dist/webui
+COPY --chown=node:node main.js main.js
+COPY --chown=node:node schema schema
+COPY --chown=node:node examples/config/default.json examples/config/default.json
+USER node
+ENTRYPOINT [ "/sbin/tini","/app/main.js"]
