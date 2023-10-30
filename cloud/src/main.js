@@ -12,9 +12,8 @@ const { logger, sendToDiscord } = require('./utils');
 require('dotenv').config();
 
 const app = express();
-
 // NOTE(jwetzell): load socket.io admin-ui on /ui
-app.use('/ui', express.static(path.join(__dirname, '../admin-ui/ui/dist')));
+app.use('/ui', express.static(path.join(__dirname, '../node_modules/@socket.io/admin-ui/ui/dist')));
 
 const httpServer = createServer(app);
 
