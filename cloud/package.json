@@ -5,8 +5,7 @@
   "main": "src/main.js",
   "bin": "src/main.js",
   "files": [
-    "src",
-    "admin-ui/ui/dist"
+    "src"
   ],
   "scripts": {
     "dev": "nodemon src/main.js | pino-pretty",
