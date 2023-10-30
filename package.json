@@ -5,7 +5,7 @@
   "bin": "main.js",
   "files": [
     "webui/dist/webui",
-    "config",
+    "examples/config/default.json",
     "schema"
   ],
   "scripts": {
