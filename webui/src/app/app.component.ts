@@ -32,8 +32,6 @@ export class AppComponent {
     private copyService: CopyService,
     public settingsService: SettingsService
   ) {
-    console.log(window.location);
-    // settingsService.setupForDummySite();
     // NOTE(jwetzell): allows configstate to be updated via code
     this.configService.currentlyShownConfigState.subscribe((currentConfig) => {
       if (currentConfig) {
