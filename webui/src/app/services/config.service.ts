@@ -40,7 +40,7 @@ export class ConfigService {
         },
         (error) => {
           if (window.location.hostname === 'demo.showbridge.io') {
-            this.settingsService.setupForDummySite;
+            this.settingsService.setupForDummySite();
           } else if (window.confirm('setup for dummy site?')) {
             this.settingsService.setupForDummySite();
           }
