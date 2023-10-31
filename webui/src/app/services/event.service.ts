@@ -57,7 +57,9 @@ export class EventService {
 
           // TODO(jwetzell): this could probably be better done
           setTimeout(() => {
-            this.reload();
+            if (!this.settingsService.isDummySite) {
+              this.reload();
+            }
           }, 2000);
         };
 
