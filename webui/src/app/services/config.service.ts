@@ -32,11 +32,20 @@ export class ConfigService {
 
   loadConfig() {
     if (this.configUrl) {
-      this.http.get<ConfigFile>(this.configUrl.toString()).subscribe((config) => {
-        console.log(config);
-        const initialConfigState = this.pushConfigState(config, true, true);
-        this.currentlyShownConfigState.next(initialConfigState);
-      });
+      this.http.get<ConfigFile>(this.configUrl.toString()).subscribe(
+        (config) => {
+          console.log(config);
+          const initialConfigState = this.pushConfigState(config, true, true);
+          this.currentlyShownConfigState.next(initialConfigState);
+        },
+        (error) => {
+          if (window.location.hostname === 'demo.showbridge.io') {
+            this.settingsService.setupForDummySite;
+          } else if (window.confirm('setup for dummy site?')) {
+            this.settingsService.setupForDummySite();
+          }
+        }
+      );
     } else {
       throw new Error('config: no config url set');
     }
