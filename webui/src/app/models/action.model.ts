@@ -9,9 +9,3 @@ export type Action = {
   transforms?: Transform[];
   enabled: boolean;
 };
-
-export type ActionTemplate = {
-  id: number;
-  action: Action;
-  tags?: string;
-};

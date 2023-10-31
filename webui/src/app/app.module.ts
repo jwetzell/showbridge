@@ -27,6 +27,7 @@ import { ParamsFormComponent } from './components/params-form/params-form.compon
 import { ProtocolComponent } from './components/protocol/protocol.component';
 import { TransformComponent } from './components/transform/transform.component';
 import { TriggerComponent } from './components/trigger/trigger.component';
+import { TemplateSearchComponent } from './components/template-search/template-search.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     ParamsFormComponent,
     ImportConfigComponent,
     MIDIInfoDialogComponent,
+    TemplateSearchComponent,
   ],
   imports: [
     BrowserModule,

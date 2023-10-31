@@ -5,6 +5,7 @@ import { get } from 'lodash-es';
 import { filter } from 'rxjs';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
+import { TemplateSearchComponent } from './components/template-search/template-search.component';
 import { ConfigState } from './models/config.models';
 import { MIDIStatus } from './models/events.model';
 import { ConfigService } from './services/config.service';
@@ -147,6 +148,13 @@ export class AppComponent {
       data: midiProtocolStatus,
       width: '50%',
       height: '50%',
+    });
+  }
+
+  openTemplatesDialog() {
+    this.dialog.open(TemplateSearchComponent, {
+      width: '90%',
+      height: '90%',
     });
   }
 }
