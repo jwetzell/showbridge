@@ -2,6 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { cloneDeep } from 'lodash-es';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
 import { CopyObject } from 'src/app/models/copy-object.model';
 import { ObjectInfo } from 'src/app/models/form.model';
@@ -86,7 +87,7 @@ export class ProtocolComponent {
     if (this.protocol && this.protocol?.triggers === undefined) {
       this.protocol.triggers = [];
     }
-    this.protocol?.triggers?.push(copyObject.object);
+    this.protocol?.triggers?.push(cloneDeep(copyObject.object));
     this.updated.emit(true);
   }
 

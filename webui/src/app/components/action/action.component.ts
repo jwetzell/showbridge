@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { merge } from 'lodash-es';
+import { cloneDeep, merge } from 'lodash-es';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
@@ -174,7 +174,7 @@ export class ActionComponent implements OnInit {
     if (this.action && this.action?.transforms === undefined) {
       this.action.transforms = [];
     }
-    this.action?.transforms?.push(copyObject.object);
+    this.action?.transforms?.push(cloneDeep(copyObject.object));
     this.updated.emit(true);
   }
 

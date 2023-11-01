@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { merge } from 'lodash-es';
+import { cloneDeep, merge } from 'lodash-es';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
@@ -139,7 +139,7 @@ export class TriggerComponent implements OnInit {
     if (this.trigger && this.trigger?.actions === undefined) {
       this.trigger.actions = [];
     }
-    this.trigger?.actions?.push(copyObject.object);
+    this.trigger?.actions?.push(cloneDeep(copyObject.object));
     this.updated.emit(true);
   }
 
