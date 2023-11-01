@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { cloneDeep } from 'lodash-es';
 import { TemplateObject } from 'src/app/models/template.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { TemplateService } from 'src/app/services/template.service';
@@ -16,11 +17,10 @@ export class TemplateSearchComponent {
     public templateService: TemplateService,
     private copyService: CopyService
   ) {
-    this.searchResults = TemplateObjects;
+    this.searchResults = cloneDeep(TemplateObjects);
   }
 
   updateSearch(event: any) {
-    console.log(event.target.value);
     this.searchResults = this.templateService.searchTemplates(event.target.value);
   }
 
