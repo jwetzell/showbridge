@@ -87,11 +87,11 @@ export class ProtocolComponent {
     if (this.protocol && this.protocol?.triggers === undefined) {
       this.protocol.triggers = [];
     }
-    this.protocol?.triggers?.push(cloneDeep(copyObject.object));
+    if (Array.isArray(copyObject.object)) {
+      this.protocol?.triggers?.push(...cloneDeep(copyObject.object));
+    } else {
+      this.protocol?.triggers?.push(cloneDeep(copyObject.object));
+    }
     this.updated.emit(true);
-  }
-
-  validCopyObject(copyObject: CopyObject) {
-    return copyObject && this.triggerTypes.find((objectInfo) => objectInfo.type === copyObject.object.type);
   }
 }

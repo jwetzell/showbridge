@@ -139,7 +139,11 @@ export class TriggerComponent implements OnInit {
     if (this.trigger && this.trigger?.actions === undefined) {
       this.trigger.actions = [];
     }
-    this.trigger?.actions?.push(cloneDeep(copyObject.object));
+    if (Array.isArray(copyObject.object)) {
+      this.trigger?.actions?.push(...cloneDeep(copyObject.object));
+    } else {
+      this.trigger?.actions?.push(cloneDeep(copyObject.object));
+    }
     this.updated.emit(true);
   }
 

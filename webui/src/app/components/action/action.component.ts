@@ -174,7 +174,11 @@ export class ActionComponent implements OnInit {
     if (this.action && this.action?.transforms === undefined) {
       this.action.transforms = [];
     }
-    this.action?.transforms?.push(cloneDeep(copyObject.object));
+    if (Array.isArray(copyObject.object)) {
+      this.action?.transforms?.push(...cloneDeep(copyObject.object));
+    } else {
+      this.action?.transforms?.push(cloneDeep(copyObject.object));
+    }
     this.updated.emit(true);
   }
 
