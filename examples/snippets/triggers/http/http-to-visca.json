@@ -1,0 +1,206 @@
+{
+  "type": "Trigger",
+  "object": [
+    {
+      "type": "regex",
+      "params": {
+        "patterns": ["/cam/.*"],
+        "properties": ["originalUrl"]
+      },
+      "subTriggers": [
+        {
+          "type": "regex",
+          "params": {
+            "patterns": ["/cam/zoom/.*"],
+            "properties": ["originalUrl"]
+          },
+          "actions": [
+            {
+              "type": "delay",
+              "params": {
+                "duration": 250,
+                "actions": [
+                  {
+                    "comment": "stop zoom",
+                    "type": "udp-output",
+                    "params": {
+                      "host": "10.0.0.58",
+                      "port": 52381,
+                      "hex": "01 00 00 06 00 00 00 00 88 01 04 07 00 ff"
+                    },
+                    "enabled": true,
+                    "transforms": []
+                  }
+                ]
+              },
+              "enabled": true,
+              "transforms": []
+            }
+          ],
+          "subTriggers": [
+            {
+              "type": "regex",
+              "params": {
+                "patterns": ["/cam/zoom/out"],
+                "properties": ["originalUrl"]
+              },
+              "actions": [
+                {
+                  "comment": "zoom out",
+                  "type": "udp-output",
+                  "params": {
+                    "host": "10.0.0.58",
+                    "port": 52381,
+                    "hex": "01 00 00 06 00 00 00 00 88 01 04 07 03 ff"
+                  },
+                  "enabled": true,
+                  "transforms": []
+                }
+              ],
+              "enabled": true
+            },
+            {
+              "type": "regex",
+              "params": {
+                "patterns": ["/cam/zoom/in"],
+                "properties": ["originalUrl"]
+              },
+              "actions": [
+                {
+                  "comment": "zoom in",
+                  "type": "udp-output",
+                  "params": {
+                    "host": "10.0.0.58",
+                    "port": 52381,
+                    "hex": "01 00 00 06 00 00 00 00 88 01 04 07 02 ff"
+                  },
+                  "enabled": true,
+                  "transforms": []
+                }
+              ],
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+        {
+          "type": "regex",
+          "params": {
+            "patterns": ["/cam/(pan|tilt)/.*"],
+            "properties": ["originalUrl"]
+          },
+          "actions": [
+            {
+              "type": "delay",
+              "transforms": [],
+              "enabled": true,
+              "params": {
+                "duration": 500,
+                "actions": [
+                  {
+                    "comment": "stop move",
+                    "type": "udp-output",
+                    "transforms": [],
+                    "enabled": true,
+                    "params": {
+                      "host": "10.0.0.58",
+                      "port": 52381,
+                      "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 03 ff"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "subTriggers": [
+            {
+              "type": "regex",
+              "params": {
+                "patterns": ["/cam/pan/left"],
+                "properties": ["originalUrl"]
+              },
+              "actions": [
+                {
+                  "type": "udp-output",
+                  "transforms": [],
+                  "enabled": true,
+                  "params": {
+                    "host": "10.0.0.58",
+                    "port": 52381,
+                    "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 01 03 ff"
+                  }
+                }
+              ],
+              "enabled": true
+            },
+            {
+              "type": "regex",
+              "params": {
+                "patterns": ["/cam/tilt/down"],
+                "properties": ["originalUrl"]
+              },
+              "actions": [
+                {
+                  "type": "udp-output",
+                  "transforms": [],
+                  "enabled": true,
+                  "params": {
+                    "host": "10.0.0.58",
+                    "port": 52381,
+                    "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 02 ff"
+                  },
+                  "comment": "tilt down"
+                }
+              ],
+              "enabled": true
+            },
+            {
+              "type": "regex",
+              "params": {
+                "patterns": ["/cam/pan/right"],
+                "properties": ["originalUrl"]
+              },
+              "actions": [
+                {
+                  "type": "udp-output",
+                  "transforms": [],
+                  "enabled": true,
+                  "params": {
+                    "host": "10.0.0.58",
+                    "port": 52381,
+                    "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 02 03 ff"
+                  },
+                  "comment": "pan right"
+                }
+              ],
+              "enabled": true
+            },
+            {
+              "type": "regex",
+              "params": {
+                "patterns": ["/cam/tilt/up"],
+                "properties": ["originalUrl"]
+              },
+              "actions": [
+                {
+                  "type": "udp-output",
+                  "transforms": [],
+                  "enabled": true,
+                  "params": {
+                    "host": "10.0.0.58",
+                    "port": 52381,
+                    "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 01 ff"
+                  },
+                  "comment": "tilt up"
+                }
+              ],
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        }
+      ],
+      "enabled": true
+    }
+  ]
+}
