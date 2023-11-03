@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-use-before-define */
 
-const { readFileSync, existsSync } = require('fs');
+const { readFileSync, existsSync, writeFileSync } = require('fs');
 const path = require('path');
 const { program } = require('commander');
 const defaultConfig = require('./examples/config/default.json');
@@ -86,6 +86,14 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
         eventType: 'configUpdated',
         config: updatedConfig,
       });
+    } else if (options.config) {
+      try {
+        writeFileSync(options.config, JSON.stringify(updatedConfig, undefined, 2));
+        logger.debug(`app: updated config written to ${options.config}`);
+      } catch (error) {
+        logger.error(`app: problem saving config to ${options.config}`);
+        logger.error(error);
+      }
     }
   });
 
@@ -95,6 +103,14 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
         eventType: 'varsUpdated',
         vars: updatedVars,
       });
+    } else if (options.vars) {
+      try {
+        writeFileSync(options.vars, JSON.stringify(updatedVars, undefined, 2));
+        logger.debug(`app: updated vars written to ${options.vars}`);
+      } catch (error) {
+        logger.error(`app: problem saving vars to ${options.vars}`);
+        logger.error(error);
+      }
     }
   });
 
