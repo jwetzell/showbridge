@@ -37,11 +37,11 @@ export type TransformEventData = {
 };
 
 export type ProtocolStatusEventData = {
-  eventType: 'protoclStatus';
+  eventType?: 'protocolStatus';
   data: {
-    cloud: CloudStatus;
-    mqtt: MQTTStatus;
-    midi: MIDIStatus;
+    cloud?: CloudStatus;
+    mqtt?: MQTTStatus;
+    midi?: MIDIStatus;
   };
 };
 

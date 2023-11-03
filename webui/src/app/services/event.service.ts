@@ -21,7 +21,10 @@ export class EventService {
   private triggerEvents$: Subject<TriggerEventData> = new Subject<TriggerEventData>();
   private actionEvents$: Subject<ActionEventData> = new Subject<ActionEventData>();
   private transformEvents$: Subject<TransformEventData> = new Subject<TransformEventData>();
-  public protocolStatus$: Subject<ProtocolStatusEventData> = new Subject<ProtocolStatusEventData>();
+  public protocolStatus$: BehaviorSubject<ProtocolStatusEventData> = new BehaviorSubject<ProtocolStatusEventData>({
+    eventType: 'protocolStatus',
+    data: {},
+  });
 
   public triggerIdList: string[] = [];
   public actionIdList: string[] = [];

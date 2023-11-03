@@ -5,6 +5,7 @@ import { get } from 'lodash-es';
 import { filter } from 'rxjs';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
+import { PatchEditorComponent } from './components/patch-editor/patch-editor.component';
 import { ConfigState } from './models/config.models';
 import { MIDIStatus } from './models/events.model';
 import { ConfigService } from './services/config.service';
@@ -149,6 +150,13 @@ export class AppComponent {
       data: midiProtocolStatus,
       width: '50%',
       height: '50%',
+    });
+  }
+
+  openPatchEditor() {
+    this.dialog.open(PatchEditorComponent, {
+      width: '90%',
+      height: '75%',
     });
   }
 }

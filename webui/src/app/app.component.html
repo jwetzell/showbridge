@@ -10,23 +10,22 @@
     <span>showbridge</span>
     <ng-container *ngIf="eventService.protocolStatus$ | async as protocolStatus">
       <div
-        *ngIf="protocolStatus.data.cloud.connected"
+        *ngIf="protocolStatus.data.cloud?.connected"
         class="flex items-center justify-center ml-2"
-        matTooltip="{{ protocolStatus.data.cloud.id }}">
+        matTooltip="{{ protocolStatus.data.cloud?.id }}">
         <mat-icon fontSet="material-icons-outlined">cloud</mat-icon>
       </div>
 
       <div
-        *ngIf="protocolStatus.data.mqtt.connected"
+        *ngIf="protocolStatus.data.mqtt?.connected"
         class="flex items-center justify-center ml-2"
         matTooltip="MQTT Connected">
         <mat-icon fontSet="material-icons-outlined">rss_feed</mat-icon>
       </div>
       <div
-        *ngIf="protocolStatus.data.midi.devices.length > 0"
         class="flex items-center justify-center ml-2 cursor-pointer"
-        (click)="openMIDIInfo(protocolStatus.data.midi)"
-        matTooltip="Show MIDI Info">
+        (click)="openPatchEditor()"
+        matTooltip="Edit Patches">
         <mat-icon fontSet="material-icons-outlined">cable</mat-icon>
       </div>
     </ng-container>
