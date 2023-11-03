@@ -309,6 +309,7 @@ export class SchemaService {
               }
 
               paramsFormInfo.paramsInfo[paramKey] = {
+                key: paramKey,
                 display: paramKey,
                 type: paramSchema.type,
                 hint: paramSchema.description,
@@ -360,12 +361,17 @@ export class SchemaService {
     return paramsFormInfo;
   }
 
-  cleanParams(paramsSchema: SomeJSONSchema, params: any): any {
+  cleanParams(paramsSchema: SomeJSONSchema, params: any, keysToTemplate: Set<string>): any {
     Object.keys(params).forEach((paramKey) => {
       // delete null/undefined params
       if (params[paramKey] === undefined || params[paramKey] === null) {
         delete params[paramKey];
         return;
+      }
+
+      // TODO(jwetzell): detect the other way base keys that should be removed in favor of their template version
+      if (paramKey.startsWith('_') && !keysToTemplate.has(paramKey.substring(1))) {
+        delete params[paramKey];
       }
 
       if (paramsSchema.properties[paramKey]) {
@@ -392,7 +398,7 @@ export class SchemaService {
             case 'array':
               if (!Array.isArray(params[paramKey])) {
                 const paramValue = params[paramKey];
-                if (paramValue.trim().length === 0) {
+                if (paramValue === undefined || paramValue.trim().length === 0) {
                   params[paramKey] = [];
                 } else {
                   if (paramSchema?.items?.type) {
