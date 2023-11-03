@@ -12,6 +12,7 @@ program.name(packageInfo.name);
 program.version(packageInfo.version);
 program.description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);
+program.option('-v, --vars <path>', 'location of file containing vars', undefined);
 program.option('-w, --webui <path>', 'location of webui html to serve', path.join(__dirname, 'webui/dist/webui'));
 program.option('-d, --debug', 'turn on debug logging', false);
 program.option('-t, --trace', 'turn on trace logging', false);
@@ -52,6 +53,18 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
   }
 
   const router = new Router(config);
+
+  if (options.vars) {
+    try {
+      logger.debug(`app: loading vars from ${options.vars}`);
+      const varsToLoad = JSON.parse(readFileSync(options.vars));
+      router.vars = varsToLoad;
+    } catch (error) {
+      logger.error(`app: could not load vars from ${options.vars}`);
+      logger.error(error);
+    }
+  }
+
   if (options.webui) {
     if (existsSync(options.webui)) {
       const filePath = path.resolve(options.webui);
@@ -66,6 +79,15 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
       process.send({
         eventType: 'configUpdated',
         config: updatedConfig,
+      });
+    }
+  });
+
+  router.on('varsUpdated', (updatedVars) => {
+    if (isChildProcess) {
+      process.send({
+        eventType: 'varsUpdated',
+        vars: updatedVars,
       });
     }
   });
@@ -141,6 +163,11 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
               errors,
             });
           }
+        }
+        break;
+      case 'updateVars':
+        if (message.vars) {
+          router.vars = message.vars;
         }
         break;
       case 'destroy':
