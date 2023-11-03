@@ -28,7 +28,7 @@
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.1.1",
     "respawn": "^2.6.0",
-    "showbridge": "0.3.4",
+    "showbridge": "0.3.6",
     "tail": "^2.2.6"
   },
   "devDependencies": {
@@ -97,6 +97,10 @@
       {
         "from": "../examples/config/default.json",
         "to": "./examples/config/default.json"
+      },
+      {
+        "from": "../examples/vars/default.json",
+        "to": "./examples/vars/default.json"
       }
     ]
   }

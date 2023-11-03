@@ -10,6 +10,7 @@ const fs = require('fs-extra');
 const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
 const defaultConfig = require('../../examples/config/default.json');
+const defaultVars = require('../../examples/vars/default.json');
 
 const rootPath = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 
@@ -22,6 +23,7 @@ let settingsWin;
 let tray;
 const configDir = path.join(app.getPath('appData'), '/showbridge/');
 const configFilePath = path.join(configDir, 'config.json');
+const varsFilePath = path.join(configDir, 'vars.json');
 const logsDir = path.join(configDir, 'logs');
 const showbridgeLogStream = fileStreamRotator.getStream({
   filename: path.join(logsDir, 'showbridge-%DATE%'),
@@ -242,6 +244,29 @@ function writeConfigToDisk(filePath, configObj) {
   }
 }
 
+function writeVarsToDisk(filePath, varsObj) {
+  // TODO(jwetzell): add error handling
+  if (fs.existsSync(filePath)) {
+    console.log('app: backing up current vars');
+    try {
+      fs.moveSync(filePath, `${filePath}.bak`, {
+        overwrite: true,
+      });
+    } catch (error) {
+      dialog.showErrorBox('Error', `Problem backing up vars ${error}`);
+    }
+  }
+
+  try {
+    console.log('app: saving new vars');
+    fs.writeJSONSync(filePath, varsObj, {
+      spaces: 2,
+    });
+  } catch (error) {
+    dialog.showErrorBox('Error', `Problem saving vars ${error}`);
+  }
+}
+
 function reloadConfigFromDisk(filePath) {
   if (filePath && fs.existsSync(filePath)) {
     try {
@@ -358,6 +383,11 @@ if (!lock) {
     writeConfigToDisk(configFilePath, defaultConfig);
   }
 
+  if (!fs.existsSync(varsFilePath)) {
+    console.log('app: populating vars.json with default config');
+    writeConfigToDisk(varsFilePath, defaultVars);
+  }
+
   app.whenReady().then(() => {
     if (!lock) {
       console.error('app: showbridge already running skipping setup');
@@ -375,15 +405,18 @@ if (!lock) {
         app.exit(11);
       }
 
-      showbridgeProcess = respawn(() => [showbridgePath, '--config', configFilePath, app.isPackaged ? '' : '--trace'], {
-        name: 'showbridge process',
-        maxRestarts: 3,
-        sleep: 500,
-        kill: 5000,
-        cwd: rootPath,
-        stdio: [null, null, null, 'ipc'],
-        fork: true,
-      });
+      showbridgeProcess = respawn(
+        () => [showbridgePath, '--config', configFilePath, '--vars', varsFilePath, app.isPackaged ? '' : '--trace'],
+        {
+          name: 'showbridge process',
+          maxRestarts: 3,
+          sleep: 500,
+          kill: 5000,
+          cwd: rootPath,
+          stdio: [null, null, null, 'ipc'],
+          fork: true,
+        }
+      );
 
       showbridgeProcess.on('start', () => {
         if (showbridgeProcess.child) {
@@ -413,6 +446,9 @@ if (!lock) {
               case 'configUpdated':
                 // TODO(jwetzell): add rollback
                 writeConfigToDisk(configFilePath, message.config);
+                break;
+              case 'varsUpdated':
+                writeVarsToDisk(varsFilePath, message.vars);
                 break;
               case 'messageIn':
                 if (routerLogStream) {
