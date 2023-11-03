@@ -4,7 +4,7 @@ on:
     branches:
       - 'main'
     paths:
-    - 'cloud/**'
+      - 'cloud/**'
 jobs:
   build-cloud-docker:
     runs-on: ubuntu-latest
