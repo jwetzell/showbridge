@@ -8,10 +8,6 @@
     <div class="flex flex-col">
       <div *ngFor="let key of paramKeys()" class="flex items-center m-1">
         <ng-container *ngIf="getParamInfo(key) as paramInfo">
-          <ng-container *ngIf="paramInfo.canTemplate || paramInfo.isTemplated">
-            <!-- TODO(jwetzell): better display of template toggle -->
-            <input type="checkbox" [checked]="baseKeyIsTemplated(key)" (change)="toggleTemplate(key)" />
-          </ng-container>
           <label class="mr-2 text-gray-300"> {{ paramInfo.display }}: </label>
 
           <ng-container [ngSwitch]="paramInfo.type">
@@ -80,6 +76,12 @@
           <div class="flex items-center justify-center">
             <mat-icon [matTooltip]="paramInfo.hint" class="ml-2 text-gray-200"> help_outline </mat-icon>
           </div>
+          <ng-container *ngIf="paramInfo.canTemplate || paramInfo.isTemplated">
+            <!-- TODO(jwetzell): better display of template toggle -->
+            <span class="ml-1 text-gray-300"
+              >_<input type="checkbox" [checked]="baseKeyIsTemplated(key)" (change)="toggleTemplate(key)"
+            /></span>
+          </ng-container>
         </ng-container>
       </div>
     </div>
