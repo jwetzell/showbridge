@@ -1,5 +1,5 @@
 {
-  "$schema": "../schema/config.schema.json",
+  "$schema": "../../schema/config.schema.json",
   "http": {
     "params": {
       "port": 3000
