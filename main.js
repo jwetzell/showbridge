@@ -5,6 +5,7 @@ const { readFileSync, existsSync } = require('fs');
 const path = require('path');
 const { program } = require('commander');
 const defaultConfig = require('./examples/config/default.json');
+const defaultVars = require('./examples/vars/default.json');
 const packageInfo = require('./package.json');
 const schema = require('./schema/config.schema.json');
 
@@ -64,6 +65,10 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
       logger.error(`app: could not load vars from ${options.vars}`);
       logger.error(error);
     }
+  } else {
+    // NOTE(jwetzell): if not load a default
+    logger.debug(`app: loading default vars`);
+    router.vars = defaultVars;
   }
 
   if (options.webui) {

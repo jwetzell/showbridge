@@ -6,6 +6,7 @@
   "files": [
     "webui/dist/webui",
     "examples/config/default.json",
+    "examples/vars/default.json",
     "schema"
   ],
   "scripts": {
