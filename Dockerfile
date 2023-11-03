@@ -18,5 +18,6 @@ COPY --chown=node:node --from=build /build/webui/dist/webui /app/webui/dist/webu
 COPY --chown=node:node main.js main.js
 COPY --chown=node:node schema schema
 COPY --chown=node:node examples/config/default.json examples/config/default.json
+COPY --chown=node:node examples/vars/default.json examples/vars/default.json
 USER node
 ENTRYPOINT [ "/sbin/tini","/app/main.js"]

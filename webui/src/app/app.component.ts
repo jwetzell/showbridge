@@ -12,6 +12,7 @@ import { CopyService } from './services/copy.service';
 import { EventService } from './services/event.service';
 import { SchemaService } from './services/schema.service';
 import { SettingsService } from './services/settings.service';
+import { VarsService } from './services/vars.service';
 import { downloadJSON } from './utils/utils';
 @Component({
   selector: 'app-root',
@@ -30,7 +31,8 @@ export class AppComponent {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private copyService: CopyService,
-    public settingsService: SettingsService
+    public settingsService: SettingsService,
+    private varsService: VarsService
   ) {
     // NOTE(jwetzell): allows configstate to be updated via code
     this.configService.currentlyShownConfigState.subscribe((currentConfig) => {
