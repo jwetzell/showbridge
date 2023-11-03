@@ -59,6 +59,7 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
       logger.debug(`app: loading vars from ${options.vars}`);
       const varsToLoad = JSON.parse(readFileSync(options.vars));
       router.vars = varsToLoad;
+      router.emit('varsUpdated', router.vars);
     } catch (error) {
       logger.error(`app: could not load vars from ${options.vars}`);
       logger.error(error);
