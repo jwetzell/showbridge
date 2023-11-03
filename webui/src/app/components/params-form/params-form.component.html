@@ -36,6 +36,7 @@
                 type="text"
                 *ngIf="!paramInfo.options; else stringSelectList"
                 class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                [placeholder]="paramInfo.placeholder"
                 [formControlName]="paramInfo.key" />
               <mat-icon class="text-gray-200" matTooltip="String">abc</mat-icon>
 

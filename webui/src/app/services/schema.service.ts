@@ -333,6 +333,12 @@ export class SchemaService {
                 validators.push(this.objectValidator);
               }
 
+              if (paramSchema.type === 'string') {
+                paramsFormInfo.paramsInfo[paramKey].placeholder = paramKey.startsWith('_')
+                  ? '${msg.prop1}'
+                  : 'some value';
+              }
+
               paramsFormInfo.formGroup.addControl(
                 paramKey,
                 new FormControl(
