@@ -169,6 +169,7 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
       case 'updateVars':
         if (message.vars) {
           router.vars = message.vars;
+          router.emit('varsUpdated', router.vars);
         }
         break;
       case 'destroy':
