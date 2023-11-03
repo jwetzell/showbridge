@@ -179,7 +179,14 @@ export class ParamsFormComponent implements OnInit {
   }
 
   toggleTemplate(key: string) {
-    // TODO(jwetzell): maybe copy data over to the other key's form control?
+    if (this.paramsFormInfo?.formGroup.value[key] !== undefined) {
+      const value = this.paramsFormInfo.formGroup.value[key];
+      if (key.startsWith('_')) {
+        this.paramsFormInfo.formGroup.controls[`${key}`]?.setValue(value);
+      } else {
+        this.paramsFormInfo.formGroup.controls[`_${key}`]?.setValue(value);
+      }
+    }
     if (key.startsWith('_')) {
       key = key.substring(1);
     }
@@ -188,6 +195,7 @@ export class ParamsFormComponent implements OnInit {
     } else {
       this.keysToTemplate.add(key);
     }
+
     this.formUpdated();
   }
 
