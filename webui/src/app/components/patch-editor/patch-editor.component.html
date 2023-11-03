@@ -1,0 +1,62 @@
+<mat-tab-group *ngIf="varsService.currentVars | async as vars">
+  <mat-tab label="MIDI">
+    <div class="flex justify-cent">
+      <button
+        class="px-6 py-1 my-5 ml-2 text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
+        (click)="addMIDIPatch()">
+        Add MIDI Patch
+      </button>
+    </div>
+    <div class="flex flex-col" *ngIf="midiPatches.length > 0">
+      <div cdkDropList class="example-list" (cdkDropListDropped)="midiPatchDrop($event)">
+        <div *ngFor="let midiPatch of midiPatches; index as i" class="flex my-2" cdkDrag>
+          <div class="flex w-14">
+            <mat-icon cdkDragHandle>drag_handle</mat-icon>
+          </div>
+          <input class="px-2 ml-2" [(ngModel)]="midiPatch.name" />
+
+          <div class="flex-grow">
+            <select class="ml-2" *ngIf="midiPorts.length > 0" [(ngModel)]="midiPatch.port">
+              <option *ngFor="let midiPort of midiPorts" [value]="midiPort.name">{{ midiPort.name }}</option>
+            </select>
+          </div>
+          <button (click)="midiPatches.splice(i, 1)" class="flex">
+            <mat-icon class="text-red-500">delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Network">
+    <div class="flex justify-cent">
+      <button
+        class="px-6 py-1 my-5 ml-2 text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
+        (click)="addNetworkPatch()">
+        Add Network Patch
+      </button>
+    </div>
+    <div class="flex flex-col" *ngIf="networkPatches.length > 0">
+      <div cdkDropList class="example-list" (cdkDropListDropped)="networkPatchDrop($event)">
+        <div *ngFor="let networkPatch of networkPatches; index as i" class="flex my-2" cdkDrag>
+          <div class="flex w-14">
+            <mat-icon cdkDragHandle>drag_handle</mat-icon>
+          </div>
+          <input class="ml-2" [(ngModel)]="networkPatch.name" />
+          <input class="px-2 ml-2" [(ngModel)]="networkPatch.host" />
+          <div class="flex-grow">
+            <input class="px-2 ml-2" type="number" [(ngModel)]="networkPatch.port" />
+          </div>
+          <button (click)="networkPatches.splice(i, 1)" class="flex">
+            <mat-icon class="text-red-500">delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+<button
+  (click)="savePatches()"
+  class="w-auto px-6 py-1 mx-2 my-5 text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg">
+  Save
+</button>
