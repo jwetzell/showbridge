@@ -65,6 +65,7 @@ export class PatchEditorComponent {
   savePatches() {
     this.midiPatches = this.midiPatches.filter((patch) => patch.port !== undefined);
     this.networkPatches = this.networkPatches.filter((patch) => patch.host !== '');
+
     this.varsService.updateMIDIPatches(this.midiPatches).subscribe((resp) => {
       this.snackbar.open('MIDI patches saved....', undefined, { duration: 3000 });
     });
@@ -72,5 +73,6 @@ export class PatchEditorComponent {
     this.varsService.updateNetworkPatches(this.networkPatches).subscribe((resp) => {
       this.snackbar.open('Network patches saved....', undefined, { duration: 3000 });
     });
+    this.varsService.loadVars();
   }
 }

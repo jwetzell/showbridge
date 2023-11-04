@@ -4,7 +4,9 @@ import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { cloneDeep, has } from 'lodash-es';
 import { Subscription } from 'rxjs';
 import { ParamInfo, ParamsFormInfo } from 'src/app/models/form.model';
+import { MIDIPatch, NetworkPatch } from 'src/app/models/patches.model';
 import { SchemaService } from 'src/app/services/schema.service';
+import { VarsService } from 'src/app/services/vars.service';
 
 @Component({
   selector: 'app-params-form',
@@ -25,7 +27,20 @@ export class ParamsFormComponent implements OnInit {
 
   keysToTemplate: Set<string> = new Set<string>();
 
-  constructor(private schemaService: SchemaService) {}
+  patchType: 'midi' | 'network' | undefined;
+  patchIndex: number = -1;
+
+  midiPatches?: MIDIPatch[];
+  networkPatches?: NetworkPatch[];
+
+  constructor(
+    private schemaService: SchemaService,
+    private varsService: VarsService
+  ) {
+    this.varsService.currentVars.subscribe((vars) => {
+      (this.midiPatches = vars.patches.midi), (this.networkPatches = vars.patches.network);
+    });
+  }
 
   ngOnInit(): void {
     this.paramsSchema = this.parentSchema?.properties?.params;
@@ -61,7 +76,6 @@ export class ParamsFormComponent implements OnInit {
     if (this.data && this.paramsFormInfo?.formGroup) {
       // NOTE(jwetzell): prepare data for form patching
       const dataToPatch = cloneDeep(this.data);
-      console.log(JSON.parse(JSON.stringify(dataToPatch)));
       Object.entries(this.paramsFormInfo.paramsInfo).forEach(([paramKey, paramInfo]) => {
         if (has(dataToPatch, paramKey)) {
           switch (paramInfo.type) {
@@ -84,6 +98,18 @@ export class ParamsFormComponent implements OnInit {
             default:
               break;
           }
+          if (paramKey === '_port' || paramKey === '_host') {
+            //NOTE(jwetzell): determine what patch to load for dropdown
+            const valueIsPatch = dataToPatch[paramKey].match(/^\${vars.patches.(midi|network)\[(\d+)\].(port|host)}$/);
+            if (valueIsPatch) {
+              this.patchType = valueIsPatch[1];
+              try {
+                this.patchIndex = parseInt(valueIsPatch[2]);
+              } catch (error) {
+                console.error('params-form: error decoding patch info');
+              }
+            }
+          }
         }
       });
 
@@ -93,6 +119,14 @@ export class ParamsFormComponent implements OnInit {
           this.keysToTemplate.add(key.substring(1));
         }
       });
+
+      if (has(this.paramsFormInfo.paramsInfo, 'port')) {
+        if (has(this.paramsFormInfo.paramsInfo, 'host')) {
+          this.patchType = 'network';
+        } else {
+          this.patchType = 'midi';
+        }
+      }
 
       this.paramsFormInfo.formGroup.patchValue(dataToPatch);
     }
@@ -145,6 +179,7 @@ export class ParamsFormComponent implements OnInit {
 
   formUpdated() {
     if (this.paramsSchema) {
+      console.log(this.paramsFormInfo?.formGroup.value);
       const params = this.schemaService.cleanParams(
         this.paramsSchema,
         this.paramsFormInfo?.formGroup.value,
@@ -181,10 +216,11 @@ export class ParamsFormComponent implements OnInit {
   toggleTemplate(key: string) {
     if (this.paramsFormInfo?.formGroup.value[key] !== undefined) {
       const value = this.paramsFormInfo.formGroup.value[key];
+      console.log(value);
       if (key.startsWith('_')) {
-        this.paramsFormInfo.formGroup.controls[`${key}`]?.setValue(value);
+        this.paramsFormInfo.formGroup.controls[`${key.substring(1)}`].setValue(value);
       } else {
-        this.paramsFormInfo.formGroup.controls[`_${key}`]?.setValue(value);
+        this.paramsFormInfo.formGroup.controls[`_${key}`].setValue(value);
       }
     }
     if (key.startsWith('_')) {
@@ -204,5 +240,39 @@ export class ParamsFormComponent implements OnInit {
       return this.keysToTemplate.has(key.substring(1));
     }
     return this.keysToTemplate.has(key);
+  }
+
+  applyPatch(event: any) {
+    if (event.target.value !== undefined && event.target.value !== '' && this.patchType !== undefined) {
+      if (this.patchType === 'network') {
+        this.keysToTemplate.add('port');
+        this.keysToTemplate.add('host');
+        this.paramsFormInfo?.formGroup.controls['_port']?.setValue(
+          '${vars.patches.' + this.patchType + '[' + event.target.value + '].port}'
+        );
+        this.paramsFormInfo?.formGroup.controls['_host']?.setValue(
+          '${vars.patches.' + this.patchType + '[' + event.target.value + '].host}'
+        );
+      } else if (this.patchType === 'midi') {
+        this.keysToTemplate.add('port');
+        this.paramsFormInfo?.formGroup.controls['_port'].setValue(
+          '${vars.patches.' + this.patchType + '[' + event.target.value + '].port}'
+        );
+
+        console.log(this.keysToTemplate);
+        console.log(this.paramsFormInfo);
+      }
+    } else {
+      if (this.patchType === 'network') {
+        this.keysToTemplate.delete('port');
+        this.keysToTemplate.delete('host');
+        this.paramsFormInfo?.formGroup.controls['_port']?.reset();
+        this.paramsFormInfo?.formGroup.controls['_host']?.reset();
+      } else if (this.patchType === 'midi') {
+        this.keysToTemplate.delete('port');
+        this.paramsFormInfo?.formGroup.controls['_port'].reset();
+      }
+    }
+    this.formUpdated();
   }
 }
