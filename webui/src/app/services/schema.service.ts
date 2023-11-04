@@ -339,13 +339,8 @@ export class SchemaService {
                   : 'some value';
               }
 
-              paramsFormInfo.formGroup.addControl(
-                paramKey,
-                new FormControl(
-                  { value: formDefault, disabled: paramsFormInfo.paramsInfo[paramKey].isConst },
-                  validators
-                )
-              );
+              //TODO(jwetzell): figure out how to disable a control but not have to deal with undefined values on disabled controls
+              paramsFormInfo.formGroup.addControl(paramKey, new FormControl(formDefault, validators));
 
               if (paramSchema.enum) {
                 paramsFormInfo.paramsInfo[paramKey].options = paramSchema.enum;
