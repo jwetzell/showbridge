@@ -496,11 +496,13 @@ if (!lock) {
           .showMessageBox(undefined, {
             title: 'showbridge',
             message: 'Showbridge process has crashed. Check logs',
-            buttons: ['Ok'],
+            buttons: ['Quit', 'Open Logs'],
           })
           .then((resp) => {
             if (resp.response === 0) {
               shutdown();
+            } else {
+              shell.openPath(logsDir);
             }
           });
       });
