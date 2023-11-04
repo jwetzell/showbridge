@@ -500,6 +500,10 @@
                   "description": "the MIDI port to send on",
                   "type": "string"
                 },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
+                  "type": "string"
+                },
                 "bytes": {
                   "description": "MIDI data to be sent as an array of 3 bytes",
                   "type": "array",
@@ -521,6 +525,10 @@
               "properties": {
                 "port": {
                   "description": "the MIDI port to send on",
+                  "type": "string"
+                },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
                 "status": {
@@ -558,6 +566,10 @@
                   "description": "the MIDI port to send on",
                   "type": "string"
                 },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -591,6 +603,10 @@
               "properties": {
                 "port": {
                   "description": "the MIDI port to send on",
+                  "type": "string"
+                },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
                 "status": {
@@ -628,6 +644,10 @@
                   "description": "the MIDI port to send on",
                   "type": "string"
                 },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -663,6 +683,10 @@
                   "description": "the MIDI port to send on",
                   "type": "string"
                 },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -690,6 +714,10 @@
               "properties": {
                 "port": {
                   "description": "the MIDI port to send on",
+                  "type": "string"
+                },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
                 "status": {
@@ -721,6 +749,10 @@
                   "description": "the MIDI port to send on",
                   "type": "string"
                 },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -750,6 +782,10 @@
                   "description": "the MIDI port to send on",
                   "type": "string"
                 },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -765,6 +801,10 @@
               "properties": {
                 "port": {
                   "description": "the MIDI port to send on",
+                  "type": "string"
+                },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
                 "status": {
@@ -784,6 +824,10 @@
                   "description": "the MIDI port to send on",
                   "type": "string"
                 },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
+                  "type": "string"
+                },
                 "status": {
                   "description": "MIDI status value",
                   "type": "string",
@@ -799,6 +843,10 @@
               "properties": {
                 "port": {
                   "description": "the MIDI port to send on",
+                  "type": "string"
+                },
+                "_port": {
+                  "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
                 "status": {
@@ -845,11 +893,19 @@
               "description": "Hostname or address of the server to forward message to",
               "type": "string"
             },
+            "_host": {
+              "description": "Template for the hostname or address of the server to forward message to",
+              "type": "string"
+            },
             "port": {
               "description": "Port to forward msg to",
               "type": "integer",
               "minimum": 1,
               "maximum": 65535
+            },
+            "_port": {
+              "description": "Template for the port to forward msg to",
+              "type": "string"
             },
             "protocol": {
               "description": "Protocol to use when forwarding msg",
@@ -857,7 +913,7 @@
               "enum": ["udp", "tcp"]
             }
           },
-          "required": ["host", "port", "protocol"],
+          "required": ["protocol"],
           "additionalProperties": false
         },
         "enabled": {
@@ -892,11 +948,19 @@
               "description": "Hostname or address of the server to send OSC to",
               "type": "string"
             },
+            "_host": {
+              "description": "Template for the hostname or address of the server to forward message to",
+              "type": "string"
+            },
             "port": {
               "description": "Port to send OSC to",
               "type": "integer",
               "minimum": 1,
               "maximum": 65535
+            },
+            "_port": {
+              "description": "Template for the port to send on",
+              "type": "string"
             },
             "protocol": {
               "description": "Protocol to use when sending OSC",
@@ -920,7 +984,7 @@
               "type": "array"
             }
           },
-          "required": ["host", "port", "protocol"],
+          "required": ["protocol"],
           "additionalProperties": false
         },
         "enabled": {
@@ -958,11 +1022,19 @@
                   "description": "Hostname or address of the server to send UDP packet to",
                   "type": "string"
                 },
+                "_host": {
+                  "description": "Template for the hostname or address of the server to forward message to",
+                  "type": "string"
+                },
                 "port": {
                   "description": "Port to send UDP packet to",
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 65535
+                },
+                "_port": {
+                  "description": "Template for the port to send msg on",
+                  "type": "string"
                 },
                 "bytes": {
                   "description": "bytes to send",
@@ -972,7 +1044,7 @@
                   }
                 }
               },
-              "required": ["host", "port", "bytes"],
+              "required": ["bytes"],
               "additionalProperties": false
             },
             {
@@ -982,11 +1054,19 @@
                   "description": "Hostname or address of the server to send UDP packet to",
                   "type": "string"
                 },
+                "_host": {
+                  "description": "Template for the hostname or address of the server to forward message to",
+                  "type": "string"
+                },
                 "port": {
                   "description": "Port to send UDP packet to",
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 65535
+                },
+                "_port": {
+                  "description": "Template for the port to send msg on",
+                  "type": "string"
                 },
                 "hex": {
                   "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
@@ -994,7 +1074,7 @@
                   "pattern": "^[0-9A-Fa-f\\sx,]+$"
                 }
               },
-              "required": ["host", "port", "hex"],
+              "required": ["hex"],
               "additionalProperties": false
             },
             {
@@ -1004,18 +1084,26 @@
                   "description": "Hostname or address of the server to send UDP packet to",
                   "type": "string"
                 },
+                "_host": {
+                  "description": "Template for the hostname or address of the server to forward message to",
+                  "type": "string"
+                },
                 "port": {
                   "description": "Port to send UDP packet to",
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 65535
                 },
+                "_port": {
+                  "description": "Template for the port to send msg on",
+                  "type": "string"
+                },
                 "_string": {
                   "description": "string to send ran through templating engine",
                   "type": "string"
                 }
               },
-              "required": ["host", "port", "_string"],
+              "required": ["_string"],
               "additionalProperties": false
             },
             {
@@ -1025,18 +1113,26 @@
                   "description": "Hostname or address of the server to send UDP packet to",
                   "type": "string"
                 },
+                "_host": {
+                  "description": "Template for the hostname or address of the server to forward message to",
+                  "type": "string"
+                },
                 "port": {
                   "description": "Port to send UDP packet to",
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 65535
                 },
+                "_port": {
+                  "description": "Template for the port to send msg on",
+                  "type": "string"
+                },
                 "string": {
                   "description": "string to send",
                   "type": "string"
                 }
               },
-              "required": ["host", "port", "string"],
+              "required": ["string"],
               "additionalProperties": false
             }
           ]
@@ -1076,11 +1172,19 @@
                   "description": "Hostname or address of the server to send TCP packet to",
                   "type": "string"
                 },
+                "_host": {
+                  "description": "Template for the hostname or address of the server to forward message to",
+                  "type": "string"
+                },
                 "port": {
                   "description": "Port to send TCP packet to",
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 65535
+                },
+                "_port": {
+                  "description": "Template for the port to send msg on",
+                  "type": "string"
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1095,7 +1199,7 @@
                   }
                 }
               },
-              "required": ["host", "port", "slip", "bytes"],
+              "required": ["slip", "bytes"],
               "additionalProperties": false
             },
             {
@@ -1105,11 +1209,19 @@
                   "description": "Hostname or address of the server to send TCP packet to",
                   "type": "string"
                 },
+                "_host": {
+                  "description": "Template for the hostname or address of the server to forward message to",
+                  "type": "string"
+                },
                 "port": {
                   "description": "Port to send TCP packet to",
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 65535
+                },
+                "_port": {
+                  "description": "Template for the port to send msg on",
+                  "type": "string"
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1122,7 +1234,7 @@
                   "pattern": "^[0-9A-Fa-f\\sx,]+$"
                 }
               },
-              "required": ["host", "port", "slip", "hex"],
+              "required": ["slip", "hex"],
               "additionalProperties": false
             },
             {
@@ -1132,11 +1244,19 @@
                   "description": "Hostname or address of the server to send TCP packet to",
                   "type": "string"
                 },
+                "_host": {
+                  "description": "Template for the hostname or address of the server to forward message to",
+                  "type": "string"
+                },
                 "port": {
                   "description": "Port to send TCP packet to",
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 65535
+                },
+                "_port": {
+                  "description": "Template for the port to send msg on",
+                  "type": "string"
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1148,7 +1268,7 @@
                   "type": "string"
                 }
               },
-              "required": ["host", "port", "slip", "_string"],
+              "required": ["slip", "_string"],
               "additionalProperties": false
             },
             {
@@ -1158,11 +1278,19 @@
                   "description": "Hostname or address of the server to send TCP packet to",
                   "type": "string"
                 },
+                "_host": {
+                  "description": "Template for the hostname or address of the server to forward message to",
+                  "type": "string"
+                },
                 "port": {
                   "description": "Port to send TCP packet to",
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 65535
+                },
+                "_port": {
+                  "description": "Template for the port to send msg on",
+                  "type": "string"
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1174,7 +1302,7 @@
                   "type": "string"
                 }
               },
-              "required": ["host", "port", "slip", "string"],
+              "required": ["slip", "string"],
               "additionalProperties": false
             }
           ]
