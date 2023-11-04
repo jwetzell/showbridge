@@ -12,7 +12,6 @@ const fileStreamRotator = require('file-stream-rotator');
 const defaultConfig = require('showbridge/sample/config/default.json');
 const defaultVars = require('showbridge/sample/vars/default.json');
 
-
 const rootPath = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 
 let restartProcess = true;
@@ -350,7 +349,7 @@ function getShowbridgeLocation(isPackaged) {
   if (!isPackaged) {
     showbridgePath = '../main.js';
   } else {
-    showbridgePath = './app.asar.unpacked/node_modules/showbridge/main.js';
+    showbridgePath = './dist/showbridge/index.js';
   }
 
   return path.join(rootPath, showbridgePath);
