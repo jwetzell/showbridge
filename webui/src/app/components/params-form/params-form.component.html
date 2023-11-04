@@ -4,6 +4,20 @@
       <mat-tab *ngFor="let paramsOption of paramsOptions" [label]="paramsOption.display"></mat-tab>
     </mat-tab-group>
   </ng-container>
+  <ng-container *ngIf="patchType === 'midi'">
+    <select *ngIf="midiPatches" (change)="applyPatch($event)" [(ngModel)]="patchIndex">
+      <option value="">Select Patch</option>
+      <option *ngFor="let patch of midiPatches; index as i" [value]="i">{{ patch.name }}</option>
+    </select>
+  </ng-container>
+
+  <ng-container *ngIf="patchType === 'network'">
+    <select *ngIf="networkPatches" (change)="applyPatch($event)" [(ngModel)]="patchIndex">
+      <option value="">Select Patch</option>
+      <option *ngFor="let patch of networkPatches; index as i" [value]="i">{{ patch.name }}</option>
+    </select>
+  </ng-container>
+
   <form [formGroup]="paramsFormInfo.formGroup">
     <div class="flex flex-col">
       <div *ngFor="let key of paramKeys()" class="flex items-center m-1">
