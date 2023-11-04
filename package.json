@@ -1,11 +1,12 @@
 {
   "name": "showbridge",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "Simple Protocol Router /s",
   "bin": "main.js",
   "files": [
     "webui/dist/webui",
-    "config",
+    "sample/config/default.json",
+    "sample/vars/default.json",
     "schema"
   ],
   "scripts": {
