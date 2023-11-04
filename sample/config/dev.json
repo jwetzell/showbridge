@@ -1,5 +1,4 @@
 {
-  "$schema": "../../schema/config.schema.json",
   "http": {
     "params": {
       "port": 3000
@@ -8,12 +7,17 @@
       {
         "type": "regex",
         "params": {
-          "patterns": ["/test.*"],
-          "properties": ["originalUrl"]
+          "patterns": [
+            "/test.*"
+          ],
+          "properties": [
+            "originalUrl"
+          ]
         },
         "actions": [
           {
             "type": "log",
+            "transforms": [],
             "enabled": true
           }
         ],
@@ -21,12 +25,42 @@
           {
             "type": "regex",
             "params": {
-              "patterns": ["/testing"],
-              "properties": ["originalUrl"]
+              "patterns": [
+                "/testing"
+              ],
+              "properties": [
+                "originalUrl"
+              ]
             },
             "actions": [
               {
                 "type": "log",
+                "transforms": [],
+                "enabled": true
+              },
+              {
+                "type": "midi-output",
+                "params": {
+                  "_port": "${vars.patches.midi[1].port}",
+                  "status": "note_on",
+                  "channel": 1,
+                  "note": 6,
+                  "velocity": 6
+                },
+                "transforms": [],
+                "enabled": true
+              },
+              {
+                "type": "osc-output",
+                "params": {
+                  "_host": "${vars.patches.network[0].host}",
+                  "_port": "${vars.patches.network[0].port}",
+                  "protocol": "udp",
+                  "address": "/test",
+                  "_args": [],
+                  "args": []
+                },
+                "transforms": [],
                 "enabled": true
               }
             ],
@@ -44,6 +78,7 @@
         "actions": [
           {
             "type": "log",
+            "transforms": [],
             "enabled": true
           }
         ],
@@ -58,6 +93,7 @@
         "actions": [
           {
             "type": "log",
+            "transforms": [],
             "enabled": true
           }
         ],
@@ -76,6 +112,7 @@
         "actions": [
           {
             "type": "log",
+            "transforms": [],
             "enabled": true
           }
         ],
@@ -93,6 +130,7 @@
         "actions": [
           {
             "type": "log",
+            "transforms": [],
             "enabled": true
           }
         ],
@@ -110,6 +148,7 @@
         "actions": [
           {
             "type": "log",
+            "transforms": [],
             "enabled": true
           }
         ],
@@ -120,12 +159,20 @@
   "mqtt": {
     "params": {
       "broker": "",
-      "topics": ["#"]
+      "topics": [
+        "#"
+      ]
     },
     "triggers": [
       {
         "type": "any",
-        "actions": [{ "type": "log", "enabled": true }],
+        "actions": [
+          {
+            "type": "log",
+            "transforms": [],
+            "enabled": true
+          }
+        ],
         "enabled": true
       }
     ]
@@ -133,7 +180,9 @@
   "cloud": {
     "params": {
       "url": "",
-      "rooms": ["example-room"]
+      "rooms": [
+        "example-room"
+      ]
     }
   }
 }

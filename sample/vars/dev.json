@@ -1,0 +1,28 @@
+{
+  "test": "value",
+  "key": "anothervalue",
+  "patches": {
+    "midi": [
+      {
+        "name": "Test 2",
+        "port": "showbridge dev Input"
+      },
+      {
+        "name": "Test",
+        "port": "Protokol"
+      }
+    ],
+    "network": [
+      {
+        "name": "localhost",
+        "host": "127.0.0.1",
+        "port": 53000
+      },
+      {
+        "name": "Protokol",
+        "host": "127.0.0.1",
+        "port": 9000
+      }
+    ]
+  }
+}
