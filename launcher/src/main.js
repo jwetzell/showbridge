@@ -9,8 +9,9 @@ const Tail = require('tail').Tail;
 const fs = require('fs-extra');
 const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
-const defaultConfig = require('../../examples/config/default.json');
-const defaultVars = require('../../examples/vars/default.json');
+const defaultConfig = require('showbridge/sample/config/default.json');
+const defaultVars = require('showbridge/sample/vars/default.json');
+
 
 const rootPath = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 

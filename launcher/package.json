@@ -28,7 +28,7 @@
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.1.1",
     "respawn": "^2.6.0",
-    "showbridge": "0.3.9",
+    "showbridge": "0.3.10",
     "tail": "^2.2.6"
   },
   "devDependencies": {
@@ -94,16 +94,6 @@
       "publish": [
         "github"
       ]
-    },
-    "extraResources": [
-      {
-        "from": "../examples/config/default.json",
-        "to": "./examples/config/default.json"
-      },
-      {
-        "from": "../examples/vars/default.json",
-        "to": "./examples/vars/default.json"
-      }
-    ]
+    }
   }
 }
