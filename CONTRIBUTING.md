@@ -9,12 +9,12 @@ I have done my best to include a dev script for all of the folders below where i
 
 # Summary of folders
 ## [lib](./lib/)
-lib is the actual meat of showbridge defining a library that is than wrapped up and fronted by other sections
+lib is the actual meat of showbridge defining a library that is then wrapped up and fronted by other sections
 
 published as [showbridge-lib](https://npmjs.com/package/showbridge-lib)
 
 ## [main.js](./main.js)
-main.js at the root of this repo is a script using [commander.js](https://github.com/tj/commander.js) that wraps the library above into an executable script with options for where to load a config from, log levels, node process messaging, etc.
+main.js at the root of this repo is a script using [commander.js](https://github.com/tj/commander.js) that wraps the library above into an executable script with options like where to load a config from, log levels, etc.
 
 published as [showbridge](https://npmjs.com/package/showbridge)
 
@@ -32,4 +32,4 @@ schema for the router config JSON file
 - would be nice to split this up
 
 ## [cloud](./cloud/)
-source for cloud server portion of showbridge
+source for cloud server portion of showbridge which is basically just a [socket.io](https://socket.io/) server with some config options for admin-ui auth, redis adapter, log-level, etc.
