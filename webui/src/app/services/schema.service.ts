@@ -454,6 +454,26 @@ export class SchemaService {
     return params;
   }
 
+  getObjectTypeFromObject(object: any) {
+    if (object !== undefined && object.type !== undefined && object.enabled !== undefined) {
+      const matchedAction = this.actionTypes.find((actionType) => object.type === actionType.type);
+      if (matchedAction !== undefined) {
+        return 'Action';
+      }
+
+      const matchedTrigger = this.triggerTypes.find((triggerType) => object.type === triggerType.type);
+      if (matchedTrigger !== undefined) {
+        return 'Trigger';
+      }
+
+      const matchedTransform = this.transformTypes.find((transformType) => object.type === transformType.type);
+      if (matchedTransform !== undefined) {
+        return 'Transform';
+      }
+    }
+    return undefined;
+  }
+
   getTriggerTypesForProtocol(protocolType: string): ObjectInfo[] {
     const types: ObjectInfo[] = [];
     if (!this.schema) {

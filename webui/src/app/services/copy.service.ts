@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { has, isEqual, noop } from 'lodash-es';
 import { BehaviorSubject, Observable, distinctUntilChanged, filter } from 'rxjs';
 import { CopyObject } from '../models/copy-object.model';
+import { SchemaService } from './schema.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,7 +20,7 @@ export class CopyService {
     filter((val) => !!val)
   );
 
-  constructor() {}
+  constructor(private schemaService: SchemaService) {}
 
   setCopyObject(copyObject: CopyObject) {
     this.currentCopyObject.next(copyObject);
@@ -38,8 +39,22 @@ export class CopyService {
       if (value) {
         try {
           const parsedClipboard = JSON.parse(value);
-          if (has(parsedClipboard, 'type') && has(parsedClipboard, 'object')) {
+          if (!has(parsedClipboard, 'type')) {
+            return;
+          }
+
+          if (has(parsedClipboard, 'object')) {
+            // NOTE(jwetzell): already a copy or template object
             this.currentCopyObject.next(parsedClipboard);
+          } else if (has(parsedClipboard, 'enabled')) {
+            // NOTE(jwetzell): this seems like a regular JSON object
+            const type = this.schemaService.getObjectTypeFromObject(parsedClipboard);
+            if (type !== undefined) {
+              this.currentCopyObject.next({
+                type,
+                object: parsedClipboard,
+              });
+            }
           }
         } catch (error) {
           noop();
