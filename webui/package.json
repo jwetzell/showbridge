@@ -13,7 +13,7 @@
     "@angular/compiler": "^16.1.0",
     "@angular/core": "^16.1.0",
     "@angular/forms": "^16.2.11",
-    "@angular/material": "^16.2.10",
+    "@angular/material": "^16.2.11",
     "@angular/platform-browser": "^16.1.0",
     "@angular/platform-browser-dynamic": "^16.2.11",
     "@angular/router": "^16.2.11",
