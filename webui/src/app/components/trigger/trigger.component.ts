@@ -92,7 +92,7 @@ export class TriggerComponent implements OnInit {
     if (this.trigger && this.trigger?.actions === undefined) {
       this.trigger.actions = [];
     }
-    const actionTemplate = this.schemaService.getTemplateForAction(actionType);
+    const actionTemplate = this.schemaService.getSkeletonForAction(actionType);
     this.trigger?.actions?.push(actionTemplate);
     this.updated.emit(true);
   }
@@ -178,7 +178,7 @@ export class TriggerComponent implements OnInit {
       if (this.trigger.subTriggers === undefined) {
         this.trigger.subTriggers = [];
       }
-      const triggerTemplate = this.schemaService.getTemplateForTrigger(triggerType);
+      const triggerTemplate = this.schemaService.getSkeletonForTrigger(triggerType);
       this.trigger.subTriggers.push(triggerTemplate);
       this.updated.emit(true);
     }
