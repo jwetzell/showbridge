@@ -1,5 +1,5 @@
 const { execSync } = require('child_process');
-const { readJSONSync } = require('fs-extra');
+const { readFileSync } = require('fs');
 const path = require('path');
 
 const libraries = [
@@ -11,7 +11,7 @@ const libraries = [
 
 libraries.forEach((library) => {
   const libraryPath = path.join(__dirname, library.libraryPath);
-  const libraryInfo = readJSONSync(path.join(libraryPath, 'package.json'));
+  const libraryInfo = JSON.parse(readFileSync(path.join(libraryPath, 'package.json')));
   execSync(`cd ${libraryPath} && npm link`, {
     stdio: 'inherit',
   });

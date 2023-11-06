@@ -1,13 +1,13 @@
 const { execSync } = require('child_process');
+const { existsSync, removeSync, copySync } = require('fs-extra');
 const path = require('path');
-const fs = require('fs-extra');
 
 exports.default = async function (context) {
   const bundlePathBase = './dist/showbridge';
 
-  if (fs.existsSync(bundlePathBase)) {
+  if (existsSync(bundlePathBase)) {
     console.log('removing existing bundle');
-    fs.removeSync(bundlePathBase);
+    removeSync(bundlePathBase);
   }
   console.log('bundling things up for electron app');
 
@@ -49,13 +49,13 @@ exports.default = async function (context) {
   const midiPrebuildSourcePath = '../launcher/node_modules/@julusian/midi/prebuilds';
   const midiPrebuildDestPath = path.join(bundlePathBase, 'prebuilds');
 
-  if (!fs.existsSync(path.join(midiPrebuildSourcePath, `midi-${platform}-${arch}`))) {
+  if (!existsSync(path.join(midiPrebuildSourcePath, `midi-${platform}-${arch}`))) {
     console.error(`midi prebuild does not exist for platform ${platform}-${arch}`);
     process.exit(1);
   }
   console.log('copying midi prebuild');
 
-  fs.copySync(
+  copySync(
     path.join(midiPrebuildSourcePath, `midi-${platform}-${arch}`),
     path.join(midiPrebuildDestPath, `midi-${platform}-${arch}`)
   );
