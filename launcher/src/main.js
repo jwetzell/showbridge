@@ -4,9 +4,8 @@
 const path = require('path');
 const { networkInterfaces } = require('os');
 const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell } = require('electron');
-
 const Tail = require('tail').Tail;
-const fs = require('fs-extra');
+const { readJSONSync, existsSync, moveSync, writeJSONSync, readdirSync, mkdirSync } = require('fs-extra');
 const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
 const defaultConfig = require('showbridge/sample/config/default.json');
@@ -163,8 +162,8 @@ function getIPAddresses() {
 }
 
 function getConfigObject(filePath) {
-  if (fs.existsSync(filePath)) {
-    return fs.readJsonSync(filePath);
+  if (existsSync(filePath)) {
+    return readJSONSync(filePath);
   }
   return undefined;
 }
@@ -223,10 +222,10 @@ function createTray() {
 
 function writeConfigToDisk(filePath, configObj) {
   // TODO(jwetzell): add error handling
-  if (fs.existsSync(filePath)) {
+  if (existsSync(filePath)) {
     console.log('app: backing up current config');
     try {
-      fs.moveSync(filePath, `${filePath}.${Date.now()}.bak`, {
+      moveSync(filePath, `${filePath}.${Date.now()}.bak`, {
         overwrite: true,
       });
     } catch (error) {
@@ -236,7 +235,7 @@ function writeConfigToDisk(filePath, configObj) {
 
   try {
     console.log('app: saving new config');
-    fs.writeJSONSync(filePath, configObj, {
+    writeJSONSync(filePath, configObj, {
       spaces: 2,
     });
   } catch (error) {
@@ -246,10 +245,10 @@ function writeConfigToDisk(filePath, configObj) {
 
 function writeVarsToDisk(filePath, varsObj) {
   // TODO(jwetzell): add error handling
-  if (fs.existsSync(filePath)) {
+  if (existsSync(filePath)) {
     console.log('app: backing up current vars');
     try {
-      fs.moveSync(filePath, `${filePath}.bak`, {
+      moveSync(filePath, `${filePath}.bak`, {
         overwrite: true,
       });
     } catch (error) {
@@ -259,7 +258,7 @@ function writeVarsToDisk(filePath, varsObj) {
 
   try {
     console.log('app: saving new vars');
-    fs.writeJSONSync(filePath, varsObj, {
+    writeJSONSync(filePath, varsObj, {
       spaces: 2,
     });
   } catch (error) {
@@ -268,9 +267,9 @@ function writeVarsToDisk(filePath, varsObj) {
 }
 
 function reloadConfigFromDisk(filePath) {
-  if (filePath && fs.existsSync(filePath)) {
+  if (filePath && existsSync(filePath)) {
     try {
-      const config = JSON.parse(fs.readFileSync(filePath));
+      const config = readJSONSync(filePath);
       showbridgeProcess.child.send({
         eventType: 'updateConfig',
         config,
@@ -286,7 +285,7 @@ function reloadConfigFromDisk(filePath) {
 // TODO(jwetzell): add ability to load backup JSON files from UI
 function getConfigBackupList() {
   if (configDir) {
-    const files = fs.readdirSync(configDir).filter((file) => file.startsWith('config.json.'));
+    const files = readdirSync(configDir).filter((file) => file.startsWith('config.json.'));
     const configBackups = files.map((fileName) => {
       let configBackupDate;
       const fileNameParts = fileName.split('.');
@@ -308,10 +307,9 @@ function getConfigBackupList() {
 }
 
 function loadConfigFromFile(filePath) {
-  if (fs.existsSync(filePath)) {
+  if (existsSync(filePath)) {
     try {
-      const newConfigFile = fs.readFileSync(filePath);
-      const newConfigObj = JSON.parse(newConfigFile);
+      const newConfigObj = readJSONSync(filePath);
       if (showbridgeProcess) {
         if (showbridgeProcess.child) {
           showbridgeProcess.child.send({
@@ -330,7 +328,7 @@ function loadConfigFromFile(filePath) {
 
 function loadCurrentLogFile() {
   if (logsDir) {
-    const logFiles = fs.readdirSync(logsDir).filter((filename) => filename.endsWith('.log'));
+    const logFiles = readdirSync(logsDir).filter((filename) => filename.endsWith('.log'));
     logFiles.sort();
     if (logFiles.length > 0) {
       currentLogFile = path.join(logsDir, logFiles[logFiles.length - 1]);
@@ -369,21 +367,21 @@ if (!lock) {
 
   loadCurrentLogFile();
 
-  console.log(`app: config dir exists: ${fs.existsSync(configDir)}`);
+  console.log(`app: config dir exists: ${existsSync(configDir)}`);
 
-  if (!fs.existsSync(configDir)) {
-    fs.mkdirSync(configDir);
+  if (!existsSync(configDir)) {
+    mkdirSync(configDir);
   }
-  console.log(`app: config file exists: ${fs.existsSync(configFilePath)}`);
+  console.log(`app: config file exists: ${existsSync(configFilePath)}`);
 
   console.log(`app: ${app.isPackaged ? 'is' : 'is not'} packaged: `);
 
-  if (!fs.existsSync(configFilePath)) {
+  if (!existsSync(configFilePath)) {
     console.log('app: populating config.json with default config');
     writeConfigToDisk(configFilePath, defaultConfig);
   }
 
-  if (!fs.existsSync(varsFilePath)) {
+  if (!existsSync(varsFilePath)) {
     console.log('app: populating vars.json with default config');
     writeConfigToDisk(varsFilePath, defaultVars);
   }
@@ -588,7 +586,7 @@ if (!lock) {
 
     ipcMain.on('showUI', () => {
       try {
-        const config = fs.readJSONSync(configFilePath);
+        const config = readJSONSync(configFilePath);
         if (config.http.params.port) {
           let addressToOpen = 'localhost';
           if (config.http.params.address !== undefined && config.http.params.address !== '0.0.0.0') {
