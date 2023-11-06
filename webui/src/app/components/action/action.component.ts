@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { merge } from 'lodash-es';
+import { cloneDeep, merge } from 'lodash-es';
 import { debounceTime, tap } from 'rxjs';
 import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
@@ -108,7 +108,7 @@ export class ActionComponent implements OnInit {
     if (this.action && this.action?.transforms === undefined) {
       this.action.transforms = [];
     }
-    const transformTemplate = this.schemaService.getTemplateForTransform(transformType);
+    const transformTemplate = this.schemaService.getSkeletonForTransform(transformType);
     this.action?.transforms?.push(transformTemplate);
 
     this.updated.emit(true);
@@ -152,7 +152,7 @@ export class ActionComponent implements OnInit {
       if (this.action.params['actions'] === undefined) {
         this.action.params['actions'] = [];
       }
-      const actionTemplate = this.schemaService.getTemplateForAction(actionType);
+      const actionTemplate = this.schemaService.getSkeletonForAction(actionType);
       this.action.params['actions'].push(actionTemplate);
       this.updated.emit(true);
     }
@@ -182,7 +182,11 @@ export class ActionComponent implements OnInit {
     if (this.action && this.action?.transforms === undefined) {
       this.action.transforms = [];
     }
-    this.action?.transforms?.push(copyObject.object);
+    if (Array.isArray(copyObject.object)) {
+      this.action?.transforms?.push(...cloneDeep(copyObject.object));
+    } else {
+      this.action?.transforms?.push(cloneDeep(copyObject.object));
+    }
     this.updated.emit(true);
   }
 

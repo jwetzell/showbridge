@@ -35,6 +35,15 @@ export class AppComponent {
     public settingsService: SettingsService,
     private varsService: VarsService
   ) {
+    window.addEventListener('focus', () => {
+      this.copyService.checkClipboard();
+    });
+
+    window.addEventListener('mouseenter', () => {
+      console.log('mouseenter');
+      this.copyService.checkClipboard();
+    });
+
     // NOTE(jwetzell): allows configstate to be updated via code
     this.configService.currentlyShownConfigState.subscribe((currentConfig) => {
       if (currentConfig) {
@@ -43,7 +52,7 @@ export class AppComponent {
     });
 
     // NOTE(jwetzell): notify user when currently copied obect is updated
-    this.copyService.currentCopyObject.pipe(filter((val) => !!val)).subscribe((object) => {
+    this.copyService.currentCopyObject$.subscribe((object) => {
       this.snackBar.open(`${object?.type} copied...`, 'Dismiss', {
         duration: 3000,
       });

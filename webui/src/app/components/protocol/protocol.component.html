@@ -45,7 +45,6 @@
       </ng-container>
       <ng-container *ngIf="copyService.getClipboardForType('Trigger') | async as copyObject">
         <div
-          *ngIf="validCopyObject(copyObject)"
           (click)="pasteTrigger(copyObject)"
           matTooltip="Paste Trigger"
           class="flex justify-center w-full bg-green-500 item-center hover:cursor-pointer hover:bg-green-400">

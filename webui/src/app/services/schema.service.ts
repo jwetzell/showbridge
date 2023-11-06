@@ -80,7 +80,7 @@ export class SchemaService {
     return this.ajv.errors;
   }
 
-  getTemplateForAction(actionType: string): Action {
+  getSkeletonForAction(actionType: string): Action {
     const template: Action = {
       type: actionType,
       transforms: [],
@@ -88,12 +88,12 @@ export class SchemaService {
     };
     const itemInfo = this.actionTypes.find((itemInfo) => itemInfo.type === actionType);
     if (itemInfo?.schema?.required && itemInfo.schema.required.includes('params')) {
-      template.params = this.getTemplateForParamsSchema(itemInfo.schema.properties.params);
+      template.params = this.getSkeletonForParamsSchema(itemInfo.schema.properties.params);
     }
     return template;
   }
 
-  getTemplateForTrigger(triggerType: string): Trigger {
+  getSkeletonForTrigger(triggerType: string): Trigger {
     const template: Trigger = {
       type: triggerType,
       actions: [],
@@ -102,24 +102,24 @@ export class SchemaService {
     };
     const itemInfo = this.triggerTypes.find((itemInfo) => itemInfo.type === triggerType);
     if (itemInfo?.schema?.required && itemInfo.schema.required.includes('params')) {
-      template.params = this.getTemplateForParamsSchema(itemInfo.schema.properties.params);
+      template.params = this.getSkeletonForParamsSchema(itemInfo.schema.properties.params);
     }
     return template;
   }
 
-  getTemplateForTransform(transformType: string): Trigger {
+  getSkeletonForTransform(transformType: string): Trigger {
     const template: Trigger = {
       type: transformType,
       enabled: true,
     };
     const itemInfo = this.transformTypes.find((itemInfo) => itemInfo.type === transformType);
     if (itemInfo?.schema?.required && itemInfo.schema.required.includes('params')) {
-      template.params = this.getTemplateForParamsSchema(itemInfo.schema.properties.params);
+      template.params = this.getSkeletonForParamsSchema(itemInfo.schema.properties.params);
     }
     return template;
   }
 
-  getTemplateForParamsSchema(paramsSchema: SomeJSONSchema): { [key: string]: any } {
+  getSkeletonForParamsSchema(paramsSchema: SomeJSONSchema): { [key: string]: any } {
     const paramsTemplate = {};
     // TODO(jwetzell): make a smart version of this populating fields with defaults
     return paramsTemplate;
@@ -472,6 +472,26 @@ export class SchemaService {
       }
     });
     return params;
+  }
+
+  getObjectTypeFromObject(object: any) {
+    if (object !== undefined && object.type !== undefined && object.enabled !== undefined) {
+      const matchedAction = this.actionTypes.find((actionType) => object.type === actionType.type);
+      if (matchedAction !== undefined) {
+        return 'Action';
+      }
+
+      const matchedTrigger = this.triggerTypes.find((triggerType) => object.type === triggerType.type);
+      if (matchedTrigger !== undefined) {
+        return 'Trigger';
+      }
+
+      const matchedTransform = this.transformTypes.find((transformType) => object.type === transformType.type);
+      if (matchedTransform !== undefined) {
+        return 'Transform';
+      }
+    }
+    return undefined;
   }
 
   getTriggerTypesForProtocol(protocolType: string): ObjectInfo[] {

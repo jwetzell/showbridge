@@ -4,17 +4,17 @@ import { Trigger } from './trigger.model';
 
 export type TriggerCopyObject = {
   type: 'Trigger';
-  object: Trigger;
+  object: Trigger | Trigger[];
 };
 
 export type ActionCopyObject = {
   type: 'Action';
-  object: Action;
+  object: Action | Action[];
 };
 
 export type TransformCopyObject = {
   type: 'Transform';
-  object: Transform;
+  object: Transform | Transform[];
 };
 
 export type CopyObject = TriggerCopyObject | TransformCopyObject | ActionCopyObject;
