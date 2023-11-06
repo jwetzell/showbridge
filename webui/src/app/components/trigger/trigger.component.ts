@@ -35,6 +35,8 @@ export class TriggerComponent implements OnInit {
     enabled: new FormControl(true),
   });
 
+  isInError: boolean = false;
+
   constructor(
     public eventService: EventService,
     public schemaService: SchemaService,
@@ -58,6 +60,12 @@ export class TriggerComponent implements OnInit {
         .subscribe((triggerEvent) => {
           this.indicatorColor = 'gray';
         });
+
+      this.schemaService.errorPaths.asObservable().subscribe((errorPaths) => {
+        if (this.path) {
+          this.isInError = errorPaths.includes(this.path);
+        }
+      });
     }
 
     if (this.trigger?.type) {

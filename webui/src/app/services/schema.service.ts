@@ -4,6 +4,7 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn,
 import Ajv, { ErrorObject, JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { noop } from 'lodash-es';
+import { BehaviorSubject } from 'rxjs';
 import { Action } from '../models/action.model';
 import { ConfigFile } from '../models/config.models';
 import { ObjectInfo, ParamsFormInfo } from '../models/form.model';
@@ -23,6 +24,8 @@ export class SchemaService {
   transformTypes: ObjectInfo[] = [];
   triggerTypes: ObjectInfo[] = [];
   protocolTypes: ObjectInfo[] = [];
+
+  errorPaths: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
   constructor(
     private http: HttpClient,
@@ -49,6 +52,16 @@ export class SchemaService {
     if (this.schema && this.ajv) {
       this.ajv.validate('Config', data);
       if (this.ajv.errors) {
+        const errorPaths = new Set(
+          this.ajv.errors.map((error) => {
+            const errorMatch = error.instancePath.match(/(\/.*)\d+/);
+            if (errorMatch) {
+              return errorMatch[0].substring(1);
+            }
+            return '';
+          })
+        );
+        this.errorPaths.next(Array.from(errorPaths));
         return this.ajv.errors
           .filter((errorRecord) => errorRecord.message !== undefined)
           .map((errorRecord) => errorRecord.message);

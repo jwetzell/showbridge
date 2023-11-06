@@ -30,6 +30,8 @@ export class TransformComponent implements OnInit {
   schema: any;
   indicatorColor: string = 'gray';
 
+  isInError: boolean = false;
+
   constructor(
     private eventService: EventService,
     private schemaService: SchemaService,
@@ -52,6 +54,12 @@ export class TransformComponent implements OnInit {
         .subscribe((transformEvent) => {
           this.indicatorColor = 'gray';
         });
+
+      this.schemaService.errorPaths.asObservable().subscribe((errorPaths) => {
+        if (this.path) {
+          this.isInError = errorPaths.includes(this.path);
+        }
+      });
     }
     if (this.transform?.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Transform', this.transform.type);
