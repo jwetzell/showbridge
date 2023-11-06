@@ -25,7 +25,6 @@
     "release": "electron-builder"
   },
   "dependencies": {
-    "@vercel/ncc": "^0.38.1",
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.1.1",
     "respawn": "^2.6.0",
@@ -34,6 +33,7 @@
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",
+    "@vercel/ncc": "^0.38.1",
     "electron": "^27.0.3",
     "electron-builder": "^24.6.4",
     "tailwindcss": "^3.3.5"
