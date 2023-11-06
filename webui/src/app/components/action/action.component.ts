@@ -36,6 +36,8 @@ export class ActionComponent implements OnInit {
     enabled: new FormControl(true),
   });
 
+  isInError: boolean = false;
+
   constructor(
     public eventService: EventService,
     public schemaService: SchemaService,
@@ -59,6 +61,12 @@ export class ActionComponent implements OnInit {
         .subscribe((actionEvent) => {
           this.indicatorColor = 'gray';
         });
+
+      this.schemaService.errorPaths.asObservable().subscribe((errorPaths) => {
+        if (this.path) {
+          this.isInError = errorPaths.includes(this.path);
+        }
+      });
     }
     if (this.action?.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Action', this.action.type);
