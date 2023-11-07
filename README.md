@@ -53,6 +53,25 @@ Simple protocol router _/s_
   - to run the launcher (these steps will also build the webui)
     - `cd launcher`
     - `npm run start`
+   
+## CLI Usage
+```
+Usage: showbridge [options]
+
+Simple protocol router /s
+
+Options:
+  -V, --version                       output the version number
+  -c, --config <path>                 location of config file
+  -v, --vars <path>                   location of file containing vars
+  -w, --webui <path>                  location of webui html to serve (default: "./webui/dist/webui")
+  --disable-action <action-type>      action type to disable (default: [])
+  --disable-protocol <protocol-type>  protocol type to disable (default: [])
+  --disable-trigger <trigger-type>    trigger type to disable (default: [])
+  -d, --debug                         turn on debug logging (default: false)
+  -t, --trace                         turn on trace logging (default: false)
+  -h, --help                          display help
+```
 
 ## Config File
 The showbridge router's config is entirely controlled by a JSON config file. This file can be made by hand or edited via the web interface included with the launcher. The router WILL NOT start up with an invalid config file. I do provide some starter/example configs to look at to get a general idea of what one entails. 

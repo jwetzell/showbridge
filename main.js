@@ -15,6 +15,24 @@ program.description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);
 program.option('-v, --vars <path>', 'location of file containing vars', undefined);
 program.option('-w, --webui <path>', 'location of webui html to serve', path.join(__dirname, 'webui/dist/webui'));
+program.option(
+  '--disable-action <action-type>',
+  'action type to disable',
+  (value, previous) => previous.concat([value]),
+  []
+);
+program.option(
+  '--disable-protocol <protocol-type>',
+  'protocol type to disable',
+  (value, previous) => previous.concat([value]),
+  []
+);
+program.option(
+  '--disable-trigger <trigger-type>',
+  'trigger type to disable',
+  (value, previous) => previous.concat([value]),
+  []
+);
 program.option('-d, --debug', 'turn on debug logging', false);
 program.option('-t, --trace', 'turn on trace logging', false);
 program.parse(process.argv);
@@ -202,6 +220,27 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
         break;
     }
   });
+
+  if (options.disableAction.length > 0) {
+    options.disableAction.forEach((type) => {
+      logger.debug(`app: disabling action ${type}`);
+      router.disableAction(type);
+    });
+  }
+
+  if (options.disableProtocol.length > 0) {
+    options.disableProtocol.forEach((type) => {
+      logger.debug(`app: disabling protocol ${type}`);
+      router.disableProtocol(type);
+    });
+  }
+
+  if (options.disableTrigger.length > 0) {
+    options.disableTrigger.forEach((type) => {
+      logger.debug(`app: disabling trigger ${type}`);
+      router.disableTrigger(type);
+    });
+  }
 
   router.start();
 
