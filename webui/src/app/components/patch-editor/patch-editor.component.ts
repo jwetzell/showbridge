@@ -15,6 +15,7 @@ import { VarsService } from 'src/app/services/vars.service';
 export class PatchEditorComponent {
   midiPorts: MIDIDeviceInfo[] = [];
 
+  midiEnabled: boolean = true;
   midiPatches: MIDIPatch[] = [];
   networkPatches: NetworkPatch[] = [];
 
@@ -29,8 +30,8 @@ export class PatchEditorComponent {
         take(1)
       )
       .subscribe((protocolStatus) => {
-        console.log(protocolStatus);
         if (protocolStatus.data?.midi !== undefined) {
+          this.midiEnabled = protocolStatus.data.midi.enabled;
           this.midiPorts = protocolStatus.data?.midi?.devices?.filter((device) => device.type === 'output');
         }
       });
