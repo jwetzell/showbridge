@@ -4,6 +4,7 @@ import { ConfigFile } from 'src/app/models/config.models';
 import { ObjectInfo } from 'src/app/models/form.model';
 import { EventService } from 'src/app/services/event.service';
 import { SchemaService } from 'src/app/services/schema.service';
+import { SettingsService } from 'src/app/services/settings.service';
 
 @Component({
   selector: 'app-config',
@@ -19,7 +20,8 @@ export class ConfigComponent {
   enabledProtocols: string[];
   constructor(
     public schemaService: SchemaService,
-    public eventService: EventService
+    public eventService: EventService,
+    public settingsService: SettingsService
   ) {
     this.enabledProtocols = this.schemaService.protocolTypes.map((protocolInfo) => protocolInfo.type);
 
