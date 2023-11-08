@@ -1,5 +1,5 @@
 <mat-tab-group *ngIf="varsService.currentVars | async as vars">
-  <mat-tab label="MIDI">
+  <mat-tab *ngIf="midiEnabled" label="MIDI">
     <div class="flex justify-cent">
       <button
         class="px-6 py-1 my-5 ml-2 text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
