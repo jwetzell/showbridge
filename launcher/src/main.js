@@ -404,7 +404,15 @@ if (!lock) {
       }
 
       showbridgeProcess = respawn(
-        () => [showbridgePath, '--config', configFilePath, '--vars', varsFilePath, app.isPackaged ? '' : '--trace'],
+        () => [
+          showbridgePath,
+          '--config',
+          configFilePath,
+          '--vars',
+          varsFilePath,
+          '-l',
+          app.isPackaged ? 'info' : 'trace',
+        ],
         {
           name: 'showbridge process',
           maxRestarts: 3,
