@@ -12,7 +12,7 @@
   "scripts": {
     "test:lib": "node tests/test.js",
     "predev": "node scripts/setup_dev.js && cd webui && npm run build",
-    "dev": "nodemon --ignore dist --ignore webui --ignore launcher --exec 'node --inspect main.js -d -c sample/config/dev.json -v sample/vars/dev.json --webui webui/dist/webui'",
+    "dev": "nodemon --ignore dist --ignore webui --ignore launcher --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui webui/dist/webui'",
     "start": "node main.js",
     "install:all": "node scripts/install_all.js",
     "prepack": "cd webui && npm install && npm run build"
