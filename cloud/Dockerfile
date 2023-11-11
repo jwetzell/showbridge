@@ -1,5 +1,4 @@
 FROM node:20-alpine
-ENV NODE_ENV production
 RUN apk add --no-cache tini
 WORKDIR /app
 COPY --chown=node:node package*.json ./
