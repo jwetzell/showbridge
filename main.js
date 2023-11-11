@@ -3,7 +3,7 @@
 
 const { readFileSync, existsSync, writeFileSync } = require('fs');
 const path = require('path');
-const { program } = require('commander');
+const { program, Option } = require('commander');
 const defaultConfig = require('./sample/config/default.json');
 const defaultVars = require('./sample/vars/default.json');
 const packageInfo = require('./package.json');
@@ -15,26 +15,15 @@ program.description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);
 program.option('-v, --vars <path>', 'location of file containing vars', undefined);
 program.option('-w, --webui <path>', 'location of webui html to serve', path.join(__dirname, 'webui/dist/webui'));
-program.option(
-  '--disable-action <action-type>',
-  'action type to disable',
-  (value, previous) => previous.concat([value]),
-  []
+program.option('--disable-action <action-type...>', 'action type(s) to disable');
+program.option('--disable-protocol <protocol-type...>', 'protocol type(s) to disable');
+program.option('--disable-trigger <trigger-type...>', 'trigger type(s) to disable');
+program.addOption(
+  new Option('-l, --log-level <number>', 'log level')
+    .choices(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
+    .default('info')
 );
-program.option(
-  '--disable-protocol <protocol-type>',
-  'protocol type to disable',
-  (value, previous) => previous.concat([value]),
-  []
-);
-program.option(
-  '--disable-trigger <trigger-type>',
-  'trigger type to disable',
-  (value, previous) => previous.concat([value]),
-  []
-);
-program.option('-d, --debug', 'turn on debug logging', false);
-program.option('-t, --trace', 'turn on trace logging', false);
+
 program.parse(process.argv);
 
 const options = program.opts();
@@ -43,12 +32,30 @@ const isChildProcess = process.send !== undefined;
 import('showbridge-lib').then(({ Config, Router, Utils }) => {
   const logger = Utils.logger;
 
-  if (options.debug) {
-    logger.level = 20;
-  }
-
-  if (options.trace) {
-    logger.level = 10;
+  if (options.logLevel) {
+    switch (options.logLevel) {
+      case 'trace':
+        logger.level = 10;
+        break;
+      case 'debug':
+        logger.level = 20;
+        break;
+      case 'info':
+        logger.level = 30;
+        break;
+      case 'warn':
+        logger.level = 40;
+        break;
+      case 'error':
+        logger.level = 50;
+        break;
+      case 'fatal':
+        logger.level = 60;
+        break;
+      default:
+        logger.level = 30;
+        break;
+    }
   }
 
   logger.info(`app: starting ${packageInfo.name} version: ${packageInfo.version}`);
@@ -221,21 +228,21 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
     }
   });
 
-  if (options.disableAction.length > 0) {
+  if (options.disableAction?.length > 0) {
     options.disableAction.forEach((type) => {
       logger.debug(`app: disabling action ${type}`);
       router.disableAction(type);
     });
   }
 
-  if (options.disableProtocol.length > 0) {
+  if (options.disableProtocol?.length > 0) {
     options.disableProtocol.forEach((type) => {
       logger.debug(`app: disabling protocol ${type}`);
       router.disableProtocol(type);
     });
   }
 
-  if (options.disableTrigger.length > 0) {
+  if (options.disableTrigger?.length > 0) {
     options.disableTrigger.forEach((type) => {
       logger.debug(`app: disabling trigger ${type}`);
       router.disableTrigger(type);
