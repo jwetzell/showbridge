@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "showbridge-webui:build:production"
+              "buildTarget": "showbridge-webui:build:production"
             },
             "development": {
-              "browserTarget": "showbridge-webui:build:development"
+              "buildTarget": "showbridge-webui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -70,7 +70,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "showbridge-webui:build"
+            "buildTarget": "showbridge-webui:build"
           }
         },
         "test": {
