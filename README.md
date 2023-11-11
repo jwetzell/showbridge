@@ -12,6 +12,7 @@
 Simple protocol router _/s_
 
 [Run](#how-to-run) •
+[CLI Usage](#cli-usage) •
 [Config File](#config-file) •
 [Structure](#structure) •
 [Templating](#templating) •
@@ -44,7 +45,7 @@ Simple protocol router _/s_
   - clone repo
   - install dependencies: `npm install && npm run install:all`
   - run: `npm run start -- -c config.json`
-    - if you would like to turn on debug or trace logging use the `-d/t` or `--debug/trace` flag
+    - see [CLI Usage](#cli-usage) for more flags
     - if no config file is specified then a [default config](sample/config/default.json) will be used
   - if you would like the webui it will need to be built
     - `cd webui`
@@ -61,16 +62,15 @@ Usage: showbridge [options]
 Simple protocol router /s
 
 Options:
-  -V, --version                       output the version number
-  -c, --config <path>                 location of config file
-  -v, --vars <path>                   location of file containing vars
-  -w, --webui <path>                  location of webui html to serve (default: "./webui/dist/webui")
-  --disable-action <action-type>      action type to disable (default: [])
-  --disable-protocol <protocol-type>  protocol type to disable (default: [])
-  --disable-trigger <trigger-type>    trigger type to disable (default: [])
-  -d, --debug                         turn on debug logging (default: false)
-  -t, --trace                         turn on trace logging (default: false)
-  -h, --help                          display help
+  -V, --version                          output the version number
+  -c, --config <path>                    location of config file
+  -v, --vars <path>                      location of file containing vars
+  -w, --webui <path>                     location of webui html to serve (default: "./webui/dist/webui")
+  --disable-action <action-type...>      action type(s) to disable
+  --disable-protocol <protocol-type...>  protocol type(s) to disable
+  --disable-trigger <trigger-type...>    trigger type(s) to disable
+  -l, --log-level <number>               log level (choices: "trace", "debug", "info", "warn", "error","fatal", default: "info")
+  -h, --help                             display help for command
 ```
 
 ## Config File
