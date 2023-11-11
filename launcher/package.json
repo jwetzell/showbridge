@@ -1,7 +1,7 @@
 {
   "name": "showbridge-launcher",
   "description": "Desktop app to launch and configure showbridge",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "src/main.js",
   "license": "MIT",
   "private": true,
