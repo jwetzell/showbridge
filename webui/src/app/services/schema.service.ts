@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import Ajv, { ErrorObject, JSONSchemaType } from 'ajv';
+import Ajv, { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { noop } from 'lodash-es';
 import { BehaviorSubject } from 'rxjs';
@@ -65,19 +65,11 @@ export class SchemaService {
         return this.ajv.errors
           .filter((errorRecord) => errorRecord.message !== undefined)
           .map((errorRecord) => errorRecord.message);
+      } else {
+        this.errorPaths.next([]);
       }
     }
     return [];
-  }
-
-  getErrorMessagesFromAjvErrors(): ErrorObject<string, Record<string, any>, unknown>[] {
-    if (this.ajv.errors && this.schema) {
-      console.log(this.ajv.errors);
-    }
-    if (this.ajv.errors === null || this.ajv.errors === undefined) {
-      return [];
-    }
-    return this.ajv.errors;
   }
 
   getSkeletonForAction(actionType: string): Action {

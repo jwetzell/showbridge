@@ -68,6 +68,7 @@ export class ConfigService {
     this.configStateHistory.forEach((existingConfigState) => {
       existingConfigState.isCurrent = isEqual(existingConfigState, configState);
     });
+    this.pendingConfigIsValid = this.validate(configState.config);
     this.currentlyShownConfigState.next(cloneDeep(configState));
   }
 
