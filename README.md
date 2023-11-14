@@ -128,33 +128,42 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 
 ## Actions
 - **forward**
-    - host: address of the server to forward the message,
-    - protocol: udp or tcp,
+    - host: address of the server to forward the message
+    - _host: JS Template of the address of the server to forward the message
+    - protocol: udp or tcp
     - port: port (number) to forward the message to,
+    - _port: JS Template of the port (number) to forward the message to,
 - **osc-output**
     - protocol: udp or tcp,
-    - host: address of the server to forward the message,
-    - port: port (number) to forward the osc message to,
-    - _address: a javascript literal string with msg available (i.e. "/routed${msg.address}"),
+    - host: address of the server to forward the message
+    - _host: JS Template of the address of the server to forward the message
+    - port: port (number) to forward the osc message to
+    - _port: JS Template of the port (number) to forward the osc message to
+    - _address: a javascript literal string with msg available (i.e. "/routed${msg.address}")
     - address: hardcoded address to send the message to, _address has priority
     - _args: an array of args all string will be interpreted as javascript templates like _address non-strings will be passed along as is
     - args: hardcoded array of args values i.e [0, "hello", 1.5], _args has priority
 - **udp-output**
-    - host: address of the server to send the message to,
-    - port: port (number) to udp message on,
+    - host: address of the server to send the message to
+    - _host: JS Template of the address of the server to send the message to
+    - port: port (number) to udp message on
+    - _port: JS Template of the port (number) to udp message on
     - bytes: hardcoded array of byte values i.e [0, 100, 200] to send over UDP
     - hex: hex string (i.e 6869, 68 69 , 0x68 0x69, etc) to turn into bytes and send
     - _string: templated string to send
     - string: static string to send
 - **tcp-output**
-    - host: address of the server to send the message to,
-    - port: port (number) to tcp message on,
+    - host: address of the server to send the message to
+    - _host: JS Template of the address of the server to send the message to
+    - port: port (number) to tcp message on
+    - _port: JS Template of the port (number) to tcp message on
     - bytes: hardcoded array of byte values i.e [0, 100, 200] to send over UDP
     - hex: hex string (i.e 6869, 68 69 , 0x68 0x69, etc) to turn into bytes and send
     - _string: templated string to send
     - string: static string to send
 - **midi-output**
     - port: optional name of the port to send the message to. defaults to virtual output
+    - _port: JS literal template of the port to send the message to. defaults to virtual output
     - bytes: byte array of midi data [status + channel, data1, data2]
     - status: midi status (i.e note_on, note_off, program_change, etc.)
     - note: note value (note_off,, note_on, polyphonic_aftertouch)
@@ -174,6 +183,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
     - command: shell command to run _command has priority
 - **cloud-output**
     - room(s): string or array of string representing the room(s) to send the incoming msg (post transforms) to
+    - _room(s): JS Templated string or array of strings representing the room(s) to send the incoming msg (post transforms) to
 
 ## Transforms
 - **scale**
