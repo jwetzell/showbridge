@@ -2,7 +2,6 @@
 // NOTE(jwetzell): HEAVY inspiration from https://github.com/bitfocus/companion/launcher
 
 const path = require('path');
-const { networkInterfaces } = require('os');
 const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell } = require('electron');
 const Tail = require('tail').Tail;
 const { readJSONSync, existsSync, moveSync, writeJSONSync, readdirSync, mkdirSync } = require('fs-extra');
@@ -126,13 +125,6 @@ function createMainWindow() {
     },
   });
   mainWin.loadFile(path.join(__dirname, 'html/main.html'));
-}
-
-function getConfigObject(filePath) {
-  if (existsSync(filePath)) {
-    return readJSONSync(filePath);
-  }
-  return undefined;
 }
 
 function createTray() {
