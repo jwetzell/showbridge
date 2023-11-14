@@ -30,11 +30,9 @@ export class TransformComponent implements OnInit {
   schema: any;
   indicatorColor: string = 'gray';
 
-  isInError: boolean = false;
-
   constructor(
     private eventService: EventService,
-    private schemaService: SchemaService,
+    public schemaService: SchemaService,
     private copyService: CopyService,
     private dialog: MatDialog
   ) {}
@@ -54,12 +52,6 @@ export class TransformComponent implements OnInit {
         .subscribe((transformEvent) => {
           this.indicatorColor = 'gray';
         });
-
-      this.schemaService.errorPaths.asObservable().subscribe((errorPaths) => {
-        if (this.path) {
-          this.isInError = errorPaths.includes(this.path);
-        }
-      });
     }
     if (this.transform?.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Transform', this.transform.type);
@@ -107,5 +99,12 @@ export class TransformComponent implements OnInit {
     if (this.dialogRef) {
       this.dialog.open(this.dialogRef);
     }
+  }
+
+  isInError(): boolean {
+    if (this.path) {
+      return this.schemaService.errorPaths.includes(this.path);
+    }
+    return false;
   }
 }

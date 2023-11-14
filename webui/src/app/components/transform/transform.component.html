@@ -1,7 +1,7 @@
 <ng-container *ngIf="transform && schema">
   <div
     class="flex items-center w-auto p-1 m-2 transform bg-gray-800 border-2 {{
-      isInError ? 'border-red-500' : 'border-gray-400'
+      isInError() ? 'border-red-500' : 'border-gray-400'
     }} border-solid"
     [style.opacity]="this.transform.enabled ? '1.0' : '0.5'">
     <div class="flex items-center justify-center">

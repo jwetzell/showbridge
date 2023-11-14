@@ -4,7 +4,6 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn,
 import Ajv, { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { noop } from 'lodash-es';
-import { BehaviorSubject } from 'rxjs';
 import { Action } from '../models/action.model';
 import { ConfigFile } from '../models/config.models';
 import { ObjectInfo, ParamsFormInfo } from '../models/form.model';
@@ -25,7 +24,7 @@ export class SchemaService {
   triggerTypes: ObjectInfo[] = [];
   protocolTypes: ObjectInfo[] = [];
 
-  errorPaths: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+  errorPaths: string[] = [];
 
   constructor(
     private http: HttpClient,
@@ -48,7 +47,7 @@ export class SchemaService {
     }
   }
 
-  validate(data: any): (string | undefined)[] {
+  validate(data: any): boolean {
     if (this.schema && this.ajv) {
       this.ajv.validate('Config', data);
       if (this.ajv.errors) {
@@ -62,15 +61,13 @@ export class SchemaService {
             return '';
           })
         );
-        this.errorPaths.next(Array.from(errorPaths));
-        return this.ajv.errors
-          .filter((errorRecord) => errorRecord.message !== undefined)
-          .map((errorRecord) => errorRecord.message);
+        this.errorPaths = Array.from(errorPaths);
+        return false;
       } else {
-        this.errorPaths.next([]);
+        this.errorPaths = [];
       }
     }
-    return [];
+    return true;
   }
 
   getSkeletonForAction(actionType: string): Action {
