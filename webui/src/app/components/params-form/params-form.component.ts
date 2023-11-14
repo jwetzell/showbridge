@@ -16,6 +16,7 @@ import { VarsService } from 'src/app/services/vars.service';
 export class ParamsFormComponent implements OnInit {
   @Input() parentSchema?: SomeJSONSchema;
   @Input() data?: any;
+  @Input() patchable: boolean = false;
   @Output() updated: EventEmitter<any> = new EventEmitter<any>();
 
   paramsSchema?: SomeJSONSchema;
@@ -242,21 +243,23 @@ export class ParamsFormComponent implements OnInit {
     return this.keysToTemplate.has(key);
   }
 
-  applyPatch(event: any) {
-    if (event.target.value !== undefined && event.target.value !== '' && this.patchType !== undefined) {
+  applyPatch(event: Event) {
+    const patchIndex = (event.target as HTMLInputElement).value;
+
+    if (this.patchType !== undefined && patchIndex !== '-1') {
       if (this.patchType === 'network') {
         this.keysToTemplate.add('port');
         this.keysToTemplate.add('host');
         this.paramsFormInfo?.formGroup.controls['_port']?.setValue(
-          '${vars.patches.' + this.patchType + '[' + event.target.value + '].port}'
+          '${vars.patches.' + this.patchType + '[' + patchIndex + '].port}'
         );
         this.paramsFormInfo?.formGroup.controls['_host']?.setValue(
-          '${vars.patches.' + this.patchType + '[' + event.target.value + '].host}'
+          '${vars.patches.' + this.patchType + '[' + patchIndex + '].host}'
         );
       } else if (this.patchType === 'midi') {
         this.keysToTemplate.add('port');
         this.paramsFormInfo?.formGroup.controls['_port'].setValue(
-          '${vars.patches.' + this.patchType + '[' + event.target.value + '].port}'
+          '${vars.patches.' + this.patchType + '[' + patchIndex + '].port}'
         );
 
         console.log(this.keysToTemplate);
