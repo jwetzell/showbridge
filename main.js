@@ -19,7 +19,7 @@ program.option('--disable-action <action-type...>', 'action type(s) to disable')
 program.option('--disable-protocol <protocol-type...>', 'protocol type(s) to disable');
 program.option('--disable-trigger <trigger-type...>', 'trigger type(s) to disable');
 program.addOption(
-  new Option('-l, --log-level <number>', 'log level')
+  new Option('-l, --log-level <level>', 'log level')
     .choices(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
     .default('info')
 );

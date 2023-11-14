@@ -69,7 +69,7 @@ Options:
   --disable-action <action-type...>      action type(s) to disable
   --disable-protocol <protocol-type...>  protocol type(s) to disable
   --disable-trigger <trigger-type...>    trigger type(s) to disable
-  -l, --log-level <number>               log level (choices: "trace", "debug", "info", "warn", "error","fatal", default: "info")
+  -l, --log-level <level>               log level (choices: "trace", "debug", "info", "warn", "error","fatal", default: "info")
   -h, --help                             display help for command
 ```
 
