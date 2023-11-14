@@ -14,7 +14,7 @@
   "type": "commonjs",
   "scripts": {
     "tailwind": "tailwindcss build -i tailwind.css -o src/assets/css/tailwind.css",
-    "prestart": "npm run tailwind && cd ../webui && npm run build",
+    "prestart": "npm run tailwind",
     "start": "electron .",
     "predev": "node ../scripts/setup_dev.js",
     "dev": "npm run start",

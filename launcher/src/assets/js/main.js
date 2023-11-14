@@ -41,7 +41,3 @@ function showWebUI() {
 function quitApp() {
   electron.send('quit');
 }
-
-function showSettings() {
-  electron.send('showSettings');
-}

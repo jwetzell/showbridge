@@ -19,7 +19,7 @@ main.js at the root of this repo is a script using [commander.js](https://github
 published as [showbridge](https://npmjs.com/package/showbridge)
 
 ## [launcher](./launcher/)
-the launcher is an electron app that wraps the main.js script into a desktop app setting up things like config directory, logs, quick settings, etc.
+the launcher is an electron app that wraps the main.js script into a desktop app setting up things like config directory, logs, etc.
 
 ## [webui](./webui/)
 an angular web interface for managing a running instance of the main.js executable this is bundled into the launcher and served on whatever port the user has configured for the http protocol

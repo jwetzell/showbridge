@@ -18,7 +18,6 @@ let restartProcess = true;
 let showbridgeProcess;
 let mainWin;
 let logWin;
-let settingsWin;
 let tray;
 const configDir = path.join(app.getPath('appData'), '/showbridge/');
 const configFilePath = path.join(configDir, 'config.json');
@@ -103,34 +102,12 @@ function createLogWindow() {
   logWin.loadFile(path.join(__dirname, 'html/logger.html'));
 }
 
-function createSettingsWindow() {
-  settingsWin = new BrowserWindow({
-    width: 450,
-    height: 500,
-    webPreferences: {
-      nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js'),
-    },
-  });
-  settingsWin.removeMenu();
-  settingsWin.loadFile(path.join(__dirname, 'html/settings.html'));
-}
-
 function showLogWindow() {
   if (logWin === undefined || logWin.isDestroyed()) {
     createLogWindow();
   } else {
     logWin.show();
     logWin.focus();
-  }
-}
-
-function showSettingsWindow() {
-  if (settingsWin === undefined || settingsWin.isDestroyed()) {
-    createSettingsWindow();
-  } else {
-    settingsWin.show();
-    settingsWin.focus();
   }
 }
 
@@ -148,17 +125,7 @@ function createMainWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-  mainWin.loadFile(path.join(__dirname, 'index.html'));
-}
-
-function getIPAddresses() {
-  const allInterfaces = networkInterfaces();
-  const validAddresses = [];
-  Object.values(allInterfaces).forEach((addresses) => {
-    const goodAddresses = addresses.filter((address) => !address.internal);
-    validAddresses.push(...goodAddresses);
-  });
-  return validAddresses;
+  mainWin.loadFile(path.join(__dirname, 'html/main.html'));
 }
 
 function getConfigObject(filePath) {
@@ -203,12 +170,6 @@ function createTray() {
           mode: 'detach',
         });
       },
-    })
-  );
-  menu.append(
-    new MenuItem({
-      label: 'Settings',
-      click: showSettingsWindow,
     })
   );
   menu.append(
@@ -588,10 +549,6 @@ if (!lock) {
       }
     });
 
-    ipcMain.on('showSettings', () => {
-      showSettingsWindow();
-    });
-
     ipcMain.on('showUI', () => {
       try {
         const config = readJSONSync(configFilePath);
@@ -607,16 +564,6 @@ if (!lock) {
       } catch (error) {
         dialog.showErrorBox('Error', 'Problem determining current router settings');
       }
-    });
-
-    ipcMain.handle('getIPAddresses', () => getIPAddresses());
-
-    ipcMain.handle('getCurrentConfig', () => getConfigObject(configFilePath));
-
-    ipcMain.on('loadConfigFromObject', (event, config) => {
-      writeConfigToDisk(configFilePath, config);
-      // TODO(jwetzell): error handling
-      reloadConfigFromDisk(configFilePath);
     });
   });
 }
