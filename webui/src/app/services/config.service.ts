@@ -106,7 +106,6 @@ export class ConfigService {
     if (errors && errors.length === 0) {
       return true;
     }
-    console.error(errors);
     return false;
   }
 

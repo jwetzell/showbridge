@@ -18,7 +18,7 @@ export class SchemaService {
   schemaUrl?: URL;
   schema?: JSONSchemaType<ConfigFile>;
 
-  ajv: Ajv = new Ajv();
+  ajv: Ajv = new Ajv({ allErrors: true });
 
   actionTypes: ObjectInfo[] = [];
   transformTypes: ObjectInfo[] = [];
@@ -52,11 +52,12 @@ export class SchemaService {
     if (this.schema && this.ajv) {
       this.ajv.validate('Config', data);
       if (this.ajv.errors) {
+        console.error(this.ajv.errors);
         const errorPaths = new Set(
           this.ajv.errors.map((error) => {
-            const errorMatch = error.instancePath.match(/(\/.*)\d+/);
-            if (errorMatch) {
-              return errorMatch[0].substring(1);
+            const errorPathMatch = error.instancePath.match(/(\/.*)\d+/);
+            if (errorPathMatch) {
+              return errorPathMatch[0].substring(1);
             }
             return '';
           })
