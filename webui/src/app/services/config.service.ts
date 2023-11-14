@@ -102,11 +102,7 @@ export class ConfigService {
   }
 
   validate(config: ConfigFile) {
-    const errors = this.schemaService.validate(config);
-    if (errors && errors.length === 0) {
-      return true;
-    }
-    return false;
+    return this.schemaService.validate(config);
   }
 
   setCurrentlyLiveConfigState(configState: ConfigState) {

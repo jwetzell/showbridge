@@ -1,5 +1,15 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,7 +28,7 @@ import { SchemaService } from 'src/app/services/schema.service';
   templateUrl: './action.component.html',
   styleUrls: ['./action.component.css'],
 })
-export class ActionComponent implements OnInit {
+export class ActionComponent implements OnInit, OnChanges {
   @Input() path?: string;
   @Input() action?: Action;
 
@@ -37,8 +47,6 @@ export class ActionComponent implements OnInit {
     enabled: new FormControl(true),
   });
 
-  isInError: boolean = false;
-
   constructor(
     public eventService: EventService,
     public schemaService: SchemaService,
@@ -47,6 +55,10 @@ export class ActionComponent implements OnInit {
     private dialog: MatDialog,
     public listsService: ListsService
   ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+  }
 
   ngOnInit(): void {
     if (this.path) {
@@ -63,12 +75,6 @@ export class ActionComponent implements OnInit {
         .subscribe((actionEvent) => {
           this.indicatorColor = 'gray';
         });
-
-      this.schemaService.errorPaths.asObservable().subscribe((errorPaths) => {
-        if (this.path) {
-          this.isInError = errorPaths.includes(this.path);
-        }
-      });
     }
     if (this.action?.type) {
       this.schema = this.schemaService.getSchemaForObjectType('Action', this.action.type);
@@ -207,5 +213,12 @@ export class ActionComponent implements OnInit {
     if (this.dialogRef) {
       this.dialog.open(this.dialogRef);
     }
+  }
+
+  isInError(): boolean {
+    if (this.path) {
+      return this.schemaService.errorPaths.includes(this.path);
+    }
+    return false;
   }
 }
