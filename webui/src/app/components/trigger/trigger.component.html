@@ -90,7 +90,7 @@
           [id]="getListId()"
           cdkDropList
           (cdkDropListDropped)="drop($event)"
-          [cdkDropListConnectedTo]="eventService.triggerIdList"
+          [cdkDropListConnectedTo]="listsService.triggerListIds"
           [cdkDropListData]="trigger.actions"
           class="flex flex-col">
           <div *ngIf="trigger.actions.length === 0" class="w-6 h-6"></div>

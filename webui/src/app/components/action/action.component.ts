@@ -10,6 +10,7 @@ import { CopyObject } from 'src/app/models/copy-object.model';
 import { Transform } from 'src/app/models/transform.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
+import { ListsService } from 'src/app/services/lists.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
@@ -43,7 +44,8 @@ export class ActionComponent implements OnInit {
     public schemaService: SchemaService,
     private snackBar: MatSnackBar,
     public copyService: CopyService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public listsService: ListsService
   ) {}
 
   ngOnInit(): void {
@@ -193,8 +195,8 @@ export class ActionComponent implements OnInit {
   getListId(): string {
     if (this.path) {
       const id = this.path.replaceAll('/', '.');
-      if (!this.eventService.actionIdList.includes(id)) {
-        this.eventService.actionIdList.push(id);
+      if (!this.listsService.actionListIds.includes(id)) {
+        this.listsService.actionListIds.push(id);
       }
       return id;
     }

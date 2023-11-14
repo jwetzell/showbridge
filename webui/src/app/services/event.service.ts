@@ -26,9 +26,6 @@ export class EventService {
     data: {},
   });
 
-  public triggerIdList: string[] = [];
-  public actionIdList: string[] = [];
-
   private protocolStatusSubscription?: Subscription;
 
   constructor(private settingsService: SettingsService) {

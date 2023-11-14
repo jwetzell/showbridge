@@ -10,6 +10,7 @@ import { CopyObject } from 'src/app/models/copy-object.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
+import { ListsService } from 'src/app/services/lists.service';
 import { SchemaService } from 'src/app/services/schema.service';
 @Component({
   selector: 'app-trigger',
@@ -42,7 +43,8 @@ export class TriggerComponent implements OnInit {
     public schemaService: SchemaService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    public copyService: CopyService
+    public copyService: CopyService,
+    public listsService: ListsService
   ) {}
 
   ngOnInit() {
@@ -158,8 +160,8 @@ export class TriggerComponent implements OnInit {
   getListId(): string {
     if (this.path) {
       const id = this.path.replaceAll('/', '.');
-      if (!this.eventService.triggerIdList.includes(id)) {
-        this.eventService.triggerIdList.push(id);
+      if (!this.listsService.triggerListIds.includes(id)) {
+        this.listsService.triggerListIds.push(id);
       }
       return id;
     }
