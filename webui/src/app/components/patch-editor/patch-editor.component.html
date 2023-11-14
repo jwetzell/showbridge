@@ -13,7 +13,7 @@
           <div class="flex w-14">
             <mat-icon cdkDragHandle>drag_handle</mat-icon>
           </div>
-          <input class="px-2 ml-2" [(ngModel)]="midiPatch.name" />
+          <input class="px-2 ml-2" placeholder="Patch Name" [(ngModel)]="midiPatch.name" />
 
           <div class="flex-grow">
             <select class="ml-2" *ngIf="midiPorts.length > 0" [(ngModel)]="midiPatch.port">
@@ -42,10 +42,10 @@
           <div class="flex w-14">
             <mat-icon cdkDragHandle>drag_handle</mat-icon>
           </div>
-          <input class="ml-2" [(ngModel)]="networkPatch.name" />
-          <input class="px-2 ml-2" [(ngModel)]="networkPatch.host" />
+          <input class="ml-2" placeholder="Patch Name" [(ngModel)]="networkPatch.name" />
+          <input class="px-2 ml-2" placeholder="127.0.0.1" [(ngModel)]="networkPatch.host" />
           <div class="flex-grow">
-            <input class="px-2 ml-2" type="number" [(ngModel)]="networkPatch.port" />
+            <input class="px-2 ml-2" placeholder="53000" type="number" [(ngModel)]="networkPatch.port" />
           </div>
           <button (click)="networkPatches.splice(i, 1)" class="flex">
             <mat-icon class="text-red-500">delete</mat-icon>
