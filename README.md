@@ -95,7 +95,10 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 - params: an object that holds the config for the trigger/action/transform
 - enabled: boolean - if false the piece is skipped and so are the underlying pieces. i.e. if a trigger is disabled no actions under that trigger will be performed, if an action is disabled no transforms under that action will be performed
 
-## Triggers
+## Params
+Each piece uses the params property to store its configurations as outlined below. An **\*** means the param can be [templated](#templating) by prefixing it with an underscore (`_`) (i.e `address` -> `_address`). You can assume that the templated param will take priority over its not templated version if they are both defined.
+
+### Triggers
 - **any**: fires for any incoming message
 - **regex**
     - patterns: a list of regex patterns as strings
@@ -126,44 +129,31 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 - **osc-address**
     - address: the OSC address to match to incoming OSC messages. Supports address patterns according to the OSC spec.
 
-## Actions
+### Actions
 - **forward**
-    - host: address of the server to forward the message
-    - _host: JS Template of the address of the server to forward the message
+    - host\*: address of the server to forward the message
     - protocol: udp or tcp
-    - port: port (number) to forward the message to,
-    - _port: JS Template of the port (number) to forward the message to,
+    - port\*: port (number) to forward the message to
 - **osc-output**
     - protocol: udp or tcp,
-    - host: address of the server to forward the message
-    - _host: JS Template of the address of the server to forward the message
-    - port: port (number) to forward the osc message to
-    - _port: JS Template of the port (number) to forward the osc message to
-    - _address: a javascript literal string with msg available (i.e. "/routed${msg.address}")
-    - address: hardcoded address to send the message to, _address has priority
-    - _args: an array of args all string will be interpreted as javascript templates like _address non-strings will be passed along as is
-    - args: hardcoded array of args values i.e [0, "hello", 1.5], _args has priority
+    - host\*: address of the server to forward the message
+    - port\*: port (number) to forward the osc message to
+    - address\*: address to send the message to, _address has priority
+    - args\*: array of args values i.e [0, "hello", 1.5], _args has priority
 - **udp-output**
-    - host: address of the server to send the message to
-    - _host: JS Template of the address of the server to send the message to
-    - port: port (number) to udp message on
-    - _port: JS Template of the port (number) to udp message on
+    - host\*: address of the server to send the message to
+    - port\*: port (number) to udp message on
     - bytes: hardcoded array of byte values i.e [0, 100, 200] to send over UDP
     - hex: hex string (i.e 6869, 68 69 , 0x68 0x69, etc) to turn into bytes and send
-    - _string: templated string to send
-    - string: static string to send
+    - string\*: string to send
 - **tcp-output**
-    - host: address of the server to send the message to
-    - _host: JS Template of the address of the server to send the message to
-    - port: port (number) to tcp message on
-    - _port: JS Template of the port (number) to tcp message on
+    - host\*: address of the server to send the message to
+    - port\*: port (number) to tcp message on
     - bytes: hardcoded array of byte values i.e [0, 100, 200] to send over UDP
     - hex: hex string (i.e 6869, 68 69 , 0x68 0x69, etc) to turn into bytes and send
-    - _string: templated string to send
-    - string: static string to send
+    - string\*: string to send
 - **midi-output**
-    - port: optional name of the port to send the message to. defaults to virtual output
-    - _port: JS literal template of the port to send the message to. defaults to virtual output
+    - port\*: optional name of the port to send the message to. defaults to virtual output
     - bytes: byte array of midi data [status + channel, data1, data2]
     - status: midi status (i.e note_on, note_off, program_change, etc.)
     - note: note value (note_off,, note_on, polyphonic_aftertouch)
@@ -179,13 +169,11 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
     - actions: array of actions to randomly pick from
 - **log**: action takes no params and will simply log the incoming message out useful for debugging triggers
 - **shell**
-    - _command: JS literal template of shell command to run has access to msg properties
-    - command: shell command to run _command has priority
+    - command\*: shell command to run _command has priority
 - **cloud-output**
-    - room(s): string or array of string representing the room(s) to send the incoming msg (post transforms) to
-    - _room(s): JS Templated string or array of strings representing the room(s) to send the incoming msg (post transforms) to
+    - room(s)\*: string or array of string representing the room(s) to send the incoming msg (post transforms) to
 
-## Transforms
+### Transforms
 - **scale**
     - property: the path to the property in the incoming msg object
     - inRange: the range of values for the incoming msg.property value i.e [0,100]
@@ -209,7 +197,7 @@ Every piece (triggers, actions, transforms) have a shared JSON structure
 
 
 # Templating
-Alright there has been a lot of references to templating. There is no secret sauce it is simply [lodash templating](https://lodash.com/docs/4.17.15#template) which is compatible with JS template literals (backtick strings)
+Alright there has been a some references to templating. There is no secret sauce it is simply [lodash templating](https://lodash.com/docs/4.17.15#template) which is compatible with JS template literals (backtick strings). The incoming `msg` and the global `vars` objects are available when templates are processed. For properties of incoming messages [see here](#message-properties). The `vars` object will contain the contents of the `vars.json` file passed in with `-v` flag or any value set using the `store` action.
 - **examples**: assume an incoming message is a midi note_on message on channel 1 with note value = 60 and velocity = 127
     - `"/midi/${msg.channel}/${msg.status}/${msg.note}"` -> `/midi/1/note_on/60`
     - `"${msg.velocity - 10}"` -> `117`
