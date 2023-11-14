@@ -1,7 +1,7 @@
 {
   "name": "showbridge-launcher",
   "description": "Desktop app to launch and configure showbridge",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "src/main.js",
   "license": "MIT",
   "private": true,
@@ -28,7 +28,7 @@
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.1.1",
     "respawn": "^2.6.0",
-    "showbridge": "0.4.3",
+    "showbridge": "0.4.4",
     "tail": "^2.2.6"
   },
   "devDependencies": {
