@@ -1,6 +1,6 @@
 {
   "name": "showbridge",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "Simple Protocol Router /s",
   "bin": "main.js",
   "files": [
