@@ -131,7 +131,7 @@ Each piece uses the params property to store its configurations as outlined belo
 
 ### Actions
 - **cloud-output**
-    - room(s)\*: string or array of string representing the room(s) to send the incoming msg (post transforms) to
+    - rooms\*: array of strings representing the room(s) to send the incoming msg (post transforms) to
 - **delay**
     - duration: time in ms to wait before executing the defined actions
     - actions: array of actions to execute

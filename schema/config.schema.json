@@ -411,58 +411,22 @@
         "params": {
           "description": "Cloud Output action params",
           "type": "object",
-          "oneOf": [
-            {
-              "title": "Single Room Output",
-              "properties": {
-                "room": {
-                  "description": "room to send the message to",
-                  "type": "string"
-                }
-              },
-              "required": ["room"],
-              "additionalProperties": false
+          "properties": {
+            "rooms": {
+              "description": "array of rooms to send the message to",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             },
-            {
-              "title": "Multi Room Output",
-              "properties": {
-                "rooms": {
-                  "description": "array of rooms to send the message to",
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "required": ["rooms"],
-              "additionalProperties": false
-            },
-            {
-              "title": "Single Room Output (Templated)",
-              "properties": {
-                "_room": {
-                  "description": "room to template and then send the message to",
-                  "type": "string"
-                }
-              },
-              "required": ["_room"],
-              "additionalProperties": false
-            },
-            {
-              "title": "Multi Room Output (Templated)",
-              "properties": {
-                "_rooms": {
-                  "description": "array of rooms to template and then send the message to",
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "required": ["_rooms"],
-              "additionalProperties": false
+            "_rooms": {
+              "description": "array of rooms to template and then send the message to",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
-          ]
+          }
         },
         "enabled": {
           "description": "Whether this action is enabled",
@@ -1078,7 +1042,7 @@
               "additionalProperties": false
             },
             {
-              "title": "UDP Template String",
+              "title": "UDP String",
               "properties": {
                 "host": {
                   "description": "Hostname or address of the server to send UDP packet to",
@@ -1101,39 +1065,12 @@
                 "_string": {
                   "description": "string to send ran through templating engine",
                   "type": "string"
-                }
-              },
-              "required": ["_string"],
-              "additionalProperties": false
-            },
-            {
-              "title": "UDP Static String",
-              "properties": {
-                "host": {
-                  "description": "Hostname or address of the server to send UDP packet to",
-                  "type": "string"
-                },
-                "_host": {
-                  "description": "Template for the hostname or address of the server to forward message to",
-                  "type": "string"
-                },
-                "port": {
-                  "description": "Port to send UDP packet to",
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 65535
-                },
-                "_port": {
-                  "description": "Template for the port to send msg on",
-                  "type": "string"
                 },
                 "string": {
                   "description": "string to send",
                   "type": "string"
                 }
-              },
-              "required": ["string"],
-              "additionalProperties": false
+              }
             }
           ]
         },
@@ -1238,7 +1175,7 @@
               "additionalProperties": false
             },
             {
-              "title": "TCP Template String",
+              "title": "TCP String",
               "properties": {
                 "host": {
                   "description": "Hostname or address of the server to send TCP packet to",
@@ -1266,44 +1203,13 @@
                 "_string": {
                   "description": "string to send ran through templating engine",
                   "type": "string"
-                }
-              },
-              "required": ["slip", "_string"],
-              "additionalProperties": false
-            },
-            {
-              "title": "TCP Static String",
-              "properties": {
-                "host": {
-                  "description": "Hostname or address of the server to send TCP packet to",
-                  "type": "string"
-                },
-                "_host": {
-                  "description": "Template for the hostname or address of the server to forward message to",
-                  "type": "string"
-                },
-                "port": {
-                  "description": "Port to send TCP packet to",
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 65535
-                },
-                "_port": {
-                  "description": "Template for the port to send msg on",
-                  "type": "string"
-                },
-                "slip": {
-                  "description": "whether to SLIP encode the TCP bytes",
-                  "type": "boolean",
-                  "default": true
                 },
                 "string": {
                   "description": "string to send",
                   "type": "string"
                 }
               },
-              "required": ["slip", "string"],
-              "additionalProperties": false
+              "required": ["slip"]
             }
           ]
         },
@@ -1334,30 +1240,16 @@
         "params": {
           "description": "Shell action params",
           "type": "object",
-          "oneOf": [
-            {
-              "title": "Template Command",
-              "properties": {
-                "_command": {
-                  "description": "JS literal template of the shell command. Will have access to the properties of the incoming message that triggered this action",
-                  "type": "string"
-                }
-              },
-              "required": ["_command"],
-              "additionalProperties": false
+          "properties": {
+            "_command": {
+              "description": "JS literal template of the shell command to run",
+              "type": "string"
             },
-            {
-              "title": "Static Command",
-              "properties": {
-                "command": {
-                  "description": "Shell command to run _command takes priority",
-                  "type": "string"
-                }
-              },
-              "required": ["command"],
-              "additionalProperties": false
+            "command": {
+              "description": "Shell command to run",
+              "type": "string"
             }
-          ]
+          }
         },
         "enabled": {
           "description": "Whether this action is enabled",
