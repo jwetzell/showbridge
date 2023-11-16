@@ -254,41 +254,20 @@
       "properties": {
         "params": {
           "type": "object",
-          "oneOf": [
-            {
-              "title": "Single Room Config",
-              "properties": {
-                "url": {
-                  "description": "cloud url",
-                  "type": "string"
-                },
-                "room": {
-                  "description": "room to join",
-                  "type": "string"
-                }
-              },
-              "required": ["url", "room"],
-              "additionalProperties": false
+          "properties": {
+            "url": {
+              "description": "cloud url",
+              "type": "string"
             },
-            {
-              "title": "Multi Room Config",
-              "properties": {
-                "url": {
-                  "description": "cloud url",
-                  "type": "string"
-                },
-                "rooms": {
-                  "description": "list of rooms to join",
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "required": ["url", "rooms"],
-              "additionalProperties": false
+            "rooms": {
+              "description": "list of rooms to join",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
-          ]
+          },
+          "additionalProperties": false
         }
       },
       "required": ["params"],
