@@ -1,6 +1,6 @@
 {
   "name": "showbridge",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Simple Protocol Router /s",
   "bin": "main.js",
   "files": [
@@ -33,7 +33,7 @@
   "license": "GPL-3.0-only",
   "dependencies": {
     "commander": "^11.0.0",
-    "showbridge-lib": "0.4.2"
+    "showbridge-lib": "0.4.3"
   },
   "devDependencies": {
     "eslint": "^8.51.0",
