@@ -180,13 +180,11 @@ export class ParamsFormComponent implements OnInit {
 
   formUpdated() {
     if (this.paramsSchema) {
-      console.log(this.paramsFormInfo?.formGroup.value);
       const params = this.schemaService.cleanParams(
         this.paramsSchema,
         this.paramsFormInfo?.formGroup.value,
         this.keysToTemplate
       );
-      console.log(params);
       this.updated.emit(params);
     } else {
       console.error('params-form: no paramsSchema loaded');
@@ -217,7 +215,6 @@ export class ParamsFormComponent implements OnInit {
   toggleTemplate(key: string) {
     if (this.paramsFormInfo?.formGroup.value[key] !== undefined) {
       const value = this.paramsFormInfo.formGroup.value[key];
-      console.log(value);
       if (key.startsWith('_')) {
         this.paramsFormInfo.formGroup.controls[`${key.substring(1)}`].setValue(value);
       } else {
@@ -261,9 +258,6 @@ export class ParamsFormComponent implements OnInit {
         this.paramsFormInfo?.formGroup.controls['_port'].setValue(
           '${vars.patches.' + this.patchType + '[' + patchIndex + '].port}'
         );
-
-        console.log(this.keysToTemplate);
-        console.log(this.paramsFormInfo);
       }
     } else {
       if (this.patchType === 'network') {
