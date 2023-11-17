@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkMenuModule } from '@angular/cdk/menu';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,11 +25,10 @@ import { ConfigComponent } from './components/config/config.component';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
 import { ParamsFormComponent } from './components/params-form/params-form.component';
+import { PatchEditorComponent } from './components/patch-editor/patch-editor.component';
 import { ProtocolComponent } from './components/protocol/protocol.component';
 import { TransformComponent } from './components/transform/transform.component';
 import { TriggerComponent } from './components/trigger/trigger.component';
-import { PatchEditorComponent } from './components/patch-editor/patch-editor.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,6 +65,7 @@ import { PatchEditorComponent } from './components/patch-editor/patch-editor.com
     MatProgressSpinnerModule,
     MatTableModule,
     TimeagoModule.forRoot(),
+    CdkMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

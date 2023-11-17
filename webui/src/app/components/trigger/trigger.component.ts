@@ -137,6 +137,12 @@ export class TriggerComponent implements OnInit {
     }
   }
 
+  toggleEnabled() {
+    if (this.formGroup && this.trigger) {
+      this.formGroup.controls['enabled'].setValue(!this.trigger.enabled);
+    }
+  }
+
   pasteAction(copyObject: CopyObject) {
     if (this.trigger && this.trigger?.actions === undefined) {
       this.trigger.actions = [];

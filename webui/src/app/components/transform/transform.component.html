@@ -1,52 +1,53 @@
 <ng-container *ngIf="transform && schema">
   <div
-    class="flex items-center w-auto p-1 m-2 transform bg-gray-800 border-2 {{
-      isInError() ? 'border-red-500' : 'border-gray-400'
+    class="flex items-center w-auto m-2 transform bg-gray-800 border-2 {{
+      isInError() ? 'border-red-500' : 'border-gray-200'
     }} border-solid"
-    [style.opacity]="this.transform.enabled ? '1.0' : '0.5'">
-    <div class="flex items-center justify-center">
-      <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
-    </div>
-    <div class="flex-auto text-gray-400" [matTooltip]="transform.comment ? transform.comment : ''">
-      {{ schema.title }}
-    </div>
-    <div class="ml-2">
-      <form [formGroup]="formGroup" class="h-full">
-        <div class="flex items-center justify-around h-full">
-          <div class="flex items-center mx-2" [matTooltip]="this.transform.enabled ? 'Disable' : 'Enable'">
-            <label class="mr-1 text-gray-300">enabled:</label>
-            <input type="checkbox" formControlName="enabled" />
-          </div>
-          <div class="flex items-center justify-center hover:cursor-pointer">
-            <mat-icon class="text-gray-500 hover:text-gray-400" matTooltip="Settings" (click)="openSettingsDialog()">
-              settings
-            </mat-icon>
-          </div>
-
-          <ng-template #settingsDialogRef>
-            <div class="m-2">
-              <app-params-form
-                [parentSchema]="schema"
-                [data]="transform.params"
-                (updated)="paramsUpdated($event)"></app-params-form>
-              <div class="flex items-center justify-center">
-                <div class="flex-auto">
-                  <mat-form-field subscriptSizing="dynamic" class="w-full">
-                    <mat-label>comment: </mat-label>
-                    <textarea matInput type="text" formControlName="comment"></textarea>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-          </ng-template>
-        </div>
-      </form>
-    </div>
-    <div class="flex items-center justify-center" matTooltip="Delete">
-      <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
-    </div>
-    <div (click)="copyMe()" class="flex items-center justify-center w-full m-2 bg-transparent hover:cursor-pointer">
-      <mat-icon class="text-green-500" matTooltip="Copy">content_copy</mat-icon>
+    [style.opacity]="this.transform.enabled ? '1.0' : '0.5'"
+    [cdkContextMenuTriggerFor]="transformContextMenu">
+    <div class="flex bg-orange-600">
+      <div class="flex items-center justify-center">
+        <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
+      </div>
+      <div class="flex-grow mr-3 text-gray-200" [matTooltip]="transform.comment ? transform.comment : ''">
+        {{ schema.title }}
+      </div>
+      <div class="flex items-center justify-center" [cdkMenuTriggerFor]="transformContextMenu">
+        <mat-icon class="text-gray-200">menu</mat-icon>
+      </div>
     </div>
   </div>
+
+  <!-- NOTE(jwetzell): Settings Dialog -->
+  <ng-template #settingsDialogRef>
+    <form [formGroup]="formGroup" class="h-full">
+      <div class="m-2">
+        <app-params-form
+          [parentSchema]="schema"
+          [data]="transform.params"
+          [patchable]="true"
+          (updated)="paramsUpdated($event)"></app-params-form>
+        <div class="flex items-center justify-center">
+          <div class="flex-auto">
+            <mat-form-field subscriptSizing="dynamic" class="w-full">
+              <mat-label>comment: </mat-label>
+              <textarea matInput type="text" formControlName="comment"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <!-- NOTE(jwetzell): Context Menus -->
+  <ng-template #transformContextMenu>
+    <div cdkMenu class="context-menu">
+      <button cdkMenuItem class="context-menu-item" (click)="openSettingsDialog()">Settings</button>
+      <button cdkMenuItem class="context-menu-item hover:bg-red-400" (click)="deleteMe()">Delete</button>
+      <button cdkMenuItem class="context-menu-item" (click)="copyMe()">Copy</button>
+      <button cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
+        {{ transform.enabled ? 'Disable' : 'Enable' }}
+      </button>
+    </div>
+  </ng-template>
 </ng-container>

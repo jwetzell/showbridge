@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .context-menu-item {
+    @apply pl-2 py-0.5 text-left border border-gray-700 hover:bg-gray-500;
+  }
+
+  .context-menu {
+    @apply flex flex-col bg-gray-600 border border-black border-solid;
+  }
+}

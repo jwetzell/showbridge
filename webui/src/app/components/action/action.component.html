@@ -2,59 +2,20 @@
   <div class="flex items-center" [style.opacity]="this.action.enabled ? '1.0' : '0.5'">
     <div class="m-2">
       <div
-        class="flex flex-col bg-gray-800 border-2 {{
-          isInError() ? 'border-red-500' : 'border-gray-200'
-        }} border-solid">
-        <div class="flex w-full p-2 items-around">
+        class="flex flex-col bg-gray-800 border-2 {{ isInError() ? 'border-red-500' : 'border-gray-200' }} border-solid"
+        [cdkContextMenuTriggerFor]="actionContextMenu">
+        <div class="flex w-full bg-green-600">
           <div class="flex items-center justify-center">
             <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
           </div>
-          <div
-            class="flex items-center justify-start flex-auto mr-3 text-gray-200"
-            [matTooltip]="action.comment ? action.comment : ''">
+          <div class="flex-grow mr-3 text-gray-200" [matTooltip]="action.comment ? action.comment : ''">
             {{ schema.title }}
           </div>
-          <div class="flex items-center justify-center hover:cursor-pointer">
-            <mat-icon class="text-gray-500 hover:text-gray-400" matTooltip="Settings" (click)="openSettingsDialog()">
-              settings
-            </mat-icon>
-          </div>
-          <div class="flex items-center justify-center" matTooltip="Delete">
-            <mat-icon (click)="deleteMe()" class="text-red-500 hover:cursor-pointer">delete</mat-icon>
-          </div>
-          <div (click)="copyMe()" class="flex items-center justify-center hover:cursor-pointer">
-            <mat-icon class="text-green-500" matTooltip="Copy">content_copy</mat-icon>
+          <div class="flex items-center justify-center" [cdkMenuTriggerFor]="actionContextMenu">
+            <mat-icon class="text-gray-200">menu</mat-icon>
           </div>
         </div>
 
-        <div class="m-2">
-          <form [formGroup]="formGroup" class="h-full">
-            <div class="flex items-center justify-around h-full">
-              <div class="flex items-center mx-2" [matTooltip]="action.enabled ? 'Disable' : 'Enable'">
-                <label class="mr-1 text-gray-300">enabled:</label>
-                <input type="checkbox" formControlName="enabled" />
-              </div>
-
-              <ng-template #settingsDialogRef>
-                <div class="m-2">
-                  <app-params-form
-                    [parentSchema]="schema"
-                    [data]="action.params"
-                    [patchable]="true"
-                    (updated)="paramsUpdated($event)"></app-params-form>
-                  <div class="flex items-center justify-center">
-                    <div class="flex-auto">
-                      <mat-form-field subscriptSizing="dynamic" class="w-full">
-                        <mat-label>comment: </mat-label>
-                        <textarea matInput type="text" formControlName="comment"></textarea>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-              </ng-template>
-            </div>
-          </form>
-        </div>
         <div
           *ngIf="action.transforms"
           [id]="getListId()"
@@ -71,49 +32,9 @@
               (updated)="transformUpdated()"></app-transform>
           </div>
         </div>
-        <div *ngIf="schemaService.actionTypes.length > 0">
-          <div
-            matTooltip="Add Transform"
-            class="flex items-center justify-center w-full bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
-            [matMenuTriggerFor]="addTransformMenu">
-            <mat-icon>add</mat-icon>
-          </div>
-          <mat-menu #addTransformMenu="matMenu">
-            <button
-              mat-menu-item
-              *ngFor="let transformType of schemaService.transformTypes"
-              (click)="addTransform(transformType.type)">
-              <span>{{ transformType.name }}</span>
-            </button>
-          </mat-menu>
-          <div
-            *ngIf="copyService.getClipboardForType('Transform') | async as copyObject"
-            (click)="pasteTransform(copyObject)"
-            matTooltip="Paste Transform"
-            class="flex items-center justify-center w-full bg-green-700 hover:cursor-pointer hover:bg-green-500">
-            <mat-icon>content_paste</mat-icon>
-          </div>
-        </div>
       </div>
     </div>
-    <ng-container *ngIf="action.type === 'delay' || action.type === 'random'">
-      <div class="w-full h-full" *ngIf="schemaService.actionTypes.length > 0">
-        <div
-          matTooltip="Add Subaction"
-          class="flex items-center justify-center bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
-          [matMenuTriggerFor]="addActionMenu">
-          <mat-icon>add</mat-icon>
-        </div>
-        <mat-menu #addActionMenu="matMenu">
-          <button
-            mat-menu-item
-            *ngFor="let actionType of schemaService.actionTypes"
-            (click)="addSubAction(actionType.type)">
-            <span>{{ actionType.name }}</span>
-          </button>
-        </mat-menu>
-      </div>
-    </ng-container>
+
     <ng-container *ngIf="getSubActions() as subActions">
       <ng-container *ngIf="subActions.length > 0">
         <div class="flex flex-col items-center justify-center">
@@ -129,4 +50,80 @@
       </ng-container>
     </ng-container>
   </div>
+
+  <!-- NOTE(jwetzell): settings dialog-->
+  <ng-template #settingsDialogRef>
+    <form [formGroup]="formGroup" class="h-full">
+      <div class="m-2">
+        <app-params-form
+          [parentSchema]="schema"
+          [data]="action.params"
+          [patchable]="true"
+          (updated)="paramsUpdated($event)"></app-params-form>
+        <div class="flex items-center justify-center">
+          <div class="flex-auto">
+            <mat-form-field subscriptSizing="dynamic" class="w-full">
+              <mat-label>comment: </mat-label>
+              <textarea matInput type="text" formControlName="comment"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <!-- NOTE(jwetzell): Context Menus -->
+  <ng-template #actionContextMenu>
+    <div cdkMenu class="context-menu">
+      <button cdkMenuItem class="context-menu-item" (click)="openSettingsDialog()">Settings</button>
+      <button cdkMenuItem class="context-menu-item hover:bg-red-400" (click)="deleteMe()">Delete</button>
+      <button cdkMenuItem class="context-menu-item" (click)="copyMe()">Copy</button>
+      <button cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
+        {{ action.enabled ? 'Disable' : 'Enable' }}
+      </button>
+      <button cdkMenuItem class="flex context-menu-item" [cdkMenuTriggerFor]="addTransformMenu">
+        <div class="flex-grow">Add Transform</div>
+        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+      </button>
+      <button
+        cdkMenuItem
+        class="flex context-menu-item"
+        [cdkMenuTriggerFor]="addActionMenu"
+        *ngIf="action.type === 'delay' || action.type === 'random'">
+        <div class="flex-grow">Add Sub-Action</div>
+        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+      </button>
+      <button
+        cdkMenuItem
+        class="context-menu-item"
+        *ngIf="copyService.getClipboardForType('Transform') | async as copyObject"
+        (click)="pasteTransform(copyObject)">
+        Paste Transform
+      </button>
+    </div>
+  </ng-template>
+
+  <ng-template #addTransformMenu>
+    <div cdkMenu class="context-menu" *ngIf="schemaService.transformTypes.length > 0">
+      <button
+        cdkMenuItem
+        class="context-menu-item"
+        *ngFor="let transformType of schemaService.transformTypes"
+        (click)="addTransform(transformType.type)">
+        <span>{{ transformType.name }}</span>
+      </button>
+    </div>
+  </ng-template>
+
+  <ng-template #addActionMenu>
+    <div cdkMenu class="context-menu" *ngIf="schemaService.actionTypes.length > 0">
+      <button
+        cdkMenuItem
+        class="context-menu-item"
+        *ngFor="let actionType of schemaService.actionTypes"
+        (click)="addSubAction(actionType.type)">
+        <span>{{ actionType.name }}</span>
+      </button>
+    </div>
+  </ng-template>
 </ng-container>

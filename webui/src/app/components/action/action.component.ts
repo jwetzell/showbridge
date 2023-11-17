@@ -172,6 +172,12 @@ export class ActionComponent implements OnInit {
     }
   }
 
+  toggleEnabled() {
+    if (this.formGroup && this.action) {
+      this.formGroup.controls['enabled'].setValue(!this.action.enabled);
+    }
+  }
+
   pasteTransform(copyObject: CopyObject) {
     if (this.action && this.action?.transforms === undefined) {
       this.action.transforms = [];

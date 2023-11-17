@@ -5,82 +5,33 @@
     [style.align-items]="
       this.trigger.actions === undefined || this.trigger.actions.length === 0 ? 'center' : 'baseline'
     ">
-    <form [formGroup]="formGroup" class="h-full">
-      <div
-        class="flex flex-col my-3 ml-5 bg-gray-900 border-2 {{
-          isInError() ? 'border-red-500' : 'border-gray-500'
-        }} border-solid trigger w-fit">
-        <div class="flex items-center justify-center m-1">
-          <div
-            class="flex-auto ml-2 text-gray-400 whitespace-nowrap w-fit"
-            [matTooltip]="trigger.comment ? trigger.comment : ''">
-            {{ schema.title }}
-          </div>
-          <div class="flex items-center mx-2" [matTooltip]="trigger.enabled ? 'Disable' : 'Enable'">
-            <input type="checkbox" formControlName="enabled" />
-          </div>
-          <div class="flex items-center justify-center hover:cursor-pointer" matTooltip="Settings">
-            <mat-icon class="text-gray-500 hover:text-gray-400" (click)="openSettingsDialog()">settings</mat-icon>
-          </div>
-          <div
-            (click)="deleteMe()"
-            class="flex items-center justify-center w-full m-2 bg-transparent hover:cursor-pointer">
-            <mat-icon class="text-red-500" matTooltip="Delete">delete</mat-icon>
-          </div>
-          <div
-            (click)="copyMe()"
-            class="flex items-center justify-center w-full m-2 bg-transparent hover:cursor-pointer">
-            <mat-icon class="text-green-500" matTooltip="Copy">content_copy</mat-icon>
-          </div>
+    <div
+      class="flex flex-col my-3 ml-5 bg-gray-800 border-2 {{
+        isInError() ? 'border-red-500' : 'border-gray-200'
+      }} border-solid trigger w-fit"
+      [cdkContextMenuTriggerFor]="triggerContextMenu">
+      <div class="flex items-center justify-center bg-purple-600">
+        <div class="flex-grow ml-1 mr-3 text-gray-200" [matTooltip]="trigger.comment ? trigger.comment : ''">
+          {{ schema.title }}
         </div>
-        <ng-container *ngIf="trigger.subTriggers as subTriggers">
-          <ng-container *ngIf="subTriggers.length > 0">
-            <div *ngFor="let subTrigger of subTriggers; let i = index" class="mr-2">
-              <app-trigger
-                [trigger]="subTrigger"
-                [path]="this.path + '/subTriggers/' + i"
-                [showActions]="true"
-                (delete)="deleteSubTrigger(i)"
-                (updated)="subTriggerUpdated()"></app-trigger>
-            </div>
-          </ng-container>
-        </ng-container>
-        <ng-container>
-          <div class="w-full h-full" *ngIf="schemaService.triggerTypes.length > 0">
-            <div
-              matTooltip="Add Subtrigger"
-              class="flex items-center justify-center bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
-              [matMenuTriggerFor]="addTriggerMenu">
-              <mat-icon>add</mat-icon>
-            </div>
-            <mat-menu #addTriggerMenu="matMenu">
-              <button
-                mat-menu-item
-                *ngFor="let triggerType of schemaService.triggerTypes"
-                (click)="addSubTrigger(triggerType.type)">
-                <span>{{ triggerType.name }}</span>
-              </button>
-            </mat-menu>
-          </div>
-        </ng-container>
-        <ng-template #settingsDialogRef>
-          <div class="m-2">
-            <app-params-form
-              [parentSchema]="schema"
-              [data]="trigger.params"
-              (updated)="paramsUpdated($event)"></app-params-form>
-            <div class="flex items-center justify-center">
-              <div class="flex-auto">
-                <mat-form-field subscriptSizing="dynamic" class="w-full">
-                  <mat-label>comment: </mat-label>
-                  <textarea matInput type="text" formControlName="comment"></textarea>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-        </ng-template>
+        <div class="flex items-center justify-center" [cdkMenuTriggerFor]="triggerContextMenu">
+          <mat-icon class="text-gray-200">menu</mat-icon>
+        </div>
       </div>
-    </form>
+      <ng-container *ngIf="trigger.subTriggers as subTriggers">
+        <ng-container *ngIf="subTriggers.length > 0">
+          <div *ngFor="let subTrigger of subTriggers; let i = index" class="mr-2">
+            <app-trigger
+              [trigger]="subTrigger"
+              [path]="this.path + '/subTriggers/' + i"
+              [showActions]="true"
+              (delete)="deleteSubTrigger(i)"
+              (updated)="subTriggerUpdated()"></app-trigger>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+
     <ng-container *ngIf="showActions">
       <div class="flex flex-col items-center justify-center">
         <mat-icon [style.color]="indicatorColor" class="scale-150">arrow_right</mat-icon>
@@ -102,30 +53,78 @@
               (updated)="actionUpdated()"></app-action>
           </div>
         </div>
-        <div class="w-full" *ngIf="schemaService.actionTypes.length > 0">
-          <div
-            matTooltip="Add Action"
-            class="flex items-center justify-center bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
-            [matMenuTriggerFor]="addActionMenu">
-            <mat-icon>add</mat-icon>
-          </div>
-          <mat-menu #addActionMenu="matMenu">
-            <button
-              mat-menu-item
-              *ngFor="let actionType of schemaService.actionTypes"
-              (click)="addAction(actionType.type)">
-              <span>{{ actionType.name }}</span>
-            </button>
-          </mat-menu>
-          <div
-            *ngIf="copyService.getClipboardForType('Action') | async as copyObject"
-            (click)="pasteAction(copyObject)"
-            matTooltip="Paste Action"
-            class="flex items-center justify-center bg-green-700 hover:cursor-pointer hover:bg-gray-green">
-            <mat-icon>content_paste</mat-icon>
-          </div>
-        </div>
       </div>
     </ng-container>
   </div>
+
+  <!-- NOTE(jwetzell): Settings Dialog -->
+  <ng-template #settingsDialogRef>
+    <form [formGroup]="formGroup" class="h-full">
+      <div class="m-2">
+        <app-params-form
+          [parentSchema]="schema"
+          [data]="trigger.params"
+          (updated)="paramsUpdated($event)"></app-params-form>
+        <div class="flex items-center justify-center">
+          <div class="flex-auto">
+            <mat-form-field subscriptSizing="dynamic" class="w-full">
+              <mat-label>comment: </mat-label>
+              <textarea matInput type="text" formControlName="comment"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <!-- NOTE(jwetzell): Context Menus -->
+  <ng-template #triggerContextMenu>
+    <div cdkMenu class="context-menu">
+      <button cdkMenuItem (click)="openSettingsDialog()" class="context-menu-item">Settings</button>
+      <button cdkMenuItem (click)="deleteMe()" class="context-menu-item hover:bg-red-400">Delete</button>
+      <button cdkMenuItem (click)="copyMe()" class="context-menu-item">Copy</button>
+      <button cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
+        {{ trigger.enabled ? 'Disable' : 'Enable' }}
+      </button>
+      <button cdkMenuItem class="flex context-menu-item" [cdkMenuTriggerFor]="addActionMenu">
+        <div class="flex-grow">Add Action</div>
+        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+      </button>
+      <button cdkMenuItem class="flex context-menu-item" [cdkMenuTriggerFor]="addTriggerMenu">
+        <div class="flex-grow">Add Sub-Trigger</div>
+        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+      </button>
+      <button
+        cdkMenuItem
+        class="bg-green-700 border context-menu-item hover:bg-green-500"
+        *ngIf="copyService.getClipboardForType('Action') | async as copyObject"
+        (click)="pasteAction(copyObject)">
+        Paste Action
+      </button>
+    </div>
+  </ng-template>
+
+  <ng-template #addActionMenu>
+    <div cdkMenu class="context-menu" *ngIf="schemaService.actionTypes.length > 0">
+      <button
+        cdkMenuItem
+        class="context-menu-item"
+        *ngFor="let actionType of schemaService.actionTypes"
+        (click)="addAction(actionType.type)">
+        <span>{{ actionType.name }}</span>
+      </button>
+    </div>
+  </ng-template>
+
+  <ng-template #addTriggerMenu>
+    <div cdkMenu class="context-menu" *ngIf="schemaService.triggerTypes.length > 0">
+      <button
+        cdkMenuItem
+        class="context-menu-item"
+        *ngFor="let triggerType of schemaService.triggerTypes"
+        (click)="addSubTrigger(triggerType.type)">
+        <span>{{ triggerType.name }}</span>
+      </button>
+    </div>
+  </ng-template>
 </ng-container>
