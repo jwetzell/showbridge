@@ -86,11 +86,11 @@
       <button cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
         {{ trigger.enabled ? 'Disable' : 'Enable' }}
       </button>
-      <button cdkMenuItem class="flex context-menu-item" [cdkMenuTriggerFor]="addActionMenu">
+      <button cdkMenuItem class="flex pr-0 context-menu-item" [cdkMenuTriggerFor]="addActionMenu">
         <div class="flex-grow">Add Action</div>
         <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
       </button>
-      <button cdkMenuItem class="flex context-menu-item" [cdkMenuTriggerFor]="addTriggerMenu">
+      <button cdkMenuItem class="flex pr-0 context-menu-item" [cdkMenuTriggerFor]="addTriggerMenu">
         <div class="flex-grow">Add Sub-Trigger</div>
         <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
       </button>

@@ -81,13 +81,13 @@
       <button cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
         {{ action.enabled ? 'Disable' : 'Enable' }}
       </button>
-      <button cdkMenuItem class="flex context-menu-item" [cdkMenuTriggerFor]="addTransformMenu">
+      <button cdkMenuItem class="flex pr-0 context-menu-item" [cdkMenuTriggerFor]="addTransformMenu">
         <div class="flex-grow">Add Transform</div>
         <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
       </button>
       <button
         cdkMenuItem
-        class="flex context-menu-item"
+        class="flex pr-0 context-menu-item"
         [cdkMenuTriggerFor]="addActionMenu"
         *ngIf="action.type === 'delay' || action.type === 'random'">
         <div class="flex-grow">Add Sub-Action</div>
