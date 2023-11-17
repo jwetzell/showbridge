@@ -1,14 +1,14 @@
 <ng-container *ngIf="transform && schema">
   <div
     class="flex items-center w-auto p-1 m-2 transform bg-gray-800 border-2 {{
-      isInError() ? 'border-red-500' : 'border-gray-400'
+      isInError() ? 'border-red-500' : 'border-gray-200'
     }} border-solid"
     [style.opacity]="this.transform.enabled ? '1.0' : '0.5'"
     [cdkContextMenuTriggerFor]="transformContextMenu">
     <div class="flex items-center justify-center">
       <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
     </div>
-    <div class="flex-auto text-gray-400" [matTooltip]="transform.comment ? transform.comment : ''">
+    <div class="flex-auto text-gray-200" [matTooltip]="transform.comment ? transform.comment : ''">
       {{ schema.title }}
     </div>
   </div>

@@ -7,13 +7,13 @@
     ">
     <form [formGroup]="formGroup" class="h-full">
       <div
-        class="flex flex-col my-3 ml-5 bg-gray-900 border-2 {{
-          isInError() ? 'border-red-500' : 'border-gray-500'
+        class="flex flex-col my-3 ml-5 bg-gray-800 border-2 {{
+          isInError() ? 'border-red-500' : 'border-gray-200'
         }} border-solid trigger w-fit"
         [cdkContextMenuTriggerFor]="triggerContextMenu">
         <div class="flex items-center justify-center m-1">
           <div
-            class="flex-auto mx-2 text-gray-400 whitespace-nowrap w-fit"
+            class="flex-auto mx-2 text-gray-200 whitespace-nowrap w-fit"
             [matTooltip]="trigger.comment ? trigger.comment : ''">
             {{ schema.title }}
           </div>
