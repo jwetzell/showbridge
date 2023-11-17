@@ -3,7 +3,8 @@
     class="flex items-center w-auto p-1 m-2 transform bg-gray-800 border-2 {{
       isInError() ? 'border-red-500' : 'border-gray-400'
     }} border-solid"
-    [style.opacity]="this.transform.enabled ? '1.0' : '0.5'" [cdkContextMenuTriggerFor]="transformContextMenu">
+    [style.opacity]="this.transform.enabled ? '1.0' : '0.5'"
+    [cdkContextMenuTriggerFor]="transformContextMenu">
     <div class="flex items-center justify-center">
       <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
     </div>
@@ -35,12 +36,25 @@
 
   <!-- NOTE(jwetzell): Context Menus -->
   <ng-template #transformContextMenu>
-    <div cdkMenu class="flex flex-col border border-black border-solid bg-gray-600">
-      <div cdkMenuItem class="select-none px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer" (click)="openSettingsDialog()">Settings</div>
-      <div cdkMenuItem class="px-2 border border-gray-700 hover:bg-red-500 hover:cursor-pointer" (click)="deleteMe()">Delete</div>
-      <div cdkMenuItem class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer" (click)="copyMe()">Copy</div>
-      <div cdkMenuItem class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer" (click)="toggleEnabled()">{{transform.enabled ? 'Disable':'Enable'}}</div>
-      
+    <div cdkMenu class="flex flex-col bg-gray-600 border border-black border-solid">
+      <div
+        cdkMenuItem
+        class="px-2 border border-gray-700 select-none hover:bg-gray-500 hover:cursor-pointer"
+        (click)="openSettingsDialog()">
+        Settings
+      </div>
+      <div cdkMenuItem class="px-2 border border-gray-700 hover:bg-red-500 hover:cursor-pointer" (click)="deleteMe()">
+        Delete
+      </div>
+      <div cdkMenuItem class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer" (click)="copyMe()">
+        Copy
+      </div>
+      <div
+        cdkMenuItem
+        class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer"
+        (click)="toggleEnabled()">
+        {{ transform.enabled ? 'Disable' : 'Enable' }}
+      </div>
     </div>
   </ng-template>
 </ng-container>
