@@ -56,7 +56,7 @@ export class SchemaService {
           this.ajv.errors.map((error) => {
             const errorPathMatch = error.instancePath.match(/(\/.*)\d+/);
             if (errorPathMatch) {
-              return errorPathMatch[0].substring(1);
+              return errorPathMatch[0].substring(1).replaceAll('/params', '');
             }
             return '';
           })
