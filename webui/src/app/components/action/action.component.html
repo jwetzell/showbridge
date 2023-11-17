@@ -77,51 +77,55 @@
   <!-- NOTE(jwetzell): Context Menus -->
   <ng-template #actionContextMenu>
     <div cdkMenu class="context-menu">
-      <div cdkMenuItem class="context-menu-item" (click)="openSettingsDialog()">Settings</div>
-      <div cdkMenuItem class="context-menu-item hover:bg-red-400" (click)="deleteMe()">Delete</div>
-      <div cdkMenuItem class="context-menu-item" (click)="copyMe()">Copy</div>
-      <div cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
+      <button cdkMenuItem class="context-menu-item" (click)="openSettingsDialog()">Settings</button>
+      <button cdkMenuItem class="context-menu-item hover:bg-red-400" (click)="deleteMe()">Delete</button>
+      <button cdkMenuItem class="context-menu-item" (click)="copyMe()">Copy</button>
+      <button cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
         {{ action.enabled ? 'Disable' : 'Enable' }}
-      </div>
-      <div cdkMenuItem class="context-menu-item" [cdkMenuTriggerFor]="addTransformMenu">Add Transform</div>
-      <div
+      </button>
+      <button cdkMenuItem class="flex context-menu-item" [cdkMenuTriggerFor]="addTransformMenu">
+        <div class="flex-grow">Add Transform</div>
+        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+      </button>
+      <button
         cdkMenuItem
-        class="context-menu-item"
+        class="flex context-menu-item"
         [cdkMenuTriggerFor]="addActionMenu"
         *ngIf="action.type === 'delay' || action.type === 'random'">
-        Add Subaction
-      </div>
-      <div
+        <div class="flex-grow">Add Sub-Action</div>
+        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+      </button>
+      <button
         cdkMenuItem
         class="context-menu-item"
         *ngIf="copyService.getClipboardForType('Transform') | async as copyObject"
         (click)="pasteTransform(copyObject)">
         Paste Transform
-      </div>
+      </button>
     </div>
   </ng-template>
 
   <ng-template #addTransformMenu>
     <div cdkMenu class="context-menu" *ngIf="schemaService.transformTypes.length > 0">
-      <div
+      <button
         cdkMenuItem
         class="context-menu-item"
         *ngFor="let transformType of schemaService.transformTypes"
         (click)="addTransform(transformType.type)">
         <span>{{ transformType.name }}</span>
-      </div>
+      </button>
     </div>
   </ng-template>
 
   <ng-template #addActionMenu>
     <div cdkMenu class="context-menu" *ngIf="schemaService.actionTypes.length > 0">
-      <div
+      <button
         cdkMenuItem
         class="context-menu-item"
         *ngFor="let actionType of schemaService.actionTypes"
         (click)="addSubAction(actionType.type)">
         <span>{{ actionType.name }}</span>
-      </div>
+      </button>
     </div>
   </ng-template>
 </ng-container>

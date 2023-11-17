@@ -82,45 +82,51 @@
   <!-- NOTE(jwetzell): Context Menus -->
   <ng-template #triggerContextMenu>
     <div cdkMenu class="context-menu">
-      <div (click)="openSettingsDialog()" class="context-menu-item">Settings</div>
-      <div (click)="deleteMe()" class="context-menu-item hover:bg-red-400">Delete</div>
-      <div (click)="copyMe()" class="context-menu-item">Copy</div>
-      <div cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
+      <button cdkMenuItem (click)="openSettingsDialog()" class="context-menu-item">Settings</button>
+      <button cdkMenuItem (click)="deleteMe()" class="context-menu-item hover:bg-red-400">Delete</button>
+      <button cdkMenuItem (click)="copyMe()" class="context-menu-item">Copy</button>
+      <button cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
         {{ trigger.enabled ? 'Disable' : 'Enable' }}
-      </div>
-      <div cdkMenuItem class="context-menu-item" [cdkMenuTriggerFor]="addActionMenu">Add Action</div>
-      <div cdkMenuItem class="context-menu-item" [cdkMenuTriggerFor]="addTriggerMenu">Add Subtrigger</div>
-      <div
+      </button>
+      <button cdkMenuItem class="flex context-menu-item" [cdkMenuTriggerFor]="addActionMenu">
+        <div class="flex-grow">Add Action</div>
+        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+      </button>
+      <button cdkMenuItem class="flex context-menu-item" [cdkMenuTriggerFor]="addTriggerMenu">
+        <div class="flex-grow">Add Sub-Trigger</div>
+        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+      </button>
+      <button
         cdkMenuItem
         class="bg-green-700 border context-menu-item hover:bg-green-500"
         *ngIf="copyService.getClipboardForType('Action') | async as copyObject"
         (click)="pasteAction(copyObject)">
         Paste Action
-      </div>
+      </button>
     </div>
   </ng-template>
 
   <ng-template #addActionMenu>
     <div cdkMenu class="context-menu" *ngIf="schemaService.actionTypes.length > 0">
-      <div
+      <button
         cdkMenuItem
         class="context-menu-item"
         *ngFor="let actionType of schemaService.actionTypes"
         (click)="addAction(actionType.type)">
         <span>{{ actionType.name }}</span>
-      </div>
+      </button>
     </div>
   </ng-template>
 
   <ng-template #addTriggerMenu>
     <div cdkMenu class="context-menu" *ngIf="schemaService.triggerTypes.length > 0">
-      <div
+      <button
         cdkMenuItem
         class="context-menu-item"
         *ngFor="let triggerType of schemaService.triggerTypes"
         (click)="addSubTrigger(triggerType.type)">
         <span>{{ triggerType.name }}</span>
-      </div>
+      </button>
     </div>
   </ng-template>
 </ng-container>

@@ -4,7 +4,7 @@
 
 @layer components {
   .context-menu-item {
-    @apply px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer;
+    @apply pl-2 py-0.5 text-left border border-gray-700 hover:bg-gray-500;
   }
 
   .context-menu {
