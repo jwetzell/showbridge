@@ -95,6 +95,12 @@ export class TransformComponent implements OnInit {
     }
   }
 
+  toggleEnabled() {
+    if (this.formGroup && this.transform) {
+      this.formGroup.controls['enabled'].setValue(!this.transform.enabled);
+    }
+  }
+
   openSettingsDialog() {
     if (this.dialogRef) {
       this.dialog.open(this.dialogRef);
