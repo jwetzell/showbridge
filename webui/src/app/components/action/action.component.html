@@ -76,41 +76,24 @@
 
   <!-- NOTE(jwetzell): Context Menus -->
   <ng-template #actionContextMenu>
-    <div cdkMenu class="flex flex-col bg-gray-600 border border-black border-solid">
-      <div
-        cdkMenuItem
-        class="px-2 border border-gray-700 select-none hover:bg-gray-500 hover:cursor-pointer"
-        (click)="openSettingsDialog()">
-        Settings
-      </div>
-      <div cdkMenuItem class="px-2 border border-gray-700 hover:bg-red-500 hover:cursor-pointer" (click)="deleteMe()">
-        Delete
-      </div>
-      <div cdkMenuItem class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer" (click)="copyMe()">
-        Copy
-      </div>
-      <div
-        cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer"
-        (click)="toggleEnabled()">
+    <div cdkMenu class="context-menu">
+      <div cdkMenuItem class="context-menu-item" (click)="openSettingsDialog()">Settings</div>
+      <div cdkMenuItem class="context-menu-item hover:bg-red-400" (click)="deleteMe()">Delete</div>
+      <div cdkMenuItem class="context-menu-item" (click)="copyMe()">Copy</div>
+      <div cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
         {{ action.enabled ? 'Disable' : 'Enable' }}
       </div>
+      <div cdkMenuItem class="context-menu-item" [cdkMenuTriggerFor]="addTransformMenu">Add Transform</div>
       <div
         cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer"
-        [cdkMenuTriggerFor]="addTransformMenu">
-        Add Transform
-      </div>
-      <div
-        cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer"
+        class="context-menu-item"
         [cdkMenuTriggerFor]="addActionMenu"
         *ngIf="action.type === 'delay' || action.type === 'random'">
         Add Subaction
       </div>
       <div
         cdkMenuItem
-        class="px-2 bg-green-700 border border-gray-700 hover:cursor-pointer hover:bg-green-500"
+        class="context-menu-item"
         *ngIf="copyService.getClipboardForType('Transform') | async as copyObject"
         (click)="pasteTransform(copyObject)">
         Paste Transform
@@ -119,13 +102,10 @@
   </ng-template>
 
   <ng-template #addTransformMenu>
-    <div
-      cdkMenu
-      class="flex flex-col bg-gray-600 border border-black border-solid"
-      *ngIf="schemaService.transformTypes.length > 0">
+    <div cdkMenu class="context-menu" *ngIf="schemaService.transformTypes.length > 0">
       <div
         cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer"
+        class="context-menu-item"
         *ngFor="let transformType of schemaService.transformTypes"
         (click)="addTransform(transformType.type)">
         <span>{{ transformType.name }}</span>
@@ -134,13 +114,10 @@
   </ng-template>
 
   <ng-template #addActionMenu>
-    <div
-      cdkMenu
-      class="flex flex-col bg-gray-600 border border-black border-solid"
-      *ngIf="schemaService.actionTypes.length > 0">
+    <div cdkMenu class="context-menu" *ngIf="schemaService.actionTypes.length > 0">
       <div
         cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer"
+        class="context-menu-item"
         *ngFor="let actionType of schemaService.actionTypes"
         (click)="addSubAction(actionType.type)">
         <span>{{ actionType.name }}</span>

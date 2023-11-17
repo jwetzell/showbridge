@@ -81,33 +81,18 @@
 
   <!-- NOTE(jwetzell): Context Menus -->
   <ng-template #triggerContextMenu>
-    <div cdkMenu class="flex flex-col bg-gray-600 border border-black border-solid">
-      <div (click)="openSettingsDialog()" class="px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer">
-        Settings
-      </div>
-      <div (click)="deleteMe()" class="px-2 border border-gray-700 hover:bg-red-500 hover:cursor-pointer">Delete</div>
-      <div (click)="copyMe()" class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer">Copy</div>
-      <div
-        cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer"
-        (click)="toggleEnabled()">
+    <div cdkMenu class="context-menu">
+      <div (click)="openSettingsDialog()" class="context-menu-item">Settings</div>
+      <div (click)="deleteMe()" class="context-menu-item hover:bg-red-400">Delete</div>
+      <div (click)="copyMe()" class="context-menu-item">Copy</div>
+      <div cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
         {{ trigger.enabled ? 'Disable' : 'Enable' }}
       </div>
+      <div cdkMenuItem class="context-menu-item" [cdkMenuTriggerFor]="addActionMenu">Add Action</div>
+      <div cdkMenuItem class="context-menu-item" [cdkMenuTriggerFor]="addTriggerMenu">Add Subtrigger</div>
       <div
         cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer"
-        [cdkMenuTriggerFor]="addActionMenu">
-        Add Action
-      </div>
-      <div
-        cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer"
-        [cdkMenuTriggerFor]="addTriggerMenu">
-        Add Subtrigger
-      </div>
-      <div
-        cdkMenuItem
-        class="px-2 bg-green-700 border border-gray-700 hover:cursor-pointer hover:bg-green-500"
+        class="bg-green-700 border context-menu-item hover:bg-green-500"
         *ngIf="copyService.getClipboardForType('Action') | async as copyObject"
         (click)="pasteAction(copyObject)">
         Paste Action
@@ -116,13 +101,10 @@
   </ng-template>
 
   <ng-template #addActionMenu>
-    <div
-      cdkMenu
-      class="flex flex-col bg-gray-600 border border-black border-solid"
-      *ngIf="schemaService.actionTypes.length > 0">
+    <div cdkMenu class="context-menu" *ngIf="schemaService.actionTypes.length > 0">
       <div
         cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer"
+        class="context-menu-item"
         *ngFor="let actionType of schemaService.actionTypes"
         (click)="addAction(actionType.type)">
         <span>{{ actionType.name }}</span>
@@ -131,13 +113,10 @@
   </ng-template>
 
   <ng-template #addTriggerMenu>
-    <div
-      cdkMenu
-      class="flex flex-col bg-gray-600 border border-black border-solid"
-      *ngIf="schemaService.triggerTypes.length > 0">
+    <div cdkMenu class="context-menu" *ngIf="schemaService.triggerTypes.length > 0">
       <div
         cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-gray-500 hover:cursor-pointer"
+        class="context-menu-item"
         *ngFor="let triggerType of schemaService.triggerTypes"
         (click)="addSubTrigger(triggerType.type)">
         <span>{{ triggerType.name }}</span>

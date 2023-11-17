@@ -39,23 +39,11 @@
 
   <!-- NOTE(jwetzell): Context Menus -->
   <ng-template #transformContextMenu>
-    <div cdkMenu class="flex flex-col bg-gray-600 border border-black border-solid">
-      <div
-        cdkMenuItem
-        class="px-2 border border-gray-700 select-none hover:bg-gray-500 hover:cursor-pointer"
-        (click)="openSettingsDialog()">
-        Settings
-      </div>
-      <div cdkMenuItem class="px-2 border border-gray-700 hover:bg-red-500 hover:cursor-pointer" (click)="deleteMe()">
-        Delete
-      </div>
-      <div cdkMenuItem class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer" (click)="copyMe()">
-        Copy
-      </div>
-      <div
-        cdkMenuItem
-        class="px-2 border border-gray-700 hover:bg-green-500 hover:cursor-pointer"
-        (click)="toggleEnabled()">
+    <div cdkMenu class="context-menu">
+      <div cdkMenuItem class="context-menu-item" (click)="openSettingsDialog()">Settings</div>
+      <div cdkMenuItem class="context-menu-item hover:bg-red-400" (click)="deleteMe()">Delete</div>
+      <div cdkMenuItem class="context-menu-item" (click)="copyMe()">Copy</div>
+      <div cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
         {{ transform.enabled ? 'Disable' : 'Enable' }}
       </div>
     </div>
