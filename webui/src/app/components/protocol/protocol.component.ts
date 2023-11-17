@@ -1,4 +1,4 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,6 +8,7 @@ import { CopyObject } from 'src/app/models/copy-object.model';
 import { ObjectInfo } from 'src/app/models/form.model';
 import { Trigger } from 'src/app/models/trigger.model';
 import { CopyService } from 'src/app/services/copy.service';
+import { ListsService } from 'src/app/services/lists.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
@@ -30,7 +31,8 @@ export class ProtocolComponent {
     private schemaService: SchemaService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    public copyService: CopyService
+    public copyService: CopyService,
+    public listsService: ListsService
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -70,9 +72,14 @@ export class ProtocolComponent {
     this.updated.emit(true);
   }
 
-  drop(event: CdkDragDrop<Trigger[]>) {
-    if (this.protocol?.triggers !== undefined) {
-      moveItemInArray(this.protocol?.triggers, event.previousIndex, event.currentIndex);
+  dropTrigger(event: CdkDragDrop<Trigger[] | undefined>) {
+    if (event.previousContainer === event.container) {
+      if (this.protocol?.triggers !== undefined) {
+        moveItemInArray(this.protocol?.triggers, event.previousIndex, event.currentIndex);
+        this.updated.emit(true);
+      }
+    } else if (event.previousContainer.data && event.container.data) {
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       this.updated.emit(true);
     }
   }

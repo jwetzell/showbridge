@@ -110,10 +110,22 @@ export class TriggerComponent implements OnInit {
     this.updated.emit(true);
   }
 
-  drop(event: CdkDragDrop<Action[]>) {
+  dropAction(event: CdkDragDrop<Action[]>) {
     if (event.previousContainer === event.container) {
       if (this.trigger?.actions !== undefined) {
         moveItemInArray(this.trigger?.actions, event.previousIndex, event.currentIndex);
+        this.updated.emit(true);
+      }
+    } else {
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      this.updated.emit(true);
+    }
+  }
+
+  dropTrigger(event: CdkDragDrop<Trigger[]>) {
+    if (event.previousContainer === event.container) {
+      if (this.trigger?.subTriggers !== undefined) {
+        moveItemInArray(this.trigger?.subTriggers, event.previousIndex, event.currentIndex);
         this.updated.emit(true);
       }
     } else {
@@ -153,17 +165,6 @@ export class TriggerComponent implements OnInit {
       this.trigger?.actions?.push(cloneDeep(copyObject.object));
     }
     this.updated.emit(true);
-  }
-
-  getListId(): string {
-    if (this.path) {
-      const id = this.path.replaceAll('/', '.');
-      if (!this.listsService.triggerListIds.includes(id)) {
-        this.listsService.triggerListIds.push(id);
-      }
-      return id;
-    }
-    return '';
   }
 
   deleteSubTrigger(index: number) {
