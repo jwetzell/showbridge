@@ -7,14 +7,22 @@
 
   <ng-container *ngIf="patchable">
     <ng-container *ngIf="patchType === 'midi'">
-      <select *ngIf="midiPatches" (change)="applyPatch($event)" [(ngModel)]="patchIndex">
+      <select
+        *ngIf="midiPatches"
+        (change)="applyPatch($event)"
+        [(ngModel)]="patchIndex"
+        [ngModelOptions]="{ standalone: true }">
         <option value="-1">Select Patch</option>
         <option *ngFor="let patch of midiPatches; index as i" [value]="i">{{ patch.name }}</option>
       </select>
     </ng-container>
-  
+
     <ng-container *ngIf="patchType === 'network'">
-      <select *ngIf="networkPatches" (change)="applyPatch($event)" [(ngModel)]="patchIndex">
+      <select
+        *ngIf="networkPatches"
+        (change)="applyPatch($event)"
+        [(ngModel)]="patchIndex"
+        [ngModelOptions]="{ standalone: true }">
         <option value="-1">Select Patch</option>
         <option *ngFor="let patch of networkPatches; index as i" [value]="i">{{ patch.name }}</option>
       </select>
