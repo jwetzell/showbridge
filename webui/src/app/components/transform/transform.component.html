@@ -11,6 +11,9 @@
     <div class="flex-auto text-gray-200" [matTooltip]="transform.comment ? transform.comment : ''">
       {{ schema.title }}
     </div>
+    <div class="flex items-center justify-center" [cdkMenuTriggerFor]="transformContextMenu">
+      <mat-icon class="text-gray-200">menu</mat-icon>
+    </div>
   </div>
 
   <!-- NOTE(jwetzell): Settings Dialog -->

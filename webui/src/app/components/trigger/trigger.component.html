@@ -16,6 +16,9 @@
           [matTooltip]="trigger.comment ? trigger.comment : ''">
           {{ schema.title }}
         </div>
+        <div class="flex items-center justify-center" [cdkMenuTriggerFor]="triggerContextMenu">
+          <mat-icon class="text-gray-200">menu</mat-icon>
+        </div>
       </div>
       <ng-container *ngIf="trigger.subTriggers as subTriggers">
         <ng-container *ngIf="subTriggers.length > 0">
