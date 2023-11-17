@@ -190,17 +190,6 @@ export class ActionComponent implements OnInit {
     this.updated.emit(true);
   }
 
-  getListId(): string {
-    if (this.path) {
-      const id = this.path.replaceAll('/', '.');
-      if (!this.listsService.actionListIds.includes(id)) {
-        this.listsService.actionListIds.push(id);
-      }
-      return id;
-    }
-    return '';
-  }
-
   openSettingsDialog() {
     if (this.dialogRef) {
       this.dialog.open(this.dialogRef);
