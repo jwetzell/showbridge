@@ -5,49 +5,53 @@
     [style.align-items]="
       this.trigger.actions === undefined || this.trigger.actions.length === 0 ? 'center' : 'baseline'
     ">
-    <form [formGroup]="formGroup" class="h-full">
-      <div
-        class="flex flex-col my-3 ml-5 bg-gray-800 border-2 {{
-          isInError() ? 'border-red-500' : 'border-gray-200'
-        }} border-solid trigger w-fit"
-        [cdkContextMenuTriggerFor]="triggerContextMenu">
-        <div class="flex items-center justify-center m-1">
-          <div
-            class="flex-auto mx-2 text-gray-200 whitespace-nowrap w-fit"
-            [matTooltip]="trigger.comment ? trigger.comment : ''">
-            {{ schema.title }}
+    <div
+      class="flex flex-col my-3 ml-5 bg-gray-800 border-2 {{
+        isInError() ? 'border-red-500' : 'border-gray-200'
+      }} border-solid trigger w-fit"
+      [cdkContextMenuTriggerFor]="triggerContextMenu">
+      <div class="flex items-center justify-center m-1">
+        <div
+          class="flex-auto mx-2 text-gray-200 whitespace-nowrap w-fit"
+          [matTooltip]="trigger.comment ? trigger.comment : ''">
+          {{ schema.title }}
+        </div>
+      </div>
+      <ng-container *ngIf="trigger.subTriggers as subTriggers">
+        <ng-container *ngIf="subTriggers.length > 0">
+          <div *ngFor="let subTrigger of subTriggers; let i = index" class="mr-2">
+            <app-trigger
+              [trigger]="subTrigger"
+              [path]="this.path + '/subTriggers/' + i"
+              [showActions]="true"
+              (delete)="deleteSubTrigger(i)"
+              (updated)="subTriggerUpdated()"></app-trigger>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <!-- NOTE(jwetzell): Settings Dialog -->
+    <ng-template #settingsDialogRef>
+      <form [formGroup]="formGroup" class="h-full">
+        <div class="m-2">
+          <app-params-form
+            [parentSchema]="schema"
+            [data]="trigger.params"
+            (updated)="paramsUpdated($event)"></app-params-form>
+          <div class="flex items-center justify-center">
+            <div class="flex-auto">
+              <mat-form-field subscriptSizing="dynamic" class="w-full">
+                <mat-label>comment: </mat-label>
+                <textarea matInput type="text" formControlName="comment"></textarea>
+              </mat-form-field>
+            </div>
           </div>
         </div>
-        <ng-container *ngIf="trigger.subTriggers as subTriggers">
-          <ng-container *ngIf="subTriggers.length > 0">
-            <div *ngFor="let subTrigger of subTriggers; let i = index" class="mr-2">
-              <app-trigger
-                [trigger]="subTrigger"
-                [path]="this.path + '/subTriggers/' + i"
-                [showActions]="true"
-                (delete)="deleteSubTrigger(i)"
-                (updated)="subTriggerUpdated()"></app-trigger>
-            </div>
-          </ng-container>
-        </ng-container>
-        <ng-template #settingsDialogRef>
-          <div class="m-2">
-            <app-params-form
-              [parentSchema]="schema"
-              [data]="trigger.params"
-              (updated)="paramsUpdated($event)"></app-params-form>
-            <div class="flex items-center justify-center">
-              <div class="flex-auto">
-                <mat-form-field subscriptSizing="dynamic" class="w-full">
-                  <mat-label>comment: </mat-label>
-                  <textarea matInput type="text" formControlName="comment"></textarea>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-      </div>
-    </form>
+      </form>
+    </ng-template>
+
+    <!-- NOTE(jwetzell): Context Menus -->
     <ng-container *ngIf="showActions">
       <div class="flex flex-col items-center justify-center">
         <mat-icon [style.color]="indicatorColor" class="scale-150">arrow_right</mat-icon>
