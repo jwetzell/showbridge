@@ -4,13 +4,11 @@
       <div
         class="flex flex-col bg-gray-800 border-2 {{ isInError() ? 'border-red-500' : 'border-gray-200' }} border-solid"
         [cdkContextMenuTriggerFor]="actionContextMenu">
-        <div class="flex w-full bg-green-600 items-around">
+        <div class="flex w-full bg-green-600">
           <div class="flex items-center justify-center">
             <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
           </div>
-          <div
-            class="flex items-center justify-start flex-auto mr-3 text-gray-200"
-            [matTooltip]="action.comment ? action.comment : ''">
+          <div class="flex-grow mr-3 text-gray-200" [matTooltip]="action.comment ? action.comment : ''">
             {{ schema.title }}
           </div>
           <div class="flex items-center justify-center" [cdkMenuTriggerFor]="actionContextMenu">

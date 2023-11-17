@@ -9,7 +9,7 @@
       <div class="flex items-center justify-center">
         <mat-icon appearance="fill" class="scale-50" [style.color]="indicatorColor"> circle </mat-icon>
       </div>
-      <div class="flex-auto mr-2 text-gray-200" [matTooltip]="transform.comment ? transform.comment : ''">
+      <div class="flex-grow mr-3 text-gray-200" [matTooltip]="transform.comment ? transform.comment : ''">
         {{ schema.title }}
       </div>
       <div class="flex items-center justify-center" [cdkMenuTriggerFor]="transformContextMenu">

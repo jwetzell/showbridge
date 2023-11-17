@@ -11,9 +11,7 @@
       }} border-solid trigger w-fit"
       [cdkContextMenuTriggerFor]="triggerContextMenu">
       <div class="flex items-center justify-center bg-purple-600">
-        <div
-          class="flex-auto mx-2 text-gray-300 whitespace-nowrap w-fit"
-          [matTooltip]="trigger.comment ? trigger.comment : ''">
+        <div class="flex-grow ml-1 mr-3 text-gray-200" [matTooltip]="trigger.comment ? trigger.comment : ''">
           {{ schema.title }}
         </div>
         <div class="flex items-center justify-center" [cdkMenuTriggerFor]="triggerContextMenu">
