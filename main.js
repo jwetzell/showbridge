@@ -18,6 +18,7 @@ program.option('-w, --webui <path>', 'location of webui html to serve', path.joi
 program.option('--disable-action <action-type...>', 'action type(s) to disable');
 program.option('--disable-protocol <protocol-type...>', 'protocol type(s) to disable');
 program.option('--disable-trigger <trigger-type...>', 'trigger type(s) to disable');
+program.option('--disable-transform <transform-type...>', 'transform type(s) to disable');
 program.addOption(
   new Option('-l, --log-level <level>', 'log level')
     .choices(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
@@ -237,15 +238,22 @@ import('showbridge-lib').then(({ Config, Router, Utils }) => {
 
   if (options.disableProtocol?.length > 0) {
     options.disableProtocol.forEach((type) => {
-      logger.debug(`app: disabling protocol ${type}`);
+      logger.debug(`app: disabling ${type} protocol`);
       router.disableProtocol(type);
     });
   }
 
   if (options.disableTrigger?.length > 0) {
     options.disableTrigger.forEach((type) => {
-      logger.debug(`app: disabling trigger ${type}`);
+      logger.debug(`app: disabling ${type} trigger`);
       router.disableTrigger(type);
+    });
+  }
+
+  if (options.disableTransform?.length > 0) {
+    options.disableTransform.forEach((type) => {
+      logger.debug(`app: disabling ${type} transform`);
+      router.disableTransform(type);
     });
   }
 
