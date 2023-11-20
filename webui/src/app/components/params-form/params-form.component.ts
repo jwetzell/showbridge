@@ -213,6 +213,15 @@ export class ParamsFormComponent implements OnInit {
   }
 
   toggleTemplate(key: string) {
+
+    const baseKey = key.startsWith('_') ? key.substring(1): key;
+
+    if (this.keysToTemplate.has(baseKey)) {
+      this.keysToTemplate.delete(baseKey);
+    } else {
+      this.keysToTemplate.add(baseKey);
+    }
+
     if (this.paramsFormInfo?.formGroup.value[key] !== undefined) {
       const value = this.paramsFormInfo.formGroup.value[key];
       if (key.startsWith('_')) {
@@ -220,17 +229,9 @@ export class ParamsFormComponent implements OnInit {
       } else {
         this.paramsFormInfo.formGroup.controls[`_${key}`].setValue(value);
       }
+    }else{
+      this.formUpdated()
     }
-    if (key.startsWith('_')) {
-      key = key.substring(1);
-    }
-    if (this.keysToTemplate.has(key)) {
-      this.keysToTemplate.delete(key);
-    } else {
-      this.keysToTemplate.add(key);
-    }
-
-    this.formUpdated();
   }
 
   baseKeyIsTemplated(key: string): boolean {
