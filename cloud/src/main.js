@@ -62,8 +62,6 @@ function setupServer(redisClient) {
     });
 
     socket.on('send', (room, msgObj) => {
-      logger.debug(`cloud: proxying ${msgObj.type} message to room ${room}`);
-      logger.trace(msgObj);
       io.to(room).emit('message', msgObj);
     });
 
