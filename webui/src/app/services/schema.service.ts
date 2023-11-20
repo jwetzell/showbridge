@@ -367,24 +367,39 @@ export class SchemaService {
 
   cleanParams(paramsSchema: SomeJSONSchema, params: any, keysToTemplate: Set<string>): any {
     Object.keys(params).forEach((paramKey) => {
-      // delete null/undefined params
-      if (params[paramKey] === undefined || params[paramKey] === null) {
-        delete params[paramKey];
-        return;
-      }
-
-      // TODO(jwetzell): detect the other way base keys that should be removed in favor of their template version
-      if (paramKey.startsWith('_') && !keysToTemplate.has(paramKey.substring(1))) {
-        delete params[paramKey];
-      }
-
       if (paramsSchema.properties[paramKey]) {
         const paramSchema = paramsSchema.properties[paramKey];
+
+        // delete null/undefined/empty params that aren't required
+        if (params[paramKey] === undefined || params[paramKey] === null || params[paramKey] === '') {
+          if (paramSchema.required) {
+            if (!paramSchema.includes(paramKey)) {
+              delete params[paramKey];
+              return;
+            }
+          } else {
+            delete params[paramKey];
+            return;
+          }
+        }
+
+        // NOTE(jwetzell): delete template looking keys that should not be
+        if (paramKey.startsWith('_') && !keysToTemplate.has(paramKey.substring(1))) {
+          delete params[paramKey];
+          return;
+        }
+
+        // NOTE(jwetzell): delete regular keys that are marked as being templated
+        if (keysToTemplate.has(paramKey)) {
+          delete params[paramKey];
+          return;
+        }
+
         if (paramSchema.type) {
           switch (paramSchema.type) {
             case 'integer':
-              // NOTE(jwetzell): delete
               var paramValue = parseInt(params[paramKey]);
+              // NOTE(jwetzell): delete non-numbers
               if (Number.isNaN(paramValue)) {
                 delete params[paramKey];
               } else {
@@ -393,6 +408,7 @@ export class SchemaService {
               break;
             case 'number':
               var paramValue = parseFloat(params[paramKey]);
+              // NOTE(jwetzell): delete non-numbers
               if (Number.isNaN(paramValue)) {
                 delete params[paramKey];
               } else {
@@ -431,19 +447,6 @@ export class SchemaService {
                     // NOTE(jwetzell): default to comma-separated strings
                     params[paramKey] = paramValue.split(',').map((part: string) => part.trim());
                   }
-                }
-              }
-
-              break;
-            case 'string':
-              // NOTE(jwetzell): clean out empty string values that aren't required
-              if (params[paramKey] === '') {
-                if (paramSchema.required) {
-                  if (!paramSchema.includes(paramKey)) {
-                    delete params[paramKey];
-                  }
-                } else {
-                  delete params[paramKey];
                 }
               }
               break;
