@@ -9,7 +9,7 @@
       },
       {
         "name": "Test",
-        "port": "Protokol"
+        "port": "IAC Driver Bus 1"
       }
     ],
     "network": [
