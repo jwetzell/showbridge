@@ -1,5 +1,5 @@
 {
-  "name": "showbridge",
+  "name": "@showbridge/cli",
   "version": "0.4.11",
   "description": "Simple Protocol Router /s",
   "bin": {
