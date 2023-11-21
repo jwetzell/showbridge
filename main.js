@@ -14,11 +14,7 @@ program.version(packageInfo.version);
 program.description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);
 program.option('-v, --vars <path>', 'location of file containing vars', undefined);
-program.option(
-  '-w, --webui <path>',
-  'location of webui html to serve',
-  path.join(__dirname, 'webui/dist/webui')
-);
+program.option('-w, --webui <path>', 'location of webui html to serve', path.join(__dirname, 'webui/dist/webui'));
 program.option('--disable-action <action-type...>', 'action type(s) to disable');
 program.option('--disable-protocol <protocol-type...>', 'protocol type(s) to disable');
 program.option('--disable-trigger <trigger-type...>', 'trigger type(s) to disable');
@@ -34,7 +30,7 @@ program.parse(process.argv);
 const options = program.opts();
 const isChildProcess = process.send !== undefined;
 
-import('showbridge-lib').then(({ Config, Router, Utils }) => {
+import('@showbridge/lib').then(({ Config, Router, Utils }) => {
   const logger = Utils.logger;
 
   if (options.logLevel) {
