@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "scripts": {
     "build": "ng build --configuration production",
-    "dev": "ng build --watch --configuration development --stats-json"
+    "dev": "ng build --watch --configuration development --stats-json",
+    "prepack": "npm run build"
   },
-  "private": true,
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@angular/animations": "^17.0.3",
     "@angular/cdk": "^17.0.1",
