@@ -1,5 +1,5 @@
 {
-  "name": "showbridge-launcher",
+  "name": "@showbridge/launcher",
   "description": "Desktop app to launch and configure showbridge",
   "version": "0.3.6",
   "main": "src/main.js",
