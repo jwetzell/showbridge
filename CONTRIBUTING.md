@@ -24,6 +24,8 @@ the launcher is an electron app that wraps the main.js script into a desktop app
 ## [webui](./webui/)
 an angular web interface for managing a running instance of the main.js executable this is bundled into the launcher and served on whatever port the user has configured for the http protocol
 
+published as [showbridge-webui](https://npmjs.com/package/showbridge-webui)
+
 ## [scripts](./scripts/)
 general build/dev scripts
 
