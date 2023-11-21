@@ -5,7 +5,7 @@
 ![npm](https://img.shields.io/npm/v/%40showbridge/lib?label=lib)
 ![npm](https://img.shields.io/npm/v/%40showbridge/cli?label=cli)
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/jwetzell/showbridge?label=launcher)
-![npm](https://img.shields.io/npm/v/showbridge-cloud?label=cloud)
+![npm](https://img.shields.io/npm/v/%40showbridge/cli?label=cloud)
 
 
 

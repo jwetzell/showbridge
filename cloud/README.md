@@ -13,7 +13,7 @@ add and configure a `.env` file if you would like to provide any of the environm
 `docker run -p 8888:8888 showbridge-cloud`
 
 ### NPX
-`npx showbridge-cloud`
+`npx @showbridge/cloud`
 
 ## Environment Variables
 - `LOG_LEVEL` (optional): log level to pass to pino logger i.e 10, 20, 30, etc.
