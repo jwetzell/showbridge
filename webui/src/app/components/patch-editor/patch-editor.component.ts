@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { filter, take } from 'rxjs';
+import { combineLatest, filter, take } from 'rxjs';
 import { MIDIDeviceInfo } from 'src/app/models/events.model';
 import { MIDIPatch, NetworkPatch } from 'src/app/models/patches.model';
 import { EventService } from 'src/app/services/event.service';
@@ -69,13 +69,13 @@ export class PatchEditorComponent {
     this.midiPatches = this.midiPatches.filter((patch) => patch.port !== undefined);
     this.networkPatches = this.networkPatches.filter((patch) => patch.host !== '');
 
-    this.varsService.updateMIDIPatches(this.midiPatches).subscribe((resp) => {
-      this.snackbar.open('MIDI patches saved....', undefined, { duration: 3000 });
+    combineLatest([
+      this.varsService.updateMIDIPatches(this.midiPatches),
+      this.varsService.updateNetworkPatches(this.networkPatches),
+    ]).subscribe((resp) => {
+      this.snackbar.open('Patches saved....', undefined, { duration: 3000 });
     });
 
-    this.varsService.updateNetworkPatches(this.networkPatches).subscribe((resp) => {
-      this.snackbar.open('Network patches saved....', undefined, { duration: 3000 });
-    });
     this.varsService.loadVars();
   }
 }
