@@ -1,6 +1,15 @@
 {
   "name": "@showbridge/webui",
   "version": "0.1.0",
+  "author": {
+    "name": "Joel Wetzell",
+    "email": "me@jwetzell.com",
+    "url": "https://jwetzell.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwetzell/showbridge.git"
+  },
   "scripts": {
     "build": "ng build --configuration production",
     "dev": "ng build --watch --configuration development --stats-json",
