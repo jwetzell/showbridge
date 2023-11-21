@@ -1,0 +1,24 @@
+name: Publish showbridge-lib to npmjs
+on:
+  push:
+    tags:
+      - 'lib/**'
+jobs:
+  publish-lib:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: 'lib/package-lock.json'
+      - name: Install Node.js dependencies
+        run: npm ci
+        working-directory: ./lib
+      - name: Publish to NPM
+        run: npm publish
+        working-directory: ./lib
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
