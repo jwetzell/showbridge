@@ -18,6 +18,7 @@
     "start": "electron .",
     "predev": "node ../scripts/setup_dev.js",
     "dev": "npm run start",
+    "build": "electron-builder",
     "build:linux": "electron-builder -l",
     "build:mac": "electron-builder -m",
     "build:win": "electron-builder -w",
@@ -28,7 +29,7 @@
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.1.1",
     "respawn": "^2.6.0",
-    "showbridge": "0.4.11",
+    "@showbridge/cli": "0.4.11",
     "tail": "^2.2.6",
     "xterm": "^5.3.0",
     "xterm-addon-fit": "^0.8.0"

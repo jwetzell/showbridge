@@ -16,10 +16,10 @@ exports.default = async function (context) {
     stdio: 'inherit',
   });
 
-  console.log('bundling showbridge main.js');
+  console.log('bundling @showbridge/cli');
   const bundleCommand = [
     'ncc build',
-    path.join(__dirname, '../launcher/node_modules/showbridge/main.js'),
+    path.join(__dirname, '../launcher/node_modules/@showbridge/cli/main.js'),
     `--out ${path.join(__dirname, bundlePathBase)}`,
     '--minify',
   ].join(' ');

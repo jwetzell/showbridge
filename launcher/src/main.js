@@ -7,8 +7,8 @@ const Tail = require('tail').Tail;
 const { readJSONSync, existsSync, moveSync, writeJSONSync, readdirSync, mkdirSync } = require('fs-extra');
 const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
-const defaultConfig = require('showbridge/sample/config/default.json');
-const defaultVars = require('showbridge/sample/vars/default.json');
+const defaultConfig = require('@showbridge/cli/sample/config/default.json');
+const defaultVars = require('@showbridge/cli/sample/vars/default.json');
 
 const rootPath = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 
