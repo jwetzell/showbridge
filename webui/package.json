@@ -1,5 +1,5 @@
 {
-  "name": "showbridge-webui",
+  "name": "@showbridge/webui",
   "version": "0.1.0",
   "scripts": {
     "build": "ng build --configuration production",
