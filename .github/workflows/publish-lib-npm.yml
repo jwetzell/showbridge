@@ -1,4 +1,4 @@
-name: Publish showbridge-lib to npmjs
+name: Publish @showbridge/lib to npmjs
 on:
   push:
     tags:
