@@ -13,8 +13,7 @@
     "predev": "node scripts/setup_dev.js",
     "dev": "nodemon --ignore dist --ignore webui --ignore launcher --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui webui/dist/webui | pino-pretty'",
     "start": "node main.js | pino-pretty",
-    "install:all": "node scripts/install_all.js",
-    "prepack": "npm run build"
+    "install:all": "node scripts/install_all.js"
   },
   "author": {
     "name": "Joel Wetzell",
