@@ -10,7 +10,10 @@
     "email": "me@jwetzell.com",
     "url": "https://jwetzell.com/"
   },
-  "repository": "https://github.com/jwetzell/showbridge",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwetzell/showbridge.git"
+  },
   "type": "commonjs",
   "scripts": {
     "tailwind": "tailwindcss build -i tailwind.css -o src/assets/css/tailwind.css",
