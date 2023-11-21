@@ -1,31 +1,30 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     ignore:
-      - dependency-name: "showbridge-lib"
-  - package-ecosystem: "npm"
-    directory: "/lib"
+      - dependency-name: '@showbridge/lib'
+  - package-ecosystem: 'npm'
+    directory: '/lib'
     schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm"
-    directory: "/launcher"
+      interval: 'weekly'
+  - package-ecosystem: 'npm'
+    directory: '/launcher'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     ignore:
-      - dependency-name: "showbridge"
-  - package-ecosystem: "npm"
-    directory: "/webui"
+      - dependency-name: 'showbridge'
+  - package-ecosystem: 'npm'
+    directory: '/webui'
     schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm"
-    directory: "/cloud"
+      interval: 'weekly'
+  - package-ecosystem: 'npm'
+    directory: '/cloud'
     schedule:
-      interval: "weekly"
-  - package-ecosystem: "github-actions"
-    directory: "/"
+      interval: 'weekly'
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-   
+      interval: 'weekly'

@@ -2,7 +2,7 @@
 
 # showbridge
 
-![npm](https://img.shields.io/npm/v/showbridge-lib?label=lib)
+![npm](https://img.shields.io/npm/v/%40showbridge/lib?label=lib)
 ![npm](https://img.shields.io/npm/v/showbridge?label=main.js)
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/jwetzell/showbridge?label=launcher)
 ![npm](https://img.shields.io/npm/v/showbridge-cloud?label=cloud)
