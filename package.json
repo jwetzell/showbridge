@@ -4,18 +4,17 @@
   "description": "Simple Protocol Router /s",
   "bin": "main.js",
   "files": [
-    "webui/dist/webui",
     "sample/config/default.json",
     "sample/vars/default.json",
     "schema"
   ],
   "scripts": {
     "test:lib": "node tests/test.js",
-    "predev": "node scripts/setup_dev.js && cd webui && npm run build",
+    "predev": "node scripts/setup_dev.js",
     "dev": "nodemon --ignore dist --ignore webui --ignore launcher --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui webui/dist/webui | pino-pretty'",
     "start": "node main.js | pino-pretty",
     "install:all": "node scripts/install_all.js",
-    "prepack": "cd webui && npm install && npm run build"
+    "prepack": "npm run build"
   },
   "author": {
     "name": "Joel Wetzell",
@@ -33,7 +32,8 @@
   "license": "GPL-3.0-only",
   "dependencies": {
     "commander": "^11.0.0",
-    "showbridge-lib": "0.4.6"
+    "showbridge-lib": "0.4.6",
+    "showbridge-webui": "0.1.0"
   },
   "devDependencies": {
     "eslint": "^8.51.0",
