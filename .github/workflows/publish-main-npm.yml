@@ -4,7 +4,7 @@ on:
     tags:
       - 'main/**'
 jobs:
-  publish-webui:
+  publish-main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
