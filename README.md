@@ -3,7 +3,7 @@
 # showbridge
 
 ![npm](https://img.shields.io/npm/v/%40showbridge/lib?label=lib)
-![npm](https://img.shields.io/npm/v/showbridge?label=main.js)
+![npm](https://img.shields.io/npm/v/%40showbridge/cli?label=cli)
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/jwetzell/showbridge?label=launcher)
 ![npm](https://img.shields.io/npm/v/showbridge-cloud?label=cloud)
 
@@ -35,10 +35,10 @@ Simple protocol router _/s_
   - run showbridge!
 - NPM
   - create a config file (see below)
-  - optionally install globally: `npm install -g showbridge`
+  - optionally install globally: `npm install -g @showbridge/cli`
   - run
     - if installed globally: `showbridge -c config.json`
-    - via npx: `npx showbridge@latest -c config.json`
+    - via npx: `npx @showbridge/cli@latest -c config.json`
   - this method still has the web interface available via HTTP
   - use the `-h` flag to see other available flags
 - Source
