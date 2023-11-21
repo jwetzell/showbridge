@@ -29,7 +29,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://git.jwetzell.com/jwetzell/showbridge-cloud.git"
+    "url": "https://git.jwetzell.com/jwetzell/showbridge.git"
   },
   "license": "GPL-3.0-only",
   "dependencies": {
