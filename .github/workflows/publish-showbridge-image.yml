@@ -5,6 +5,8 @@ on:
       - 'main'
     paths:
       - './main.js'
+      - './Dockerfile'
+      - './webui/**'
 jobs:
   build-main-docker:
     runs-on: ubuntu-latest
