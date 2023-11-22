@@ -3,14 +3,14 @@ import { Transform } from './transform.model';
 import { Trigger } from './trigger.model';
 
 export type MessageEventData = {
-  eventType: 'messageIn';
+  eventName: 'messageIn';
   data: {
     type: string;
   };
 };
 
 export type TriggerEventData = {
-  eventType: 'trigger';
+  eventName: 'trigger';
   data: {
     path: string;
     fired: boolean;
@@ -19,7 +19,7 @@ export type TriggerEventData = {
 };
 
 export type ActionEventData = {
-  eventType: 'action';
+  eventName: 'action';
   data: {
     path: string;
     fired: boolean;
@@ -28,7 +28,7 @@ export type ActionEventData = {
 };
 
 export type TransformEventData = {
-  eventType: 'transform';
+  eventName: 'transform';
   data: {
     path: string;
     fired: boolean;
@@ -37,7 +37,7 @@ export type TransformEventData = {
 };
 
 export type ProtocolStatusEventData = {
-  eventType?: 'protocolStatus';
+  eventName?: 'protocolStatus';
   data: {
     cloud?: CloudStatus;
     http?: HTTPStatus;
@@ -105,4 +105,3 @@ export type WebSocketStatus = {
   enabled: boolean;
   listening: boolean;
 };
-

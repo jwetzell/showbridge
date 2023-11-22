@@ -109,8 +109,8 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
   router.on('configUpdated', (updatedConfig) => {
     if (isChildProcess) {
       process.send({
-        eventType: 'configUpdated',
-        config: updatedConfig,
+        eventName: 'configUpdated',
+        data: updatedConfig,
       });
     } else if (options.config) {
       try {
@@ -126,8 +126,8 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
   router.on('varsUpdated', (updatedVars) => {
     if (isChildProcess) {
       process.send({
-        eventType: 'varsUpdated',
-        vars: updatedVars,
+        eventName: 'varsUpdated',
+        data: updatedVars,
       });
     } else if (options.vars) {
       try {
@@ -143,8 +143,8 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
   router.on('messageIn', (messageEvent) => {
     if (isChildProcess) {
       process.send({
-        eventType: 'messageIn',
-        ...messageEvent,
+        eventName: 'messageIn',
+        data: messageEvent,
       });
     }
   });
@@ -152,8 +152,8 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
   router.on('trigger', (triggerEvent) => {
     if (isChildProcess) {
       process.send({
-        eventType: 'trigger',
-        ...triggerEvent,
+        eventName: 'trigger',
+        data: triggerEvent,
       });
     }
   });
@@ -161,8 +161,8 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
   router.on('action', (actionEvent) => {
     if (isChildProcess) {
       process.send({
-        eventType: 'action',
-        ...actionEvent,
+        eventName: 'action',
+        data: actionEvent,
       });
     }
   });
@@ -170,28 +170,28 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
   router.on('transform', (transformEvent) => {
     if (isChildProcess) {
       process.send({
-        eventType: 'transform',
-        ...transformEvent,
+        eventName: 'transform',
+        data: transformEvent,
       });
     }
   });
 
   process.on('message', (message) => {
-    switch (message.eventType) {
+    switch (message.eventName) {
       case 'checkConfig':
         try {
-          const newConfig = new Config(message.config, schema);
+          const newConfig = new Config(message.data, schema);
           if (isChildProcess) {
             process.send({
-              eventType: 'configValid',
-              config: newConfig.toJSON(),
+              eventName: 'configValid',
+              data: newConfig.toJSON(),
             });
           }
         } catch (errors) {
           if (isChildProcess) {
             process.send({
-              eventType: 'configError',
-              errors,
+              eventName: 'configError',
+              data: errors,
             });
           }
           logger.error(`app: problem loading new config`);
@@ -200,22 +200,22 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
         break;
       case 'updateConfig':
         try {
-          router.config = new Config(message.config, schema);
+          router.config = new Config(message.data, schema);
           router.reload();
           logger.info('app: new config applied router reload');
         } catch (errors) {
           logger.error('app: errors loading config');
           if (isChildProcess) {
             process.send({
-              eventType: 'configError',
-              errors,
+              eventName: 'configError',
+              data: errors,
             });
           }
         }
         break;
       case 'updateVars':
         if (message.vars) {
-          router.vars = message.vars;
+          router.vars = message.data;
           router.emit('varsUpdated', router.vars);
         }
         break;
@@ -224,7 +224,7 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
         router.stop();
         break;
       default:
-        logger.error(`app: unhandled process event type = ${message.eventType}`);
+        logger.error(`app: unhandled process event type = ${message.eventName}`);
         break;
     }
   });

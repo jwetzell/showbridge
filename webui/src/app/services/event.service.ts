@@ -22,7 +22,7 @@ export class EventService {
   private actionEvents$: Subject<ActionEventData> = new Subject<ActionEventData>();
   private transformEvents$: Subject<TransformEventData> = new Subject<TransformEventData>();
   public protocolStatus$: BehaviorSubject<ProtocolStatusEventData> = new BehaviorSubject<ProtocolStatusEventData>({
-    eventType: 'protocolStatus',
+    eventName: 'protocolStatus',
     data: {},
   });
 
@@ -44,7 +44,11 @@ export class EventService {
           this.status$.next('open');
           this.protocolStatusSubscription = timer(0, 5000).subscribe(() => {
             if (this.socket && this.socket.readyState === this.socket.OPEN) {
-              this.socket.send('getProtocolStatus');
+              this.socket.send(
+                JSON.stringify({
+                  eventName: 'getProtocolStatus',
+                })
+              );
             }
           });
         };
@@ -70,7 +74,8 @@ export class EventService {
         // NOTE(jwetzell): websocket messages from router to webui
         this.socket.onmessage = (message: MessageEvent) => {
           const messageObj = JSON.parse(message.data);
-          switch (messageObj.eventType) {
+          console.log(messageObj);
+          switch (messageObj.eventName) {
             case 'messageIn':
               this.messageInEvents$.next(messageObj);
               break;
@@ -87,7 +92,7 @@ export class EventService {
               this.protocolStatus$.next(messageObj);
               break;
             default:
-              console.log(`unhandled websocket message type = ${messageObj.eventType}`);
+              console.log(`unhandled websocket message type = ${messageObj.eventName}`);
               console.log(messageObj);
               break;
           }
