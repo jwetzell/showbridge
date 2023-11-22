@@ -71,6 +71,9 @@ export class TriggerComponent implements OnInit {
         this.formUpdated();
       });
     }
+    if (this.trigger !== undefined && this.trigger.subTriggers === undefined) {
+      this.trigger.subTriggers = [];
+    }
   }
 
   formUpdated() {
