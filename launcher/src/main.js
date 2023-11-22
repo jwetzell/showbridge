@@ -62,7 +62,7 @@ function shutdown() {
       console.log('app: sending destroy to showbridge process');
       restartProcess = false;
       showbridgeProcess.child.send({
-        eventType: 'destroy',
+        eventName: 'destroy',
       });
     } else {
       console.log('app: could not determine how to safely shutdown closing app right away');
@@ -224,8 +224,8 @@ function reloadConfigFromDisk(filePath) {
     try {
       const config = readJSONSync(filePath);
       showbridgeProcess.child.send({
-        eventType: 'updateConfig',
-        config,
+        eventName: 'updateConfig',
+        data: config,
       });
     } catch (error) {
       dialog.showErrorBox('Error', error.toString());
@@ -266,8 +266,8 @@ function loadConfigFromFile(filePath) {
       if (showbridgeProcess) {
         if (showbridgeProcess.child) {
           showbridgeProcess.child.send({
-            eventType: 'checkConfig',
-            config: newConfigObj,
+            eventName: 'checkConfig',
+            data: newConfigObj,
           });
         }
       }
@@ -380,7 +380,7 @@ if (!lock) {
       showbridgeProcess.on('start', () => {
         if (showbridgeProcess.child) {
           showbridgeProcess.child.on('message', (message) => {
-            switch (message.eventType) {
+            switch (message.eventName) {
               case 'configValid':
                 dialog
                   .showMessageBox(mainWin, {
@@ -392,36 +392,36 @@ if (!lock) {
                   })
                   .then((response) => {
                     if (response.response === 0) {
-                      writeConfigToDisk(configFilePath, message.config);
+                      writeConfigToDisk(configFilePath, message.data);
                       reloadConfigFromDisk(configFilePath);
                     }
                   });
                 break;
               case 'configError':
                 // TODO(jwetzell): format these errors better
-                mainWin.webContents.send('configError', message.errors);
-                dialog.showErrorBox('Error', message.errors.map((error) => error.message).join('\n'));
+                mainWin.webContents.send('configError', message.data);
+                dialog.showErrorBox('Error', message.data.map((error) => error.message).join('\n'));
                 break;
               case 'configUpdated':
                 // TODO(jwetzell): add rollback
-                writeConfigToDisk(configFilePath, message.config);
+                writeConfigToDisk(configFilePath, message.data);
                 break;
               case 'varsUpdated':
-                writeVarsToDisk(varsFilePath, message.vars);
+                writeVarsToDisk(varsFilePath, message.data);
                 break;
               case 'messageIn':
                 if (routerLogStream) {
-                  routerLogStream.write(`${JSON.stringify(message)}\n`);
+                  routerLogStream.write(`${JSON.stringify(message.data)}\n`);
                 }
                 if (mainWin && mainWin.isVisible()) {
-                  mainWin.webContents.send('messageIn', message.message);
+                  mainWin.webContents.send('messageIn', message.data);
                 }
                 break;
               case 'trigger':
               case 'action':
               case 'transform':
                 if (routerLogStream) {
-                  routerLogStream.write(`${JSON.stringify(message)}\n`);
+                  routerLogStream.write(`${JSON.stringify(message.data)}\n`);
                 }
                 break;
               default:
@@ -531,7 +531,6 @@ if (!lock) {
           fromBeginning: true,
         });
         tail.on('line', (data) => {
-          console.log(data);
           if (logWin && !logWin.isDestroyed()) {
             logWin.webContents.send('log', data.toString());
           }

@@ -22,7 +22,6 @@ dragContainer.ondragover = (event) => {
 };
 
 electron.on('messageIn', (event, message) => {
-  console.log(message);
   // NOTE(jwetzell) flash message indicator
   messageIndicator.style.display = 'block';
   setTimeout(() => {
