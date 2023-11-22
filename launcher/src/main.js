@@ -75,6 +75,10 @@ function shutdown() {
 }
 
 function quitApp() {
+  if (mainWin) {
+    mainWin.show();
+  }
+
   dialog
     .showMessageBox(undefined, {
       title: 'showbridge',
@@ -151,16 +155,6 @@ function createTray() {
       label: 'Open Config Dir',
       click: () => {
         shell.openPath(configDir);
-      },
-    })
-  );
-  menu.append(
-    new MenuItem({
-      label: 'Open DevTools',
-      click: () => {
-        mainWin.webContents.openDevTools({
-          mode: 'detach',
-        });
       },
     })
   );
