@@ -316,7 +316,6 @@ if (!lock) {
   shutdown();
 } else {
   // TODO(jwetzell): add logging for launcher logs.
-  // TODO(jwetzell): add menu links to open the config directory
 
   loadCurrentLogFile();
 
