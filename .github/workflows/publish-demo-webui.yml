@@ -1,4 +1,4 @@
-name: publish-demo-webui-build
+name: Publish webui to demo site
 on:
   push:
     branches:

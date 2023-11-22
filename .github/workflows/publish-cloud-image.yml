@@ -1,4 +1,4 @@
-name: publish-cloud-main
+name: Publish cloud docker image for main
 on:
   push:
     branches:

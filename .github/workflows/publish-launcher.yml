@@ -1,4 +1,4 @@
-name: publish-launcher
+name: Publish electron launcher
 on:
   workflow_dispatch:
 

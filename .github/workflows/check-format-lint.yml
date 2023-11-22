@@ -1,4 +1,4 @@
-name: check-format-lint
+name: Check formatting and linting rules
 on:
   pull_request:
     branches:
@@ -19,7 +19,7 @@ jobs:
           node-version: 18
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
-      
+
       - name: Install root Node.js dependencies
         run: npm ci
 
@@ -29,19 +29,18 @@ jobs:
 
       - name: Install launcher dependencies
         run: npm ci
-        working-directory: ./launcher 
+        working-directory: ./launcher
 
       - name: Install webui dependencies
         run: npm ci
         working-directory: ./webui
-      
+
       - name: Install cloud dependencies
         run: npm ci
         working-directory: ./cloud
-      
+
       - name: Install eslint
         run: npm install -g eslint
-      
+
       - name: Run check script
         run: node scripts/check_format_lint.js
-      

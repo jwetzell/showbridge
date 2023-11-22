@@ -1,4 +1,4 @@
-name: publish-schema-docs
+name: Publish schema docs to docs site
 on:
   push:
     branches:

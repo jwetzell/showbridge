@@ -1,4 +1,4 @@
-name: publish-lib-docs
+name: Publish lib docs to docs site
 on:
   push:
     branches:

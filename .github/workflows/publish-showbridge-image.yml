@@ -1,4 +1,4 @@
-name: publish-showbridge-image-main
+name: Publish cli docker image for main
 on:
   push:
     branches:

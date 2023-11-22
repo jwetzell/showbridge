@@ -1,4 +1,4 @@
-name: check-webui-build
+name: Check Web UI Builds
 on:
   pull_request:
     branches:
