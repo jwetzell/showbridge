@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList } from '@angular/cdk/drag-drop';
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -60,6 +60,7 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     CdkDrag,
     CdkDragPlaceholder,
     CdkDragHandle,
+    CdkDragPreview,
     MatDialogModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
