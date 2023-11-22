@@ -74,7 +74,6 @@ export class EventService {
         // NOTE(jwetzell): websocket messages from router to webui
         this.socket.onmessage = (message: MessageEvent) => {
           const messageObj = JSON.parse(message.data);
-          console.log(messageObj);
           switch (messageObj.eventName) {
             case 'messageIn':
               this.messageInEvents$.next(messageObj);
