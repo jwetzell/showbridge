@@ -26,8 +26,8 @@ export class ListsService {
     }
 
     const id = this.pathToId(path);
-    if (!this.actionListIds.includes(id)) {
-      this.actionListIds.push(id);
+    if (!this.transformListIds.includes(id)) {
+      this.transformListIds.push(id);
     }
     return id;
   }

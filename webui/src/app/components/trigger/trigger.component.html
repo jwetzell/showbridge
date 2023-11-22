@@ -1,9 +1,9 @@
 <ng-container *ngIf="trigger && schema">
-  <div class="flex w-fit" [style.opacity]="this.trigger.enabled ? '1.0' : '0.5'">
+  <div class="flex items-start m-2 w-fit" [style.opacity]="this.trigger.enabled ? '1.0' : '0.5'">
     <div
-      class="flex flex-col my-3 ml-5 bg-gray-800 border-2 {{
+      class="flex flex-col bg-gray-800 border-2 {{
         isInError() ? 'border-red-500' : 'border-gray-200'
-      }} border-solid trigger w-fit"
+      }} border-solid w-fit h-full mr-2"
       [cdkContextMenuTriggerFor]="triggerContextMenu">
       <div class="flex items-center justify-center bg-purple-600">
         <div class="flex-grow ml-1 mr-3 text-gray-200" [matTooltip]="trigger.comment ? trigger.comment : ''">
@@ -37,7 +37,7 @@
       <div class="flex flex-col items-center justify-center">
         <mat-icon [style.color]="indicatorColor" class="scale-150">arrow_right</mat-icon>
       </div>
-      <div *ngIf="trigger.actions" class="mb-2">
+      <div *ngIf="trigger.actions">
         <div
           [id]="listsService.registerActionList(path + '/actions')"
           cdkDropList
