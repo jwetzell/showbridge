@@ -44,6 +44,7 @@ const routerLogStream = fileStreamRotator.getStream({
 });
 
 let currentLogFile;
+let currentLogFileTail;
 
 function toggleWindow(window) {
   if (window.isVisible()) {
@@ -270,6 +271,22 @@ function loadConfigFromFile(filePath) {
     }
   } else {
     dialog.showErrorBox('Error', `Cannot find file: ${filePath}`);
+  }
+}
+
+function setupCurrentLogFileTail() {
+  if (currentLogFile) {
+    if (currentLogFileTail) {
+      currentLogFileTail.unwatch();
+    }
+    currentLogFileTail = new Tail(currentLogFile, {
+      fromBeginning: true,
+    });
+    currentLogFileTail.on('line', (data) => {
+      if (logWin && !logWin.isDestroyed()) {
+        logWin.webContents.send('log', data.toString());
+      }
+    });
   }
 }
 
@@ -519,18 +536,7 @@ if (!lock) {
 
     ipcMain.on('logWinLoaded', () => {
       loadCurrentLogFile();
-      if (currentLogFile) {
-        const tail = new Tail(currentLogFile, {
-          fromBeginning: true,
-        });
-        tail.on('line', (data) => {
-          if (logWin && !logWin.isDestroyed()) {
-            logWin.webContents.send('log', data.toString());
-          }
-        });
-      } else {
-        console.error('app: current log file not set');
-      }
+      setupCurrentLogFileTail();
     });
 
     ipcMain.on('showUI', () => {
