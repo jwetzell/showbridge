@@ -96,7 +96,7 @@
             </ng-container>
           </ng-container>
           <ng-container *ngIf="!paramsFormInfo.formGroup.controls[key].valid">
-            <!-- TODO(jwetzell): better error displaying maybe even at a higher level to know which form has errors if none open -->
+            <!-- TODO(jwetzell): better error displaying -->
             <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
           </ng-container>
           <div class="flex items-center justify-center">
