@@ -1,3 +1,11 @@
+input {
+  @apply w-full pl-2 text-gray-200 bg-gray-900;
+}
+
+select {
+  @apply w-full text-gray-200 bg-gray-500;
+}
+
 .cdk-drag-placeholder {
   opacity: 0;
 }

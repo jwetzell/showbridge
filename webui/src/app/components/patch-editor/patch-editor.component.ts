@@ -58,7 +58,7 @@ export class PatchEditorComponent {
   }
 
   addNetworkPatch() {
-    this.networkPatches.push({ name: '', host: '', port: 1 });
+    this.networkPatches.push({ name: '', host: '', port: 8000 });
   }
 
   addMIDIPatch() {
