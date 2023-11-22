@@ -48,7 +48,7 @@
   "build": {
     "productName": "showbridge",
     "appId": "showbridge.jwetzell.com",
-    "artifactName": "${name}.${os}-${arch}.v${version}.${ext}",
+    "artifactName": "showbridge.${os}-${arch}.v${version}.${ext}",
     "icon": "./src/assets/images/icon512x512.png",
     "beforePack": "./electron_bundle.js",
     "directories": {
