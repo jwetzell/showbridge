@@ -21,7 +21,7 @@
           <tr cdkDrag *ngFor="let midiPatch of midiPatches; index as i">
             <td cdkDragHandle>
               <div class="flex justify-center">
-                <mat-icon class="text-gray-200">drag_handle</mat-icon>
+                <mat-icon class="text-gray-200">drag_indicator</mat-icon>
               </div>
             </td>
             <td>
@@ -41,7 +41,7 @@
             </td>
 
             <div *cdkDragPreview>
-              <mat-icon class="text-gray-200">drag_handle</mat-icon>
+              <mat-icon class="text-gray-200">drag_indicator</mat-icon>
             </div>
           </tr>
         </tbody>
@@ -71,7 +71,7 @@
           <tr cdkDrag *ngFor="let networkPatch of networkPatches; index as i">
             <td cdkDragHandle>
               <div class="flex justify-center">
-                <mat-icon class="text-gray-200">drag_handle</mat-icon>
+                <mat-icon class="text-gray-200">drag_indicator</mat-icon>
               </div>
             </td>
             <td>
@@ -95,7 +95,7 @@
               </button>
             </td>
             <div *cdkDragPreview>
-              <mat-icon class="text-gray-200">drag_handle</mat-icon>
+              <mat-icon class="text-gray-200">drag_indicator</mat-icon>
             </div>
           </tr>
         </tbody>
