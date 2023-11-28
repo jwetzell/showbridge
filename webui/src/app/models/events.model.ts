@@ -1,7 +1,3 @@
-import { Action } from './action.model';
-import { Transform } from './transform.model';
-import { Trigger } from './trigger.model';
-
 export type MessageEventData = {
   eventName: 'messageIn';
   data: {
@@ -14,7 +10,6 @@ export type TriggerEventData = {
   data: {
     path: string;
     fired: boolean;
-    trigger: Trigger;
   };
 };
 
@@ -23,7 +18,6 @@ export type ActionEventData = {
   data: {
     path: string;
     fired: boolean;
-    action: Action;
   };
 };
 
@@ -32,7 +26,6 @@ export type TransformEventData = {
   data: {
     path: string;
     fired: boolean;
-    transform: Transform;
   };
 };
 
