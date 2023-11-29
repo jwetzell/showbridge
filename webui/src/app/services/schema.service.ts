@@ -313,33 +313,28 @@ export class SchemaService {
 
               paramsFormInfo.paramsInfo[paramKey] = {
                 key: paramKey,
-                display: paramKey,
+                display: paramSchema.title ? paramSchema.title : paramKey,
                 type: paramSchema.type,
                 hint: paramSchema.description,
                 isConst: !!paramSchema.const,
                 isTemplated: paramKey.startsWith('_'),
                 canTemplate: paramKeys.includes(`_${paramKey}`),
                 schema: paramSchema,
+                placeholder: '',
               };
 
+              if (paramSchema.examples && paramSchema.examples.length > 0) {
+                paramsFormInfo.paramsInfo[paramKey].placeholder = paramSchema.examples[0];
+              }
+
               if (paramSchema.type === 'array') {
-                paramsFormInfo.paramsInfo[paramKey].placeholder = paramKey.startsWith('_')
-                  ? '${msg.prop1}, ${msg.prop2}'
-                  : 'item1, item2, item3';
                 if (paramSchema.$ref === '#/definitions/ActionList') {
                   validators.push(this.subActionValidator);
                 }
               }
 
               if (paramSchema.type === 'object') {
-                paramsFormInfo.paramsInfo[paramKey].placeholder = '{"key": "value"}';
                 validators.push(this.objectValidator);
-              }
-
-              if (paramSchema.type === 'string') {
-                paramsFormInfo.paramsInfo[paramKey].placeholder = paramKey.startsWith('_')
-                  ? '${msg.prop1}'
-                  : 'some value';
               }
 
               //TODO(jwetzell): figure out how to disable a control but not have to deal with undefined values on disabled controls

@@ -22,7 +22,8 @@
               "type": "number",
               "minimum": 1,
               "maximum": 65535,
-              "default": 3000
+              "default": 3000,
+              "examples": ["8000"]
             }
           },
           "required": ["port"],
@@ -96,14 +97,16 @@
             "address": {
               "description": "Address to listen on defaults to 0.0.0.0",
               "type": "string",
-              "default": "0.0.0.0"
+              "default": "0.0.0.0",
+              "examples": ["127.0.0.1"]
             },
             "port": {
               "description": "TCP port to listen on",
               "type": "number",
               "minimum": 1,
               "maximum": 65535,
-              "default": 3000
+              "default": 3000,
+              "examples": ["8000"]
             }
           },
           "required": ["port"],
@@ -143,7 +146,8 @@
               "type": "number",
               "minimum": 1,
               "maximum": 65535,
-              "default": 3000
+              "default": 3000,
+              "examples": ["8000"]
             }
           },
           "required": ["port"],
@@ -174,10 +178,12 @@
           "type": "object",
           "properties": {
             "virtualInputName": {
+              "title": "Virtual Input Name",
               "description": "Name of the virtual MIDI Input port",
               "type": "string"
             },
             "virtualOutputName": {
+              "title": "Virtual Output Name",
               "description": "Name of the virtual MIDI Output port",
               "type": "string"
             }
@@ -396,14 +402,16 @@
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "examples": ["room1, room2"]
             },
             "_rooms": {
               "description": "array of rooms to template and then send the message to",
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "examples": ["${msg.prop1}, ${msg.prop2}"]
             }
           }
         },
@@ -456,7 +464,8 @@
                     "maximum": 255
                   },
                   "minItems": 2,
-                  "maxItems": 3
+                  "maxItems": 3,
+                  "examples": ["144, 60, 127"]
                 }
               },
               "required": ["bytes"],
@@ -483,19 +492,22 @@
                   "description": "MIDI channel number",
                   "type": "number",
                   "minimum": 1,
-                  "maximum": 16
+                  "maximum": 16,
+                  "examples": ["1"]
                 },
                 "note": {
                   "description": "MIDI note value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["60"]
                 },
                 "velocity": {
                   "description": "MIDI velocity value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["127"]
                 }
               },
               "required": ["status", "channel", "note", "velocity"],
@@ -522,19 +534,22 @@
                   "description": "MIDI channel number",
                   "type": "number",
                   "minimum": 1,
-                  "maximum": 16
+                  "maximum": 16,
+                  "examples": ["1"]
                 },
                 "note": {
                   "description": "MIDI note value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["60"]
                 },
                 "velocity": {
                   "description": "MIDI velocity value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["127"]
                 }
               },
               "required": ["status", "channel", "note", "velocity"],
@@ -561,19 +576,22 @@
                   "description": "MIDI channel number",
                   "type": "number",
                   "minimum": 1,
-                  "maximum": 16
+                  "maximum": 16,
+                  "examples": ["1"]
                 },
                 "note": {
                   "description": "MIDI note value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["60"]
                 },
                 "pressure": {
                   "description": "MIDI pressure value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["40"]
                 }
               },
               "required": ["status", "channel", "note", "pressure"],
@@ -600,19 +618,22 @@
                   "description": "MIDI channel number",
                   "type": "number",
                   "minimum": 1,
-                  "maximum": 16
+                  "maximum": 16,
+                  "examples": ["1"]
                 },
                 "control": {
                   "description": "MIDI control value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["7"]
                 },
                 "value": {
                   "description": "MIDI value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["70"]
                 }
               },
               "required": ["status", "control", "value"],
@@ -639,13 +660,15 @@
                   "description": "MIDI channel number",
                   "type": "number",
                   "minimum": 1,
-                  "maximum": 16
+                  "maximum": 16,
+                  "examples": ["1"]
                 },
                 "program": {
                   "description": "MIDI program value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["10"]
                 }
               },
               "required": ["status", "program"],
@@ -672,13 +695,15 @@
                   "description": "MIDI channel number",
                   "type": "number",
                   "minimum": 1,
-                  "maximum": 16
+                  "maximum": 16,
+                  "examples": ["1"]
                 },
                 "pressure": {
                   "description": "MIDI pressure value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 127
+                  "maximum": 127,
+                  "examples": ["60"]
                 }
               },
               "required": ["status", "pressure"],
@@ -705,13 +730,15 @@
                   "description": "MIDI channel number",
                   "type": "number",
                   "minimum": 1,
-                  "maximum": 16
+                  "maximum": 16,
+                  "examples": ["1"]
                 },
                 "value": {
                   "description": "MIDI value",
                   "type": "number",
                   "minimum": 0,
-                  "maximum": 16383
+                  "maximum": 16383,
+                  "examples": ["7000"]
                 }
               },
               "required": ["status", "value"],
@@ -844,7 +871,8 @@
               "description": "Port to forward msg to",
               "type": "integer",
               "minimum": 1,
-              "maximum": 65535
+              "maximum": 65535,
+              "examples": ["8000"]
             },
             "_port": {
               "description": "Template for the port to forward msg to",
@@ -899,11 +927,13 @@
               "description": "Port to send OSC to",
               "type": "integer",
               "minimum": 1,
-              "maximum": 65535
+              "maximum": 65535,
+              "examples": ["8000"]
             },
             "_port": {
               "description": "Template for the port to send on",
-              "type": "string"
+              "type": "string",
+              "examples": ["${msg.prop1}"]
             },
             "protocol": {
               "description": "Protocol to use when sending OSC",
@@ -912,19 +942,23 @@
             },
             "_address": {
               "description": "JS template of the OSC address. Will have access to the msg object to subsitute in properties of the message that triggered this action",
-              "type": "string"
+              "type": "string",
+              "examples": ["${msg.prop1}"]
             },
             "address": {
               "description": "Hardcoded OSC address. _address has priority",
-              "type": "string"
+              "type": "string",
+              "examples": ["/osc/address"]
             },
             "_args": {
               "description": "Array of args. Strings will be ran through the templating engine same as the _address param",
-              "type": "array"
+              "type": "array",
+              "examples": ["${msg.prop1}, ${msg.prop2}"]
             },
             "args": {
               "description": "Hardcoded array of OSC args",
-              "type": "array"
+              "type": "array",
+              "examples": ["1, 2, 3, 4"]
             }
           },
           "required": ["protocol"],
@@ -963,28 +997,33 @@
               "properties": {
                 "host": {
                   "description": "Hostname or address of the server to send UDP packet to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["127.0.0.1"]
                 },
                 "_host": {
                   "description": "Template for the hostname or address of the server to forward message to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "port": {
                   "description": "Port to send UDP packet to",
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 65535
+                  "maximum": 65535,
+                  "examples": ["8000"]
                 },
                 "_port": {
                   "description": "Template for the port to send msg on",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "bytes": {
                   "description": "bytes to send",
                   "type": "array",
                   "items": {
                     "type": "number"
-                  }
+                  },
+                  "examples": ["0, 1, 2"]
                 }
               },
               "required": ["bytes"],
@@ -995,26 +1034,31 @@
               "properties": {
                 "host": {
                   "description": "Hostname or address of the server to send UDP packet to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["127.0.0.1"]
                 },
                 "_host": {
                   "description": "Template for the hostname or address of the server to forward message to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "port": {
                   "description": "Port to send UDP packet to",
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 65535
+                  "maximum": 65535,
+                  "examples": ["8000"]
                 },
                 "_port": {
                   "description": "Template for the port to send msg on",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "hex": {
                   "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
                   "type": "string",
-                  "pattern": "^[0-9A-Fa-f\\sx,]+$"
+                  "pattern": "^[0-9A-Fa-f\\sx,]+$",
+                  "examples": ["0xdeadbeef"]
                 }
               },
               "required": ["hex"],
@@ -1025,29 +1069,35 @@
               "properties": {
                 "host": {
                   "description": "Hostname or address of the server to send UDP packet to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["127.0.0.1"]
                 },
                 "_host": {
                   "description": "Template for the hostname or address of the server to forward message to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "port": {
                   "description": "Port to send UDP packet to",
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 65535
+                  "maximum": 65535,
+                  "examples": ["8000"]
                 },
                 "_port": {
                   "description": "Template for the port to send msg on",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "_string": {
                   "description": "string to send ran through templating engine",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "string": {
                   "description": "string to send",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["message"]
                 }
               }
             }
@@ -1086,21 +1136,25 @@
               "properties": {
                 "host": {
                   "description": "Hostname or address of the server to send TCP packet to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["127.0.0.1"]
                 },
                 "_host": {
                   "description": "Template for the hostname or address of the server to forward message to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "port": {
                   "description": "Port to send TCP packet to",
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 65535
+                  "maximum": 65535,
+                  "examples": ["8000"]
                 },
                 "_port": {
                   "description": "Template for the port to send msg on",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1112,7 +1166,8 @@
                   "type": "array",
                   "items": {
                     "type": "number"
-                  }
+                  },
+                  "examples": ["24, 25, 26"]
                 }
               },
               "required": ["slip", "bytes"],
@@ -1123,21 +1178,25 @@
               "properties": {
                 "host": {
                   "description": "Hostname or address of the server to send TCP packet to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["127.0.0.1"]
                 },
                 "_host": {
                   "description": "Template for the hostname or address of the server to forward message to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "port": {
                   "description": "Port to send TCP packet to",
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 65535
+                  "maximum": 65535,
+                  "examples": ["8000"]
                 },
                 "_port": {
                   "description": "Template for the port to send msg on",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1147,7 +1206,8 @@
                 "hex": {
                   "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
                   "type": "string",
-                  "pattern": "^[0-9A-Fa-f\\sx,]+$"
+                  "pattern": "^[0-9A-Fa-f\\sx,]+$",
+                  "examples": ["0x42, 0x56, 0x77"]
                 }
               },
               "required": ["slip", "hex"],
@@ -1158,21 +1218,25 @@
               "properties": {
                 "host": {
                   "description": "Hostname or address of the server to send TCP packet to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["127.0.0.1"]
                 },
                 "_host": {
                   "description": "Template for the hostname or address of the server to forward message to",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "port": {
                   "description": "Port to send TCP packet to",
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 65535
+                  "maximum": 65535,
+                  "examples": ["8000"]
                 },
                 "_port": {
                   "description": "Template for the port to send msg on",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "slip": {
                   "description": "whether to SLIP encode the TCP bytes",
@@ -1181,11 +1245,13 @@
                 },
                 "_string": {
                   "description": "string to send ran through templating engine",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
                 },
                 "string": {
                   "description": "string to send",
-                  "type": "string"
+                  "type": "string",
+                  "examples": ["message"]
                 }
               },
               "required": ["slip"]
@@ -1222,11 +1288,13 @@
           "properties": {
             "_command": {
               "description": "JS literal template of the shell command to run",
-              "type": "string"
+              "type": "string",
+              "examples": ["${msg.prop1}"]
             },
             "command": {
               "description": "Shell command to run",
-              "type": "string"
+              "type": "string",
+              "examples": ["touch hello.txt"]
             }
           }
         },
@@ -1265,23 +1333,28 @@
             },
             "_url": {
               "description": "JS literal template of the url. Will have access to the properties of the incoming message that triggered this action",
-              "type": "string"
+              "type": "string",
+              "examples": ["${msg.prop1}"]
             },
             "url": {
               "description": "Url to call",
-              "type": "string"
+              "type": "string",
+              "examples": ["https://example.com"]
             },
             "contentType": {
               "description": "Content-Type header value mainly useful for POST/PUT/PATCH",
-              "type": "string"
+              "type": "string",
+              "examples": ["application/json"]
             },
             "_body": {
               "description": "JS literal template of the body. Will have access to the properties of the incoming message that triggered this action",
-              "type": "string"
+              "type": "string",
+              "examples": ["${msg.prop1}"]
             },
             "body": {
               "description": "Body to include with the request",
-              "type": "string"
+              "type": "string",
+              "examples": ["OK"]
             }
           },
           "required": ["method"],
@@ -1318,7 +1391,8 @@
             "actions": {
               "description": "array of actions to randomly pick from",
               "type": "array",
-              "$ref": "#/definitions/ActionList"
+              "$ref": "#/definitions/ActionList",
+              "examples": ["YOU PROBABLY SHOULDN'T BE EDITING THIS"]
             }
           },
           "required": ["actions"],
@@ -1354,12 +1428,14 @@
           "properties": {
             "duration": {
               "description": "time in ms to wait",
-              "type": "number"
+              "type": "number",
+              "examples": ["3000"]
             },
             "actions": {
               "description": "array of actions to execute after delaying",
               "type": "array",
-              "$ref": "#/definitions/ActionList"
+              "$ref": "#/definitions/ActionList",
+              "examples": ["YOU PROBABLY SHOULDN'T BE EDITING THIS"]
             }
           },
           "required": ["duration", "actions"],
@@ -1394,19 +1470,23 @@
           "properties": {
             "_topic": {
               "description": "the templated MQTT topic to publish the message to",
-              "type": "string"
+              "type": "string",
+              "examples": ["${msg.prop1}"]
             },
             "topic": {
               "description": "the static MQTT topic to publish the message to",
-              "type": "string"
+              "type": "string",
+              "examples": ["topic/1"]
             },
             "_payload": {
               "description": "the templated payload of the mqtt message",
-              "type": "string"
+              "type": "string",
+              "examples": ["${msg.prop1}"]
             },
             "payload": {
               "description": "the static payload of the mqtt message",
-              "type": "string"
+              "type": "string",
+              "examples": ["payload"]
             }
           },
           "additionalProperties": false
@@ -1486,7 +1566,8 @@
           "properties": {
             "address": {
               "description": "OSC Address to match. Supports OSC 1.0 address patterns spec *,?,{string1,string2},[a-z],[!a-z]",
-              "type": "string"
+              "type": "string",
+              "examples": ["/address/to/match"]
             }
           },
           "required": ["address"],
@@ -1526,7 +1607,8 @@
           "properties": {
             "address": {
               "description": "Address of the server to match incoming messages against",
-              "type": "string"
+              "type": "string",
+              "examples": ["127.0.0.1"]
             }
           },
           "required": ["address"],
@@ -1570,7 +1652,8 @@
                 "type": "integer",
                 "minimum": 0,
                 "maximum": 255
-              }
+              },
+              "examples": ["10, 22, 65, 76"]
             }
           },
           "required": ["bytes"],
@@ -1615,19 +1698,22 @@
               "description": "channel value to match against incoming the messages",
               "type": "number",
               "minimum": 1,
-              "maximum": 16
+              "maximum": 16,
+              "examples": ["1"]
             },
             "note": {
               "description": "Note value to match against incoming the messages",
               "type": "integer",
               "minimum": 0,
-              "maximum": 127
+              "maximum": 127,
+              "examples": ["60"]
             },
             "velocity": {
               "description": "Velocity value to match against the incoming message",
               "type": "integer",
               "minimum": 0,
-              "maximum": 127
+              "maximum": 127,
+              "examples": ["127"]
             }
           },
           "additionalProperties": false
@@ -1671,19 +1757,22 @@
               "description": "channel value to match against incoming the messages",
               "type": "number",
               "minimum": 1,
-              "maximum": 16
+              "maximum": 16,
+              "examples": ["1"]
             },
             "note": {
               "description": "note value to match against incoming the messages",
               "type": "integer",
               "minimum": 0,
-              "maximum": 127
+              "maximum": 127,
+              "examples": ["60"]
             },
             "velocity": {
               "description": "velocity value to match against the incoming message",
               "type": "integer",
               "minimum": 0,
-              "maximum": 127
+              "maximum": 127,
+              "examples": ["127"]
             }
           },
           "additionalProperties": false
@@ -1727,19 +1816,22 @@
               "description": "channel value to match against incoming the messages",
               "type": "number",
               "minimum": 1,
-              "maximum": 16
+              "maximum": 16,
+              "examples": ["1"]
             },
             "control": {
               "description": "control number to match against incoming the messages",
               "type": "integer",
               "minimum": 0,
-              "maximum": 127
+              "maximum": 127,
+              "examples": ["7"]
             },
             "value": {
               "description": "control value to match against the incoming message",
               "type": "integer",
               "minimum": 0,
-              "maximum": 127
+              "maximum": 127,
+              "examples": ["60"]
             }
           },
           "additionalProperties": false
@@ -1780,13 +1872,15 @@
               "description": "channel value to match against incoming the messages",
               "type": "number",
               "minimum": 1,
-              "maximum": 16
+              "maximum": 16,
+              "examples": ["1"]
             },
             "program": {
               "description": "program number to match against incoming the messages",
               "type": "integer",
               "minimum": 0,
-              "maximum": 127
+              "maximum": 127,
+              "examples": ["10"]
             }
           },
           "additionalProperties": false
@@ -1827,14 +1921,16 @@
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "examples": [".*, test"]
             },
             "properties": {
               "description": "an array of properties on the msg to match the regex patterns to 1:1",
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "examples": ["prop1, prop2"]
             }
           },
           "required": ["patterns", "properties"],
@@ -1891,7 +1987,8 @@
           "properties": {
             "property": {
               "description": "the property of the incoming message to scale",
-              "type": "string"
+              "type": "string",
+              "examples": ["prop1"]
             },
             "inRange": {
               "description": "the range of the incoming numbers i.e [0,100]",
@@ -1900,7 +1997,8 @@
                 "type": "number"
               },
               "minItems": 2,
-              "maxItems": 2
+              "maxItems": 2,
+              "examples": ["0, 127"]
             },
             "outRange": {
               "description": "the range of the outgoing numbers i.e [1,10]",
@@ -1909,7 +2007,8 @@
                 "type": "number"
               },
               "minItems": 2,
-              "maxItems": 2
+              "maxItems": 2,
+              "examples": ["0, 100"]
             }
           },
           "required": ["property", "inRange", "outRange"],
@@ -1942,7 +2041,8 @@
           "properties": {
             "property": {
               "description": "the property of the incoming message to round",
-              "type": "string"
+              "type": "string",
+              "examples": ["prop1"]
             }
           },
           "required": ["property"],
@@ -1975,7 +2075,8 @@
           "properties": {
             "property": {
               "description": "the property of the incoming message to floor",
-              "type": "string"
+              "type": "string",
+              "examples": ["prop1"]
             }
           },
           "required": ["property"],
@@ -2008,11 +2109,13 @@
           "properties": {
             "property": {
               "description": "the property of the incoming message",
-              "type": "string"
+              "type": "string",
+              "examples": ["prop1"]
             },
             "base": {
               "description": "the log base",
-              "type": "number"
+              "type": "number",
+              "examples": ["10"]
             }
           },
           "required": ["property", "base"],
@@ -2045,11 +2148,13 @@
           "properties": {
             "property": {
               "description": "the property of the incoming message that will be used as the base of the exponent",
-              "type": "string"
+              "type": "string",
+              "examples": ["prop1"]
             },
             "exponent": {
               "description": "the exponent to raise the property value to",
-              "type": "number"
+              "type": "number",
+              "examples": ["3"]
             }
           },
           "required": ["property", "exponent"],
@@ -2082,11 +2187,13 @@
           "properties": {
             "property": {
               "description": "the property of the incoming message to map",
-              "type": "string"
+              "type": "string",
+              "examples": ["prop1"]
             },
             "map": {
               "description": "key:value object to lookup the property value in and the resulting value to map it to",
-              "type": "object"
+              "type": "object",
+              "examples": ["{1:\"one\",2:\"two\"}"]
             }
           },
           "required": ["property", "map"],
@@ -2119,11 +2226,13 @@
           "properties": {
             "property": {
               "description": "the property of the incoming message to populate",
-              "type": "string"
+              "type": "string",
+              "examples": ["prop1"]
             },
             "template": {
               "description": "the template whose result will replace the property value. will have access to the msg object",
-              "type": "string"
+              "type": "string",
+              "examples": ["modified-${msg.prop1}"]
             }
           },
           "required": ["property", "template"],

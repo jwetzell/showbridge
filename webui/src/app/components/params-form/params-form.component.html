@@ -43,6 +43,7 @@
             <ng-container *ngSwitchCase="'number'">
               <input
                 type="number"
+                [placeholder]="paramInfo.placeholder"
                 class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
                 [formControlName]="paramInfo.key" />
               <mat-icon class="text-gray-200">123</mat-icon>
@@ -51,6 +52,7 @@
             <ng-container *ngSwitchCase="'integer'">
               <input
                 type="number"
+                [placeholder]="paramInfo.placeholder"
                 class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
                 [formControlName]="paramInfo.key" />
               <mat-icon class="text-gray-200" matTooltip="Number">123</mat-icon>
