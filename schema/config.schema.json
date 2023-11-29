@@ -861,11 +861,13 @@
           "properties": {
             "host": {
               "description": "Hostname or address of the server to forward message to",
-              "type": "string"
+              "type": "string",
+              "examples": ["127.0.0.1"]
             },
             "_host": {
               "description": "Template for the hostname or address of the server to forward message to",
-              "type": "string"
+              "type": "string",
+              "examples": ["${msg.prop1}"]
             },
             "port": {
               "description": "Port to forward msg to",
@@ -917,11 +919,13 @@
           "properties": {
             "host": {
               "description": "Hostname or address of the server to send OSC to",
-              "type": "string"
+              "type": "string",
+              "examples": ["127.0.0.1"]
             },
             "_host": {
               "description": "Template for the hostname or address of the server to forward message to",
-              "type": "string"
+              "type": "string",
+              "examples": ["${msg.prop1}"]
             },
             "port": {
               "description": "Port to send OSC to",
@@ -1602,7 +1606,7 @@
           "type": "string"
         },
         "params": {
-          "description": "Host trigger params",
+          "description": "Sender trigger params",
           "type": "object",
           "properties": {
             "address": {
