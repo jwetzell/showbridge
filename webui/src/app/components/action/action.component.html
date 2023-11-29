@@ -38,7 +38,7 @@
         <div class="flex flex-col items-center justify-center">
           <mat-icon class="text-gray-400 scale-150">arrow_right</mat-icon>
         </div>
-        <div *ngFor="let subAction of subActions; let i = index">
+        <div *ngFor="let subAction of subActions; let i = index" class="mt-2">
           <app-action
             [action]="subAction"
             [path]="this.path + '/actions/' + i"
