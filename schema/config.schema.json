@@ -350,6 +350,7 @@
           "type": "object",
           "properties": {
             "_key": {
+              "title": "key",
               "description": "key of the variable to store ran through templating",
               "type": "string"
             },
@@ -358,6 +359,7 @@
               "type": "string"
             },
             "_value": {
+              "title": "value",
               "description": "value of the variable to store ran through templating",
               "type": "string"
             },
@@ -406,6 +408,7 @@
               "examples": ["room1, room2"]
             },
             "_rooms": {
+              "title": "rooms",
               "description": "array of rooms to template and then send the message to",
               "type": "array",
               "items": {
@@ -452,6 +455,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -480,6 +484,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -522,6 +527,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -564,6 +570,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -606,6 +613,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -648,6 +656,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -683,6 +692,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -718,6 +728,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -753,6 +764,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -774,6 +786,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -795,6 +808,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -816,6 +830,7 @@
                   "type": "string"
                 },
                 "_port": {
+                  "title": "port",
                   "description": "JS template of the MIDI port to send on",
                   "type": "string"
                 },
@@ -865,6 +880,7 @@
               "examples": ["127.0.0.1"]
             },
             "_host": {
+              "title": "host",
               "description": "Template for the hostname or address of the server to forward message to",
               "type": "string",
               "examples": ["${msg.prop1}"]
@@ -877,6 +893,7 @@
               "examples": ["8000"]
             },
             "_port": {
+              "title": "port",
               "description": "Template for the port to forward msg to",
               "type": "string"
             },
@@ -923,6 +940,7 @@
               "examples": ["127.0.0.1"]
             },
             "_host": {
+              "title": "host",
               "description": "Template for the hostname or address of the server to forward message to",
               "type": "string",
               "examples": ["${msg.prop1}"]
@@ -935,6 +953,7 @@
               "examples": ["8000"]
             },
             "_port": {
+              "title": "port",
               "description": "Template for the port to send on",
               "type": "string",
               "examples": ["${msg.prop1}"]
@@ -945,6 +964,7 @@
               "enum": ["udp", "tcp"]
             },
             "_address": {
+              "title": "address",
               "description": "JS template of the OSC address. Will have access to the msg object to subsitute in properties of the message that triggered this action",
               "type": "string",
               "examples": ["${msg.prop1}"]
@@ -955,6 +975,7 @@
               "examples": ["/osc/address"]
             },
             "_args": {
+              "title": "args",
               "description": "Array of args. Strings will be ran through the templating engine same as the _address param",
               "type": "array",
               "examples": ["${msg.prop1}, ${msg.prop2}"]
@@ -1005,6 +1026,7 @@
                   "examples": ["127.0.0.1"]
                 },
                 "_host": {
+                  "title": "host",
                   "description": "Template for the hostname or address of the server to forward message to",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1017,6 +1039,7 @@
                   "examples": ["8000"]
                 },
                 "_port": {
+                  "title": "port",
                   "description": "Template for the port to send msg on",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1042,6 +1065,7 @@
                   "examples": ["127.0.0.1"]
                 },
                 "_host": {
+                  "title": "host",
                   "description": "Template for the hostname or address of the server to forward message to",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1054,6 +1078,7 @@
                   "examples": ["8000"]
                 },
                 "_port": {
+                  "title": "port",
                   "description": "Template for the port to send msg on",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1077,6 +1102,7 @@
                   "examples": ["127.0.0.1"]
                 },
                 "_host": {
+                  "title": "host",
                   "description": "Template for the hostname or address of the server to forward message to",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1089,11 +1115,13 @@
                   "examples": ["8000"]
                 },
                 "_port": {
+                  "title": "port",
                   "description": "Template for the port to send msg on",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
                 },
                 "_string": {
+                  "title": "string",
                   "description": "string to send ran through templating engine",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1144,6 +1172,7 @@
                   "examples": ["127.0.0.1"]
                 },
                 "_host": {
+                  "title": "host",
                   "description": "Template for the hostname or address of the server to forward message to",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1156,6 +1185,7 @@
                   "examples": ["8000"]
                 },
                 "_port": {
+                  "title": "port",
                   "description": "Template for the port to send msg on",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1186,6 +1216,7 @@
                   "examples": ["127.0.0.1"]
                 },
                 "_host": {
+                  "title": "host",
                   "description": "Template for the hostname or address of the server to forward message to",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1198,6 +1229,7 @@
                   "examples": ["8000"]
                 },
                 "_port": {
+                  "title": "port",
                   "description": "Template for the port to send msg on",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1226,6 +1258,7 @@
                   "examples": ["127.0.0.1"]
                 },
                 "_host": {
+                  "title": "host",
                   "description": "Template for the hostname or address of the server to forward message to",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1238,6 +1271,7 @@
                   "examples": ["8000"]
                 },
                 "_port": {
+                  "title": "port",
                   "description": "Template for the port to send msg on",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1248,6 +1282,7 @@
                   "default": true
                 },
                 "_string": {
+                  "title": "string",
                   "description": "string to send ran through templating engine",
                   "type": "string",
                   "examples": ["${msg.prop1}"]
@@ -1291,6 +1326,7 @@
           "type": "object",
           "properties": {
             "_command": {
+              "title": "command",
               "description": "JS literal template of the shell command to run",
               "type": "string",
               "examples": ["${msg.prop1}"]
@@ -1336,6 +1372,7 @@
               "enum": ["get", "post", "put", "delete", "patch", "GET", "POST", "PUT", "DELETE", "PATCH"]
             },
             "_url": {
+              "title": "url",
               "description": "JS literal template of the url. Will have access to the properties of the incoming message that triggered this action",
               "type": "string",
               "examples": ["${msg.prop1}"]
@@ -1351,6 +1388,7 @@
               "examples": ["application/json"]
             },
             "_body": {
+              "title": "body",
               "description": "JS literal template of the body. Will have access to the properties of the incoming message that triggered this action",
               "type": "string",
               "examples": ["${msg.prop1}"]
@@ -1473,6 +1511,7 @@
           "type": "object",
           "properties": {
             "_topic": {
+              "title": "topic",
               "description": "the templated MQTT topic to publish the message to",
               "type": "string",
               "examples": ["${msg.prop1}"]
@@ -1483,6 +1522,7 @@
               "examples": ["topic/1"]
             },
             "_payload": {
+              "title": "payload",
               "description": "the templated payload of the mqtt message",
               "type": "string",
               "examples": ["${msg.prop1}"]
