@@ -5,6 +5,8 @@ on:
       - main
     paths:
       - 'webui/**'
+      - 'schema/**'
+      - 'sample/config/default.json'
 jobs:
   build-webui:
     runs-on: ubuntu-latest
@@ -24,6 +26,12 @@ jobs:
 
       - run: npm run build
         working-directory: ./webui
+
+      - name: copy default config
+        run: cp sample/config/default.json ./webui/dist/webui/config.json
+
+      - name: copy schema
+        run: cp schema/config.schema.json ./webui/dist/webui/config.schema.json
 
       - name: Publish demo webui
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
