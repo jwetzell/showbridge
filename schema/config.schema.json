@@ -1946,7 +1946,7 @@
     },
     "TriggerRegex": {
       "title": "Regex",
-      "description": "This trigger will match the incoming message properties to the regex patterns",
+      "description": "This trigger will match the incoming message properties to the regex patterns 1:1",
       "type": "object",
       "properties": {
         "type": {
