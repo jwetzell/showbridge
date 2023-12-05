@@ -82,7 +82,7 @@ export class AppComponent {
         if (this.currentlyShownConfigState) {
           this.configService.setCurrentlyLiveConfigState(this.currentlyShownConfigState);
 
-          // NOTE(jwetzell): check for a updated HTTP port
+          // NOTE(jwetzell): check for an updated HTTP port
           const newHttpPort = get(this.currentlyShownConfigState.config, 'http.params.port');
 
           if (newHttpPort && newHttpPort !== parseInt(location.port)) {
@@ -96,7 +96,7 @@ export class AppComponent {
           });
 
           configAppliedSnackBar.afterOpened().subscribe((value) => {
-            // NOTE(jwetzell): reload right away if not HTTP port change
+            // NOTE(jwetzell): reload right away if HTTP port didn't change
             if (!this.shouldRedirect) {
               this.eventService.reload();
             }
