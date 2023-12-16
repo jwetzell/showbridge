@@ -573,3 +573,9 @@ app.on('activate', () => {
     createMainWindow();
   }
 });
+
+app.on('second-instance', () => {
+  if (mainWin) {
+    mainWin.show();
+  }
+});
