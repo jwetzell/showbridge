@@ -560,6 +560,7 @@ if (!lock) {
 
 app.on('will-quit', () => {
   console.log('app: will quit');
+  shutdown();
 });
 
 app.on('window-all-closed', () => {
