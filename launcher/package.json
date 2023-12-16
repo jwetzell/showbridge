@@ -68,6 +68,10 @@
           ]
         }
       ],
+      "extendInfo": {
+        "LSBackgroundOnly": 1,
+        "LSUIElement": 1
+      },
       "hardenedRuntime": true,
       "notarize": {
         "teamId": "JHA7H7P56J"

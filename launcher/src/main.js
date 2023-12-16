@@ -560,6 +560,7 @@ if (!lock) {
 
 app.on('will-quit', () => {
   console.log('app: will quit');
+  shutdown();
 });
 
 app.on('window-all-closed', () => {
@@ -570,5 +571,11 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createMainWindow();
+  }
+});
+
+app.on('second-instance', () => {
+  if (mainWin) {
+    mainWin.show();
   }
 });
