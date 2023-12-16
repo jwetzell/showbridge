@@ -1,7 +1,7 @@
 {
   "name": "@showbridge/launcher",
   "description": "Desktop app to launch and configure showbridge",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "main": "src/main.js",
   "license": "MIT",
   "private": true,
@@ -32,7 +32,7 @@
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.2.0",
     "respawn": "^2.6.0",
-    "@showbridge/cli": "0.4.14",
+    "@showbridge/cli": "0.4.15",
     "tail": "^2.2.6",
     "xterm": "^5.3.0",
     "xterm-addon-fit": "^0.8.0"
