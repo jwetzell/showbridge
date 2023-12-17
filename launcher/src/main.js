@@ -2,7 +2,7 @@
 // NOTE(jwetzell): HEAVY inspiration from https://github.com/bitfocus/companion/launcher
 
 const path = require('path');
-const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell, crashReporter } = require('electron');
 const Tail = require('tail').Tail;
 const { readJSONSync, existsSync, moveSync, writeJSONSync, readdirSync, mkdirSync } = require('fs-extra');
 const respawn = require('respawn');
@@ -11,7 +11,6 @@ const defaultConfig = require('@showbridge/cli/sample/config/default.json');
 const defaultVars = require('@showbridge/cli/sample/vars/default.json');
 
 const rootPath = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
-
 let restartProcess = true;
 
 let showbridgeProcess;
@@ -23,6 +22,10 @@ const backupDir = path.join(configDir, 'backups');
 const configFilePath = path.join(configDir, 'config.json');
 const varsFilePath = path.join(configDir, 'vars.json');
 const logsDir = path.join(configDir, 'logs');
+
+app.setPath('crashDumps', path.join(configDir, 'crashes'));
+crashReporter.start({ uploadToServer: false });
+
 const showbridgeLogStream = fileStreamRotator.getStream({
   filename: path.join(logsDir, 'showbridge-%DATE%'),
   extension: '.log',
