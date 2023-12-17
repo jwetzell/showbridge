@@ -4,7 +4,16 @@
 const path = require('path');
 const { app, BrowserWindow, dialog, ipcMain, Tray, Menu, MenuItem, shell, crashReporter } = require('electron');
 const Tail = require('tail').Tail;
-const { readJSONSync, existsSync, moveSync, writeJSONSync, readdirSync, mkdirSync } = require('fs-extra');
+const {
+  readJSONSync,
+  existsSync,
+  moveSync,
+  writeJSONSync,
+  readdirSync,
+  mkdirSync,
+  ensureDirSync,
+  copySync,
+} = require('fs-extra');
 const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
 const defaultConfig = require('@showbridge/cli/sample/config/default.json');
@@ -172,19 +181,33 @@ function createTray() {
   tray.setContextMenu(menu);
 }
 
-function writeConfigToDisk(filePath, configObj) {
-  // TODO(jwetzell): add error handling
-  if (existsSync(filePath)) {
-    console.log('app: backing up current config');
+function backup() {
+  const now = Date.now();
+  const filesToBackup = ['config.json', 'vars.json'];
+  console.debug(`app: backup started @ ${now.toString()}`);
+
+  const currentBackupDir = path.join(backupDir, now.toString());
+  filesToBackup.forEach((filename) => {
+    const fileToBackup = path.join(configDir, filename);
+    console.debug(`app: backing up ${filename}`);
     try {
-      moveSync(filePath, path.join(backupDir, `${path.basename(filePath).slice(0, -5)}.${Date.now()}.json`), {
-        overwrite: true,
-      });
+      if (existsSync(fileToBackup)) {
+        ensureDirSync(currentBackupDir);
+        copySync(fileToBackup, path.join(currentBackupDir, filename), { preserveTimestamps: true });
+      } else {
+        console.debug('app: file does not exist - excluding from backup');
+      }
     } catch (error) {
+      console.error(`app: backup error`);
+      console.error(error);
       dialog.showErrorBox('Error', `Problem backing up config ${error}`);
     }
-  }
+  });
+}
 
+function writeConfigToDisk(filePath, configObj) {
+  // TODO(jwetzell): add error handling
+  backup();
   try {
     console.log('app: saving new config');
     writeJSONSync(filePath, configObj, {
@@ -235,25 +258,27 @@ function reloadConfigFromDisk(filePath) {
 }
 
 // TODO(jwetzell): add ability to load backup JSON files from UI
-function getConfigBackupList() {
-  if (configDir) {
-    const files = readdirSync(configDir).filter((file) => file.startsWith('config.json.'));
-    const configBackups = files.map((fileName) => {
-      let configBackupDate;
-      const fileNameParts = fileName.split('.');
-      if (fileNameParts.length === 4) {
+function getBackups() {
+  if (backupDir) {
+    const backupTimestamps = readdirSync(backupDir)
+      .map((folder) => {
         try {
-          configBackupDate = parseInt(fileNameParts[2], 10);
+          return Number.parseInt(folder, 10);
         } catch (error) {
-          console.error('app: config file not formatted normally');
+          return undefined;
         }
-      }
+      })
+      .filter((folder) => folder !== undefined);
+
+    const backups = backupTimestamps.map((timestamp) => {
+      const backupPath = path.join(backupDir, timestamp.toString());
       return {
-        filePath: path.join(configDir, fileName),
-        timestamp: configBackupDate,
+        timestamp,
+        files: readdirSync(backupPath),
+        path: backupPath,
       };
     });
-    return configBackups;
+    return backups;
   }
   return [];
 }
@@ -506,10 +531,10 @@ if (!lock) {
       dialog.showErrorBox('Error', error);
     }
 
-    ipcMain.handle('getConfigBackups', () => {
-      console.log('app: get config backups called');
-      const configBackups = getConfigBackupList();
-      return configBackups;
+    ipcMain.handle('getBackups', () => {
+      console.log('app: get backups called');
+      const backups = getBackups();
+      return backups;
     });
 
     // NOTE(jwetzell) load config file from drag/drop
@@ -541,6 +566,7 @@ if (!lock) {
 
     ipcMain.on('showLogs', () => {
       showLogWindow();
+      getBackups();
     });
 
     ipcMain.on('logWinLoaded', () => {
