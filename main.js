@@ -268,4 +268,12 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
     logger.info('app: shutting down router');
     router.stop();
   });
+
+  if (isChildProcess) {
+    // NOTE(jwetzell): this seems to detect the parent process disappearing
+    process.on('disconnect', () => {
+      logger.info('app: parent process exited');
+      router.stop();
+    });
+  }
 });
