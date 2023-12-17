@@ -19,6 +19,7 @@ let mainWin;
 let logWin;
 let tray;
 const configDir = path.join(app.getPath('appData'), '/showbridge/');
+const backupDir = path.join(configDir, 'backups');
 const configFilePath = path.join(configDir, 'config.json');
 const varsFilePath = path.join(configDir, 'vars.json');
 const logsDir = path.join(configDir, 'logs');
@@ -173,7 +174,7 @@ function writeConfigToDisk(filePath, configObj) {
   if (existsSync(filePath)) {
     console.log('app: backing up current config');
     try {
-      moveSync(filePath, `${filePath}.${Date.now()}.bak`, {
+      moveSync(filePath, path.join(backupDir, `${path.basename(filePath).slice(0, -5)}.${Date.now()}.json`), {
         overwrite: true,
       });
     } catch (error) {
@@ -335,6 +336,11 @@ if (!lock) {
   if (!existsSync(configDir)) {
     mkdirSync(configDir);
   }
+
+  if (!existsSync(backupDir)) {
+    mkdirSync(backupDir);
+  }
+
   console.log(`app: config file exists: ${existsSync(configFilePath)}`);
 
   console.log(`app: ${app.isPackaged ? 'is' : 'is not'} packaged: `);
