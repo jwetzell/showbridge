@@ -17,7 +17,7 @@ changelog:
         - schema
     - title: CLI ⌨️
       labels:
-        - main
+        - cli
     - title: Web UI 🌐
       labels:
         - webui
