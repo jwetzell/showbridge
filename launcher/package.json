@@ -26,6 +26,7 @@
     "build:mac": "electron-builder -m",
     "build:win": "electron-builder -w",
     "build:all": "electron-builder -mwl",
+    "prerelease": "npm run tailwind",
     "release": "electron-builder"
   },
   "dependencies": {
