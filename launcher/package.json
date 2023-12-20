@@ -50,7 +50,6 @@
     "appId": "showbridge.jwetzell.com",
     "artifactName": "showbridge.${os}-${arch}.v${version}.${ext}",
     "icon": "./src/assets/images/icon512x512.png",
-    "beforePack": "./electron_bundle.js",
     "directories": {
       "output": "./dist/electron-output/"
     },
@@ -104,10 +103,6 @@
       "publish": [
         "github"
       ]
-    },
-    "extraResources": {
-      "from": "./dist/showbridge",
-      "to": "./dist/showbridge"
     }
   }
 }
