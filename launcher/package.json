@@ -26,7 +26,6 @@
     "build:mac": "electron-builder -m",
     "build:win": "electron-builder -w",
     "build:all": "electron-builder -mwl",
-    "prerelease": "npm run tailwind",
     "release": "electron-builder"
   },
   "dependencies": {
@@ -51,6 +50,8 @@
     "appId": "showbridge.jwetzell.com",
     "artifactName": "showbridge.${os}-${arch}.v${version}.${ext}",
     "icon": "./src/assets/images/icon512x512.png",
+    "beforePack": "./electron_bundle.js",
+    "npmRebuild": false,
     "directories": {
       "output": "./dist/electron-output/"
     },
