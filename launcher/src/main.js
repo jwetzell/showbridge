@@ -335,15 +335,10 @@ function getShowbridgeLocation(isPackaged) {
     return null;
   }
 
-  let showbridgePath = null;
-
   if (!isPackaged) {
-    showbridgePath = '../main.js';
-  } else {
-    showbridgePath = './dist/showbridge/index.js';
+    return path.join(rootPath, '../main.js');
   }
-
-  return path.join(rootPath, showbridgePath);
+  return require.resolve('@showbridge/cli');
 }
 
 const lock = app.requestSingleInstanceLock();

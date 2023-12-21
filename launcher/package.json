@@ -1,7 +1,7 @@
 {
   "name": "@showbridge/launcher",
   "description": "Desktop app to launch and configure showbridge",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "main": "src/main.js",
   "license": "MIT",
   "private": true,
@@ -29,7 +29,7 @@
     "release": "electron-builder"
   },
   "dependencies": {
-    "@showbridge/cli": "0.4.16",
+    "@showbridge/cli": "0.4.17",
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.2.0",
     "respawn": "^2.6.0",
@@ -39,10 +39,8 @@
   },
   "devDependencies": {
     "@electron/notarize": "^2.2.0",
-    "@vercel/ncc": "^0.38.1",
     "electron": "^28.0.0",
     "electron-builder": "^24.9.1",
-    "node-gyp": "^10.0.1",
     "tailwindcss": "^3.3.6"
   },
   "build": {
@@ -51,6 +49,7 @@
     "artifactName": "showbridge.${os}-${arch}.v${version}.${ext}",
     "icon": "./src/assets/images/icon512x512.png",
     "beforePack": "./electron_bundle.js",
+    "npmRebuild": false,
     "directories": {
       "output": "./dist/electron-output/"
     },
@@ -104,10 +103,6 @@
       "publish": [
         "github"
       ]
-    },
-    "extraResources": {
-      "from": "./dist/showbridge",
-      "to": "./dist/showbridge"
     }
   }
 }

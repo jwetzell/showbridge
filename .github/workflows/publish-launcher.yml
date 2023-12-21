@@ -17,7 +17,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - run: sudo apt-get install -y libasound2-dev
-      
+
       - name: Install launcher Node.js Dependencies
         run: npm ci
         working-directory: './launcher'
@@ -33,9 +33,6 @@ jobs:
           node-version: 20
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
-
-      - name: Install main Node.js Dependencies
-        run: npm ci
 
       - name: Install launcher Node.js Dependencies
         run: npm ci
@@ -57,9 +54,6 @@ jobs:
           node-version: 20
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
-
-      - name: Install main Node.js Dependencies
-        run: npm ci
 
       - name: Install launcher Node.js Dependencies
         run: npm ci
