@@ -16,7 +16,7 @@ let serverReady = false;
 const app = express();
 // NOTE(jwetzell): load socket.io admin-ui on /ui
 app.use('/ui', express.static(path.join(__dirname, '../node_modules/@socket.io/admin-ui/ui/dist')));
-app.get('/ready', (req, res, next) => {
+app.get('/ready', (req, res) => {
   res.statusCode = serverReady ? 200 : 503;
   res.send();
 });
