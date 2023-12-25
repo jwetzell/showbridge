@@ -5,6 +5,8 @@ on:
       - 'main'
     paths:
       - 'cloud/**'
+    tags:
+      - 'cloud/v*'
 jobs:
   build-cloud-docker:
     runs-on: ubuntu-latest
@@ -17,10 +19,20 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Setup Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            jwetzell/showbridge-cloud
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true
           context: ./cloud/
           file: ./cloud/Dockerfile
-          tags: jwetzell/showbridge-cloud:main
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
