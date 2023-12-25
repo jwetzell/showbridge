@@ -64,6 +64,7 @@
                 "enabled": true
               }
             ],
+            "subTriggers": [],
             "enabled": true
           }
         ],
@@ -179,9 +180,9 @@
   },
   "cloud": {
     "params": {
-      "url": "",
+      "url": "https://cloud-dev.showbridge.io",
       "rooms": [
-        "example-room"
+        "dev"
       ]
     }
   }
