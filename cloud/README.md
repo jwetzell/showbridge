@@ -22,3 +22,8 @@ add and configure a `.env` file if you would like to provide any of the environm
 - `ADMIN_UI_PASSWORD` (optional): Password for the admin ui
 - `REDIS_URL` (optional): redis client url for socket.io redis-streams adapter if no url is provided then socket.io starts up as a solo instance
 - `DISCORD_WEBHOOK_URL`(optional): discord webhook url to send some status messages to
+
+
+## Info
+- admin ui available at `/ui`
+- server ready endpoint at `/ready` return 200 when server is up and running, 503 while starting up for use in things like k8s readinessProbe
