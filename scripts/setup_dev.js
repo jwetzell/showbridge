@@ -6,7 +6,11 @@ const libraries = [
   {
     libraryPath: '../lib',
     linkPaths: ['../', '../launcher'],
-  }
+  },
+  {
+    libraryPath: '../',
+    linkPaths: ['../launcher'],
+  },
 ];
 
 libraries.forEach((library) => {
