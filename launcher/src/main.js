@@ -233,9 +233,12 @@ function backup() {
   });
 }
 
-function writeConfigToDisk(filePath, configObj) {
+function writeJSONToDisk(filePath, configObj, skipBackup = false) {
   // TODO(jwetzell): add error handling
-  backup();
+  if (!skipBackup) {
+    backup();
+  }
+
   try {
     console.log('app: saving new config');
     writeJSONSync(filePath, configObj, {
@@ -398,12 +401,12 @@ if (!lock) {
 
   if (!existsSync(configFilePath)) {
     console.log('app: populating config.json with default config');
-    writeConfigToDisk(configFilePath, defaultConfig);
+    writeJSONToDisk(configFilePath, defaultConfig, true);
   }
 
   if (!existsSync(varsFilePath)) {
     console.log('app: populating vars.json with default config');
-    writeConfigToDisk(varsFilePath, defaultVars);
+    writeJSONToDisk(varsFilePath, defaultVars, true);
   }
 
   app.whenReady().then(() => {
@@ -459,7 +462,7 @@ if (!lock) {
                   })
                   .then((response) => {
                     if (response.response === 0) {
-                      writeConfigToDisk(configFilePath, message.data);
+                      writeJSONToDisk(configFilePath, message.data);
                       reloadConfigFromDisk(configFilePath);
                     }
                   });
@@ -471,7 +474,7 @@ if (!lock) {
                 break;
               case 'configUpdated':
                 // TODO(jwetzell): add rollback
-                writeConfigToDisk(configFilePath, message.data);
+                writeJSONToDisk(configFilePath, message.data);
                 break;
               case 'varsUpdated':
                 writeVarsToDisk(varsFilePath, message.data);
