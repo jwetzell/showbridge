@@ -145,6 +145,28 @@ function createMainWindow() {
   mainWin.loadFile(path.join(__dirname, 'html/main.html'));
 }
 
+function reloadMIDI() {
+  if (showbridgeProcess && showbridgeProcess.child) {
+    dialog
+      .showMessageBox(mainWin, {
+        type: 'question',
+        buttons: ['Reload', 'Cancel'],
+        defaultId: 0,
+        title: 'Reload MIDI',
+        message:
+          'This will reload the MIDI protocol which, while quick, will drop any messages received while reloading.\n\nWould you like to reload?',
+      })
+      .then((response) => {
+        if (response.response === 0) {
+          showbridgeProcess.child.send({
+            eventName: 'reloadProtocols',
+            data: ['midi'],
+          });
+        }
+      });
+  }
+}
+
 function createTray() {
   tray = new Tray(path.join(__dirname, 'assets/images/icon16x16.png'));
   tray.setIgnoreDoubleClickEvents(true);
@@ -170,6 +192,12 @@ function createTray() {
       click: () => {
         shell.openPath(configDir);
       },
+    })
+  );
+  menu.append(
+    new MenuItem({
+      label: 'Reload MIDI',
+      click: reloadMIDI,
     })
   );
   menu.append(
