@@ -1,4 +1,4 @@
-name: Publish cloud docker image for main
+name: Publish cloud docker image
 on:
   push:
     branches:
