@@ -64,17 +64,17 @@ if (process.env.REDIS_URL) {
 
 io.of('/').adapter.on('join-room', (room, id) => {
   logger.debug(`cloud: socket ${id} joined room ${room}`);
-  // sendToDiscord(`socket ${id} joined room ${room}`);
+  sendToDiscord('join', `socket ${id} joined room ${room}`);
 });
 
 io.of('/').adapter.on('leave-room', (room, id) => {
   logger.debug(`cloud: socket ${id} left room ${room}`);
-  // sendToDiscord(`socket ${id} joined room ${room}`);
+  sendToDiscord('leave', `socket ${id} left room ${room}`);
 });
 
 io.on('connection', (socket) => {
   logger.info(`cloud: socket ${socket.id} connected`);
-  sendToDiscord(`socket ${socket.id} connected`);
+  sendToDiscord('connect', `socket ${socket.id} connected`);
   socket.on('join', (rooms) => {
     if (rooms) {
       if (Array.isArray(rooms)) {
@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    sendToDiscord(`socket ${socket.id} disconnected`);
+    sendToDiscord('disconnect', `socket ${socket.id} disconnected`);
     logger.info(`cloud: socket ${socket.id} disconnected`);
   });
 });
