@@ -224,7 +224,7 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
         router.stop();
         break;
       case 'reloadProtocols':
-        if (message.data & Array.isArray(message.data)) {
+        if (message.data && Array.isArray(message.data)) {
           message.data.forEach((protocolType) => {
             router.reloadProtocol(protocolType);
           });
