@@ -223,6 +223,13 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
         logger.info('app: process received a request to tear down');
         router.stop();
         break;
+      case 'reloadProtocols':
+        if (message.data & Array.isArray(message.data)) {
+          message.data.forEach((protocolType) => {
+            router.reloadProtocol(protocolType);
+          });
+        }
+        break;
       default:
         logger.error(`app: unhandled process event type = ${message.eventName}`);
         break;
