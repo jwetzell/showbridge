@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { has, isEqual, noop } from 'lodash-es';
 import { BehaviorSubject, Observable, distinctUntilChanged, filter } from 'rxjs';
 import { CopyObject } from '../models/copy-object.model';
@@ -11,6 +12,8 @@ export class CopyService {
   // TODO(jwetzell): actually implement copy history
   history: CopyObject[] = [];
 
+  clipboardAccessible: boolean = true;
+
   private currentCopyObject: BehaviorSubject<CopyObject | undefined> = new BehaviorSubject<CopyObject | undefined>(
     undefined
   );
@@ -20,7 +23,10 @@ export class CopyService {
     filter((val) => !!val)
   );
 
-  constructor(private schemaService: SchemaService) {}
+  constructor(
+    private schemaService: SchemaService,
+    private snackBar: MatSnackBar
+  ) {}
 
   setCopyObject(copyObject: CopyObject) {
     this.currentCopyObject.next(copyObject);
@@ -34,32 +40,45 @@ export class CopyService {
     return this.currentCopyObject$.pipe(filter((val) => val?.type === type));
   }
 
-  checkClipboard() {
-    navigator.clipboard.readText().then((value) => {
-      if (value) {
-        try {
-          const parsedClipboard = JSON.parse(value);
-          if (!has(parsedClipboard, 'type')) {
-            return;
-          }
+  setSnippet(jsonSnippet: any) {
+    // NOTE(jwetzell): this seems like a regular JSON object
+    const type = this.schemaService.getObjectTypeFromObject(jsonSnippet);
+    if (type !== undefined) {
+      this.currentCopyObject.next({
+        type,
+        object: jsonSnippet,
+      });
+    } else {
+      this.snackBar.open('Snippet not recognized!', 'Dismiss', {
+        duration: 3000,
+      });
+    }
+  }
 
-          if (has(parsedClipboard, 'object')) {
-            // NOTE(jwetzell): already a copy or template object
-            this.currentCopyObject.next(parsedClipboard);
-          } else if (has(parsedClipboard, 'enabled')) {
-            // NOTE(jwetzell): this seems like a regular JSON object
-            const type = this.schemaService.getObjectTypeFromObject(parsedClipboard);
-            if (type !== undefined) {
-              this.currentCopyObject.next({
-                type,
-                object: parsedClipboard,
-              });
+  checkClipboard() {
+    navigator.clipboard
+      .readText()
+      .then((value) => {
+        if (value) {
+          try {
+            const parsedClipboard = JSON.parse(value);
+            if (!has(parsedClipboard, 'type')) {
+              return;
             }
+
+            if (has(parsedClipboard, 'object')) {
+              // NOTE(jwetzell): already a copy or template object
+              this.currentCopyObject.next(parsedClipboard);
+            } else if (has(parsedClipboard, 'enabled')) {
+              this.setSnippet(parsedClipboard);
+            }
+          } catch (error) {
+            noop();
           }
-        } catch (error) {
-          noop();
         }
-      }
-    });
+      })
+      .catch((reason) => {
+        this.clipboardAccessible = false;
+      });
   }
 }

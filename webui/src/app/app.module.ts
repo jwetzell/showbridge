@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimeagoModule } from 'ngx-timeago';
 import { AppComponent } from './app.component';
 import { ActionComponent } from './components/action/action.component';
+import { ClipboardDialogComponent } from './components/clipboard-dialog/clipboard-dialog.component';
 import { ConfigComponent } from './components/config/config.component';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
@@ -40,6 +41,7 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     ParamsFormComponent,
     ImportConfigComponent,
     MIDIInfoDialogComponent,
+    ClipboardDialogComponent,
     PatchEditorComponent,
   ],
   imports: [
