@@ -7,7 +7,6 @@ const Tail = require('tail').Tail;
 const {
   readJSONSync,
   existsSync,
-  moveSync,
   writeJSONSync,
   readdirSync,
   mkdirSync,
