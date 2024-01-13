@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { get } from 'lodash-es';
 import { filter } from 'rxjs';
+import { ClipboardDialogComponent } from './components/clipboard-dialog/clipboard-dialog.component';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
 import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
 import { PatchEditorComponent } from './components/patch-editor/patch-editor.component';
@@ -147,6 +148,13 @@ export class AppComponent {
         duration: 3000,
       });
     }
+  }
+
+  editClipboard() {
+    this.dialog.open(ClipboardDialogComponent, {
+      width: '50%',
+      height: '50%',
+    });
   }
 
   // NOTE(jwetzell): load configstate from revisions history
