@@ -233,42 +233,19 @@ function backup() {
   });
 }
 
-function writeJSONToDisk(filePath, configObj, skipBackup = false) {
+function writeJSONToDisk(filePath, obj, skipBackup = false) {
   // TODO(jwetzell): add error handling
   if (!skipBackup) {
     backup();
   }
 
   try {
-    console.log('app: saving new config');
-    writeJSONSync(filePath, configObj, {
+    console.debug(`app: saving file - ${filePath}`);
+    writeJSONSync(filePath, obj, {
       spaces: 2,
     });
   } catch (error) {
-    dialog.showErrorBox('Error', `Problem saving up config ${error}`);
-  }
-}
-
-function writeVarsToDisk(filePath, varsObj) {
-  // TODO(jwetzell): add error handling
-  if (existsSync(filePath)) {
-    console.log('app: backing up current vars');
-    try {
-      moveSync(filePath, `${filePath}.bak`, {
-        overwrite: true,
-      });
-    } catch (error) {
-      dialog.showErrorBox('Error', `Problem backing up vars ${error}`);
-    }
-  }
-
-  try {
-    console.log('app: saving new vars');
-    writeJSONSync(filePath, varsObj, {
-      spaces: 2,
-    });
-  } catch (error) {
-    dialog.showErrorBox('Error', `Problem saving vars ${error}`);
+    dialog.showErrorBox('Error', `Problem saving file - ${error}`);
   }
 }
 
@@ -405,7 +382,7 @@ if (!lock) {
   }
 
   if (!existsSync(varsFilePath)) {
-    console.log('app: populating vars.json with default config');
+    console.log('app: populating vars.json with default vars');
     writeJSONToDisk(varsFilePath, defaultVars, true);
   }
 
@@ -477,7 +454,7 @@ if (!lock) {
                 writeJSONToDisk(configFilePath, message.data);
                 break;
               case 'varsUpdated':
-                writeVarsToDisk(varsFilePath, message.data);
+                writeJSONToDisk(varsFilePath, message.data);
                 break;
               case 'messageIn':
                 if (routerLogStream) {
