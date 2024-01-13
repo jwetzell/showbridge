@@ -234,7 +234,6 @@ function backup() {
 }
 
 function writeJSONToDisk(filePath, obj, skipBackup = false) {
-  // TODO(jwetzell): add error handling
   if (!skipBackup) {
     backup();
   }
@@ -450,7 +449,6 @@ if (!lock) {
                 dialog.showErrorBox('Error', message.data.map((error) => error.message).join('\n'));
                 break;
               case 'configUpdated':
-                // TODO(jwetzell): add rollback
                 writeJSONToDisk(configFilePath, message.data);
                 break;
               case 'varsUpdated':
