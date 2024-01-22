@@ -37,7 +37,6 @@ if (process.env.DISCORD_WEBHOOK_URL) {
 }
 
 function sendToDiscord(event, data) {
-  console.log(discordEvents);
   if (discord) {
     if (discordEvents.includes(event)) {
       discord.send(data).catch(logger.error);
