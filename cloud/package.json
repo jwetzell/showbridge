@@ -1,6 +1,6 @@
 {
   "name": "@showbridge/cloud",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Cloud server for proxying messages between showbridge instances",
   "main": "src/main.js",
   "bin": {
