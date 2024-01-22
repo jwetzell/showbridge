@@ -106,9 +106,10 @@
           </div>
           <ng-container *ngIf="paramInfo.canTemplate || paramInfo.isTemplated">
             <!-- TODO(jwetzell): better display of template toggle -->
-            <span class="ml-1 text-gray-300"
-              >_<input type="checkbox" [checked]="baseKeyIsTemplated(key)" (change)="toggleTemplate(key)"
-            /></span>
+            <span class="ml-1 text-gray-300">
+              _
+              <input type="checkbox" [checked]="baseKeyIsTemplated(key)" (change)="toggleTemplate(key)" />
+            </span>
           </ng-container>
         </ng-container>
       </div>
