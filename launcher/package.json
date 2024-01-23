@@ -29,7 +29,7 @@
     "release": "electron-builder"
   },
   "dependencies": {
-    "@showbridge/cli": "0.4.22",
+    "@showbridge/cli": "0.4.23",
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.2.0",
     "respawn": "^2.6.0",
