@@ -51,6 +51,31 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "demo": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all",
+              "buildOptimizer": true,
+              "aot": true,
+              "deleteOutputPath": true,
+              "vendorChunk": true,
+              "commonChunk": true,
+              "optimization": true,
+              "index": {
+                "input": "src/index.demo.html",
+                "output": "index.html"
+              }
             }
           },
           "defaultConfiguration": "production"

@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "ng build --configuration production",
+    "build:demo": "ng build --configuration demo",
     "dev": "ng build --watch --configuration development --stats-json",
     "prepack": "npm run build"
   },

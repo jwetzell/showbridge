@@ -11,20 +11,21 @@ jobs:
   build-webui:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      - name: Install Node.js dependencies
+      - name: install Node.js dependencies
         run: npm ci
         working-directory: ./webui
 
-      - run: npm run build
+      - name: build demo site
+        run: npm run build:demo
         working-directory: ./webui
 
       - name: copy default config
