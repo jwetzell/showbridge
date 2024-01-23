@@ -39,7 +39,7 @@
   "license": "GPL-3.0-only",
   "dependencies": {
     "commander": "^11.0.0",
-    "@showbridge/lib": "0.4.13"
+    "@showbridge/lib": "0.4.14"
   },
   "devDependencies": {
     "eslint": "^8.51.0",
