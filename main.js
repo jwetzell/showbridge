@@ -201,7 +201,6 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
       case 'updateConfig':
         try {
           router.config = new Config(message.data, schema);
-          router.reload();
           logger.info('app: new config applied router reload');
         } catch (errors) {
           logger.error('app: errors loading config');
