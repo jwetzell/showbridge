@@ -57,7 +57,7 @@ Simple protocol router _/s_
    
 ## CLI Usage
 ```
-Usage: showbridge [options]
+Usage: @showbridge/cli [options]
 
 Simple protocol router /s
 
@@ -72,6 +72,7 @@ Options:
   --disable-transform <transform-type...>  transform type(s) to disable
   -l, --log-level <level>                  log level (choices: "trace", "debug", "info", "warn", "error", "fatal", default: "info")
   -h, --help                               display help for command
+
 ```
 
 ## Config File
