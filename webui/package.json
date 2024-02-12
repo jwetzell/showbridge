@@ -43,7 +43,7 @@
     "@angular/compiler-cli": "17.1.2",
     "@types/lodash-es": "^4.17.12",
     "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.33",
+    "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2"
   }
