@@ -6,8 +6,10 @@
   </ng-container>
 
   <ng-container *ngIf="patchable">
+    <label class="mr-2 text-gray-300" for="patch-select">patch:</label>
     <ng-container *ngIf="patchType === 'midi'">
       <select
+        id="patch-select"
         *ngIf="midiPatches"
         (change)="applyPatch($event)"
         [(ngModel)]="patchIndex"
@@ -19,6 +21,7 @@
 
     <ng-container *ngIf="patchType === 'network'">
       <select
+        id="patch-select"
         *ngIf="networkPatches"
         (change)="applyPatch($event)"
         [(ngModel)]="patchIndex"
