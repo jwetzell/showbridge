@@ -63,7 +63,7 @@
     <form [formGroup]="formGroup" class="h-full">
       <div class="m-2">
         <app-params-form
-          [parentSchema]="schema"
+          [paramsSchema]="schema?.properties?.params"
           [data]="trigger.params"
           (updated)="paramsUpdated($event)"></app-params-form>
         <div class="flex items-center justify-center">

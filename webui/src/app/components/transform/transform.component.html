@@ -23,7 +23,7 @@
     <form [formGroup]="formGroup" class="h-full">
       <div class="m-2">
         <app-params-form
-          [parentSchema]="schema"
+          [paramsSchema]="schema?.properties?.params"
           [data]="transform.params"
           [patchable]="true"
           (updated)="paramsUpdated($event)"></app-params-form>

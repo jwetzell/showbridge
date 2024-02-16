@@ -13,7 +13,7 @@
               {{ schema?.title }}
             </div>
             <app-params-form
-              [parentSchema]="schema"
+              [paramsSchema]="schema?.properties?.params"
               [data]="protocol.params"
               (updated)="protocolParamsUpdated($event)"></app-params-form>
           </div>
