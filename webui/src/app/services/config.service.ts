@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { cloneDeep, isEqual, orderBy } from 'lodash-es';
+import { cloneDeep, debounce, isEqual, orderBy } from 'lodash-es';
 import { BehaviorSubject } from 'rxjs';
 import { ConfigFile, ConfigState } from '../models/config.models';
 import { SchemaService } from './schema.service';
@@ -73,8 +73,7 @@ export class ConfigService {
   }
 
   pushConfigState(config: ConfigFile, isLive: boolean = false, isCurrent: boolean = false): ConfigState {
-    // TODO(jwetzell): find a way to debounce configState updates
-
+    console.log('config: pushing config state');
     // NOTE(jwetzell): mark any configState that has the same config as live as well
     if (isLive) {
       this.configStateHistory.forEach((configState) => {
@@ -96,10 +95,14 @@ export class ConfigService {
       isLive,
       isCurrent,
     };
-    this.configStateHistory.push(configState);
-    this.configStateHistory = orderBy(this.configStateHistory, ['timestamp'], ['desc']);
+    this.pushConfigStateHistory(configState);
     return cloneDeep(configState);
   }
+
+  pushConfigStateHistory = debounce((configState: ConfigState) => {
+    this.configStateHistory.push(configState);
+    this.configStateHistory = orderBy(this.configStateHistory, ['timestamp'], ['desc']);
+  }, 1000);
 
   validate(config: ConfigFile) {
     return this.schemaService.validate(config);
