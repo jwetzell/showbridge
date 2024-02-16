@@ -14,7 +14,11 @@ program.version(packageInfo.version);
 program.description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);
 program.option('-v, --vars <path>', 'location of file containing vars', undefined);
-program.option('-w, --webui <path>', 'location of webui html to serve', path.join(__dirname, 'webui/dist/webui'));
+program.option(
+  '-w, --webui <path>',
+  'location of webui html to serve',
+  path.join(__dirname, 'node_modules/@showbridge/webui/dist/webui')
+);
 program.option('--disable-action <action-type...>', 'action type(s) to disable');
 program.option('--disable-protocol <protocol-type...>', 'protocol type(s) to disable');
 program.option('--disable-trigger <trigger-type...>', 'trigger type(s) to disable');
