@@ -1,7 +1,7 @@
 {
   "name": "@showbridge/launcher",
   "description": "Desktop app to launch and configure showbridge",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "src/main.js",
   "license": "MIT",
   "private": true,
@@ -29,7 +29,8 @@
     "release": "electron-builder"
   },
   "dependencies": {
-    "@showbridge/cli": "0.4.24",
+    "@showbridge/cli": "0.5.1",
+    "@showbridge/webui": "0.4.0",
     "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.2.0",
     "respawn": "^2.6.0",
