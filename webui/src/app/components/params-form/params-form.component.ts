@@ -14,12 +14,11 @@ import { VarsService } from 'src/app/services/vars.service';
   styleUrls: ['./params-form.component.css'],
 })
 export class ParamsFormComponent implements OnInit {
-  @Input() parentSchema?: SomeJSONSchema;
+  @Input() paramsSchema?: SomeJSONSchema;
   @Input() data?: any;
   @Input() patchable: boolean = false;
   @Output() updated: EventEmitter<any> = new EventEmitter<any>();
 
-  paramsSchema?: SomeJSONSchema;
   paramsFormInfo?: ParamsFormInfo;
 
   formGroupSubscription?: Subscription;
@@ -44,7 +43,6 @@ export class ParamsFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.paramsSchema = this.parentSchema?.properties?.params;
     if (this.paramsSchema) {
       if (this.paramsSchema.properties) {
         this.paramsFormInfo = this.schemaService.getFormInfoFromParamsSchema(this.paramsSchema);
@@ -70,7 +68,7 @@ export class ParamsFormComponent implements OnInit {
         this.paramsSchema = this.paramsOptions[matchingSchemaIndex].schema;
       } else {
         console.error('params is not a singular or oneOf');
-        console.error(this.parentSchema);
+        console.error(this.paramsSchema);
       }
     }
 
@@ -213,8 +211,7 @@ export class ParamsFormComponent implements OnInit {
   }
 
   toggleTemplate(key: string) {
-
-    const baseKey = key.startsWith('_') ? key.substring(1): key;
+    const baseKey = key.startsWith('_') ? key.substring(1) : key;
 
     if (this.keysToTemplate.has(baseKey)) {
       this.keysToTemplate.delete(baseKey);
@@ -229,8 +226,8 @@ export class ParamsFormComponent implements OnInit {
       } else {
         this.paramsFormInfo.formGroup.controls[`_${key}`].setValue(value);
       }
-    }else{
-      this.formUpdated()
+    } else {
+      this.formUpdated();
     }
   }
 
@@ -272,5 +269,17 @@ export class ParamsFormComponent implements OnInit {
       }
     }
     this.formUpdated();
+  }
+
+  getParamValue(key: string) {
+    if (this.paramsSchema) {
+      const params = this.schemaService.cleanParams(
+        this.paramsSchema,
+        this.paramsFormInfo?.formGroup.value,
+        this.keysToTemplate
+      );
+      console.log(params);
+      return params[key];
+    }
   }
 }
