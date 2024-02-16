@@ -17,7 +17,7 @@ program.option('-v, --vars <path>', 'location of file containing vars', undefine
 program.option(
   '-w, --webui <path>',
   'location of webui html to serve',
-  path.join(__dirname, 'node_modules/@showbridge/webui/dist/webui')
+  path.dirname(require.resolve('@showbridge/webui/dist/webui/index.html'))
 );
 program.option('--disable-action <action-type...>', 'action type(s) to disable');
 program.option('--disable-protocol <protocol-type...>', 'protocol type(s) to disable');
