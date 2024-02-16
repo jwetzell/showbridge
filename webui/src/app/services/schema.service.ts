@@ -452,6 +452,9 @@ export class SchemaService {
                 noop();
               }
               break;
+            case 'string':
+              noop();
+              break;
             default:
               console.log(`schema-service: unhandled param schema type: ${paramSchema.type}`);
               break;
