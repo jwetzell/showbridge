@@ -25,13 +25,13 @@ export class ArrayFormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.paramFormControl && this.paramInfo?.schema) {
-      this.arrayValue = this.schemaService.parseValueToArray(this.paramFormControl.value, this.paramInfo.schema);
+      console.log(this.paramFormControl.value);
+      if (!Array.isArray(this.paramFormControl.value)) {
+        this.arrayValue = this.schemaService.parseStringToArray(this.paramFormControl.value, this.paramInfo.schema);
+      } else {
+        this.arrayValue = this.paramFormControl.value;
+      }
 
-      // this.paramFormControl.valueChanges.subscribe((value: any) => {
-      //   if (this.paramSchema) {
-      //     this.arrayValue = this.schemaService.parseValueToArray(value, this.paramSchema);
-      //   }
-      // });
       if (this.paramInfo.schema.minItems) {
         this.minItems = parseInt(this.paramInfo?.schema.minItems);
       }
@@ -40,7 +40,6 @@ export class ArrayFormComponent implements OnInit {
         this.maxItems = parseInt(this.paramInfo?.schema.maxItems);
       }
     }
-
     this.ensureArrayMin();
   }
 
@@ -54,22 +53,18 @@ export class ArrayFormComponent implements OnInit {
   deleteItem(index: number) {
     this.arrayValue?.splice(index, 1);
     this.valueUpdated();
-
-    // this.updated.emit(true);
-    // this.snackBar.open('Trigger Removed', 'Dismiss', {
-    //   duration: 3000,
-    // });
   }
 
   ensureArrayMin() {
     if (this.arrayValue === undefined) {
       this.arrayValue = [];
     }
-    console.log();
-    for (let i = 0; i <= this.minItems - this.arrayValue.length; i += 1) {
-      this.arrayValue.push(null);
+    if (this.arrayValue.length < this.minItems) {
+      for (let i = 0; i <= this.minItems - this.arrayValue.length; i += 1) {
+        this.arrayValue.push(null);
+      }
+      this.valueUpdated();
     }
-    this.valueUpdated();
   }
 
   arrayIsMaxed() {
@@ -93,7 +88,9 @@ export class ArrayFormComponent implements OnInit {
   }
 
   valueUpdated() {
-    this.paramFormControl.setValue(this.arrayValue);
+    if (this.arrayValue) {
+      this.paramFormControl.setValue(this.schemaService.cleanArray(this.arrayValue, this.paramInfo?.schema?.items));
+    }
   }
 
   trackByIndex(index: number, obj: any): any {

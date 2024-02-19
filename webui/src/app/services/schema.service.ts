@@ -360,6 +360,23 @@ export class SchemaService {
     return paramsFormInfo;
   }
 
+  cleanArray(values: any[], itemSchema: SomeJSONSchema) {
+    if (Array.isArray(values)) {
+      switch (itemSchema.type) {
+        case 'number':
+          return values.map(Number.parseFloat);
+        case 'integer':
+          return values.map(Number.parseInt);
+        case 'string':
+          return values;
+        default:
+          console.error(`schema-service: unsupported array type ${itemSchema.type}`);
+          return values;
+      }
+    }
+    return [];
+  }
+
   cleanParams(paramsSchema: SomeJSONSchema, params: any, keysToTemplate: Set<string>): any {
     Object.keys(params).forEach((paramKey) => {
       if (paramsSchema.properties[paramKey]) {
@@ -413,7 +430,7 @@ export class SchemaService {
             case 'array':
               if (!Array.isArray(params[paramKey])) {
                 const paramValue = params[paramKey];
-                params[paramKey] = this.parseValueToArray(paramValue, paramSchema);
+                params[paramKey] = this.parseStringToArray(paramValue, paramSchema);
               }
               break;
             case 'object':
@@ -436,7 +453,7 @@ export class SchemaService {
     return params;
   }
 
-  parseValueToArray(value: any, schema: SomeJSONSchema): any[] | undefined {
+  parseStringToArray(value: any, schema: SomeJSONSchema): any[] | undefined {
     if (!Array.isArray(value)) {
       const paramValue = value;
       if (paramValue === undefined || paramValue.trim().length === 0) {
