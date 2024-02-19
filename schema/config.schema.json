@@ -405,7 +405,7 @@
               "items": {
                 "type": "string"
               },
-              "examples": ["room1, room2"]
+              "examples": ["room1"]
             },
             "_rooms": {
               "title": "rooms",
@@ -414,7 +414,7 @@
               "items": {
                 "type": "string"
               },
-              "examples": ["${msg.prop1}, ${msg.prop2}"]
+              "examples": ["${msg.prop1}"]
             }
           }
         },
@@ -469,7 +469,7 @@
                   },
                   "minItems": 2,
                   "maxItems": 3,
-                  "examples": ["144, 60, 127"]
+                  "examples": ["144"]
                 }
               },
               "required": ["bytes"],
@@ -978,12 +978,18 @@
               "title": "args",
               "description": "Array of args. Strings will be ran through the templating engine same as the _address param",
               "type": "array",
-              "examples": ["${msg.prop1}, ${msg.prop2}"]
+              "items": {
+                "type": "string"
+              },
+              "examples": ["${msg.prop1}"]
             },
             "args": {
               "description": "Hardcoded array of OSC args",
               "type": "array",
-              "examples": ["1, 2, 3, 4"]
+              "items": {
+                "type": "string"
+              },
+              "examples": ["arg1"]
             }
           },
           "required": ["protocol"],
@@ -1050,7 +1056,7 @@
                   "items": {
                     "type": "number"
                   },
-                  "examples": ["0, 1, 2"]
+                  "examples": ["215"]
                 }
               },
               "required": ["bytes"],
@@ -1243,7 +1249,7 @@
                   "description": "hex string to be sent as bytes (i.e 68 69, 6869, 0x68 0x69, 0x68,0x69)",
                   "type": "string",
                   "pattern": "^[0-9A-Fa-f\\sx,]+$",
-                  "examples": ["0x42, 0x56, 0x77"]
+                  "examples": ["0x42"]
                 }
               },
               "required": ["slip", "hex"],
@@ -1697,7 +1703,7 @@
                 "minimum": 0,
                 "maximum": 255
               },
-              "examples": ["10, 22, 65, 76"]
+              "examples": ["10"]
             }
           },
           "required": ["bytes"],
@@ -1966,7 +1972,7 @@
               "items": {
                 "type": "string"
               },
-              "examples": [".*, test"]
+              "examples": [".*"]
             },
             "properties": {
               "description": "an array of properties on the msg to match the regex patterns to 1:1",
@@ -1974,7 +1980,7 @@
               "items": {
                 "type": "string"
               },
-              "examples": ["prop1, prop2"]
+              "examples": ["prop1"]
             }
           },
           "required": ["patterns", "properties"],
@@ -2042,7 +2048,7 @@
               },
               "minItems": 2,
               "maxItems": 2,
-              "examples": ["0, 127"]
+              "examples": ["0"]
             },
             "outRange": {
               "description": "the range of the outgoing numbers i.e [1,10]",
@@ -2052,7 +2058,7 @@
               },
               "minItems": 2,
               "maxItems": 2,
-              "examples": ["0, 100"]
+              "examples": ["0"]
             }
           },
           "required": ["property", "inRange", "outRange"],
