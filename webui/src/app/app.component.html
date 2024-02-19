@@ -54,19 +54,19 @@
           >
         </button>
       </mat-menu>
-      <button
-        mat-icon-button
-        matTooltip="Apply Config"
-        *ngIf="configService.pendingConfigIsValid; else configError"
-        (click)="applyConfig()">
-        <mat-icon>save</mat-icon>
-      </button>
-      <ng-template #configError>
-        <div class="flex items-center justify-center text-red-500 hover:cursor-pointer" matTooltip="Config Errors">
-          <mat-icon>error</mat-icon>
-        </div>
-      </ng-template>
     </ng-container>
+    <button
+      mat-icon-button
+      matTooltip="Apply Config"
+      *ngIf="configService.pendingConfigIsValid; else configError"
+      (click)="applyConfig()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <ng-template #configError>
+      <div class="flex items-center justify-center text-red-500 hover:cursor-pointer" matTooltip="Config Errors">
+        <mat-icon>error</mat-icon>
+      </div>
+    </ng-template>
   </mat-toolbar>
   <div class="mt-16 -z-50">
     <ng-container
