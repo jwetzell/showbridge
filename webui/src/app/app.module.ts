@@ -21,7 +21,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimeagoModule } from 'ngx-timeago';
 import { AppComponent } from './app.component';
 import { ActionComponent } from './components/action/action.component';
-import { ArrayFormComponent } from './components/array-form/array-form.component';
 import { ClipboardDialogComponent } from './components/clipboard-dialog/clipboard-dialog.component';
 import { ConfigComponent } from './components/config/config.component';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
@@ -40,7 +39,6 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     TriggerComponent,
     ProtocolComponent,
     ParamsFormComponent,
-    ArrayFormComponent,
     ImportConfigComponent,
     MIDIInfoDialogComponent,
     ClipboardDialogComponent,
