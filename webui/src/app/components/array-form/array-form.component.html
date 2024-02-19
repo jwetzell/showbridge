@@ -1,0 +1,37 @@
+<ng-container *ngIf="paramFormControl && paramInfo?.schema">
+  <ng-container *ngIf="arrayValue">
+    <div cdkDropList (cdkDropListDropped)="dropItem($event)" [cdkDropListData]="arrayValue">
+      <!-- <div *ngIf="arrayValue.length === 0" class="w-full h-6"></div> -->
+      <div cdkDrag *ngFor="let item of arrayValue; let i = index; trackBy: trackByIndex" class="flex my-2 mr-2">
+        <label for="item-{{ i }}" class="text-gray-300 mr-1">{{ i }}:</label>
+        <ng-container *ngIf="paramInfo?.schema.items.type === 'object'; else nonObjectItem">
+          <div>Object arrays not supported</div>
+        </ng-container>
+        <ng-template #nonObjectItem>
+          <input
+            id="item-{{ i }}"
+            [(ngModel)]="arrayValue[i]"
+            [placeholder]="paramInfo?.placeholder"
+            [ngModelOptions]="{ standalone: true }"
+            (input)="valueUpdated()" />
+        </ng-template>
+        <div class="flex items-center justify-center" *ngIf="i >= minItems">
+          <mat-icon (click)="deleteItem(i)" class="scale-150 ml-1">remove</mat-icon>
+        </div>
+        <!-- <app-trigger
+            [trigger]="subTrigger"
+            [path]="this.path + '/subTriggers/' + i"
+            [showActions]="true"
+            (delete)="deleteSubTrigger(i)"
+            (updated)="subTriggerUpdated()"></app-trigger> -->
+      </div>
+    </div>
+  </ng-container>
+  <div
+    class="w-full bg-gray-400 flex items-center justify-center rounded-sm"
+    (click)="addItem()"
+    matTooltip="Add Item"
+    *ngIf="!arrayIsMaxed()">
+    <mat-icon class="scale-150">add</mat-icon>
+  </div>
+</ng-container>
