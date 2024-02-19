@@ -56,7 +56,6 @@
         <app-params-form
           [paramsSchema]="schema?.properties?.params"
           [data]="action.params"
-          [patchable]="true"
           (updated)="paramsUpdated($event)"></app-params-form>
         <div class="flex items-center justify-center">
           <div class="flex-auto">
