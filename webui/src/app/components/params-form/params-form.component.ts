@@ -16,9 +16,9 @@ import { VarsService } from 'src/app/services/vars.service';
 export class ParamsFormComponent implements OnInit {
   @Input() paramsSchema?: SomeJSONSchema;
   @Input() data?: any;
-  @Input() patchable: boolean = false;
   @Output() updated: EventEmitter<any> = new EventEmitter<any>();
 
+  patchable: boolean = false;
   paramsFormInfo?: ParamsFormInfo;
 
   formGroupSubscription?: Subscription;
@@ -120,6 +120,7 @@ export class ParamsFormComponent implements OnInit {
       });
 
       if (has(this.paramsFormInfo.paramsInfo, 'port')) {
+        this.patchable = true;
         if (has(this.paramsFormInfo.paramsInfo, 'host')) {
           this.patchType = 'network';
         } else {
