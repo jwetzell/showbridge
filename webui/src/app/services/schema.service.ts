@@ -413,36 +413,7 @@ export class SchemaService {
             case 'array':
               if (!Array.isArray(params[paramKey])) {
                 const paramValue = params[paramKey];
-                if (paramValue === undefined || paramValue.trim().length === 0) {
-                  params[paramKey] = [];
-                } else {
-                  if (paramSchema?.items?.type) {
-                    if (paramSchema?.items?.type === 'integer') {
-                      params[paramKey] = paramValue
-                        .split(',')
-                        .map((part: string) => part.trim())
-                        .map((item: any) => parseInt(item));
-                    } else if (paramSchema?.items?.type === 'number') {
-                      params[paramKey] = paramValue
-                        .split(',')
-                        .map((part: string) => part.trim())
-                        .map((item: any) => parseFloat(item));
-                    } else if (paramSchema?.items?.type === 'string') {
-                      params[paramKey] = paramValue.split(',').map((part: string) => part.trim());
-                    } else {
-                      console.error(`schema-service: unhandled array schema type: ${paramSchema?.items?.type}`);
-                    }
-                  } else if (paramSchema['$ref'] === '#/definitions/ActionList') {
-                    try {
-                      params[paramKey] = JSON.parse(`[${paramValue}]`);
-                    } catch (error) {
-                      noop();
-                    }
-                  } else {
-                    // NOTE(jwetzell): default to comma-separated strings
-                    params[paramKey] = paramValue.split(',').map((part: string) => part.trim());
-                  }
-                }
+                params[paramKey] = this.parseValueToArray(paramValue, paramSchema);
               }
               break;
             case 'object':
@@ -463,6 +434,43 @@ export class SchemaService {
       }
     });
     return params;
+  }
+
+  parseValueToArray(value: any, schema: SomeJSONSchema): any[] | undefined {
+    if (!Array.isArray(value)) {
+      const paramValue = value;
+      if (paramValue === undefined || paramValue.trim().length === 0) {
+        value = [];
+      } else {
+        if (schema.items?.type) {
+          if (schema.items?.type === 'integer') {
+            return paramValue
+              .split(',')
+              .map((part: string) => part.trim())
+              .map((item: any) => parseInt(item));
+          } else if (schema.items?.type === 'number') {
+            return paramValue
+              .split(',')
+              .map((part: string) => part.trim())
+              .map((item: any) => parseFloat(item));
+          } else if (schema.items?.type === 'string') {
+            return paramValue.split(',').map((part: string) => part.trim());
+          } else {
+            console.error(`schema-service: unhandled array schema type: ${schema.items?.type}`);
+          }
+        } else if (schema['$ref'] === '#/definitions/ActionList') {
+          try {
+            return JSON.parse(`[${paramValue}]`);
+          } catch (error) {
+            noop();
+          }
+        } else {
+          // NOTE(jwetzell): default to comma-separated strings
+          return paramValue.split(',').map((part: string) => part.trim());
+        }
+      }
+    }
+    return undefined;
   }
 
   getObjectTypeFromObject(object: any) {
