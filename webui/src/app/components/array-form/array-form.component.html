@@ -2,8 +2,11 @@
   <ng-container *ngIf="arrayValue">
     <div cdkDropList (cdkDropListDropped)="dropItem($event)" [cdkDropListData]="arrayValue">
       <!-- <div *ngIf="arrayValue.length === 0" class="w-full h-6"></div> -->
-      <div cdkDrag *ngFor="let item of arrayValue; let i = index; trackBy: trackByIndex" class="flex my-2 mr-2">
-        <label for="item-{{ i }}" class="text-gray-300 mr-1">{{ i }}:</label>
+      <div
+        cdkDrag
+        *ngFor="let item of arrayValue; let i = index; trackBy: trackByIndex"
+        class="flex my-2 mr-2 items-center">
+        <label for="item-{{ i }}" class="text-gray-300 mr-1 hover:cursor-move" cdkDragHandle>{{ i }}:</label>
         <ng-container *ngIf="paramInfo?.schema.items.type === 'object'; else nonObjectItem">
           <app-params-form
             [paramsSchema]="paramInfo?.schema.items"
@@ -13,13 +16,17 @@
         <ng-template #nonObjectItem>
           <input
             id="item-{{ i }}"
+            class="pl-1"
             [(ngModel)]="arrayValue[i]"
             [placeholder]="paramInfo?.placeholder"
             [ngModelOptions]="{ standalone: true }"
             (input)="valueUpdated()" />
         </ng-template>
-        <div class="flex items-center justify-center" *ngIf="i >= minItems">
-          <mat-icon (click)="deleteItem(i)" class="scale-150 ml-1">remove</mat-icon>
+        <div
+          class="flex items-center justify-center hover:cursor-pointer bg-red-400 rounded-sm ml-1"
+          *ngIf="i >= minItems"
+          matTooltip="Remove">
+          <mat-icon (click)="deleteItem(i)">remove</mat-icon>
         </div>
         <!-- <app-trigger
             [trigger]="subTrigger"
@@ -31,10 +38,10 @@
     </div>
   </ng-container>
   <div
-    class="w-full bg-gray-400 flex items-center justify-center rounded-sm"
+    class="w-full bg-gray-400 flex items-center justify-center rounded-sm hover:cursor-pointer hover:bg-gray-300"
     (click)="addItem()"
     matTooltip="Add Item"
     *ngIf="!arrayIsMaxed()">
-    <mat-icon class="scale-150">add</mat-icon>
+    <mat-icon class="scale-100">add</mat-icon>
   </div>
 </ng-container>
