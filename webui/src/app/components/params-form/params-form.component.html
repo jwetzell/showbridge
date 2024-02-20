@@ -80,10 +80,13 @@
             </ng-container>
             <ng-container *ngSwitchCase="'array'">
               <!-- TODO(jwetzell): figure out how to display arrays-->
-              <input
+              <app-array-form
+                [paramFormControl]="paramsFormInfo.formGroup.get(paramInfo.key)"
+                [paramInfo]="paramInfo"></app-array-form>
+              <!-- <input
                 class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
                 [formControlName]="paramInfo.key"
-                [placeholder]="paramInfo.placeholder" />
+                [placeholder]="paramInfo.placeholder" /> -->
               <mat-icon class="text-gray-200" matTooltip="Comma separated list">data_array</mat-icon>
             </ng-container>
 
