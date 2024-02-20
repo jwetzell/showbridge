@@ -5,7 +5,10 @@
       <div cdkDrag *ngFor="let item of arrayValue; let i = index; trackBy: trackByIndex" class="flex my-2 mr-2">
         <label for="item-{{ i }}" class="text-gray-300 mr-1">{{ i }}:</label>
         <ng-container *ngIf="paramInfo?.schema.items.type === 'object'; else nonObjectItem">
-          <div>Object arrays not supported</div>
+          <app-params-form
+            [paramsSchema]="paramInfo?.schema.items"
+            [data]="item"
+            (updated)="updateItem(i, $event)"></app-params-form>
         </ng-container>
         <ng-template #nonObjectItem>
           <input

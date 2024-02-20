@@ -25,7 +25,6 @@ export class ArrayFormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.paramFormControl && this.paramInfo?.schema) {
-      console.log(this.paramFormControl.value);
       if (!Array.isArray(this.paramFormControl.value)) {
         this.arrayValue = this.schemaService.parseStringToArray(this.paramFormControl.value, this.paramInfo.schema);
       } else {
@@ -95,5 +94,13 @@ export class ArrayFormComponent implements OnInit {
 
   trackByIndex(index: number, obj: any): any {
     return index;
+  }
+
+  // NOTE(jwetzel): this is only needed for object item types
+  updateItem(index: number, value: any) {
+    if (this.arrayValue) {
+      this.arrayValue[index] = value;
+      this.valueUpdated();
+    }
   }
 }
