@@ -369,6 +369,8 @@ export class SchemaService {
           return values.map(Number.parseInt);
         case 'string':
           return values;
+        case 'object':
+          return values;
         default:
           console.error(`schema-service: unsupported array type ${itemSchema.type}`);
           return values;
