@@ -14,6 +14,7 @@
             (updated)="updateItem(i, $event)"></app-params-form>
         </ng-container>
         <ng-template #nonObjectItem>
+          <!-- TODO(jwetzell): add input validation using info from schema -->
           <input
             id="item-{{ i }}"
             class="pl-1"
