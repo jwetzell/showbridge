@@ -3,7 +3,7 @@
 const { Server } = require('socket.io');
 const { instrument } = require('@socket.io/admin-ui');
 const { createAdapter } = require('@socket.io/redis-streams-adapter');
-const { createClient } = require('redis');
+const { Redis } = require('ioredis');
 const bcrypt = require('bcrypt');
 const express = require('express');
 const { createServer } = require('http');
@@ -46,17 +46,18 @@ instrument(io, adminUIOptions);
 
 if (process.env.REDIS_URL) {
   logger.info('cloud: socket io server being started with redis');
-  const redisClient = createClient({ url: process.env.REDIS_URL });
-  redisClient
-    .connect()
-    .then(() => {
-      io.adapter(createAdapter(redisClient));
-      serverReady = true;
-    })
-    .catch((error) => {
-      logger.error('cloud: failed to connect to redis');
-      logger.error(error);
-    });
+  const redisClient = new Redis(process.env.REDIS_URL);
+
+  redisClient.on('connect', () => {
+    io.adapter(createAdapter(redisClient, { maxLen: 50000 }));
+    serverReady = true;
+    logger.info('cloud: connected to redis server');
+  });
+
+  redisClient.on('error', (error) => {
+    logger.error('cloud: failed to connect to redis');
+    logger.error(error);
+  });
 } else {
   logger.info('cloud: socket io server being started without redis');
   serverReady = true;
