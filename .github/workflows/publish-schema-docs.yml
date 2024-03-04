@@ -19,7 +19,7 @@ jobs:
       - run: generate-schema-doc --config expand_buttons=true schema/config.schema.json html/docs/schema/config/index.html
       - run: ls html/docs/schema/config
       - name: publish docs
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.FTP_USERNAME}}

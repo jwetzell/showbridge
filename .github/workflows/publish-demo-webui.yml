@@ -35,7 +35,7 @@ jobs:
         run: cp schema/config.schema.json ./webui/dist/webui/config.schema.json
 
       - name: Publish demo webui
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.DEMO_FTP_USERNAME}}
