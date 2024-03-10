@@ -208,7 +208,11 @@ export class ParamsFormComponent implements OnInit {
   }
 
   getParamInfo(key: string): ParamInfo | undefined {
-    return this.paramsFormInfo?.paramsInfo[key];
+    const paramInfo = this.paramsFormInfo?.paramsInfo[key];
+    if (paramInfo?.schema?.$ref === '#/definitions/ActionList') {
+      return undefined;
+    }
+    return paramInfo;
   }
 
   toggleTemplate(key: string) {
