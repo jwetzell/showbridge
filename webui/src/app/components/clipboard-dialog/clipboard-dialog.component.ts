@@ -25,7 +25,6 @@ export class ClipboardDialogComponent {
     return (control: AbstractControl): ValidationErrors | null => {
       try {
         const value = JSON.parse(control.value);
-        console.log(value);
         return null;
       } catch (error) {
         console.log(error);
