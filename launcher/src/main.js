@@ -263,7 +263,6 @@ function reloadConfigFromDisk(filePath) {
   }
 }
 
-// TODO(jwetzell): add ability to load backup JSON files from UI
 function getBackups() {
   if (backupDir) {
     const backupTimestamps = readdirSync(backupDir)
