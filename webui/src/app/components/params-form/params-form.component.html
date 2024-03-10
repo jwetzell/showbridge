@@ -35,7 +35,7 @@
   <form [formGroup]="paramsFormInfo.formGroup">
     <div class="flex flex-col">
       <div *ngFor="let key of paramKeys()" class="flex items-center m-1">
-        <ng-container *ngIf="getParamInfo(key) as paramInfo">
+        <ng-container *ngIf="showParam(key) && getParamInfo(key) as paramInfo">
           <label class="mr-2 text-gray-300"> {{ paramInfo.display }}: </label>
 
           <ng-container [ngSwitch]="paramInfo.type">
