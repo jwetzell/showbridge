@@ -11,10 +11,6 @@ const libraries = [
     libraryPath: '../',
     linkPaths: ['../launcher'],
   },
-  {
-    libraryPath: '../webui',
-    linkPaths: ['../'],
-  },
 ];
 
 libraries.forEach((library) => {
