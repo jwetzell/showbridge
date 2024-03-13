@@ -247,7 +247,11 @@
           "type": "array",
           "items": {
             "type": "object",
-            "oneOf": [{ "$ref": "#/definitions/TriggerRegex" }, { "$ref": "#/definitions/TriggerAny" }]
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerMQTTTopiic" },
+              { "$ref": "#/definitions/TriggerAny" }
+            ]
           }
         }
       },
@@ -1621,6 +1625,47 @@
             }
           },
           "required": ["address"],
+          "additionalProperties": false
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "subTriggers": {
+          "$ref": "#/definitions/TriggerList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+
+    "TriggerMQTTTopiic": {
+      "title": "MQTT Topic",
+      "description": "This trigger will match mqtt messages by topic",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "mqtt-topic"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "description": "MQTT topic trigger params",
+          "type": "object",
+          "properties": {
+            "topic": {
+              "description": "MQTT topic to match. Supports MQTT topic wildcard patterns +,#",
+              "type": "string",
+              "examples": ["topic/to/match"]
+            }
+          },
+          "required": ["topic"],
           "additionalProperties": false
         },
         "actions": {
