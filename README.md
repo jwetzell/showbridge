@@ -123,6 +123,8 @@ Each piece uses the params property to store its configurations as outlined belo
     - port: optional name of the MIDI device to match the incoming message to
     - channel: optional MIDI channel number 1-16 to match the incoming message to
     - program: optional program number 0-127 to match the incoming message to
+- **mqtt-topic**
+    - topic: the MQTT topic to match to incoming MQTT messages. Supports mqtt wildcards patterns like `+` and `#`.
 - **osc-address**
     - address: the OSC address to match to incoming OSC messages. Supports address patterns according to the OSC spec.
 - **regex**
