@@ -159,21 +159,38 @@
   },
   "mqtt": {
     "params": {
-      "broker": "",
+      "broker": "mqtt://hass.jwetzell.internal",
+      "username": "mqtt",
+      "password": "hass2019",
       "topics": [
         "#"
       ]
     },
     "triggers": [
       {
-        "type": "any",
+        "type": "mqtt-topic",
+        "params": {
+          "topic": "LivingRoomRelay/sensors/humidity"
+        },
         "actions": [
           {
             "type": "log",
             "transforms": [],
             "enabled": true
+          },
+          {
+            "type": "http",
+            "params": {
+              "method": "post",
+              "url": "https://discord.com/api/webhooks/1029831454894592081/litgtX5y64NDfxP1EO5_RJMtoPFM2UTBjVAZkn_BwO7eISvDP4Bu6G8PsP8CbpPfgjda",
+              "contentType": "application/json",
+              "_body": "{\"content\":\"${msg.payload}\"}"
+            },
+            "transforms": [],
+            "enabled": true
           }
         ],
+        "subTriggers": [],
         "enabled": true
       }
     ]
