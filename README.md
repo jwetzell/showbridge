@@ -143,7 +143,7 @@ Each piece uses the params property to store its configurations as outlined belo
     - host\*: address of the server to forward the message
     - protocol: udp or tcp
     - port\*: port (number) to forward the message to
-- **http**
+- **http-request**
     - method: HTTP method to use i.e GET, POST, DELETE, etc.
     - url\*: the URL to make the call to
     - contentType: the value to set the Content-Type header to

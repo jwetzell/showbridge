@@ -300,8 +300,9 @@
           { "$ref": "#/definitions/ActionUDPOutput" },
           { "$ref": "#/definitions/ActionTCPOutput" },
           { "$ref": "#/definitions/ActionShell" },
-          { "$ref": "#/definitions/ActionHTTP" },
+          { "$ref": "#/definitions/ActionHTTPRequest" },
           { "$ref": "#/definitions/ActionMQTTOutput" },
+          { "$ref": "#/definitions/ActionHTTPResponse" },
           { "$ref": "#/definitions/ActionCloudOutput" },
           { "$ref": "#/definitions/ActionDelay" },
           { "$ref": "#/definitions/ActionRandom" }
@@ -1357,14 +1358,14 @@
       "required": ["type", "enabled", "params"],
       "additionalProperties": false
     },
-    "ActionHTTP": {
+    "ActionHTTPRequest": {
       "title": "HTTP Request",
       "description": "This command will make the configured http call",
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "const": "http"
+          "const": "http-request"
         },
         "comment": {
           "type": "string"
@@ -1541,6 +1542,49 @@
               "description": "the static payload of the mqtt message",
               "type": "string",
               "examples": ["payload"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this action is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "params", "enabled"],
+      "additionalProperties": false
+    },
+
+    "ActionHTTPResponse": {
+      "title": "HTTP Response",
+      "description": "This action responds to the incoming http request",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "http-response"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "transforms": {
+          "$ref": "#/definitions/TransformList"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "_body": {
+              "title": "body",
+              "description": "the templated body of the HTTP response",
+              "type": "string",
+              "examples": ["<h1>${msg.originalURL}</h1>"]
+            },
+            "body": {
+              "title": "body",
+              "description": "the body of the HTTP response",
+              "type": "string",
+              "examples": ["<h1>Hello World!</h1>"]
             }
           },
           "additionalProperties": false
