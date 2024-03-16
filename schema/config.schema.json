@@ -300,7 +300,7 @@
           { "$ref": "#/definitions/ActionUDPOutput" },
           { "$ref": "#/definitions/ActionTCPOutput" },
           { "$ref": "#/definitions/ActionShell" },
-          { "$ref": "#/definitions/ActionHTTP" },
+          { "$ref": "#/definitions/ActionHTTPRequest" },
           { "$ref": "#/definitions/ActionMQTTOutput" },
           { "$ref": "#/definitions/ActionCloudOutput" },
           { "$ref": "#/definitions/ActionDelay" },
@@ -1357,14 +1357,14 @@
       "required": ["type", "enabled", "params"],
       "additionalProperties": false
     },
-    "ActionHTTP": {
+    "ActionHTTPRequest": {
       "title": "HTTP Request",
       "description": "This command will make the configured http call",
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "const": "http"
+          "const": "http-request"
         },
         "comment": {
           "type": "string"
