@@ -11,6 +11,7 @@ eslintPaths.forEach((path) => {
   });
 
   if (eslintProcess.error || eslintProcess.status > 0) {
+    console.log(eslintProcess.error);
     pathsWithErrors.push(path);
   }
 });
