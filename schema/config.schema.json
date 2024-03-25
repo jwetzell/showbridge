@@ -202,6 +202,7 @@
               { "$ref": "#/definitions/TriggerMIDINoteOff" },
               { "$ref": "#/definitions/TriggerMIDINoteOn" },
               { "$ref": "#/definitions/TriggerMIDIControlChange" },
+              { "$ref": "#/definitions/TriggerMIDIPitchBend" },
               { "$ref": "#/definitions/TriggerMIDIProgramChange" },
               { "$ref": "#/definitions/TriggerAny" }
             ]
@@ -1974,6 +1975,61 @@
             }
           },
           "additionalProperties": false
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "subTriggers": {
+          "$ref": "#/definitions/TriggerList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "TriggerMIDIPitchBend": {
+      "title": "MIDI Pitch Bend",
+      "description": "The trigger will match incoming MIDI pitch bend events",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "midi-pitch-bend"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "description": "MIDI pitch bend trigger params",
+          "type": "object",
+          "properties": {
+            "port": {
+              "description": "name of the MIDI port to match against incoming messages",
+              "type": "string"
+            },
+            "channel": {
+              "description": "channel value to match against incoming the messages",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 16,
+              "examples": ["1"]
+            },
+            "value": {
+              "description": "control value to match against the incoming message",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 16384,
+              "examples": ["9000"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
         },
         "subTriggers": {
           "$ref": "#/definitions/TriggerList"
