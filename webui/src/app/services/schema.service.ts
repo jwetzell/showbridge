@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import Ajv, { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
-import { noop } from 'lodash-es';
+import { noop, sortBy } from 'lodash-es';
 import { Action } from '../models/action.model';
 import { ConfigFile } from '../models/config.models';
 import { ObjectInfo, ParamsFormInfo } from '../models/form.model';
@@ -154,17 +154,20 @@ export class SchemaService {
     if (this.schema) {
       const definitions = this.schema.definitions;
       if (definitions) {
-        this.actionTypes = Object.keys(definitions)
-          .filter((definitionKey) => definitionKey.startsWith('Action'))
-          .map((definitionKey) => definitions[definitionKey])
-          .filter((definition) => definition.properties?.type?.const !== undefined)
-          .map((definition) => {
-            return {
-              name: definition['title'],
-              type: definition.properties?.type?.const,
-              schema: definition,
-            };
-          });
+        this.actionTypes = sortBy(
+          Object.keys(definitions)
+            .filter((definitionKey) => definitionKey.startsWith('Action'))
+            .map((definitionKey) => definitions[definitionKey])
+            .filter((definition) => definition.properties?.type?.const !== undefined)
+            .map((definition) => {
+              return {
+                name: definition['title'],
+                type: definition.properties?.type?.const,
+                schema: definition,
+              };
+            }),
+          ['name']
+        );
       }
     }
   }
@@ -173,17 +176,20 @@ export class SchemaService {
     if (this.schema) {
       const definitions = this.schema.definitions;
       if (definitions) {
-        this.transformTypes = Object.keys(definitions)
-          .filter((definitionKey) => definitionKey.startsWith('Transform'))
-          .map((definitionKey) => definitions[definitionKey])
-          .filter((definition) => definition.properties?.type?.const !== undefined)
-          .map((definition) => {
-            return {
-              name: definition['title'],
-              type: definition.properties?.type?.const,
-              schema: definition,
-            };
-          });
+        this.transformTypes = sortBy(
+          Object.keys(definitions)
+            .filter((definitionKey) => definitionKey.startsWith('Transform'))
+            .map((definitionKey) => definitions[definitionKey])
+            .filter((definition) => definition.properties?.type?.const !== undefined)
+            .map((definition) => {
+              return {
+                name: definition['title'],
+                type: definition.properties?.type?.const,
+                schema: definition,
+              };
+            }),
+          ['name']
+        );
       }
     }
   }
@@ -192,17 +198,20 @@ export class SchemaService {
     if (this.schema) {
       const definitions = this.schema.definitions;
       if (definitions) {
-        this.triggerTypes = Object.keys(definitions)
-          .filter((definitionKey) => definitionKey.startsWith('Trigger'))
-          .map((definitionKey) => definitions[definitionKey])
-          .filter((definition) => definition.properties?.type?.const !== undefined)
-          .map((definition) => {
-            return {
-              name: definition['title'],
-              type: definition.properties?.type?.const,
-              schema: definition,
-            };
-          });
+        this.triggerTypes = sortBy(
+          Object.keys(definitions)
+            .filter((definitionKey) => definitionKey.startsWith('Trigger'))
+            .map((definitionKey) => definitions[definitionKey])
+            .filter((definition) => definition.properties?.type?.const !== undefined)
+            .map((definition) => {
+              return {
+                name: definition['title'],
+                type: definition.properties?.type?.const,
+                schema: definition,
+              };
+            }),
+          ['name']
+        );
       }
     }
   }
