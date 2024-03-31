@@ -17,6 +17,8 @@ const respawn = require('respawn');
 const fileStreamRotator = require('file-stream-rotator');
 const defaultConfig = require('@showbridge/cli/sample/config/default.json');
 const defaultVars = require('@showbridge/cli/sample/vars/default.json');
+const cliInfo = require('@showbridge/cli/package.json');
+const launcherInfo = require('../package.json');
 
 const rootPath = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..');
 let restartProcess = true;
@@ -127,6 +129,25 @@ function showLogWindow() {
   }
 }
 
+function getVersions() {
+  return {
+    launcher: launcherInfo.version,
+    cli: launcherInfo.dependencies['@showbridge/cli'],
+    webui: cliInfo.dependencies['@showbridge/webui'],
+    lib: cliInfo.dependencies['@showbridge/lib'],
+  };
+}
+
+function showAboutWindow() {
+  const message = Object.entries(getVersions())
+    .map(([service, version]) => `${service}: ${version}`)
+    .join('\n');
+  dialog.showMessageBox(undefined, {
+    title: 'About',
+    message,
+  });
+}
+
 function createMainWindow() {
   mainWin = new BrowserWindow({
     width: 200,
@@ -173,10 +194,14 @@ function createTray() {
   const menu = new Menu();
   menu.append(
     new MenuItem({
+      label: 'About showbridge',
+      click: showAboutWindow,
+    })
+  );
+  menu.append(
+    new MenuItem({
       label: 'Show/Hide Window',
-      click: () => {
-        toggleWindow(mainWin);
-      },
+      click: showAboutWindow,
     })
   );
   menu.append(
