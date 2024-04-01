@@ -41,7 +41,7 @@
     "@electron/notarize": "^2.3.0",
     "electron": "29.1.5",
     "electron-builder": "^24.13.3",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.3"
   },
   "build": {
     "productName": "showbridge",
