@@ -25,6 +25,11 @@ jobs:
       - run: npm run release
         working-directory: ./launcher
 
+      - name: extract version
+        id: exract-version
+        run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
+        working-directory: ./launcher
+
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -32,7 +37,7 @@ jobs:
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./dist/electron-output/
-          server-dir: builds/@showbrige/launcher
+          server-dir: builds/@showbrige/launcher/${{steps.extract-version.outputs.launcher-version}}
           state-name: .linux-sync-state.json
           port: 21
           protocol: ftps
@@ -58,6 +63,11 @@ jobs:
       - run: npm run release
         working-directory: ./launcher
 
+      - name: extract version
+        id: exract-version
+        run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
+        working-directory: ./launcher
+
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -65,7 +75,7 @@ jobs:
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./dist/electron-output/
-          server-dir: builds/@showbrige/launcher
+          server-dir: builds/@showbrige/launcher/${{steps.extract-version.outputs.launcher-version}}
           state-name: .windows-sync-state.json
           port: 21
           protocol: ftps
@@ -96,6 +106,11 @@ jobs:
       - run: npm run release
         working-directory: ./launcher
 
+      - name: extract version
+        id: exract-version
+        run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
+        working-directory: ./launcher
+
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -103,7 +118,7 @@ jobs:
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./dist/electron-output/
-          server-dir: builds/@showbrige/launcher
+          server-dir: builds/@showbrige/launcher/${{steps.extract-version.outputs.launcher-version}}
           state-name: .macos-sync-state.json
           port: 21
           protocol: ftps
