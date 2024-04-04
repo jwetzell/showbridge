@@ -32,12 +32,11 @@ jobs:
 
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        working-directory: ./launcher
         with:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
-          local-dir: ./dist/electron-output/
+          local-dir: ./launcher/dist/electron-output/
           server-dir: builds/@showbrige/launcher/${{steps.extract-version.outputs.launcher-version}}
           state-name: .linux-sync-state.json
           port: 21
@@ -71,12 +70,11 @@ jobs:
 
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        working-directory: ./launcher
         with:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
-          local-dir: ./dist/electron-output/
+          local-dir: ./launcher/dist/electron-output/
           server-dir: builds/@showbrige/launcher/${{steps.extract-version.outputs.launcher-version}}
           state-name: .windows-sync-state.json
           port: 21
@@ -115,12 +113,11 @@ jobs:
 
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        working-directory: ./launcher
         with:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
-          local-dir: ./dist/electron-output/
+          local-dir: ./launcher/dist/electron-output/
           server-dir: builds/@showbrige/launcher/${{steps.extract-version.outputs.launcher-version}}
           state-name: .macos-sync-state.json
           port: 21
