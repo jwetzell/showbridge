@@ -32,6 +32,7 @@ jobs:
 
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        working-directory: ./launcher
         with:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.BUILDS_FTP_USERNAME}}
@@ -70,6 +71,7 @@ jobs:
 
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        working-directory: ./launcher
         with:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.BUILDS_FTP_USERNAME}}
@@ -113,6 +115,7 @@ jobs:
 
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        working-directory: ./launcher
         with:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.BUILDS_FTP_USERNAME}}
