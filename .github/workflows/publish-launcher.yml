@@ -37,7 +37,7 @@ jobs:
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./launcher/dist/electron-output/
-          server-dir: builds/@showbridge/launcher/${{steps.extract-version.outputs.launcher-version}}
+          server-dir: builds/@showbridge/launcher/${{steps.extract-version.outputs.launcher-version}}/
           state-name: .linux-sync-state.json
           port: 21
           protocol: ftps
@@ -75,7 +75,7 @@ jobs:
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./launcher/dist/electron-output/
-          server-dir: builds/@showbridge/launcher/${{steps.extract-version.outputs.launcher-version}}
+          server-dir: builds/@showbridge/launcher/${{steps.extract-version.outputs.launcher-version}}/
           state-name: .windows-sync-state.json
           port: 21
           protocol: ftps
@@ -118,7 +118,7 @@ jobs:
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./launcher/dist/electron-output/
-          server-dir: builds/@showbridge/launcher/${{steps.extract-version.outputs.launcher-version}}
+          server-dir: builds/@showbridge/launcher/${{steps.extract-version.outputs.launcher-version}}/
           state-name: .macos-sync-state.json
           port: 21
           protocol: ftps
