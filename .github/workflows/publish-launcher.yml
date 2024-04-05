@@ -68,6 +68,7 @@ jobs:
         id: extract-version
         run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
         working-directory: ./launcher
+        shell: bash
 
       - name: publish to ftp
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
