@@ -26,7 +26,7 @@ jobs:
         working-directory: ./launcher
 
       - name: extract version
-        id: exract-version
+        id: extract-version
         run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
         working-directory: ./launcher
 
@@ -37,7 +37,7 @@ jobs:
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./launcher/dist/electron-output/
-          server-dir: builds/@showbrige/launcher/${{steps.extract-version.outputs.launcher-version}}
+          server-dir: builds/@showbridge/launcher/${{steps.extract-version.outputs.launcher-version}}
           state-name: .linux-sync-state.json
           port: 21
           protocol: ftps
@@ -64,7 +64,7 @@ jobs:
         working-directory: ./launcher
 
       - name: extract version
-        id: exract-version
+        id: extract-version
         run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
         working-directory: ./launcher
 
@@ -75,7 +75,7 @@ jobs:
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./launcher/dist/electron-output/
-          server-dir: builds/@showbrige/launcher/${{steps.extract-version.outputs.launcher-version}}
+          server-dir: builds/@showbridge/launcher/${{steps.extract-version.outputs.launcher-version}}
           state-name: .windows-sync-state.json
           port: 21
           protocol: ftps
@@ -107,7 +107,7 @@ jobs:
         working-directory: ./launcher
 
       - name: extract version
-        id: exract-version
+        id: extract-version
         run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
         working-directory: ./launcher
 
@@ -118,7 +118,7 @@ jobs:
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./launcher/dist/electron-output/
-          server-dir: builds/@showbrige/launcher/${{steps.extract-version.outputs.launcher-version}}
+          server-dir: builds/@showbridge/launcher/${{steps.extract-version.outputs.launcher-version}}
           state-name: .macos-sync-state.json
           port: 21
           protocol: ftps
