@@ -45,6 +45,7 @@ jobs:
             .*/**
             *-unpacked/**
             mac*/**
+            builder-*.yml
 
   build-windows:
     runs-on: windows-latest
@@ -83,6 +84,7 @@ jobs:
             .*/**
             *-unpacked/**
             mac*/**
+            builder-*.yml
 
   build-macos:
     runs-on: macos-latest
@@ -126,3 +128,4 @@ jobs:
             .*/**
             *-unpacked/**
             mac*/**
+            builder-*.yml
