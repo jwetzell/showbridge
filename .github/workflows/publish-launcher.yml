@@ -42,9 +42,9 @@ jobs:
           port: 21
           protocol: ftps
           exclude: |
-            .*
-            *-unpacked
-            mac*
+            .*/**
+            *-unpacked/**
+            mac*/**
 
   build-windows:
     runs-on: windows-latest
@@ -80,9 +80,9 @@ jobs:
           port: 21
           protocol: ftps
           exclude: |
-            .*
-            *-unpacked
-            mac*
+            .*/**
+            *-unpacked/**
+            mac*/**
 
   build-macos:
     runs-on: macos-latest
@@ -123,6 +123,6 @@ jobs:
           port: 21
           protocol: ftps
           exclude: |
-            .*
-            *-unpacked
-            mac*
+            .*/**
+            *-unpacked/**
+            mac*/**
