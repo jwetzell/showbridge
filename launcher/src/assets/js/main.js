@@ -29,6 +29,12 @@ electron.on('messageIn', (event, message) => {
   }, 100);
 });
 
+electron.on('protocolStarted', (event, protocol) => {
+  if (protocol === 'http') {
+    document.getElementById('open-webui').disabled = false;
+  }
+});
+
 function showLogs() {
   electron.send('showLogs');
 }
