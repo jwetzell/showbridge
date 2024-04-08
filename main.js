@@ -180,6 +180,15 @@ import('@showbridge/lib').then(({ Config, Router, Utils }) => {
     }
   });
 
+  router.on('protocolStarted', (protocol) => {
+    if (isChildProcess) {
+      process.send({
+        eventName: 'protocolStarted',
+        data: protocol,
+      });
+    }
+  });
+
   process.on('message', (message) => {
     switch (message.eventName) {
       case 'checkConfig':
