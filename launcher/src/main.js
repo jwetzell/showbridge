@@ -201,7 +201,9 @@ function createTray() {
   menu.append(
     new MenuItem({
       label: 'Show/Hide Window',
-      click: toggleWindow(mainWin),
+      click: () => {
+        toggleWindow(mainWin);
+      },
     })
   );
   menu.append(
