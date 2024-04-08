@@ -1,0 +1,36 @@
+name: Publish site
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'site/**'
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Node.js dependencies
+        run: npm install
+        working-directory: ./site
+
+      - name: Generate tailwindcss
+        run: npm run tailwind
+        working-directory: ./site
+
+      - name: publish site
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{secrets.FTP_URL}}
+          username: ${{secrets.DOCS_FTP_USERNAME}}
+          password: ${{secrets.DOCS_FTP_PASSWORD}}
+          local-dir: ./src/
+          server-dir: /
+          port: 21
+          protocol: ftps
