@@ -42,7 +42,7 @@
     "@showbridge/webui": "0.5.3"
   },
   "devDependencies": {
-    "eslint": "^8.51.0",
+    "eslint": "^9.0.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.0.0",
     "nodemon": "^3.0.1",
