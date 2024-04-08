@@ -25,10 +25,14 @@
           class="flex items-center justify-center flex-grow h-full px-2 bg-blue-500 cursor-pointer hover:bg-blue-100">
           <div>Quit</div>
         </div>
-        <div
-          onclick="showWebUI()"
-          class="flex items-center justify-center flex-grow h-full px-2 bg-blue-500 cursor-pointer hover:bg-blue-100">
-          <div>Web UI</div>
+        <div class="flex items-center justify-center flex-grow h-full">
+          <button
+            disabled
+            id="open-webui"
+            onclick="showWebUI()"
+            class="h-full w-full bg-blue-500 hover:bg-blue-100 disabled:bg-yellow-200 hover:disabled:cursor-wait">
+            Web UI
+          </button>
         </div>
         <div
           onclick="showLogs()"

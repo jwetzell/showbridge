@@ -494,6 +494,11 @@ if (!lock) {
                   routerLogStream.write(`${JSON.stringify(message.data)}\n`);
                 }
                 break;
+              case 'protocolStarted':
+                if (mainWin) {
+                  mainWin.webContents.send('protocolStarted', message.data);
+                }
+                break;
               default:
                 console.error(`app: unhandled message from showbridge process`);
                 console.error(message);
