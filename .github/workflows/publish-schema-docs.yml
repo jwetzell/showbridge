@@ -22,8 +22,8 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{secrets.FTP_URL}}
-          username: ${{secrets.FTP_USERNAME}}
-          password: ${{secrets.FTP_PASSWORD}}
+          username: ${{secrets.DOCS_FTP_USERNAME}}
+          password: ${{secrets.DOCS_FTP_PASSWORD}}
           local-dir: ./html/docs/schema/config/
           server-dir: schema/config/
           port: 21
