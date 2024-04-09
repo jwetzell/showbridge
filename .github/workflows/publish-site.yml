@@ -25,6 +25,12 @@ jobs:
         run: npm run tailwind
         working-directory: ./site
 
+      - name: setup tracking script
+        env:
+          WWW_TRACKING_SCRIPT: ${{ secrets.WWW_TRACKING_SCRIPT }}
+        run: echo $WWW_TRACKING_SCRIPT > src/assets/js/tracking.js
+        working-directory: ./site
+
       - name: publish site
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
