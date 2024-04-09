@@ -122,7 +122,7 @@ Each piece uses the params property to store its configurations as outlined belo
 - **midi-pitch-bend**
     - port: optional name of the MIDI device to match the incoming message to
     - channel: optional MIDI channel number 1-16 to match the incoming message to
-    - value: optional control value 0-16384 to match the incoming message to
+    - value: optional pitch bend value 0-16384 to match the incoming message to
 - **midi-program-change**
     - port: optional name of the MIDI device to match the incoming message to
     - channel: optional MIDI channel number 1-16 to match the incoming message to
