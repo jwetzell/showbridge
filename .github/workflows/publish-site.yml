@@ -28,8 +28,8 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{secrets.FTP_URL}}
-          username: ${{secrets.DOCS_FTP_USERNAME}}
-          password: ${{secrets.DOCS_FTP_PASSWORD}}
+          username: ${{secrets.WWW_FTP_USERNAME}}
+          password: ${{secrets.WWW_FTP_PASSWORD}}
           local-dir: ./site/src/
           server-dir: /
           port: 21
