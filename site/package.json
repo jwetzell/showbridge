@@ -1,0 +1,29 @@
+{
+  "name": "@showbridge/site",
+  "version": "1.0.0",
+  "description": "www.showbrigde.io",
+  "main": "index.js",
+  "scripts": {
+    "tailwind": "tailwindcss build -i tailwind.css -o src/assets/css/tailwind.css",
+    "dev": "http-server src/",
+    "tailwind:dev": "tailwindcss build -i tailwind.css -o src/assets/css/tailwind.css --watch"
+  },
+  "author": {
+    "name": "Joel Wetzell",
+    "email": "me@jwetzell.com",
+    "url": "https://jwetzell.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwetzell/showbridge.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwetzell/showbridge/issues"
+  },
+  "homepage": "https://github.com/jwetzell/showbridge#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "tailwindcss": "^3.4.3"
+  }
+}
