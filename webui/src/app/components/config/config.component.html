@@ -2,7 +2,6 @@
   <div class="fixed z-50 flex justify-around w-full top-16">
     <ng-container *ngFor="let protocol of schemaService.protocolTypes">
       <ng-container *ngIf="enabledProtocols.includes(protocol.type) || settingsService.isDummySite">
-
         <ng-container *ngIf="selectedProtocol.type === protocol.type; else notSelectedProtocol">
           <div
             (click)="selectProtocolType(protocol)"
