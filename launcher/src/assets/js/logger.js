@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const levelMap = {
   10: '\u001b[90mTRACE\u001b[39m ',
   20: '\u001b[34mDEBUG\u001b[39m ',

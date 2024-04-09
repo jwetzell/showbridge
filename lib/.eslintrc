@@ -1,9 +1,0 @@
-{
-  "ignorePatterns": ["dist/**"],
-  "parserOptions": {
-    "sourceType": "module",
-  },
-  "rules": {
-    "no-underscore-dangle": "off",
-  },
-}

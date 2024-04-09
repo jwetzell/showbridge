@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable no-use-before-define */
 
 const { readFileSync, existsSync, writeFileSync } = require('fs');
 const path = require('path');

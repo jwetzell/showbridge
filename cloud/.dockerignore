@@ -4,7 +4,6 @@ dist
 Dockerfile
 .vscode
 .drone.yml
-.eslintrc.js
 .nvmrc
 .prettierignore
 .prettierrc.js
