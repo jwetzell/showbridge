@@ -7,6 +7,7 @@ const projectFolders = [
   path.resolve(__dirname, '../launcher'),
   path.resolve(__dirname, '../webui'),
   path.resolve(__dirname, '../cloud'),
+  path.resolve(__dirname, '../site'),
 ];
 
 const processes = [];
