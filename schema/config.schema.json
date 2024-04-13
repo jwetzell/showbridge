@@ -1574,22 +1574,84 @@
         },
         "params": {
           "type": "object",
-          "properties": {
-            "_body": {
-              "title": "body",
-              "description": "the templated body of the HTTP response",
-              "type": "string",
-              "examples": ["<h1>${msg.originalURL}</h1>"]
+          "oneOf": [
+            {
+              "title": "String Body",
+              "properties": {
+                "_body": {
+                  "title": "body",
+                  "description": "the templated body of the HTTP response",
+                  "type": "string",
+                  "examples": ["<h1>${msg.originalURL}</h1>"]
+                },
+                "body": {
+                  "title": "body",
+                  "description": "the body of the HTTP response",
+                  "type": "string",
+                  "examples": ["<h1>Hello World!</h1>"]
+                },
+                "contentType": {
+                  "title": "content type",
+                  "type": "string",
+                  "default": "text/plain",
+                  "enum": [
+                    "text/plain",
+                    "text/html",
+                    "text/csv",
+                    "application/json",
+                    "application/pdf",
+                    "image/jpeg",
+                    "image/png",
+                    "audio/wav",
+                    "audio/webm",
+                    "video/mp4",
+                    "video/mpeg",
+                    "video/webm"
+                  ]
+                }
+              },
+              "additionalProperties": false
             },
-            "body": {
-              "title": "body",
-              "description": "the body of the HTTP response",
-              "type": "string",
-              "examples": ["<h1>Hello World!</h1>"]
+            {
+              "title": "File Body",
+              "properties": {
+                "path": {
+                  "description": "path to the file that will be read and returned",
+                  "type": "string",
+                  "examples": ["/tmp/file.txt"]
+                },
+                "_path": {
+                  "title": "path",
+                  "description": "path to the file that will be read and returned",
+                  "type": "string",
+                  "examples": ["${msg.prop1}"]
+                },
+                "contentType": {
+                  "title": "content type",
+                  "type": "string",
+                  "default": "text/plain",
+                  "enum": [
+                    "text/plain",
+                    "text/html",
+                    "text/csv",
+                    "application/json",
+                    "application/pdf",
+                    "image/jpeg",
+                    "image/png",
+                    "audio/wav",
+                    "audio/webm",
+                    "video/mp4",
+                    "video/mpeg",
+                    "video/webm"
+                  ]
+                }
+              },
+              "required": ["contentType"],
+              "additionalProperties": false
             }
-          },
-          "additionalProperties": false
+          ]
         },
+
         "enabled": {
           "description": "Whether this action is enabled",
           "type": "boolean",
