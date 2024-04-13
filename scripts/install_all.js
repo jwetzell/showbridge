@@ -9,11 +9,23 @@ const projectFolders = [
   path.resolve(__dirname, '../cloud'),
 ];
 
+const processes = [];
+
 projectFolders.forEach((projectFolder) => {
   console.log(`spawning npm ci process for ${projectFolder}`);
-  cp.spawn(os.platform() === 'win32' ? 'npm.cmd' : 'npm', ['ci'], {
+  const childProcess = cp.spawn(os.platform() === 'win32' ? 'npm.cmd' : 'npm', ['ci'], {
     env: process.env,
     cwd: projectFolder,
     stdio: 'inherit',
+  });
+  processes.push(childProcess);
+});
+
+process.on('SIGINT', () => {
+  console.log();
+  console.log('killing processes');
+  console.log();
+  processes.forEach((process) => {
+    process.kill('SIGINT');
   });
 });
