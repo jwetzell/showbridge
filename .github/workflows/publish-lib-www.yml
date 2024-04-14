@@ -37,7 +37,6 @@ jobs:
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
           local-dir: ./lib/
           server-dir: lib/${{steps.extract-version.outputs.lib-version}}/
-          state-name: .macos-sync-state.json
           port: 21
           protocol: ftps
           exclude: |
