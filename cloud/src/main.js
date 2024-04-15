@@ -84,8 +84,16 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('send', (room, msgObj) => {
+  socket.on('send', (room, msgObj, callback) => {
     io.to(room).emit('message', msgObj);
+
+    if (callback) {
+      callback(Date.now());
+    }
+  });
+
+  socket.on('ping', (callback) => {
+    callback(Date.now());
   });
 
   socket.on('disconnect', () => {

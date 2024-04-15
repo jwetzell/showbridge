@@ -46,6 +46,7 @@ export type CloudStatus = {
   enabled: boolean;
   connected: boolean;
   id?: string;
+  roundtripMs?: number;
 };
 
 export type HTTPStatus = {

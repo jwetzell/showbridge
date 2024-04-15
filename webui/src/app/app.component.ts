@@ -8,7 +8,7 @@ import { ImportConfigComponent } from './components/import-config/import-config.
 import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
 import { PatchEditorComponent } from './components/patch-editor/patch-editor.component';
 import { ConfigState } from './models/config.models';
-import { MIDIStatus } from './models/events.model';
+import { CloudStatus, MIDIStatus } from './models/events.model';
 import { ConfigService } from './services/config.service';
 import { CopyService } from './services/copy.service';
 import { EventService } from './services/event.service';
@@ -175,5 +175,15 @@ export class AppComponent {
       width: '90%',
       height: '75%',
     });
+  }
+
+  getCloudTooltipText(cloudStatus?: CloudStatus) {
+    if (cloudStatus) {
+      return `
+        id: ${cloudStatus.id}
+        roundtrip (ms): ${cloudStatus.roundtripMs === undefined ? '' : cloudStatus.roundtripMs}
+      `;
+    }
+    return '';
   }
 }
