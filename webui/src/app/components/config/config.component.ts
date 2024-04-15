@@ -42,7 +42,12 @@ export class ConfigComponent {
       });
   }
 
-  protocolUpdate() {
+  protocolUpdate(type: string) {
+    if (this.config[type] === undefined) {
+      this.config[type] = {
+        triggers: [],
+      };
+    }
     this.updated.emit(true);
   }
 
