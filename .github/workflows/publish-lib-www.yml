@@ -17,6 +17,7 @@ jobs:
 
       - name: Install Node.js dependencies
         run: npm ci
+        working-directory: ./lib
 
       - name: extract version
         id: extract-version
