@@ -12,7 +12,7 @@
       <div
         *ngIf="protocolStatus.data.cloud?.connected"
         class="flex items-center justify-center ml-2"
-        matTooltip="{{ protocolStatus.data.cloud?.id }}">
+        [matTooltip]="getCloudTooltipText(protocolStatus.data.cloud)">
         <mat-icon fontSet="material-icons-outlined">cloud</mat-icon>
       </div>
 
