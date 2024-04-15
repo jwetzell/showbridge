@@ -1,5 +1,6 @@
 name: Publish @showbridge/lib to builds site
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'lib/**'
@@ -38,5 +39,6 @@ jobs:
           server-dir: lib/${{steps.extract-version.outputs.lib-version}}/
           port: 21
           protocol: ftps
-          exclude: |
-            !showbridge-lib-*.tgz
+          exclude:
+            - '**/*'
+            - '!*.tgz'
