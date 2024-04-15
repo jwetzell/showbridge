@@ -1,5 +1,6 @@
 name: Publish @showbridge/webui to builds site
 on:
+  workflow_dispacth:
   push:
     tags:
       - 'webui/**'
@@ -39,4 +40,5 @@ jobs:
           port: 21
           protocol: ftps
           exclude: |
-            !showbridge-webui-*.tgz
+            **/*
+            !*.tgz
