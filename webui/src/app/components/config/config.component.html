@@ -31,6 +31,6 @@
     <app-protocol
       [protocolType]="selectedProtocol.type"
       [protocol]="config[selectedProtocol.type]"
-      (updated)="protocolUpdate()"></app-protocol>
+      (updated)="protocolUpdate(selectedProtocol.type)"></app-protocol>
   </div>
 </ng-container>

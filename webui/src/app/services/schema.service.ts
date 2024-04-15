@@ -483,6 +483,9 @@ export class SchemaService {
               .map((item: any) => parseFloat(item));
           } else if (schema.items?.type === 'string') {
             return paramValue.split(',').map((part: string) => part.trim());
+          } else if (schema.items?.type === 'object') {
+            // TODO(jwetzell): this seems gross, not sure if this covers everything
+            return JSON.parse(`[${paramValue}]`);
           } else {
             console.error(`schema-service: unhandled array schema type: ${schema.items?.type}`);
           }
