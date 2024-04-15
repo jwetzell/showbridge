@@ -92,6 +92,10 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('ping', (callback) => {
+    callback(Date.now());
+  });
+
   socket.on('disconnect', () => {
     sendToDiscord('disconnect', `socket ${socket.id} disconnected`);
     logger.info(`cloud: socket ${socket.id} disconnected`);
