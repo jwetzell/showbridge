@@ -1,0 +1,42 @@
+name: Publish @showbridge/cli to builds site
+on:
+  push:
+    tags:
+      - 'cli/**'
+jobs:
+  publish-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: 'cli/package-lock.json'
+
+      - name: Install Node.js dependencies
+        run: npm ci
+        working-directory: ./cli
+
+      - name: extract version
+        id: extract-version
+        run: node -e "console.log('cli-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
+        working-directory: ./cli
+
+      - name: pack
+        run: npm pack
+        working-directory: ./cli
+
+      - name: publish to ftp
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{secrets.FTP_URL}}
+          username: ${{secrets.BUILDS_FTP_USERNAME}}
+          password: ${{secrets.BUILDS_FTP_PASSWORD}}
+          local-dir: ./cli/
+          server-dir: cli/${{steps.extract-version.outputs.cli-version}}/
+          port: 21
+          protocol: ftps
+          exclude: |
+            !showbridge-cli-*.tgz
