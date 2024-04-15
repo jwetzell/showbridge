@@ -1,6 +1,6 @@
 name: Publish @showbridge/webui to builds site
 on:
-  workflow_dispacth:
+  workflow_dispatch:
   push:
     tags:
       - 'webui/**'
