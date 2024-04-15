@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
     io.to(room).emit('message', msgObj);
 
     if (callback) {
-      cb(Date.now());
+      callback(Date.now());
     }
   });
 
