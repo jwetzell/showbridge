@@ -88,7 +88,6 @@ export class EventService {
               this.transformEvents$.next(messageObj);
               break;
             case 'protocolStatus':
-              console.log(messageObj);
               this.protocolStatus$.next(messageObj);
               break;
             default:
