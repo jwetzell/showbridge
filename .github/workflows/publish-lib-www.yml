@@ -39,6 +39,6 @@ jobs:
           server-dir: lib/${{steps.extract-version.outputs.lib-version}}/
           port: 21
           protocol: ftps
-          exclude:
-            - '**/*'
-            - '!*.tgz'
+          exclude: |
+            **/*
+            !*.tgz
