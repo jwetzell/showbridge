@@ -14,7 +14,7 @@
   "scripts": {
     "test:lib": "node tests/test.js",
     "predev": "node scripts/setup_dev.js",
-    "dev": "nodemon --ignore dist --ignore webui --ignore launcher --ignore sample --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui node_modules/@showbridge/webui/dist/webui | pino-pretty'",
+    "dev": "nodemon --ignore dist --ignore webui --ignore launcher --ignore sample --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui webui/dist/webui | pino-pretty'",
     "start": "node main.js | pino-pretty",
     "install:all": "node scripts/install_all.js",
     "prepack": "cd webui && npm install && npm run build"
@@ -39,7 +39,7 @@
   "dependencies": {
     "commander": "^12.0.0",
     "@showbridge/lib": "0.12.0",
-    "@showbridge/webui": "0.6.1"
+    "@showbridge/webui": "0.7.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1",
