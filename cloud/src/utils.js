@@ -1,9 +1,8 @@
-const { WebhookClient } = require('discord.js');
-const pino = require('pino');
+import { WebhookClient } from 'discord.js';
+import 'dotenv/config';
+import pino from 'pino';
 
-require('dotenv').config();
-
-const logger = pino();
+export const logger = pino();
 
 if (process.env.LOG_LEVEL) {
   try {
@@ -36,15 +35,10 @@ if (process.env.DISCORD_WEBHOOK_URL) {
   discordEvents = [];
 }
 
-function sendToDiscord(event, data) {
+export function sendToDiscord(event, data) {
   if (discord) {
     if (discordEvents.includes(event)) {
       discord.send(data).catch(logger.error);
     }
   }
 }
-
-module.exports = {
-  logger,
-  sendToDiscord,
-};
