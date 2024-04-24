@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, Subscription, filter, timer } from 'rxjs';
+import { Action } from '../models/action.model';
 import {
   ActionEventData,
   MessageEventData,
@@ -100,6 +101,19 @@ export class EventService {
     } catch (error) {
       console.error('problem connecting to ws');
       console.error(error);
+    }
+  }
+
+  runAction(action: Action) {
+    if (this.socket) {
+      this.socket.send(
+        JSON.stringify({
+          eventName: 'runAction',
+          data: {
+            action,
+          },
+        })
+      );
     }
   }
 

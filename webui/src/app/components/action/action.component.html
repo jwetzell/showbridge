@@ -78,6 +78,7 @@
       <button cdkMenuItem class="context-menu-item" (click)="toggleEnabled()">
         {{ action.enabled ? 'Disable' : 'Enable' }}
       </button>
+      <button cdkMenuItem class="context-menu-item" (click)="previewAction()">Preview</button>
       <button cdkMenuItem class="flex pr-0 context-menu-item" [cdkMenuTriggerFor]="addTransformMenu">
         <div class="flex-grow">Add Transform</div>
         <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>

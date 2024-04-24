@@ -196,6 +196,13 @@ export class ActionComponent implements OnInit {
     }
   }
 
+  previewAction() {
+    if (this.action) {
+      // TODO(jwetzell): add ability to simulate the message and vars portion of runAction
+      this.eventService.runAction(this.action);
+    }
+  }
+
   isInError(): boolean {
     if (this.path) {
       return this.schemaService.errorPaths.includes(this.path);
