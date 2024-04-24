@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-const { Server } = require('socket.io');
-const { instrument } = require('@socket.io/admin-ui');
-const { createAdapter } = require('@socket.io/redis-streams-adapter');
-const { Redis } = require('ioredis');
-const bcrypt = require('bcrypt');
-const express = require('express');
-const { createServer } = require('http');
-const path = require('path');
-const { logger, sendToDiscord } = require('./utils');
-require('dotenv').config();
+import { instrument } from '@socket.io/admin-ui';
+import { createAdapter } from '@socket.io/redis-streams-adapter';
+import bcrypt from 'bcrypt';
+import 'dotenv/config';
+import express from 'express';
+import { createServer } from 'http';
+import { Redis } from 'ioredis';
+import path from 'path';
+import { Server } from 'socket.io';
+import { logger, sendToDiscord } from './utils.js';
 
 let serverReady = false;
 
 const app = express();
 // NOTE(jwetzell): load socket.io admin-ui on /ui
-app.use('/ui', express.static(path.join(__dirname, '../node_modules/@socket.io/admin-ui/ui/dist')));
+app.use('/ui', express.static(path.join(import.meta.dirname, '../node_modules/@socket.io/admin-ui/ui/dist')));
 app.get('/ready', (req, res) => {
   res.statusCode = serverReady ? 200 : 503;
   res.send();

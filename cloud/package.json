@@ -3,6 +3,7 @@
   "version": "0.5.0",
   "description": "Cloud server for proxying messages between showbridge instances",
   "main": "src/main.js",
+  "type": "module",
   "bin": {
     "showbridge-cloud": "src/main.js"
   },
