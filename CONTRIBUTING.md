@@ -13,8 +13,8 @@ lib is the actual meat of showbridge defining a library that is then wrapped up 
 
 published as [@showbridge/lib](https://npmjs.com/package/@showbridge/lib)
 
-## [main.js](./main.js)
-main.js at the root of this repo is a script using [commander.js](https://github.com/tj/commander.js) that wraps the library above into an executable script with options like where to load a config from, log levels, etc.
+## [cli](./cli)
+cli is a script using [commander.js](https://github.com/tj/commander.js) that wraps the library above into an executable script with options like where to load a config from, log levels, etc.
 
 published as [@showbridge/cli](https://npmjs.com/package/@showbrige/cli)
 
