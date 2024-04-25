@@ -1,5 +1,6 @@
 name: Publish cli docker image for main
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'main'
