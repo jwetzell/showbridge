@@ -3,28 +3,30 @@
 import { Config, Router, Utils } from '@showbridge/lib';
 import { Option, program } from 'commander';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { createRequire } from 'module';
 import path from 'path';
 
-function readJSON(relativePath){
-  return JSON.parse(readFileSync(path.join(import.meta.dirname,relativePath)))
+// TODO(jwetzell): this seems error prone....
+function readJSON(relativePath) {
+  return JSON.parse(readFileSync(path.join(import.meta.dirname, relativePath)));
 }
 
 export const defaultConfig = readJSON('./sample/config/default.json');
 export const defaultVars = readJSON('./sample/vars/default.json');
 export const schema = readJSON('./schema/config.schema.json');
 
-const packageInfo = readJSON('./package.json');
+export const packageInfo = readJSON('./package.json');
+
+// TODO(jwetzell): would be nice to get rid of this require
+const require = createRequire(import.meta.url);
+const defaultWebUIPath = path.dirname(require.resolve('@showbridge/webui/dist/webui/index.html'));
 
 program.name(packageInfo.name);
 program.version(packageInfo.version);
 program.description('Simple protocol router /s');
 program.option('-c, --config <path>', 'location of config file', undefined);
 program.option('-v, --vars <path>', 'location of file containing vars', undefined);
-program.option(
-  '-w, --webui <path>',
-  'location of webui html to serve',
-  path.dirname(import.meta.resolve('@showbridge/webui/dist/webui'))
-);
+program.option('-w, --webui <path>', 'location of webui html to serve', defaultWebUIPath);
 program.option('--disable-action <action-type...>', 'action type(s) to disable');
 program.option('--disable-protocol <protocol-type...>', 'protocol type(s) to disable');
 program.option('--disable-trigger <trigger-type...>', 'trigger type(s) to disable');
@@ -109,6 +111,7 @@ if (options.vars) {
 if (options.webui) {
   if (existsSync(options.webui)) {
     const filePath = path.resolve(options.webui);
+    console.log(filePath);
     router.servePath(filePath);
   } else {
     logger.error(`app: provided webui path = ${options.webui} does not seem to exist skipping...`);
