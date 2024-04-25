@@ -1,5 +1,4 @@
 dist/
 tests/
 node_modules/
-.DS_store
 .angular/

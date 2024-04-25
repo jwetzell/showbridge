@@ -111,7 +111,6 @@ if (options.vars) {
 if (options.webui) {
   if (existsSync(options.webui)) {
     const filePath = path.resolve(options.webui);
-    console.log(filePath);
     router.servePath(filePath);
   } else {
     logger.error(`app: provided webui path = ${options.webui} does not seem to exist skipping...`);

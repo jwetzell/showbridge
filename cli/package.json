@@ -1,0 +1,50 @@
+{
+  "name": "@showbridge/cli",
+  "version": "0.6.0",
+  "description": "Simple Protocol Router /s",
+  "main": "main.js",
+  "type": "module",
+  "bin": {
+    "showbridge": "main.js"
+  },
+  "files": [
+    "sample/config/default.json",
+    "sample/vars/default.json",
+    "schema"
+  ],
+  "scripts": {
+    "test:lib": "node tests/test.js",
+    "predev": "node ../scripts/setup_dev.js && node bundle.js",
+    "dev": "nodemon --ignore dist --ignore webui --ignore launcher --ignore sample --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui ../webui/dist/webui | pino-pretty'",
+    "start": "node main.js | pino-pretty",
+    "install:all": "node scripts/install_all.js",
+    "prepack": "cp -R ../sample ./ && cp -R ../schema ./"
+  },
+  "author": {
+    "name": "Joel Wetzell",
+    "email": "me@jwetzell.com",
+    "url": "https://jwetzell.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwetzell/showbridge.git"
+  },
+  "keywords": [
+    "show",
+    "control",
+    "protocol",
+    "router",
+    "theatre"
+  ],
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "commander": "^12.0.0",
+    "@showbridge/lib": "0.12.0",
+    "@showbridge/webui": "0.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "pino-pretty": "^11.0.0",
+    "prettier": "^3.0.3"
+  }
+}
