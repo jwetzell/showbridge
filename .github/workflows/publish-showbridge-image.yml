@@ -4,9 +4,8 @@ on:
     branches:
       - 'main'
     paths:
-      - './main.js'
-      - './Dockerfile'
-      - './webui/**'
+      - './cli/main.js'
+      - './cli/Dockerfile'
 jobs:
   build-main-docker:
     runs-on: ubuntu-latest
