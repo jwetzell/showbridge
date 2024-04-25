@@ -44,13 +44,9 @@ Simple protocol router _/s_
 - Source
   - clone repo
   - install dependencies: `npm install && npm run install:all`
-  - run: `npm run start -- -c config.json`
+  - run: `cd cli && npm run start -- -c config.json`
     - see [CLI Usage](#cli-usage) for more flags
     - if no config file is specified then a [default config](sample/config/default.json) will be used
-  - if you would like the webui it will need to be built
-    - `cd webui`
-    - `npm run build`
-  - to include the webui just relaunch showbridge by running: `npm run start -- -c config.json --webui webui/dist/webui`
   - to run the launcher (these steps will also build the webui)
     - `cd launcher`
     - `npm run start`
