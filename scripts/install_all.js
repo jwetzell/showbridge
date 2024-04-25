@@ -8,6 +8,7 @@ const projectFolders = [
   path.resolve(import.meta.dirname, '../webui'),
   path.resolve(import.meta.dirname, '../cloud'),
   path.resolve(import.meta.dirname, '../site'),
+  path.resolve(import.meta.dirname, '../cli'),
 ];
 
 const processes = [];

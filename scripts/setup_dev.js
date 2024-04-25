@@ -5,10 +5,10 @@ import path from 'path';
 const libraries = [
   {
     libraryPath: '../lib',
-    linkPaths: ['../', '../launcher'],
+    linkPaths: ['../cli', '../launcher'],
   },
   {
-    libraryPath: '../',
+    libraryPath: '../cli',
     linkPaths: ['../launcher'],
   },
 ];
