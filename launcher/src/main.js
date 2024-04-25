@@ -367,7 +367,7 @@ function getShowbridgeLocation(isPackaged) {
   }
 
   if (!isPackaged) {
-    return path.join(rootPath, '../main.js');
+    return path.join(rootPath, '../cli/main.js');
   }
   return require.resolve('@showbridge/cli');
 }
