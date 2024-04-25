@@ -1,13 +1,13 @@
-const cp = require('child_process');
-const path = require('path');
-const os = require('os');
+import cp from 'child_process';
+import os from 'os';
+import path from 'path';
 
 const projectFolders = [
-  path.resolve(__dirname, '../lib'),
-  path.resolve(__dirname, '../launcher'),
-  path.resolve(__dirname, '../webui'),
-  path.resolve(__dirname, '../cloud'),
-  path.resolve(__dirname, '../site'),
+  path.resolve(import.meta.dirname, '../lib'),
+  path.resolve(import.meta.dirname, '../launcher'),
+  path.resolve(import.meta.dirname, '../webui'),
+  path.resolve(import.meta.dirname, '../cloud'),
+  path.resolve(import.meta.dirname, '../site'),
 ];
 
 const processes = [];
