@@ -3,6 +3,7 @@
   "version": "0.5.9",
   "description": "Simple Protocol Router /s",
   "main": "main.js",
+  "type": "module",
   "bin": {
     "showbridge": "main.js"
   },
