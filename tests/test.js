@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { Config, Messages, Router, Utils } from '@showbridge/lib';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { Config, Messages, Router, Utils } from '../lib/index.js';
 
 const schema = JSON.parse(readFileSync(path.join(import.meta.dirname, '../schema/config.schema.json')));
 const testConfig = JSON.parse(readFileSync(path.join(import.meta.dirname, './test.json')));
