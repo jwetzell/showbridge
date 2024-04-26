@@ -24,5 +24,8 @@
     "router",
     "theatre"
   ],
-  "license": "GPL-3.0-only"
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  }
 }
