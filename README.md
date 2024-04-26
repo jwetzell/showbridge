@@ -148,6 +148,9 @@ Each piece uses the params property to store its configurations as outlined belo
     - url\*: the URL to make the call to
     - contentType: the value to set the Content-Type header to
     - body\*: value to use for the body of the HTTP request
+- **http-response**
+    - body\*: value to use for the body of the HTTP request
+    - contentType: the value to set the Content-Type header to
 - **log**: action takes no params and will simply log the incoming message out useful for debugging triggers
 - **midi-output**
     - port\*: optional name of the port to send the message to. defaults to virtual output
