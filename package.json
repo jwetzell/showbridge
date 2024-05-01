@@ -5,7 +5,6 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test:lib": "node tests/test.js",
     "install:all": "node scripts/install_all.js"
   },
   "author": {

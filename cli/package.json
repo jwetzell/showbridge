@@ -13,7 +13,6 @@
     "schema"
   ],
   "scripts": {
-    "test:lib": "node tests/test.js",
     "predev": "node ../scripts/setup_dev.js && node bundle.js",
     "dev": "nodemon --ignore dist --ignore webui --ignore launcher --ignore sample --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui ../webui/dist/webui | pino-pretty'",
     "start": "node main.js | pino-pretty",
