@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "test": "node --test --experimental-test-coverage",
     "predocs": "rimraf dist/docs",
     "docs": "jsdoc -c .jsdoc.config.json -d dist/docs -r ./src docs/README.md"
   },
