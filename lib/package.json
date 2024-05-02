@@ -4,7 +4,12 @@
   "description": "Main library for showbridge protocol router",
   "main": "index.js",
   "type": "module",
+  "files": [
+    "src",
+    "index.js"
+  ],
   "scripts": {
+    "test": "node --test --experimental-test-coverage",
     "predocs": "rimraf dist/docs",
     "docs": "jsdoc -c .jsdoc.config.json -d dist/docs -r ./src docs/README.md"
   },
