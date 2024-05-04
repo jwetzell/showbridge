@@ -1,0 +1,83 @@
+{
+  "$schema": "./config.schema.json",
+  "http": {
+    "params": {
+      "port": 3000
+    },
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
+  },
+  "ws": {
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
+  },
+  "osc": {
+    "triggers": []
+  },
+  "midi": {
+    "params": {
+      "virtualInputName": "showbridge Input",
+      "virtualOutputName": "showbridge Output"
+    },
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
+  },
+  "udp": {
+    "params": {
+      "port": 8000
+    },
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
+  },
+  "tcp": {
+    "params": {
+      "port": 8000
+    },
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
+  },
+  "mqtt": {
+    "params": {
+      "broker": "",
+      "topics": []
+    },
+    "triggers": [
+      {
+        "type": "any",
+        "enabled": true,
+        "actions": [{ "type": "log", "enabled": true }]
+      }
+    ]
+  },
+  "cloud": {
+    "params": {
+      "url": "",
+      "rooms": []
+    }
+  }
+}
