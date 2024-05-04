@@ -19,8 +19,8 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
-          cache-dependency-path: './cli/package-lock.json'
-      
+          cache-dependency-path: 'cli/package-lock.json'
+
       - name: setup cli folder
         run: node bundle.js
         working-directory: ./cli
