@@ -35,7 +35,7 @@ jobs:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.BUILDS_FTP_USERNAME}}
           password: ${{secrets.BUILDS_FTP_PASSWORD}}
-          local-dir: ./cli
+          local-dir: ./cli/
           server-dir: cli/${{steps.extract-version.outputs.cli-version}}/
           port: 21
           protocol: ftps
