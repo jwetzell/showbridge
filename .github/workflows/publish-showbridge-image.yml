@@ -5,8 +5,7 @@ on:
     branches:
       - 'main'
     paths:
-      - 'cli/main.js'
-      - 'cli/Dockerfile'
+      - 'cli/**'
 jobs:
   build-main-docker:
     runs-on: ubuntu-latest
