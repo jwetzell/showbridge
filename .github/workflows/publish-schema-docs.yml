@@ -14,7 +14,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - run: pip install json-schema-for-humans
+      - run: pip install json-schema-for-humans==0.47
       - run: mkdir -p html/docs/schema/config
       - run: generate-schema-doc --config expand_buttons=true schema/config.schema.json html/docs/schema/config/index.html
       - run: ls html/docs/schema/config
