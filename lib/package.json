@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "clean-jsdoc-theme": "4.2.14",
-    "jsdoc": "4.0.2",
+    "jsdoc": "4.0.3",
     "rimraf": "5.0.5"
   }
 }
