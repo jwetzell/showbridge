@@ -35,6 +35,7 @@
           "items": {
             "type": "object",
             "oneOf": [
+              { "$ref": "#/definitions/TriggerHTTPRequest" },
               { "$ref": "#/definitions/TriggerSender" },
               { "$ref": "#/definitions/TriggerRegex" },
               { "$ref": "#/definitions/TriggerAny" }
@@ -1672,7 +1673,8 @@
           { "$ref": "#/definitions/TriggerRegex" },
           { "$ref": "#/definitions/TriggerSender" },
           { "$ref": "#/definitions/TriggerBytesEqual" },
-          { "$ref": "#/definitions/TriggerOSCAddress" },
+          { "$ref": "#/definitions/TriggerBytesEqual" },
+          { "$ref": "#/definitions/TriggerHTTPRequest" },
           { "$ref": "#/definitions/TriggerMIDINoteOff" },
           { "$ref": "#/definitions/TriggerMIDINoteOn" },
           { "$ref": "#/definitions/TriggerMIDIControlChange" },
@@ -1732,6 +1734,52 @@
             }
           },
           "required": ["address"],
+          "additionalProperties": false
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "subTriggers": {
+          "$ref": "#/definitions/TriggerList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+
+    "TriggerHTTPRequest": {
+      "title": "HTTP Request",
+      "description": "This trigger will match http requests by method and/or path ",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "http-request"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "description": "HTTP Request trigger params",
+          "type": "object",
+          "properties": {
+            "path": {
+              "description": "exact HTTP path to match",
+              "type": "string",
+              "examples": ["/test/index.html"]
+            },
+            "method": {
+              "description": "The HTTP method to match i.e GET, POST, PUT",
+              "type": "string",
+              "enum": ["get", "post", "put", "delete", "patch", "GET", "POST", "PUT", "DELETE", "PATCH"]
+            }
+          },
+          "required": [],
           "additionalProperties": false
         },
         "actions": {
