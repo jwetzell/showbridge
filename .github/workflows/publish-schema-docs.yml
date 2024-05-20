@@ -1,5 +1,6 @@
 name: Publish schema docs to docs site
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
