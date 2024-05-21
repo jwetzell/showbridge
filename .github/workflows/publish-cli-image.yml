@@ -9,7 +9,7 @@ on:
     tags:
       - 'cli/v**'
 jobs:
-  build-main-docker:
+  build-cli-docker:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
