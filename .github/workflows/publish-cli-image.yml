@@ -1,4 +1,4 @@
-name: Publish cli docker image for main
+name: Publish cli docker image
 on:
   workflow_dispatch:
   push:
@@ -6,6 +6,8 @@ on:
       - 'main'
     paths:
       - 'cli/**'
+    tags:
+      - 'cli/v**'
 jobs:
   build-main-docker:
     runs-on: ubuntu-latest
@@ -30,6 +32,16 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Setup Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            jwetzell/showbridge
+          tags: |
+            type=ref,event=branch
+            type=match,pattern=cli/v(\d+.\d+.\d+),group=1
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -37,3 +49,6 @@ jobs:
           context: ./cli
           file: ./cli/Dockerfile
           tags: jwetzell/showbridge:main
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
