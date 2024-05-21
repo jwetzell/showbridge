@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20.12.2-alpine
 RUN apk add --no-cache tini
 WORKDIR /app
 COPY --chown=node:node package*.json ./
