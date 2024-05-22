@@ -2,7 +2,7 @@
 
 import { instrument } from '@socket.io/admin-ui';
 import { createAdapter } from '@socket.io/redis-streams-adapter';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import 'dotenv/config';
 import express from 'express';
 import { createServer } from 'http';
