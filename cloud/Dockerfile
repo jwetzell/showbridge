@@ -1,8 +1,7 @@
-FROM node:20.12.2-alpine
-RUN apk add --no-cache tini
+FROM node:20.12.2-slim
+RUN apt-get update && apt-get install tini
 WORKDIR /app
-COPY --chown=node:node package*.json ./
+COPY package*.json ./
 RUN npm ci
-COPY --chown=node:node . .
-USER node
-ENTRYPOINT [ "/sbin/tini", "/app/src/main.js" ]
+COPY src .
+ENTRYPOINT [ "/usr/bin/tini", "/app/src/main.js" ]
