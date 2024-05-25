@@ -1,0 +1,20 @@
+---
+title: Templating
+sidebar:
+  order: 8
+---
+
+Alright there has been a some references to templating. There is no secret sauce it is simply [lodash templating](https://lodash.com/docs/4.17.15#template) which is compatible with JS template literals (backtick strings). The incoming `msg` and the global `vars` objects are available when templates are processed. For properties of incoming messages [see messages](/reference/messages/). The `vars` object will contain the contents of the `vars.json` file passed in with `-v` flag or any value set using the `store` [action](/reference/actions/#store).
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside>
+  For the following examples assume an incoming message is a midi note_on message on channel 1 with note value = 60 and
+  velocity = 127
+</Aside>
+
+## **Examples**:
+
+    - `"/midi/${msg.channel}/${msg.status}/${msg.note}"` -> `/midi/1/note_on/60`
+    - `"${msg.velocity - 10}"` -> `117`
+    - `"${msg.note + 12}"` -> `72`
