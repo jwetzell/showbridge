@@ -47,7 +47,7 @@ Simple protocol router _/s_
   - run: `cd cli && npm run start -- -c config.json`
     - see [CLI Usage](#cli-usage) for more flags
     - if no config file is specified then a [default config](sample/config/default.json) will be used
-  - to run the launcher (these steps will also build the webui)
+  - to run the launcher
     - `cd launcher`
     - `npm run start`
    
@@ -99,7 +99,10 @@ Each piece uses the params property to store its configurations as outlined belo
 ### Triggers
 - **any**: fires for any incoming message
 - **bytes-equal**
-    - bytes: array of bytes to match to the bytes of the incoming message (supports midi, tcp, udp, osc messages)
+    - bytes: array of bytes to match to the bytes of the incoming message (supports midi, tcp, udp, osc messages
+- **http-request**
+    - path: the path to match the incoming HTTP requst agains i.e `index.html`, `/api/v1/test`, etc.
+    - method: the HTTP method to match against the incoming HTTP request i.e GET, POST, DELETE, etc.
 - **midi-control-change**
     - port: optional name of the MIDI device to match the incoming message to
     - channel: optional MIDI channel number 1-16 to match the incoming message to
