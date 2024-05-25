@@ -23,7 +23,8 @@ jobs:
         run: npm ci
         working-directory: ./docs
 
-      - run: npm run build
+      - name: build docs
+        run: npm run build:prod
         working-directory: ./docs
 
       - name: publish docs
