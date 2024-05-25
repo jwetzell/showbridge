@@ -4,9 +4,7 @@
   "description": "www.showbrigde.io",
   "main": "index.js",
   "scripts": {
-    "tailwind": "tailwindcss build -i tailwind.css -o src/assets/css/tailwind.css",
-    "dev": "http-server src/",
-    "tailwind:dev": "tailwindcss build -i tailwind.css -o src/assets/css/tailwind.css --watch"
+    "dev": "http-server src/"
   },
   "author": {
     "name": "Joel Wetzell",
