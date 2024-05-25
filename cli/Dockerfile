@@ -1,6 +1,6 @@
 FROM node:20.12.2-slim
 ENV NODE_ENV production
-RUN apt-get update && apt-get install tini
+RUN apt-get update && apt-get install -y tini libasound2
 WORKDIR /app
 COPY package*.json .
 RUN npm ci
