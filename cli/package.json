@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "predev": "node ../scripts/setup_dev.js && node bundle.js",
-    "dev": "nodemon --ignore dist --ignore webui --ignore launcher --ignore sample --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui ../webui/dist/webui | pino-pretty'",
+    "dev": "nodemon --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui ../webui/dist/webui | pino-pretty'",
     "start": "node main.js | pino-pretty",
     "install:all": "node scripts/install_all.js",
     "prepack": "cp -R ../sample ./ && cp -R ../schema ./"
@@ -45,5 +45,14 @@
     "nodemon": "3.0.1",
     "pino-pretty": "11.0.0",
     "prettier": "3.0.3"
+  },
+  "nodemonConfig": {
+    "ignoreRoot": [
+      ".git"
+    ],
+    "ignore": [
+      "dist",
+      "sample"
+    ]
   }
 }
