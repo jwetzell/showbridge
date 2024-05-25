@@ -1,0 +1,26 @@
+---
+title: Source
+sidebar:
+  order: 4
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+1. clone repo
+
+2. install dependencies: `npm install && npm run install:all`
+
+3. run cli:
+
+   - `cd cli`
+   - `npm run start -- -c config.json`
+
+   - see [CLI Usage](/guides/cli-usage) for more flags
+   - if no config file is specified then a [default config](https://github.com/jwetzell/showbridge/blob/main/sample/config/default.json) will be used
+
+4. run launcher
+
+   - `cd launcher`
+   - `npm run start`
+</Steps>

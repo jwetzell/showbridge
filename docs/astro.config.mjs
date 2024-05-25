@@ -16,8 +16,8 @@ export default defineConfig({
           autogenerate: { directory: '/showbridge' },
         },
         {
-          label: 'Guides',
-          autogenerate: { directory: 'guides' },
+          label: 'Run',
+          autogenerate: { directory: 'run' },
         },
         {
           label: 'Reference',

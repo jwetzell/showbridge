@@ -1,8 +1,16 @@
 ---
-title: CLI Usage
+title: CLI
 sidebar:
   order: 2
 ---
+- create a config file (see [config](/reference/config/))
+- optionally install globally: `npm install -g @showbridge/cli`
+- run
+  - if installed globally: `showbridge -c config.json`
+  - via npx: `npx @showbridge/cli@latest -c config.json`
+  - see below for all flags
+- this method still has the web interface available via HTTP
+- use the `-h` flag to see other available flags
 
 ```
 Usage: @showbridge/cli [options]
