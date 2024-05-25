@@ -16,3 +16,4 @@ showbridge is a kind of re-imagining of [OSCulator](https://osculator.net/) take
 - MQTT
     - only one broker connection is currently supported
 - MIDI
+  - virtual MIDI input/output is not supported on Windows and Docker
