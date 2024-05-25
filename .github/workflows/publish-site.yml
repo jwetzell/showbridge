@@ -20,7 +20,7 @@ jobs:
           cache-dependency-path: 'site/package-lock.json'
 
       - name: Install Node.js dependencies
-        run: npm install
+        run: npm ci
         working-directory: ./site
 
       - name: setup tracking script
