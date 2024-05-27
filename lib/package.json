@@ -45,7 +45,7 @@
     "ws": "8.17.0"
   },
   "devDependencies": {
-    "clean-jsdoc-theme": "4.2.14",
+    "clean-jsdoc-theme": "4.3.0",
     "jsdoc": "4.0.3",
     "rimraf": "5.0.7"
   }
