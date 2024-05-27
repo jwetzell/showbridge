@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList } from '@angular/cdk/drag-drop';
 import { CdkMenuModule } from '@angular/cdk/menu';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -46,10 +46,10 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     ClipboardDialogComponent,
     PatchEditorComponent,
   ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule,
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
@@ -72,7 +72,6 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     TimeagoModule.forRoot(),
     CdkMenuModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent],
+  providers: [provideHttpClient(withInterceptorsFromDi())],
 })
 export class AppModule {}
