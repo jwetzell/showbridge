@@ -11,16 +11,18 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "./dist/webui",
+            "outputPath": {
+              "base": "./dist/webui"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/assets"],
             "styles": ["theme.scss", "src/assets/css/fonts.css", "src/assets/css/styles.css", "tailwind.css"],
-            "scripts": []
+            "scripts": [],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
@@ -37,17 +39,12 @@
                 }
               ],
               "outputHashing": "all",
-              "buildOptimizer": true,
               "aot": true,
               "deleteOutputPath": true,
-              "vendorChunk": true,
-              "commonChunk": true,
               "optimization": true
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -66,11 +63,8 @@
                 }
               ],
               "outputHashing": "all",
-              "buildOptimizer": true,
               "aot": true,
               "deleteOutputPath": true,
-              "vendorChunk": true,
-              "commonChunk": true,
               "optimization": true,
               "index": {
                 "input": "src/index.demo.html",
@@ -81,7 +75,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "showbridge-webui:build:production"
