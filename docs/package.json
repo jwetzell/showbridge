@@ -2,6 +2,9 @@
   "name": "@showbridge/docs",
   "type": "module",
   "version": "0.1.0",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
