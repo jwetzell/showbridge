@@ -13,7 +13,7 @@
     "preview": "astro preview",
     "astro": "astro"
   },
-  "dependencies": {
+  "devDependencies": {
     "@astrojs/starlight": "^0.23.1",
     "astro": "^4.8.6",
     "sharp": "^0.32.5",
