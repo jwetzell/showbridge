@@ -46,7 +46,7 @@
     "socket.io": "4.7.5"
   },
   "devDependencies": {
-    "nodemon": "3.0.1",
+    "nodemon": "3.1.2",
     "pino-pretty": "11.1.0"
   }
 }
