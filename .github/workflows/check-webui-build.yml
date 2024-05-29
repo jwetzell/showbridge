@@ -1,4 +1,4 @@
-name: Check Web UI Builds
+name: Check @showbridge/webui builds
 on:
   pull_request:
     branches:
