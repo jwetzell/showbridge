@@ -1,0 +1,48 @@
+name: Publish @showbridge/docs to builds site
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'docs/**'
+jobs:
+  publish-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: 'docs/package-lock.json'
+
+      - name: Install Node.js dependencies
+        run: npm ci
+        working-directory: ./docs
+
+      - name: extract version
+        id: extract-version
+        run: node -e "console.log('docs-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
+        working-directory: ./docs
+      
+      - name: build
+        run: npm run build
+        working-directory: /docs
+        
+      - name: pack
+        run: npm pack
+        working-directory: ./docs
+
+      - name: publish to ftp
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{secrets.FTP_URL}}
+          username: ${{secrets.BUILDS_FTP_USERNAME}}
+          password: ${{secrets.BUILDS_FTP_PASSWORD}}
+          local-dir: ./docs/
+          server-dir: docs/${{steps.extract-version.outputs.docs-version}}/
+          port: 21
+          protocol: ftps
+          exclude: |
+            **/*
+            !*.tgz
