@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/jwetzell/showbridge#readme",
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "tailwindcss": "^3.4.3"
+    "http-server": "14.1.1",
+    "tailwindcss": "3.4.3"
   }
 }
