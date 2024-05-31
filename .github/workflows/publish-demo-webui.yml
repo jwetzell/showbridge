@@ -1,5 +1,6 @@
 name: Publish webui to demo site
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
