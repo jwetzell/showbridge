@@ -39,7 +39,7 @@
   "dependencies": {
     "commander": "12.1.0",
     "@showbridge/lib": "0.14.0",
-    "@showbridge/webui": "0.7.0"
+    "@showbridge/webui": "0.7.1"
   },
   "devDependencies": {
     "nodemon": "3.1.2",
