@@ -18,8 +18,11 @@ For templating purposes (any param starting with an underscore `_`) the incoming
     - velocity: midi velocity 1-127
     - pressure: midi pressure 1-127
     - control: midi control number 1-127
-    - value: value portion of control change and pitch_bend 
+    - value: value portion of control_change, pitch_bend, mtc messages
     - program: program number 1- 127
+    - type: timecode type from mtc messages
+    - song: song number from song_select messages
+    - beats: MIDI beats for song_position mesages
     - bytes: the 3 MIDI data bytes
 ## **mqtt**
     - payload: the contents of the MQTT message either an object if parsable JSON or the raw contents as a string
