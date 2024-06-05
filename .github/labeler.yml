@@ -1,0 +1,31 @@
+cli:
+- changed-files:
+  - any-glob-to-any-file: 'cli/**'
+  
+cloud:
+- changed-files:
+  - any-glob-to-any-file: 'cloud/**'
+
+docs:
+- changed-files:
+  - any-glob-to-any-file: 'docs/**'
+
+launcher:
+- changed-files:
+  - any-glob-to-any-file: 'launcher/**'
+
+lib:
+- changed-files:
+  - any-glob-to-any-file: 'lib/**'
+
+schema:
+- changed-files:
+  - any-glob-to-any-file: 'schema/**'
+
+site:
+- changed-files:
+  - any-glob-to-any-file: 'site/**'
+
+webui:
+- changed-files:
+  - any-glob-to-any-file: 'webui/**'
