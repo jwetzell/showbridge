@@ -1,5 +1,5 @@
 # Taken from https://github.com/go-gitea/gitea
-name: labeler
+name: Add labels to PR
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
