@@ -47,6 +47,6 @@
   },
   "devDependencies": {
     "nodemon": "3.1.2",
-    "pino-pretty": "11.1.0"
+    "pino-pretty": "11.2.0"
   }
 }
