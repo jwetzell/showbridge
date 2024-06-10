@@ -40,7 +40,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "18.0.2",
     "@angular/build": "18.0.2",
-    "@angular/cli": "18.0.2",
+    "@angular/cli": "18.0.3",
     "@angular/compiler-cli": "18.0.2",
     "@types/lodash-es": "4.17.12",
     "autoprefixer": "10.4.18",
