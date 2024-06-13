@@ -1,23 +1,19 @@
 import cp from 'node:child_process';
 
-const eslintPaths = ['./cli', './cloud', './launcher', './lib', './site', './webui'];
-
-const pathsWithErrors = [];
-
-console.log(`Running eslint on:\n${eslintPaths.join('\n')}`);
-eslintPaths.forEach((path) => {
-  const eslintProcess = cp.spawnSync('eslint', [path], {
-    stdio: 'inherit',
-  });
-
-  if (eslintProcess.error || eslintProcess.status > 0) {
-    console.log(eslintProcess.error);
-    pathsWithErrors.push(path);
-  }
+const eslintProcess = cp.spawnSync('eslint', ['./'], {
+  stdio: 'inherit',
 });
 
-if (pathsWithErrors.length > 0) {
-  console.error(`The following paths have formatting or linting errors: ${pathsWithErrors.join(', ')}`);
+const lintError = eslintProcess.error || eslintProcess.status > 0;
+
+const prettierProcess = cp.spawnSync('prettier', ['./', '--check'], {
+  stdio: 'inherit',
+});
+
+const formatError = prettierProcess.error || prettierProcess.status > 0;
+
+if (lintError || formatError) {
+  console.error(`Formatting or linting error found.`);
   process.exit(1);
 } else {
   console.log('No formatting or linting errors found.');
