@@ -4,7 +4,7 @@ import { Config, Router, Utils } from '@showbridge/lib';
 import { Option, program } from 'commander';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { createRequire } from 'module';
-import path from 'path';
+import path from 'node:path';
 
 // TODO(jwetzell): this seems error prone....
 function readJSON(relativePath) {

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 // NOTE(jwetzell): HEAVY inspiration from https://github.com/bitfocus/companion/launcher
 
 const path = require('path');

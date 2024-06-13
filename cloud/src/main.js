@@ -7,7 +7,7 @@ import 'dotenv/config';
 import express from 'express';
 import { createServer } from 'http';
 import { Redis } from 'ioredis';
-import path from 'path';
+import path from 'node:path';
 import { Server } from 'socket.io';
 import { logger, sendToDiscord } from './utils.js';
 
