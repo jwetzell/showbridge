@@ -1,6 +1,6 @@
-import cp from 'child_process';
-import os from 'os';
-import path from 'path';
+import cp from 'node:child_process';
+import os from 'node:os';
+import path from 'node:path';
 
 const projectFolders = [
   path.resolve(import.meta.dirname, '../cli'),

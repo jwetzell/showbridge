@@ -1,0 +1,36 @@
+name: Check formatting and linting rules
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-check-script:
+    name: Run Format Check Script
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Install root Node.js dependencies
+        run: npm ci
+
+      - name: Install all dependencies
+        run: npm run install:all
+
+      - name: Install eslint
+        run: npm install -g eslint@8.57.0
+
+      - name: Install prettier
+        run: npm install -g prettier@3.2.5
+
+      - name: Run check script
+        run: node scripts/check_format_lint.js

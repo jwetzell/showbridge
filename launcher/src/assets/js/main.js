@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 const dragContainer = document.getElementById('drag-drop-container');
 const messageIndicator = document.getElementById('message-indicator');
 

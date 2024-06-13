@@ -24,11 +24,11 @@ jobs:
         id: extract-version
         run: node -e "console.log('docs-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
         working-directory: ./docs
-      
+
       - name: build
         run: npm run build
         working-directory: ./docs
-        
+
       - name: pack
         run: npm pack
         working-directory: ./docs

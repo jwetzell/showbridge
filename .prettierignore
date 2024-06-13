@@ -2,3 +2,7 @@
 *.mdx
 *.min.*
 sample/**/dev.json
+.dockerignore
+.env
+.gitignore
+.prettierignore
