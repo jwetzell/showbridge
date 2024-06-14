@@ -7,7 +7,11 @@ export function getTemplateResult(templateString, data): string {
   return templateFunction(data);
 }
 
-export function resolveTemplatedProperty(params, property, data): number | string | boolean | any[] {
+export function resolveTemplatedProperty(
+  params: { [key: string]: any },
+  property: string,
+  data: { [key: string]: any }
+): number | string | boolean | any[] {
   if (has(params, `_${property}`)) {
     // NOTE(jwetzell): if we have a template version of the property
     const templatedProperty = params[`_${property}`];
@@ -63,7 +67,7 @@ export function resolveTemplatedProperty(params, property, data): number | strin
   return undefined;
 }
 
-export function resolveAllKeys(_obj, data) {
+export function resolveAllKeys(_obj: { [key: string]: any }, data: { [key: string]: any }) {
   const obj = cloneDeep(_obj);
   Object.keys(obj)
     .filter((key) => key.startsWith('_'))

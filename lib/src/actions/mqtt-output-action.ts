@@ -1,9 +1,10 @@
 import { Message } from '../messages/index.js';
+import { RouterProtocols, RouterVars } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
 
 class MQTTOutputAction extends Action {
-  _run(_msg: Message, vars, protocols) {
+  _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {
     const msg = this.getTransformedMessage(_msg, vars);
 
     try {

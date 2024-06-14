@@ -18,18 +18,21 @@ import {
 } from './protocols/index.js';
 import Trigger from './triggers/trigger.js';
 
+export type RouterVars = { [k: string]: any };
+
+export type RouterProtocols = {
+  http: HTTPProtocol;
+  udp: UDPProtocol;
+  tcp: TCPProtocol;
+  midi: MIDIProtocol;
+  mqtt: MQTTProtocol;
+  cloud: CloudProtocol;
+  ws: WebSocketProtocol;
+};
 class Router extends EventEmitter {
-  vars: any;
+  vars: RouterVars;
   _config: Config;
-  protocols: {
-    http: HTTPProtocol;
-    udp: UDPProtocol;
-    tcp: TCPProtocol;
-    midi: MIDIProtocol;
-    mqtt: MQTTProtocol;
-    cloud: CloudProtocol;
-    ws: WebSocketProtocol;
-  };
+  protocols: RouterProtocols;
 
   constructor(config: Config) {
     super();
@@ -71,7 +74,7 @@ class Router extends EventEmitter {
       }
     });
 
-    this.protocols.ws.on('runAction', (action, msg, vars) => {
+    this.protocols.ws.on('runAction', (action: Action, msg: Message, vars: RouterVars) => {
       this.runAction(action, msg, vars);
     });
 
@@ -264,7 +267,7 @@ class Router extends EventEmitter {
     }
   }
 
-  runAction(action: Action, msg: Message, vars: any) {
+  runAction(action: Action, msg: Message, vars: RouterVars) {
     try {
       const onDemandAction = new ActionTypeClassMap[action.type](action);
       onDemandAction.run(msg, vars || this.vars, this.protocols);

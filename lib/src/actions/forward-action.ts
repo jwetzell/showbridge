@@ -1,9 +1,10 @@
 import { ByteMessage } from '../messages/index.js';
+import { RouterProtocols, RouterVars } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
 
 class ForwardAction extends Action {
-  _run(_msg: ByteMessage, vars, protocols) {
+  _run(_msg: ByteMessage, vars: RouterVars, protocols: RouterProtocols) {
     const msg = this.getTransformedMessage<ByteMessage>(_msg, vars);
     try {
       const msgToForward = msg.bytes;
@@ -15,9 +16,14 @@ class ForwardAction extends Action {
       }
 
       if (resolvedParams.protocol === 'udp') {
-        protocols.udp.send(msgToForward, resolvedParams.port, resolvedParams.host);
+        protocols.udp.send(Buffer.from(msgToForward), resolvedParams.port, resolvedParams.host);
       } else if (resolvedParams.protocol === 'tcp') {
-        protocols.tcp.send(msgToForward, resolvedParams.port, resolvedParams.host, msg.messageType === 'osc');
+        protocols.tcp.send(
+          Buffer.from(msgToForward),
+          resolvedParams.port,
+          resolvedParams.host,
+          msg.messageType === 'osc'
+        );
       } else {
         logger.error(`action: unhandled forward protocol = ${resolvedParams.protocol}`);
       }

@@ -1,5 +1,6 @@
 import { has } from 'lodash-es';
 import { Message } from '../messages/index.js';
+import { RouterProtocols, RouterVars } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action, { ActionObj } from './action.js';
 import { ActionTypeClassMap } from './index.js';
@@ -16,7 +17,7 @@ class RandomAction extends Action {
       .map((action) => new ActionTypeClassMap[action.type](action));
   }
 
-  _run(_msg: Message, vars, protocols) {
+  _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {
     const msg = this.getTransformedMessage(_msg, vars);
     if (this.params.actions !== undefined) {
       const subActionIndex = Math.floor(Math.random() * this.params.actions.length);

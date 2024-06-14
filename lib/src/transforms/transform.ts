@@ -1,5 +1,6 @@
 import { noop } from 'lodash-es';
 import { Message } from '../messages/index.js';
+import { RouterVars } from '../router.js';
 import { disabled, Templating } from '../utils/index.js';
 
 export type TransformObj = {
@@ -17,11 +18,11 @@ class Transform {
   }
 
   // eslint-disable-next-line no-underscore-dangle, no-unused-vars
-  _transform(msg: Message, vars) {
+  _transform(msg: Message, vars: RouterVars) {
     noop();
   }
 
-  transform(msg: Message, vars) {
+  transform(msg: Message, vars: RouterVars) {
     if (!this.enabled) {
       return;
     }

@@ -6,7 +6,7 @@ import { Trigger, TriggerTypeClassMap } from './triggers/index.js';
 import getConfigMigrations from './utils/migrations.js';
 
 export type ProtocolObj = {
-  params: any;
+  params: { [key: string]: any };
   triggers: Trigger[];
 };
 
