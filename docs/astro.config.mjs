@@ -27,7 +27,6 @@ export default defineConfig({
         {
           label: 'More Docs',
           items: [
-            { label: 'Lib JSDocs', link: 'https://docs.showbridge.io/lib/', attrs: { target: '_blank' } },
             {
               label: 'Config JSON Schema',
               link: 'https://docs.showbridge.io/schema/config',
