@@ -26,7 +26,7 @@ jobs:
       - name: Install all dependencies
         run: npm run install:all
 
-      - name: build lib
+      - name: Build lib
         run: npm run build
         working-directory: ./lib
 
