@@ -26,6 +26,10 @@ jobs:
       - name: Install all dependencies
         run: npm run install:all
 
+      - name: Build lib
+        run: npm run build
+        working-directory: ./lib
+
       - name: Install eslint
         run: npm install -g eslint@8.57.0
 

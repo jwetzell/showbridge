@@ -1,0 +1,41 @@
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import { HTTPMessage } from '../messages/index.js';
+import { logger } from '../utils/index.js';
+import Action from './action.js';
+
+class HTTPResponseAction extends Action {
+  _run(_msg: HTTPMessage, vars) {
+    const msg = this.getTransformedMessage(_msg, vars);
+
+    try {
+      const resolvedParams = this.resolveTemplatedParams({ msg, vars });
+      if (msg.response) {
+        if (resolvedParams.contentType) {
+          msg.response.setHeader('content-type', resolvedParams.contentType);
+        }
+
+        if (resolvedParams.body !== undefined) {
+          msg.response.status(200).send(resolvedParams.body);
+        } else if (resolvedParams.path !== undefined) {
+          const resolvedPath = path.resolve(resolvedParams.path);
+          if (existsSync(resolvedPath)) {
+            const fileData = readFileSync(resolvedPath);
+            msg.response.status(200).send(fileData);
+          } else {
+            msg.response.status(404).send();
+          }
+        }
+      } else {
+        logger.error('action: http-response action called from a non http context');
+      }
+    } catch (error) {
+      logger.error(`action: problem executing http-response action - ${error}`);
+      if (msg.response) {
+        msg.response.status(500).send(error);
+      }
+    }
+    this.emit('finished');
+  }
+}
+export default HTTPResponseAction;
