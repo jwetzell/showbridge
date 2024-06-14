@@ -128,7 +128,7 @@ class MIDIMessage {
     return `status: ${this.status} ch: ${this.channel} data: ${this.bytes.slice(1).join(' ')}`;
   }
 
-  static objectToBytes(obj) {
+  static objectToBytes(obj): number[] {
     const midiBytes = [];
     const midiStatusMap = {
       note_off: 0x8,
