@@ -1,10 +1,18 @@
-import osc from 'osc-min';
+import osc, { OscArgument } from 'osc-min';
 import { Message } from '../messages/index.js';
 import { RouterProtocols, RouterVars } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
 
-class OSCOutputAction extends Action {
+type OSCOutputActionParams = {
+  host?: string;
+  port?: number;
+  protocol: 'udp' | 'tcp';
+  address?: string;
+  args?: string[];
+};
+
+class OSCOutputAction extends Action<OSCOutputActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {
     const msg = this.getTransformedMessage(_msg, vars);
 
@@ -26,7 +34,7 @@ class OSCOutputAction extends Action {
       }
 
       const typedArgs = resolvedParams.args.map((arg) => {
-        const typedArg = {
+        const typedArg: OscArgument = {
           type: 'string',
           value: arg,
         };
@@ -35,7 +43,7 @@ class OSCOutputAction extends Action {
             typedArg.type = Number.isInteger(arg) ? 'integer' : 'float';
             break;
           case 'boolean':
-            typedArg.type = 'boolean';
+            typedArg.type = arg ? 'true' : 'false';
             break;
           case 'string':
           default:

@@ -5,21 +5,21 @@ import { Message } from '../messages/index.js';
 import { Templating, disabled } from '../utils/index.js';
 import { TriggerTypeClassMap } from './index.js';
 
-type TriggerObj = {
+type TriggerObj<T> = {
   type: string;
-  params: any;
+  params: T;
   enabled: boolean;
   comment: string;
-  actions: Action[];
-  subTriggers: Trigger[];
+  actions: Action<unknown>[];
+  subTriggers: Trigger<unknown>[];
 };
 
-class Trigger {
-  private obj: TriggerObj;
-  actions: Action[];
-  subTriggers: Trigger[];
+class Trigger<T extends Object> {
+  private obj: TriggerObj<T>;
+  actions: Action<unknown>[];
+  subTriggers: Trigger<unknown>[];
 
-  constructor(triggerObj: TriggerObj) {
+  constructor(triggerObj: TriggerObj<T>) {
     this.obj = triggerObj;
 
     this.actions = [];
@@ -76,7 +76,7 @@ class Trigger {
   }
 
   resolveTemplatedParams(data) {
-    return Templating.resolveAllKeys(this.params, data);
+    return Templating.resolveAllKeys<T>(this.params, data);
   }
 
   toJSON() {

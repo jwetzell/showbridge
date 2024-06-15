@@ -3,7 +3,11 @@ import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Transform from './transform.js';
 
-class FloorTransform extends Transform {
+type FloorTransformParams = {
+  property: string;
+};
+
+class FloorTransform extends Transform<FloorTransformParams> {
   _transform(msg: Message, vars) {
     logger.trace(`transform: before ${this.type} = ${msg}`);
     try {

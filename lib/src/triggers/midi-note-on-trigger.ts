@@ -3,7 +3,14 @@ import { MIDIMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
 
-class MIDINoteOnTrigger extends Trigger {
+type MIDINoteOnTriggerParams = {
+  port?: string;
+  channel?: number;
+  note?: number;
+  velocity?: number;
+};
+
+class MIDINoteOnTrigger extends Trigger<MIDINoteOnTriggerParams> {
   test(msg: MIDIMessage) {
     if (msg.messageType !== 'midi') {
       logger.error('trigger: midi-note-on trigger only works on midi messages');

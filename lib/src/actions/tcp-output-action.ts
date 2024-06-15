@@ -3,18 +3,41 @@ import { RouterProtocols, RouterVars } from '../router.js';
 import { hexToBytes, logger } from '../utils/index.js';
 import Action from './action.js';
 
-class TCPOutputAction extends Action {
+type TCPOutputActionParams = TCPBytesParams | TCPHexParams | TCPStringParams;
+
+type TCPBytesParams = {
+  host?: string;
+  port?: number;
+  slip: boolean;
+  bytes: number[];
+};
+
+type TCPHexParams = {
+  host?: string;
+  port?: number;
+  slip: boolean;
+  hex: string;
+};
+
+type TCPStringParams = {
+  host?: string;
+  port?: number;
+  slip: boolean;
+  string?: string;
+};
+
+class TCPOutputAction extends Action<TCPOutputActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {
     const msg = this.getTransformedMessage(_msg, vars);
     let tcpSend;
     try {
       const resolvedParams = this.resolveTemplatedParams({ msg, vars });
 
-      if (resolvedParams.bytes !== undefined) {
+      if ('bytes' in resolvedParams) {
         tcpSend = resolvedParams.bytes;
-      } else if (resolvedParams.hex !== undefined) {
+      } else if ('hex' in resolvedParams) {
         tcpSend = hexToBytes(resolvedParams.hex);
-      } else if (resolvedParams.string !== undefined) {
+      } else if ('string' in resolvedParams) {
         tcpSend = resolvedParams.string;
       }
 

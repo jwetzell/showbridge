@@ -3,17 +3,17 @@ import { Message } from '../messages/index.js';
 import { RouterVars } from '../router.js';
 import { disabled, Templating } from '../utils/index.js';
 
-export type TransformObj = {
+export type TransformObj<T> = {
   type: string;
-  params: any;
+  params: T;
   enabled: boolean;
   comment: string;
 };
 
-class Transform {
-  private obj: TransformObj;
+class Transform<T extends Object> {
+  private obj: TransformObj<T>;
 
-  constructor(transformObj: TransformObj) {
+  constructor(transformObj: TransformObj<T>) {
     this.obj = transformObj;
   }
 
@@ -47,7 +47,7 @@ class Transform {
   }
 
   resolveTemplatedParams(data) {
-    return Templating.resolveAllKeys(this.params, data);
+    return Templating.resolveAllKeys<T>(this.params, data);
   }
 
   toJSON() {

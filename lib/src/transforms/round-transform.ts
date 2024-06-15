@@ -3,7 +3,11 @@ import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Transform from './transform.js';
 
-class RoundTransform extends Transform {
+type RoundTransformParams = {
+  property: string;
+};
+
+class RoundTransform extends Transform<RoundTransformParams> {
   _transform(msg: Message, vars) {
     logger.trace(`transform: before ${this.type} = ${msg}`);
     try {

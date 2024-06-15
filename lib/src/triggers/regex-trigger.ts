@@ -3,7 +3,12 @@ import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
 
-class RegexTrigger extends Trigger {
+type RegexTriggerParams = {
+  patterns: string[];
+  properties: string[];
+};
+
+class RegexTrigger extends Trigger<RegexTriggerParams> {
   test(msg: Message) {
     if (!has(this.params, 'patterns') || !has(this.params, 'properties')) {
       logger.error('regex: must have both patterns and properties params');

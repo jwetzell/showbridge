@@ -3,7 +3,11 @@ import { HTTPMessage, TCPMessage, UDPMessage, WebSocketMessage } from '../messag
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
 
-class SenderTrigger extends Trigger {
+type SenderTriggerParams = {
+  address: string;
+};
+
+class SenderTrigger extends Trigger<SenderTriggerParams> {
   test(msg: HTTPMessage | TCPMessage | UDPMessage | WebSocketMessage) {
     if (!has(msg, 'sender')) {
       logger.error('trigger: host trigger attempted on message type that does not have host information');

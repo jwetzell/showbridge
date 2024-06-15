@@ -6,19 +6,19 @@ import { TransformTypeClassMap } from '../transforms/index.js';
 import Transform, { TransformObj } from '../transforms/transform.js';
 import { Templating, disabled } from '../utils/index.js';
 
-export type ActionObj = {
+export type ActionObj<T> = {
   type: string;
-  params: { [k: string]: any };
-  transforms: TransformObj[];
+  params: T;
+  transforms: TransformObj<unknown>[];
   enabled: boolean;
   comment: string;
 };
 
-class Action extends EventEmitter {
-  private obj: ActionObj;
-  transforms: Transform[];
+class Action<T extends Object> extends EventEmitter {
+  private obj: ActionObj<T>;
+  transforms: Transform<unknown>[];
 
-  constructor(actionObj: ActionObj) {
+  constructor(actionObj: ActionObj<T>) {
     super();
 
     this.obj = actionObj;
@@ -35,15 +35,15 @@ class Action extends EventEmitter {
     }
   }
 
-  resolveTemplatedParams(data) {
-    return Templating.resolveAllKeys(this.params, data);
+  resolveTemplatedParams(data): T {
+    return Templating.resolveAllKeys<T>(this.params, data);
   }
 
   get type() {
     return this.obj.type;
   }
 
-  get params() {
+  get params(): T {
     return this.obj.params;
   }
 

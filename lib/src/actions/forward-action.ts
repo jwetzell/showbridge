@@ -3,7 +3,13 @@ import { RouterProtocols, RouterVars } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
 
-class ForwardAction extends Action {
+type ForwardActionParms = {
+  host?: string;
+  port?: number;
+  protocol: 'udp' | 'tcp';
+};
+
+class ForwardAction extends Action<ForwardActionParms> {
   _run(_msg: ByteMessage, vars: RouterVars, protocols: RouterProtocols) {
     const msg = this.getTransformedMessage<ByteMessage>(_msg, vars);
     try {

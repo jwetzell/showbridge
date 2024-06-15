@@ -5,10 +5,15 @@ import { logger } from '../utils/index.js';
 import Action, { ActionObj } from './action.js';
 import { ActionTypeClassMap } from './index.js';
 
-class DelayAction extends Action {
-  subActions: Action[];
+type DelayActionParams = {
+  duration?: number;
+  actions: ActionObj<unknown>[];
+};
 
-  constructor(obj: ActionObj) {
+class DelayAction extends Action<DelayActionParams> {
+  subActions: Action<unknown>[];
+
+  constructor(obj: ActionObj<DelayActionParams>) {
     super(obj);
 
     // NOTE(jwetzell): turn subAction JSON into class instances
