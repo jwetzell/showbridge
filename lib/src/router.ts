@@ -202,6 +202,7 @@ class Router extends EventEmitter {
       if (triggerShouldFire) {
         trigger.actions?.forEach((action, actionIndex) => {
           const actionEventObj = {
+            action: action,
             path: `${triggerEventObj.path}/actions/${actionIndex}`,
             fired: action.enabled,
           };
@@ -220,8 +221,9 @@ class Router extends EventEmitter {
             });
 
             // NOTE(jwetzell): listen for subaction events and bubble them up
-            action.on('action', (subActionPath, enabled) => {
+            action.on('action', (subAction, subActionPath, enabled) => {
               const subActionEventObject = {
+                action: subAction,
                 path: `${actionEventObj.path}/${subActionPath}`,
                 fired: enabled,
               };

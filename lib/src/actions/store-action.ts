@@ -10,6 +10,8 @@ class StoreAction extends Action {
       const resolvedParams = this.resolveTemplatedParams({ msg, vars });
       if (resolvedParams.key !== undefined) {
         set(vars, resolvedParams.key, resolvedParams.value);
+        console.log(resolvedParams);
+        console.log(vars);
       } else {
         logger.error('action: store action missing a key');
       }
