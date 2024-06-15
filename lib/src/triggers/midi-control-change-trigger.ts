@@ -3,7 +3,13 @@ import { MIDIMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
 
-class MIDIControlChangeTrigger extends Trigger {
+type MIDIControlChangeTriggerParams = {
+  port?: string;
+  channel?: number;
+  control?: number;
+  value?: number;
+};
+class MIDIControlChangeTrigger extends Trigger<MIDIControlChangeTriggerParams> {
   test(msg: MIDIMessage) {
     if (msg.messageType !== 'midi') {
       logger.error('trigger: midi-control-change trigger only works on midi messages');

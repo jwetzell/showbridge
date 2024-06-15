@@ -3,7 +3,11 @@ import MQTTMessage from '../messages/mqtt-message.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
 
-class MQTTTopicTrigger extends Trigger {
+type MQTTTopicTriggerParams = {
+  topic: string;
+};
+
+class MQTTTopicTrigger extends Trigger<MQTTTopicTriggerParams> {
   test(msg: MQTTMessage) {
     if (msg.messageType !== 'mqtt') {
       logger.error('trigger: mqtt-topic only works with mqtt messages');

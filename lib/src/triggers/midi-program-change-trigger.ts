@@ -3,7 +3,13 @@ import { MIDIMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
 
-class MIDIProgramChangeTrigger extends Trigger {
+type MIDIProgramChangeTriggerParams = {
+  port?: string;
+  channel?: number;
+  program?: number;
+};
+
+class MIDIProgramChangeTrigger extends Trigger<MIDIProgramChangeTriggerParams> {
   test(msg: MIDIMessage) {
     if (msg.messageType !== 'midi') {
       logger.error('trigger: midi-program-change trigger only works on midi messages');

@@ -5,10 +5,13 @@ import { logger } from '../utils/index.js';
 import Action, { ActionObj } from './action.js';
 import { ActionTypeClassMap } from './index.js';
 
-class RandomAction extends Action {
-  subActions: Action[];
+type RandomActionParams = {
+  actions: ActionObj<unknown>[];
+};
+class RandomAction extends Action<RandomActionParams> {
+  subActions: Action<unknown>[];
 
-  constructor(obj: ActionObj) {
+  constructor(obj: ActionObj<RandomActionParams>) {
     super(obj);
 
     // NOTE(jwetzell): turn subAction JSON into class instances

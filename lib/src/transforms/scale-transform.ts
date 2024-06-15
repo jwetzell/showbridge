@@ -3,7 +3,13 @@ import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Transform from './transform.js';
 
-class ScaleTransform extends Transform {
+type ScaleTransformParams = {
+  property: string;
+  inRange: [number, number];
+  outRange: [number, number];
+};
+
+class ScaleTransform extends Transform<ScaleTransformParams> {
   _transform(msg: Message, vars) {
     logger.trace(`transform: before ${this.type} = ${msg}`);
     try {

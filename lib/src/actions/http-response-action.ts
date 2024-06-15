@@ -4,7 +4,33 @@ import { HTTPMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
 
-class HTTPResponseAction extends Action {
+export type ContentType =
+  | 'text/plain'
+  | 'text/html'
+  | 'text/csv'
+  | 'application/json'
+  | 'application/pdf'
+  | 'image/jpeg'
+  | 'image/png'
+  | 'audio/wav'
+  | 'audio/webm'
+  | 'video/mp4'
+  | 'video/mpeg'
+  | 'video/webm';
+
+type HTTPResponseActionParams = FileBodyParams | StringBodyParams;
+
+type FileBodyParams = {
+  contentType?: ContentType;
+  path?: string;
+};
+
+type StringBodyParams = {
+  contentType?: ContentType;
+  path?: string;
+};
+
+class HTTPResponseAction extends Action<HTTPResponseActionParams> {
   _run(_msg: HTTPMessage, vars) {
     const msg = this.getTransformedMessage(_msg, vars);
 
@@ -15,9 +41,9 @@ class HTTPResponseAction extends Action {
           msg.response.setHeader('content-type', resolvedParams.contentType);
         }
 
-        if (resolvedParams.body !== undefined) {
+        if ('body' in resolvedParams) {
           msg.response.status(200).send(resolvedParams.body);
-        } else if (resolvedParams.path !== undefined) {
+        } else if ('path' in resolvedParams) {
           const resolvedPath = path.resolve(resolvedParams.path);
           if (existsSync(resolvedPath)) {
             const fileData = readFileSync(resolvedPath);

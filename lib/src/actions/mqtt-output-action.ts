@@ -3,7 +3,12 @@ import { RouterProtocols, RouterVars } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
 
-class MQTTOutputAction extends Action {
+type MQTTOutputActionParams = {
+  topic?: string;
+  payload?: string;
+};
+
+class MQTTOutputAction extends Action<MQTTOutputActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {
     const msg = this.getTransformedMessage(_msg, vars);
 

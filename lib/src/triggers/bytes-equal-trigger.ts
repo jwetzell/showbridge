@@ -3,7 +3,11 @@ import { MIDIMessage, MQTTMessage, OSCMessage, TCPMessage, UDPMessage, WebSocket
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
 
-class BytesEqualTrigger extends Trigger {
+type BytesEqualTriggerParams = {
+  bytes: number[];
+};
+
+class BytesEqualTrigger extends Trigger<BytesEqualTriggerParams> {
   test(msg: MIDIMessage | UDPMessage | OSCMessage | TCPMessage | MQTTMessage | WebSocketMessage) {
     if (msg.bytes === undefined) {
       logger.error('trigger: bytes equality check attempted on msg that does not have bytes');

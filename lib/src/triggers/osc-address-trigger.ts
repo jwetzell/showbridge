@@ -3,7 +3,11 @@ import { OSCMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
 
-class OSCAddressTrigger extends Trigger {
+type OSCAddressTriggerParams = {
+  address: string;
+};
+
+class OSCAddressTrigger extends Trigger<OSCAddressTriggerParams> {
   test(msg: OSCMessage) {
     if (msg.messageType !== 'osc') {
       logger.error('trigger: osc-address only works with osc messages');

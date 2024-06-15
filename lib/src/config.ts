@@ -7,7 +7,7 @@ import getConfigMigrations from './utils/migrations.js';
 
 export type ProtocolObj = {
   params: { [key: string]: any };
-  triggers: Trigger[];
+  triggers: Trigger<unknown>[];
 };
 
 export type ConfigObj = {
@@ -63,7 +63,7 @@ class Config {
     return migratedConfig;
   }
 
-  getTriggers(messageType: string): Trigger[] {
+  getTriggers(messageType: string): Trigger<unknown>[] {
     if (this[messageType] && this[messageType].triggers) {
       return this[messageType].triggers;
     }

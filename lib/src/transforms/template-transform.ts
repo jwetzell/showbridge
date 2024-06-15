@@ -3,7 +3,12 @@ import { Message } from '../messages/index.js';
 import { Templating, logger } from '../utils/index.js';
 import Transform from './transform.js';
 
-class TemplateTransform extends Transform {
+type TemplateTransformParams = {
+  property: string;
+  template: string;
+};
+
+class TemplateTransform extends Transform<TemplateTransformParams> {
   _transform(msg: Message, vars) {
     try {
       const resolvedParams = this.resolveTemplatedParams({ msg, vars });

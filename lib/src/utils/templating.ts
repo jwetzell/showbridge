@@ -67,8 +67,8 @@ export function resolveTemplatedProperty(
   return undefined;
 }
 
-export function resolveAllKeys(_obj: { [key: string]: any }, data: { [key: string]: any }) {
-  const obj = cloneDeep(_obj);
+export function resolveAllKeys<T extends object>(_obj: { [key: string]: any }, data: { [key: string]: any }): T {
+  const obj = cloneDeep(_obj) as T;
   Object.keys(obj)
     .filter((key) => key.startsWith('_'))
     .forEach((templateKey) => {

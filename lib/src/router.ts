@@ -74,7 +74,7 @@ class Router extends EventEmitter {
       }
     });
 
-    this.protocols.ws.on('runAction', (action: Action, msg: Message, vars: RouterVars) => {
+    this.protocols.ws.on('runAction', (action: Action<unknown>, msg: Message, vars: RouterVars) => {
       this.runAction(action, msg, vars);
     });
 
@@ -189,7 +189,7 @@ class Router extends EventEmitter {
     this.protocols.http.servePath(filePath);
   }
 
-  processTrigger(trigger: Trigger, triggerPath: string, msg: Message) {
+  processTrigger(trigger: Trigger<unknown>, triggerPath: string, msg: Message) {
     try {
       const triggerShouldFire = trigger.shouldFire(msg);
 
@@ -269,7 +269,7 @@ class Router extends EventEmitter {
     }
   }
 
-  runAction(action: Action, msg: Message, vars: RouterVars) {
+  runAction(action: Action<unknown>, msg: Message, vars: RouterVars) {
     try {
       const onDemandAction = new ActionTypeClassMap[action.type](action);
       onDemandAction.run(msg, vars || this.vars, this.protocols);

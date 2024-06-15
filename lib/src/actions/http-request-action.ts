@@ -3,7 +3,14 @@ import { RouterProtocols, RouterVars } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
 
-class HTTPRequestAction extends Action {
+type HTTPRequestActionParams = {
+  method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  url?: string;
+  contentType?: string;
+  body?: string;
+};
+
+class HTTPRequestAction extends Action<HTTPRequestActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {
     const msg = this.getTransformedMessage(_msg, vars);
     // TODO(jwetzell): add other http things like query parameters though they can just be included in the url field

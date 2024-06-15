@@ -3,7 +3,13 @@ import { MIDIMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
 
-class MIDIPitchBendTrigger extends Trigger {
+type MIDIPitchBendTriggerParams = {
+  port?: string;
+  channel?: number;
+  value?: number;
+};
+
+class MIDIPitchBendTrigger extends Trigger<MIDIPitchBendTriggerParams> {
   test(msg: MIDIMessage) {
     if (msg.messageType !== 'midi') {
       logger.error('trigger: midi-pitch-bend trigger only works on midi messages');

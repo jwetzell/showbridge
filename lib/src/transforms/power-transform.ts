@@ -3,7 +3,12 @@ import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Transform from './transform.js';
 
-class PowerTransform extends Transform {
+type PowerTransformParams = {
+  property: string;
+  exponent: number;
+};
+
+class PowerTransform extends Transform<PowerTransformParams> {
   _transform(msg: Message, vars) {
     logger.trace(`transform: before ${this.type} = ${msg}`);
     try {
