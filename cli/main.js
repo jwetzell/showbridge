@@ -232,7 +232,7 @@ process.on('message', (message) => {
         }
       }
       break;
-    case 'updateVars':
+    case 'varsUpdated':
       if (message.vars) {
         router.vars = message.data;
         router.emit('varsUpdated', router.vars);
