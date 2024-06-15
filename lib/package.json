@@ -11,7 +11,7 @@
     "pretest": "npm run build",
     "test": "node --test --experimental-test-coverage",
     "prebuild": "rimraf dist/lib",
-    "prepack": "npm run build",
+    "prepack": "npm run test",
     "build": "tsc"
   },
   "author": {
