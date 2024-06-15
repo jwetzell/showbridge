@@ -15,6 +15,7 @@ class ShellAction extends Action<ShellActionParams> {
         exec(resolvedParams.command, (error, stdout) => {
           if (error) {
             logger.error(`action: problem executing shell action - ${error}`);
+            // TODO(jwetzell): error handling
             return;
           }
           logger.debug(`shell: ${stdout}`);
