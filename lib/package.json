@@ -1,6 +1,6 @@
 {
   "name": "@showbridge/lib",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "description": "Main library for showbridge protocol router",
   "main": "dist/lib/index.js",
   "type": "module",
