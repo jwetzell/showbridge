@@ -1678,6 +1678,7 @@
           { "$ref": "#/definitions/TriggerMIDINoteOff" },
           { "$ref": "#/definitions/TriggerMIDINoteOn" },
           { "$ref": "#/definitions/TriggerMIDIControlChange" },
+          { "$ref": "#/definitions/TriggerMIDIPitchBend" },
           { "$ref": "#/definitions/TriggerMIDIProgramChange" }
         ]
       }
