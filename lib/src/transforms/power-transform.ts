@@ -24,7 +24,7 @@ class PowerTransform extends Transform<PowerTransformParams> {
         return;
       }
 
-      const newValue = propertyValue ** resolvedParams.power;
+      const newValue = propertyValue ** resolvedParams.exponent;
       set(msg, resolvedParams.property, newValue);
 
       logger.trace(`transform: after ${this.type} = ${msg}`);
