@@ -118,11 +118,11 @@
   </ng-template>
 
   <ng-template #addTriggerMenu>
-    <div cdkMenu class="context-menu" *ngIf="schemaService.triggerTypes.length > 0">
+    <div cdkMenu class="context-menu" *ngIf="schemaService.getSubTriggerTypesForTriggerType(trigger.type).length > 0">
       <button
         cdkMenuItem
         class="context-menu-item"
-        *ngFor="let triggerType of schemaService.triggerTypes"
+        *ngFor="let triggerType of schemaService.getSubTriggerTypesForTriggerType(trigger.type)"
         (click)="addSubTrigger(triggerType.type)">
         <span>{{ triggerType.name }}</span>
       </button>

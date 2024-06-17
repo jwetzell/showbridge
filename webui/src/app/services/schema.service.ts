@@ -557,6 +557,49 @@ export class SchemaService {
     return types;
   }
 
+  getSubTriggerTypesForTriggerType(triggerType: string): ObjectInfo[] {
+    const types: ObjectInfo[] = [];
+    if (!this.triggerTypes) {
+      return types;
+    }
+
+    const baseTriggerType = this.triggerTypes.find((trigger) => trigger.type === triggerType);
+
+    if (!baseTriggerType) {
+      return types;
+    }
+
+    if (baseTriggerType.schema.properties?.subTriggers) {
+      let subTriggersSchema = baseTriggerType.schema.properties?.subTriggers;
+      if (subTriggersSchema['$ref'] && this.schema?.definitions) {
+        subTriggersSchema = this.schema?.definitions[subTriggersSchema['$ref'].replace('#/definitions/', '')];
+      }
+
+      if (subTriggersSchema?.items?.oneOf) {
+        const validTriggerRefs = subTriggersSchema.items.oneOf;
+        validTriggerRefs
+          .map((triggerRef: any) => triggerRef['$ref'])
+          .forEach((triggerRef: string) => {
+            if (triggerRef.startsWith('#/definitions/')) {
+              triggerRef = triggerRef.replace('#/definitions/', '');
+              if (this.schema?.definitions) {
+                const triggerSchema = this.schema?.definitions[triggerRef];
+                if (triggerSchema) {
+                  types.push({
+                    name: triggerSchema['title'],
+                    type: triggerSchema.properties.type.const,
+                    schema: triggerSchema,
+                  });
+                }
+              }
+            }
+          });
+      }
+    }
+
+    return types;
+  }
+
   objectValidator(control: AbstractControl): ValidationErrors | null {
     try {
       JSON.parse(control.value);

@@ -1740,7 +1740,18 @@
           "$ref": "#/definitions/ActionList"
         },
         "subTriggers": {
-          "$ref": "#/definitions/TriggerList"
+          "description": "List of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerOSCAddress" }
+            ]
+          }
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -1786,7 +1797,17 @@
           "$ref": "#/definitions/ActionList"
         },
         "subTriggers": {
-          "$ref": "#/definitions/TriggerList"
+          "description": "List of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerHTTPRequest" }
+            ]
+          }
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -1827,7 +1848,18 @@
           "$ref": "#/definitions/ActionList"
         },
         "subTriggers": {
-          "$ref": "#/definitions/TriggerList"
+          "description": "List of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerMQTTTopiic" }
+            ]
+          }
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -1972,7 +2004,22 @@
           "$ref": "#/definitions/ActionList"
         },
         "subTriggers": {
-          "$ref": "#/definitions/TriggerList"
+          "description": "List of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerMIDINoteOff" },
+              { "$ref": "#/definitions/TriggerMIDINoteOn" },
+              { "$ref": "#/definitions/TriggerMIDIControlChange" },
+              { "$ref": "#/definitions/TriggerMIDIPitchBend" },
+              { "$ref": "#/definitions/TriggerMIDIProgramChange" }
+            ]
+          }
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -2031,7 +2078,22 @@
           "$ref": "#/definitions/ActionList"
         },
         "subTriggers": {
-          "$ref": "#/definitions/TriggerList"
+          "description": "List of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerMIDINoteOff" },
+              { "$ref": "#/definitions/TriggerMIDINoteOn" },
+              { "$ref": "#/definitions/TriggerMIDIControlChange" },
+              { "$ref": "#/definitions/TriggerMIDIPitchBend" },
+              { "$ref": "#/definitions/TriggerMIDIProgramChange" }
+            ]
+          }
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -2090,7 +2152,22 @@
           "$ref": "#/definitions/ActionList"
         },
         "subTriggers": {
-          "$ref": "#/definitions/TriggerList"
+          "description": "List of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerMIDINoteOff" },
+              { "$ref": "#/definitions/TriggerMIDINoteOn" },
+              { "$ref": "#/definitions/TriggerMIDIControlChange" },
+              { "$ref": "#/definitions/TriggerMIDIPitchBend" },
+              { "$ref": "#/definitions/TriggerMIDIProgramChange" }
+            ]
+          }
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -2142,7 +2219,22 @@
           "$ref": "#/definitions/ActionList"
         },
         "subTriggers": {
-          "$ref": "#/definitions/TriggerList"
+          "description": "List of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerMIDINoteOff" },
+              { "$ref": "#/definitions/TriggerMIDINoteOn" },
+              { "$ref": "#/definitions/TriggerMIDIControlChange" },
+              { "$ref": "#/definitions/TriggerMIDIPitchBend" },
+              { "$ref": "#/definitions/TriggerMIDIProgramChange" }
+            ]
+          }
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
@@ -2194,7 +2286,22 @@
           "$ref": "#/definitions/ActionList"
         },
         "subTriggers": {
-          "$ref": "#/definitions/TriggerList"
+          "description": "List of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerMIDINoteOff" },
+              { "$ref": "#/definitions/TriggerMIDINoteOn" },
+              { "$ref": "#/definitions/TriggerMIDIControlChange" },
+              { "$ref": "#/definitions/TriggerMIDIPitchBend" },
+              { "$ref": "#/definitions/TriggerMIDIProgramChange" }
+            ]
+          }
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
