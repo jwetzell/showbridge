@@ -289,7 +289,6 @@ export class ParamsFormComponent implements OnInit {
         this.paramsFormInfo?.formGroup.value,
         this.keysToTemplate
       );
-      console.log(params);
       return params[key];
     }
   }

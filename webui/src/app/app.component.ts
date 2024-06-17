@@ -41,7 +41,6 @@ export class AppComponent {
     });
 
     window.addEventListener('mouseenter', () => {
-      console.log('mouseenter');
       this.copyService.checkClipboard();
     });
 
