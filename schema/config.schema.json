@@ -1678,7 +1678,8 @@
           { "$ref": "#/definitions/TriggerMIDINoteOn" },
           { "$ref": "#/definitions/TriggerMIDIControlChange" },
           { "$ref": "#/definitions/TriggerMIDIPitchBend" },
-          { "$ref": "#/definitions/TriggerMIDIProgramChange" }
+          { "$ref": "#/definitions/TriggerMIDIProgramChange" },
+          { "$ref": "#/definitions/TriggerMQTTTopiic" }
         ]
       }
     },
