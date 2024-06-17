@@ -37,11 +37,11 @@
           (updated)="triggerUpdated()"></app-trigger>
       </div>
     </div>
-    <div class="fixed bottom-0 w-full">
+    <div class="flex mx-6 my-2">
       <ng-container *ngIf="triggerTypes.length > 0">
         <div
           matTooltip="Add Trigger"
-          class="flex items-center justify-center w-full bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
+          class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:cursor-pointer hover:bg-gray-300"
           [matMenuTriggerFor]="addTriggerMenu">
           <mat-icon>add</mat-icon>
         </div>
@@ -55,7 +55,7 @@
         <div
           (click)="pasteTrigger(copyObject)"
           matTooltip="Paste Trigger"
-          class="flex justify-center w-full bg-green-500 item-center hover:cursor-pointer hover:bg-green-400">
+          class="flex items-center justify-center w-10 h-10 ml-2 rounded-full bg-green-500 item-center hover:cursor-pointer hover:bg-green-400">
           <mat-icon>content_paste</mat-icon>
         </div>
       </ng-container>
