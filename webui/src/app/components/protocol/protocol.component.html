@@ -1,9 +1,11 @@
 <ng-container *ngIf="protocolType">
   <div class="flex flex-col h-full">
-    <div>
+    <div class="flex">
       <ng-container *ngIf="hasSettings && schema">
+        <div class="flex-grow"></div>
         <div
-          class="flex items-center justify-center bg-gray-700 hover:cursor-pointer hover:bg-gray-500"
+          matTooltip="{{ schema?.title }} Settings"
+          class="flex items-center justify-center w-10 h-10 mx-5 my-2 rounded-full bg-gray-200 hover:cursor-pointer hover:bg-gray-300"
           (click)="openSettingsDialog()">
           <mat-icon>settings</mat-icon>
         </div>
