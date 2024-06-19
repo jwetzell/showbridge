@@ -26,6 +26,10 @@ site:
   - changed-files:
       - any-glob-to-any-file: 'site/**'
 
+types:
+  - changed-files:
+      - any-glob-to-any-file: 'types/**'
+
 webui:
   - changed-files:
       - any-glob-to-any-file: 'webui/**'
