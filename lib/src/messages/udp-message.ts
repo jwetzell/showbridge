@@ -1,8 +1,4 @@
-export type UDPSender = {
-  protocol: 'udp';
-  address: string;
-  port: number;
-};
+import { UDPSender } from '@showbridge/types';
 
 class UDPMessage {
   private msg: Buffer;

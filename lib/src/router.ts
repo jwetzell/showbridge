@@ -4,6 +4,7 @@ import { WebSocket } from 'ws';
 import Config from './config.js';
 import { disabled, logger } from './utils/index.js';
 
+import { RouterVars } from '@showbridge/types';
 import Action from './actions/action.js';
 import { ActionTypeClassMap } from './actions/index.js';
 import { Message } from './messages/index.js';
@@ -18,8 +19,6 @@ import {
 } from './protocols/index.js';
 import Trigger from './triggers/trigger.js';
 
-export type RouterVars = { [k: string]: any };
-
 export type RouterProtocols = {
   http: HTTPProtocol;
   udp: UDPProtocol;
@@ -29,6 +28,7 @@ export type RouterProtocols = {
   cloud: CloudProtocol;
   ws: WebSocketProtocol;
 };
+
 class Router extends EventEmitter {
   vars: RouterVars;
   _config: Config;

@@ -1,13 +1,8 @@
+import { MIDIProgramChangeTriggerParams } from '@showbridge/types';
 import { has } from 'lodash-es';
 import { MIDIMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
-
-type MIDIProgramChangeTriggerParams = {
-  port?: string;
-  channel?: number;
-  program?: number;
-};
 
 class MIDIProgramChangeTrigger extends Trigger<MIDIProgramChangeTriggerParams> {
   test(msg: MIDIMessage) {

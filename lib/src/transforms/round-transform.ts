@@ -1,11 +1,8 @@
+import { RoundTransformParams } from '@showbridge/types';
 import { get, set } from 'lodash-es';
 import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Transform from './transform.js';
-
-type RoundTransformParams = {
-  property: string;
-};
 
 class RoundTransform extends Transform<RoundTransformParams> {
   _transform(msg: Message, vars) {

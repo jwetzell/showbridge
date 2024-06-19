@@ -1,18 +1,10 @@
+import { TriggerObj } from '@showbridge/types';
 import { has } from 'lodash-es';
 import Action from '../actions/action.js';
 import { ActionTypeClassMap } from '../actions/index.js';
 import { Message } from '../messages/index.js';
 import { Templating, disabled } from '../utils/index.js';
 import { TriggerTypeClassMap } from './index.js';
-
-type TriggerObj<T> = {
-  type: string;
-  params: T;
-  enabled: boolean;
-  comment: string;
-  actions: Action<unknown>[];
-  subTriggers: Trigger<unknown>[];
-};
 
 class Trigger<T extends Object> {
   private obj: TriggerObj<T>;

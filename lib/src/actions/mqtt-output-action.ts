@@ -1,12 +1,8 @@
+import { MQTTOutputActionParams, RouterVars } from '@showbridge/types';
 import { Message } from '../messages/index.js';
-import { RouterProtocols, RouterVars } from '../router.js';
+import { RouterProtocols } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
-
-type MQTTOutputActionParams = {
-  topic?: string;
-  payload?: string;
-};
 
 class MQTTOutputAction extends Action<MQTTOutputActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {

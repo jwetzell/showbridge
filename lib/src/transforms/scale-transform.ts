@@ -1,13 +1,8 @@
+import { ScaleTransformParams } from '@showbridge/types';
 import { get, has, set } from 'lodash-es';
 import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Transform from './transform.js';
-
-type ScaleTransformParams = {
-  property: string;
-  inRange: [number, number];
-  outRange: [number, number];
-};
 
 class ScaleTransform extends Transform<ScaleTransformParams> {
   _transform(msg: Message, vars) {

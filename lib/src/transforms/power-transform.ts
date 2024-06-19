@@ -1,12 +1,8 @@
+import { PowerTransformParams } from '@showbridge/types';
 import { get, set } from 'lodash-es';
 import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Transform from './transform.js';
-
-type PowerTransformParams = {
-  property: string;
-  exponent: number;
-};
 
 class PowerTransform extends Transform<PowerTransformParams> {
   _transform(msg: Message, vars) {

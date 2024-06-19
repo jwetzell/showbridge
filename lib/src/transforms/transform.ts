@@ -1,14 +1,7 @@
+import { RouterVars, TransformObj } from '@showbridge/types';
 import { noop } from 'lodash-es';
 import { Message } from '../messages/index.js';
-import { RouterVars } from '../router.js';
 import { disabled, Templating } from '../utils/index.js';
-
-export type TransformObj<T> = {
-  type: string;
-  params: T;
-  enabled: boolean;
-  comment: string;
-};
 
 class Transform<T extends Object> {
   private obj: TransformObj<T>;

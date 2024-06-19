@@ -1,34 +1,9 @@
+import { HTTPResponseActionParams } from '@showbridge/types';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { HTTPMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
-
-export type ContentType =
-  | 'text/plain'
-  | 'text/html'
-  | 'text/csv'
-  | 'application/json'
-  | 'application/pdf'
-  | 'image/jpeg'
-  | 'image/png'
-  | 'audio/wav'
-  | 'audio/webm'
-  | 'video/mp4'
-  | 'video/mpeg'
-  | 'video/webm';
-
-type HTTPResponseActionParams = FileBodyParams | StringBodyParams;
-
-type FileBodyParams = {
-  contentType?: ContentType;
-  path?: string;
-};
-
-type StringBodyParams = {
-  contentType?: ContentType;
-  path?: string;
-};
 
 class HTTPResponseAction extends Action<HTTPResponseActionParams> {
   _run(_msg: HTTPMessage, vars) {

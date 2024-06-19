@@ -1,30 +1,8 @@
+import { RouterVars, TCPOutputActionParams } from '@showbridge/types';
 import { Message } from '../messages/index.js';
-import { RouterProtocols, RouterVars } from '../router.js';
+import { RouterProtocols } from '../router.js';
 import { hexToBytes, logger } from '../utils/index.js';
 import Action from './action.js';
-
-type TCPOutputActionParams = TCPBytesParams | TCPHexParams | TCPStringParams;
-
-type TCPBytesParams = {
-  host?: string;
-  port?: number;
-  slip: boolean;
-  bytes: number[];
-};
-
-type TCPHexParams = {
-  host?: string;
-  port?: number;
-  slip: boolean;
-  hex: string;
-};
-
-type TCPStringParams = {
-  host?: string;
-  port?: number;
-  slip: boolean;
-  string?: string;
-};
 
 class TCPOutputAction extends Action<TCPOutputActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {

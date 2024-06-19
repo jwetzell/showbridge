@@ -1,16 +1,9 @@
+import { OSCOutputActionParams, RouterVars } from '@showbridge/types';
 import osc, { OscArgument } from 'osc-min';
 import { Message } from '../messages/index.js';
-import { RouterProtocols, RouterVars } from '../router.js';
+import { RouterProtocols } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
-
-type OSCOutputActionParams = {
-  host?: string;
-  port?: number;
-  protocol: 'udp' | 'tcp';
-  address?: string;
-  args?: string[];
-};
 
 class OSCOutputAction extends Action<OSCOutputActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {

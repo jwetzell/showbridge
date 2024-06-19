@@ -1,11 +1,8 @@
+import { FloorTransformParams } from '@showbridge/types';
 import { get, set } from 'lodash-es';
 import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Transform from './transform.js';
-
-type FloorTransformParams = {
-  property: string;
-};
 
 class FloorTransform extends Transform<FloorTransformParams> {
   _transform(msg: Message, vars) {

@@ -1,12 +1,8 @@
+import { HTTPRequestTriggerParams } from '@showbridge/types';
 import { has } from 'lodash-es';
 import HTTPMessage from '../messages/http-message.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
-
-type HTTPRequestTriggerParams = {
-  path?: string;
-  method?: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-};
 
 class HTTPRequestTrigger extends Trigger<HTTPRequestTriggerParams> {
   test(msg: HTTPMessage) {

@@ -1,12 +1,8 @@
+import { TemplateTransformParams } from '@showbridge/types';
 import { set } from 'lodash-es';
 import { Message } from '../messages/index.js';
 import { Templating, logger } from '../utils/index.js';
 import Transform from './transform.js';
-
-type TemplateTransformParams = {
-  property: string;
-  template: string;
-};
 
 class TemplateTransform extends Transform<TemplateTransformParams> {
   _transform(msg: Message, vars) {

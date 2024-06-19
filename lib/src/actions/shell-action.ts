@@ -1,11 +1,8 @@
+import { ShellActionParams } from '@showbridge/types';
 import { exec } from 'node:child_process';
 import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
-
-type ShellActionParams = {
-  command: string;
-};
 
 class ShellAction extends Action<ShellActionParams> {
   _run(_msg: Message, vars) {

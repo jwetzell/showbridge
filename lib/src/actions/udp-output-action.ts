@@ -1,30 +1,8 @@
+import { RouterVars, UDPOutputActionParams } from '@showbridge/types';
 import { Message } from '../messages/index.js';
-import { RouterProtocols, RouterVars } from '../router.js';
+import { RouterProtocols } from '../router.js';
 import { hexToBytes, logger } from '../utils/index.js';
 import Action from './action.js';
-
-type UDPOutputActionParams = UDPBytesParams | UDPHexParams | UDPStringParams;
-
-type UDPBytesParams = {
-  host?: string;
-  port?: number;
-  slip: boolean;
-  bytes: number[];
-};
-
-type UDPHexParams = {
-  host?: string;
-  port?: number;
-  slip: boolean;
-  hex: string;
-};
-
-type UDPStringParams = {
-  host?: string;
-  port?: number;
-  slip: boolean;
-  string?: string;
-};
 
 class UDPOutputAction extends Action<UDPOutputActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {

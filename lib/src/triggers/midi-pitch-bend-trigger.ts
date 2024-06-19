@@ -1,13 +1,8 @@
+import { MIDIPitchBendTriggerParams } from '@showbridge/types';
 import { has } from 'lodash-es';
 import { MIDIMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
-
-type MIDIPitchBendTriggerParams = {
-  port?: string;
-  channel?: number;
-  value?: number;
-};
 
 class MIDIPitchBendTrigger extends Trigger<MIDIPitchBendTriggerParams> {
   test(msg: MIDIMessage) {

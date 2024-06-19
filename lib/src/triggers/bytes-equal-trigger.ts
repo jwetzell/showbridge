@@ -1,11 +1,8 @@
+import { BytesEqualTriggerParams } from '@showbridge/types';
 import { isEqual } from 'lodash-es';
 import { MIDIMessage, MQTTMessage, OSCMessage, TCPMessage, UDPMessage, WebSocketMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
-
-type BytesEqualTriggerParams = {
-  bytes: number[];
-};
 
 class BytesEqualTrigger extends Trigger<BytesEqualTriggerParams> {
   test(msg: MIDIMessage | UDPMessage | OSCMessage | TCPMessage | MQTTMessage | WebSocketMessage) {

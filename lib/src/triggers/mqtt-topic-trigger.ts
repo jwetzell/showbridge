@@ -1,11 +1,8 @@
+import { MQTTTopicTriggerParams } from '@showbridge/types';
 import { has } from 'lodash-es';
 import MQTTMessage from '../messages/mqtt-message.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
-
-type MQTTTopicTriggerParams = {
-  topic: string;
-};
 
 class MQTTTopicTrigger extends Trigger<MQTTTopicTriggerParams> {
   test(msg: MQTTMessage) {

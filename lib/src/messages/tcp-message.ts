@@ -1,8 +1,4 @@
-export type TCPSender = {
-  protocol: 'tcp';
-  address: string;
-  port: number;
-};
+import { TCPSender } from '@showbridge/types';
 
 class TCPMessage {
   private msg: Buffer;

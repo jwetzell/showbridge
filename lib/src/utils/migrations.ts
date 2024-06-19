@@ -1,5 +1,5 @@
+import { ConfigObj } from '@showbridge/types';
 import { cloneDeep } from 'lodash-es';
-import { ConfigObj } from '../config.js';
 import { logger } from './index.js';
 
 // NOTE(jwetzell): I was really hoping to avoid this, but can't avoid breaking the config forever.

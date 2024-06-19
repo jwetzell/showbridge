@@ -1,19 +1,11 @@
+import { ActionObj, RouterVars } from '@showbridge/types';
 import { cloneDeep, has, noop } from 'lodash-es';
 import { EventEmitter } from 'node:events';
 import { Message } from '../messages/index.js';
-import { RouterProtocols, RouterVars } from '../router.js';
+import { RouterProtocols } from '../router.js';
 import { TransformTypeClassMap } from '../transforms/index.js';
-import Transform, { TransformObj } from '../transforms/transform.js';
+import Transform from '../transforms/transform.js';
 import { Templating, disabled } from '../utils/index.js';
-
-export type ActionObj<T> = {
-  type: string;
-  params: T;
-  transforms: TransformObj<unknown>[];
-  enabled: boolean;
-  comment: string;
-};
-
 class Action<T extends Object> extends EventEmitter {
   private obj: ActionObj<T>;
   transforms: Transform<unknown>[];

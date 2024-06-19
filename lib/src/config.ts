@@ -1,26 +1,10 @@
+import { ConfigObj } from '@showbridge/types';
 import { Ajv, ValidateFunction } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema.js';
 import { cloneDeep, has } from 'lodash-es';
 import { MessageTypeClassMap } from './messages/index.js';
 import { Trigger, TriggerTypeClassMap } from './triggers/index.js';
 import getConfigMigrations from './utils/migrations.js';
-
-export type ProtocolObj = {
-  params: { [key: string]: any };
-  triggers: Trigger<unknown>[];
-};
-
-export type ConfigObj = {
-  $schema?: string;
-  http: ProtocolObj;
-  ws: ProtocolObj;
-  osc: ProtocolObj;
-  tcp: ProtocolObj;
-  udp: ProtocolObj;
-  midi: ProtocolObj;
-  mqtt: ProtocolObj;
-  cloud: ProtocolObj;
-};
 
 class Config {
   schema: SomeJSONSchema;

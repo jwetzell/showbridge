@@ -1,12 +1,9 @@
+import { StoreActionParams } from '@showbridge/types';
 import { set } from 'lodash-es';
 import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
 
-type StoreActionParams = {
-  key: string;
-  value: string;
-};
 class StoreAction extends Action<StoreActionParams> {
   _run(_msg: Message, vars) {
     const msg = this.getTransformedMessage(_msg, vars);

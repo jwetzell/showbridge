@@ -1,8 +1,5 @@
+import { HTTPSender } from '@showbridge/types';
 import { Response } from 'express';
-type HTTPSender = {
-  protocol: 'tcp';
-  address: string;
-};
 
 class HTTPMessage {
   msg: any;

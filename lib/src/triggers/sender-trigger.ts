@@ -1,11 +1,8 @@
+import { SenderTriggerParams } from '@showbridge/types';
 import { has } from 'lodash-es';
 import { HTTPMessage, TCPMessage, UDPMessage, WebSocketMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
-
-type SenderTriggerParams = {
-  address: string;
-};
 
 class SenderTrigger extends Trigger<SenderTriggerParams> {
   test(msg: HTTPMessage | TCPMessage | UDPMessage | WebSocketMessage) {

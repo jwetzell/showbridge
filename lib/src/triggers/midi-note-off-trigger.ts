@@ -1,14 +1,8 @@
+import { MIDINoteOffTriggerParams } from '@showbridge/types';
 import { has } from 'lodash-es';
 import { MIDIMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
-
-type MIDINoteOffTriggerParams = {
-  port?: string;
-  channel?: number;
-  note?: number;
-  velocity?: number;
-};
 
 class MIDINoteOffTrigger extends Trigger<MIDINoteOffTriggerParams> {
   test(msg: MIDIMessage) {

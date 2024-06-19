@@ -1,10 +1,5 @@
+import { WebSocketSender } from '@showbridge/types';
 import { RawData } from 'ws';
-
-type WebSocketSender = {
-  protocol: 'tcp';
-  address: string;
-  port: number;
-};
 
 export type WebUIPayload = {
   eventName: string;

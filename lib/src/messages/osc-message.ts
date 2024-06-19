@@ -1,9 +1,6 @@
+import { OSCSender } from '@showbridge/types';
 import { has } from 'lodash-es';
 import osc, { OscMessageOrBundle } from 'osc-min';
-import { TCPSender } from './tcp-message.js';
-import { UDPSender } from './udp-message.js';
-
-type OSCSender = UDPSender | TCPSender;
 
 class OSCMessage {
   private msg: any;

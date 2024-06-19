@@ -1,11 +1,8 @@
+import { OSCAddressTriggerParams } from '@showbridge/types';
 import { has } from 'lodash-es';
 import { OSCMessage } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
-
-type OSCAddressTriggerParams = {
-  address: string;
-};
 
 class OSCAddressTrigger extends Trigger<OSCAddressTriggerParams> {
   test(msg: OSCMessage) {

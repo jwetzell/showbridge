@@ -1,12 +1,8 @@
+import { RegexTriggerParams } from '@showbridge/types';
 import { get, has } from 'lodash-es';
 import { Message } from '../messages/index.js';
 import { logger } from '../utils/index.js';
 import Trigger from './trigger.js';
-
-type RegexTriggerParams = {
-  patterns: string[];
-  properties: string[];
-};
 
 class RegexTrigger extends Trigger<RegexTriggerParams> {
   test(msg: Message) {

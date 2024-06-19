@@ -1,14 +1,8 @@
+import { HTTPRequestActionParams, RouterVars } from '@showbridge/types';
 import { Message } from '../messages/index.js';
-import { RouterProtocols, RouterVars } from '../router.js';
+import { RouterProtocols } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
-
-type HTTPRequestActionParams = {
-  method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-  url?: string;
-  contentType?: string;
-  body?: string;
-};
 
 class HTTPRequestAction extends Action<HTTPRequestActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {

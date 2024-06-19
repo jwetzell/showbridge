@@ -1,13 +1,8 @@
+import { ForwardActionParms, RouterVars } from '@showbridge/types';
 import { ByteMessage } from '../messages/index.js';
-import { RouterProtocols, RouterVars } from '../router.js';
+import { RouterProtocols } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
-
-type ForwardActionParms = {
-  host?: string;
-  port?: number;
-  protocol: 'udp' | 'tcp';
-};
 
 class ForwardAction extends Action<ForwardActionParms> {
   _run(_msg: ByteMessage, vars: RouterVars, protocols: RouterProtocols) {

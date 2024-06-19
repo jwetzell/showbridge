@@ -1,9 +1,9 @@
+import { UDPSender } from '@showbridge/types';
 import { createSocket, Socket } from 'dgram';
 import { Router } from 'express';
 import { EventEmitter } from 'node:events';
 import osc from 'osc-min';
 import { OSCMessage, UDPMessage } from '../messages/index.js';
-import { UDPSender } from '../messages/udp-message.js';
 import { disabled, logger } from '../utils/index.js';
 
 class UDPProtocol extends EventEmitter {

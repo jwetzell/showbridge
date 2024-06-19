@@ -1,12 +1,9 @@
+import { CloudOutputActionParams, RouterVars } from '@showbridge/types';
 import { Message } from '../messages/index.js';
-import { RouterProtocols, RouterVars } from '../router.js';
+import { RouterProtocols } from '../router.js';
 import { logger } from '../utils/index.js';
 import Action from './action.js';
 
-type CloudOutputActionParams = {
-  room?: string;
-  rooms?: string[];
-};
 class CloudOutputAction extends Action<CloudOutputActionParams> {
   _run(_msg: Message, vars: RouterVars, protocols: RouterProtocols) {
     const msg = this.getTransformedMessage(_msg, vars);
