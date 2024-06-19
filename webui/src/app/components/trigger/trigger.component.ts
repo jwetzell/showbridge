@@ -3,11 +3,10 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActionObj, ActionParams, TriggerObj, TriggerParams } from '@showbridge/types';
 import { cloneDeep, merge } from 'lodash-es';
 import { debounceTime, tap } from 'rxjs';
-import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
-import { Trigger } from 'src/app/models/trigger.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
 import { ListsService } from 'src/app/services/lists.service';
@@ -19,7 +18,7 @@ import { SchemaService } from 'src/app/services/schema.service';
 })
 export class TriggerComponent implements OnInit {
   @Input() path?: string;
-  @Input() trigger?: Trigger;
+  @Input() trigger?: TriggerObj<TriggerParams>;
   @Input() showActions: boolean = true;
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
@@ -113,7 +112,7 @@ export class TriggerComponent implements OnInit {
     this.updated.emit(true);
   }
 
-  dropAction(event: CdkDragDrop<Action[]>) {
+  dropAction(event: CdkDragDrop<ActionObj<ActionParams>[]>) {
     if (event.previousContainer === event.container) {
       if (this.trigger?.actions !== undefined) {
         moveItemInArray(this.trigger?.actions, event.previousIndex, event.currentIndex);
@@ -125,7 +124,7 @@ export class TriggerComponent implements OnInit {
     }
   }
 
-  dropTrigger(event: CdkDragDrop<Trigger[]>) {
+  dropTrigger(event: CdkDragDrop<TriggerObj<TriggerParams>[]>) {
     if (event.previousContainer === event.container) {
       if (this.trigger?.subTriggers !== undefined) {
         moveItemInArray(this.trigger?.subTriggers, event.previousIndex, event.currentIndex);
@@ -159,6 +158,10 @@ export class TriggerComponent implements OnInit {
   }
 
   pasteAction(copyObject: CopyObject) {
+    if (copyObject.type !== 'Action') {
+      return;
+    }
+
     if (this.trigger && this.trigger?.actions === undefined) {
       this.trigger.actions = [];
     }

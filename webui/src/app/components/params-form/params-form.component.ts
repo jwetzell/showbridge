@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MIDIPatch, NetworkPatch } from '@showbridge/types';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { cloneDeep, has } from 'lodash-es';
 import { Subscription } from 'rxjs';
 import { ParamInfo, ParamsFormInfo } from 'src/app/models/form.model';
-import { MIDIPatch, NetworkPatch } from 'src/app/models/patches.model';
 import { SchemaService } from 'src/app/services/schema.service';
 import { VarsService } from 'src/app/services/vars.service';
 

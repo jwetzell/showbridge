@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MIDIPatch, NetworkPatch, RouterVars } from '@showbridge/types';
 import { BehaviorSubject } from 'rxjs';
-import { MIDIPatch, NetworkPatch } from '../models/patches.model';
 import { SettingsService } from './settings.service';
 @Injectable({
   providedIn: 'root',
@@ -32,7 +32,7 @@ export class VarsService {
     }
   }
 
-  uploadVars(vars: any) {
+  uploadVars(vars: RouterVars) {
     if (this.varsUrl) {
       return this.http.post(this.varsUrl.toString(), vars, {
         headers: {

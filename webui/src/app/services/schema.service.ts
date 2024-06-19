@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { ActionObj, ActionParams, TransformObj, TransformParams, TriggerObj, TriggerParams } from '@showbridge/types';
 import Ajv, { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
 import { noop, sortBy } from 'lodash-es';
-import { Action } from '../models/action.model';
 import { ConfigFile } from '../models/config.models';
 import { ObjectInfo, ParamsFormInfo } from '../models/form.model';
-import { Trigger } from '../models/trigger.model';
 import { SettingsService } from './settings.service';
 
 @Injectable({
@@ -70,21 +69,21 @@ export class SchemaService {
     return true;
   }
 
-  getSkeletonForAction(actionType: string): Action {
-    const template: Action = {
+  getSkeletonForAction(actionType: string): ActionObj<ActionParams> {
+    const template: ActionObj<ActionParams> = {
       type: actionType,
       transforms: [],
       enabled: true,
     };
     const itemInfo = this.actionTypes.find((itemInfo) => itemInfo.type === actionType);
     if (itemInfo?.schema?.required && itemInfo.schema.required.includes('params')) {
-      template.params = this.getSkeletonForParamsSchema(itemInfo.schema.properties.params);
+      template.params = this.getSkeletonForParamsSchema(itemInfo.schema.properties.params) as ActionParams;
     }
     return template;
   }
 
-  getSkeletonForTrigger(triggerType: string): Trigger {
-    const template: Trigger = {
+  getSkeletonForTrigger(triggerType: string): TriggerObj<TriggerParams> {
+    const template: TriggerObj<TriggerParams> = {
       type: triggerType,
       actions: [],
       subTriggers: [],
@@ -92,24 +91,24 @@ export class SchemaService {
     };
     const itemInfo = this.triggerTypes.find((itemInfo) => itemInfo.type === triggerType);
     if (itemInfo?.schema?.required && itemInfo.schema.required.includes('params')) {
-      template.params = this.getSkeletonForParamsSchema(itemInfo.schema.properties.params);
+      template.params = this.getSkeletonForParamsSchema(itemInfo.schema.properties.params) as TriggerParams;
     }
     return template;
   }
 
-  getSkeletonForTransform(transformType: string): Trigger {
-    const template: Trigger = {
+  getSkeletonForTransform(transformType: string): TransformObj<TransformParams> {
+    const template: TransformObj<TransformParams> = {
       type: transformType,
       enabled: true,
     };
     const itemInfo = this.transformTypes.find((itemInfo) => itemInfo.type === transformType);
     if (itemInfo?.schema?.required && itemInfo.schema.required.includes('params')) {
-      template.params = this.getSkeletonForParamsSchema(itemInfo.schema.properties.params);
+      template.params = this.getSkeletonForParamsSchema(itemInfo.schema.properties.params) as TransformParams;
     }
     return template;
   }
 
-  getSkeletonForParamsSchema(paramsSchema: SomeJSONSchema): { [key: string]: any } {
+  getSkeletonForParamsSchema(paramsSchema: SomeJSONSchema): TransformParams | ActionParams | TriggerParams {
     const paramsTemplate = {};
     // TODO(jwetzell): make a smart version of this populating fields with defaults
     return paramsTemplate;
