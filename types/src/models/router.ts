@@ -12,9 +12,9 @@ type Patch = {
 };
 
 export type RouterVars = {
-  patches: {
-    midi: MIDIPatch[];
-    network: NetworkPatch[];
+  patches?: {
+    midi?: MIDIPatch[];
+    network?: NetworkPatch[];
   };
   [k: string]: any;
 };
