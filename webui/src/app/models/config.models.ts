@@ -1,4 +1,4 @@
-import { Trigger } from './trigger.model';
+import { TriggerObj, TriggerParams } from '@showbridge/types';
 
 export type ConfigFile = {
   [key: string]: ProtocolConfiguration;
@@ -8,7 +8,7 @@ export type ProtocolConfiguration = {
   params?: {
     [k: string]: string | number;
   };
-  triggers?: Trigger[];
+  triggers?: TriggerObj<TriggerParams>[];
 };
 
 export type CloudConfiguration = {

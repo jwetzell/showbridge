@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { TransformObj, TransformParams } from '@showbridge/types';
 import { merge } from 'lodash-es';
 import { debounceTime, tap } from 'rxjs';
-import { Transform } from 'src/app/models/transform.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
 import { SchemaService } from 'src/app/services/schema.service';
@@ -14,7 +14,7 @@ import { SchemaService } from 'src/app/services/schema.service';
   styleUrls: ['./transform.component.css'],
 })
 export class TransformComponent implements OnInit {
-  @Input() transform?: Transform;
+  @Input() transform?: TransformObj<TransformParams>;
   @Input() path?: string;
 
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { ActionObj, ActionParams } from '@showbridge/types';
 import { BehaviorSubject, Subject, Subscription, filter, timer } from 'rxjs';
-import { Action } from '../models/action.model';
 import {
   ActionEventData,
   MessageEventData,
@@ -104,7 +104,7 @@ export class EventService {
     }
   }
 
-  runAction(action: Action) {
+  runAction(action: ActionObj<ActionParams>) {
     if (this.socket) {
       this.socket.send(
         JSON.stringify({

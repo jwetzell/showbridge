@@ -2,11 +2,11 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Component, EventEmitter, Input, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TriggerObj, TriggerParams } from '@showbridge/types';
 import { cloneDeep } from 'lodash-es';
 import { ProtocolConfiguration } from 'src/app/models/config.models';
 import { CopyObject } from 'src/app/models/copy-object.model';
 import { ObjectInfo } from 'src/app/models/form.model';
-import { Trigger } from 'src/app/models/trigger.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { ListsService } from 'src/app/services/lists.service';
 import { SchemaService } from 'src/app/services/schema.service';
@@ -72,7 +72,7 @@ export class ProtocolComponent {
     this.updated.emit(true);
   }
 
-  dropTrigger(event: CdkDragDrop<Trigger[] | undefined>) {
+  dropTrigger(event: CdkDragDrop<TriggerObj<TriggerParams>[] | undefined>) {
     if (event.previousContainer === event.container) {
       if (this.protocol?.triggers !== undefined) {
         moveItemInArray(this.protocol?.triggers, event.previousIndex, event.currentIndex);
@@ -91,6 +91,10 @@ export class ProtocolComponent {
   }
 
   pasteTrigger(copyObject: CopyObject) {
+    if (copyObject.type !== 'Trigger') {
+      return;
+    }
+
     if (this.protocol && this.protocol?.triggers === undefined) {
       this.protocol.triggers = [];
     }

@@ -3,11 +3,10 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActionObj, ActionParams, TransformObj, TransformParams } from '@showbridge/types';
 import { cloneDeep, merge } from 'lodash-es';
 import { debounceTime, tap } from 'rxjs';
-import { Action } from 'src/app/models/action.model';
 import { CopyObject } from 'src/app/models/copy-object.model';
-import { Transform } from 'src/app/models/transform.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
 import { ListsService } from 'src/app/services/lists.service';
@@ -20,7 +19,7 @@ import { SchemaService } from 'src/app/services/schema.service';
 })
 export class ActionComponent implements OnInit {
   @Input() path?: string;
-  @Input() action?: Action;
+  @Input() action?: ActionObj<ActionParams>;
 
   @Output() delete: EventEmitter<string> = new EventEmitter<string>();
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
@@ -116,7 +115,7 @@ export class ActionComponent implements OnInit {
     this.updated.emit(true);
   }
 
-  drop(event: CdkDragDrop<Transform[]>) {
+  drop(event: CdkDragDrop<TransformObj<TransformParams>[]>) {
     if (event.previousContainer === event.container) {
       if (this.action?.transforms !== undefined) {
         moveItemInArray(this.action?.transforms, event.previousIndex, event.currentIndex);
@@ -128,12 +127,8 @@ export class ActionComponent implements OnInit {
     }
   }
 
-  getSubActions(): Action[] | undefined {
-    if (
-      (this.action?.type === 'delay' || this.action?.type === 'random') &&
-      this.action.params &&
-      this.action.params['actions']
-    ) {
+  getSubActions(): ActionObj<ActionParams>[] | undefined {
+    if (this.action?.params && 'actions' in this.action.params) {
       if (typeof this.action.params['actions'] === 'object') {
         return this.action.params['actions'];
       }
@@ -142,7 +137,7 @@ export class ActionComponent implements OnInit {
   }
 
   addSubAction(actionType: string) {
-    if (this.action?.params) {
+    if (this.action?.params && 'actions' in this.action.params) {
       if (this.action.params['actions'] === undefined) {
         this.action.params['actions'] = [];
       }
@@ -153,7 +148,7 @@ export class ActionComponent implements OnInit {
   }
 
   deleteSubAction(index: number) {
-    if (this.action?.params) {
+    if (this.action?.params && 'actions' in this.action.params) {
       this.action?.params['actions'].splice(index, 1);
       this.updated.emit(true);
     }
@@ -179,6 +174,10 @@ export class ActionComponent implements OnInit {
   }
 
   pasteTransform(copyObject: CopyObject) {
+    if (copyObject.type !== 'Transform') {
+      return;
+    }
+
     if (this.action && this.action?.transforms === undefined) {
       this.action.transforms = [];
     }

@@ -1,9 +1,9 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MIDIPatch, NetworkPatch } from '@showbridge/types';
 import { combineLatest, filter, take } from 'rxjs';
 import { MIDIDeviceInfo } from 'src/app/models/events.model';
-import { MIDIPatch, NetworkPatch } from 'src/app/models/patches.model';
 import { EventService } from 'src/app/services/event.service';
 import { SettingsService } from 'src/app/services/settings.service';
 import { VarsService } from 'src/app/services/vars.service';
@@ -62,7 +62,7 @@ export class PatchEditorComponent {
   }
 
   addMIDIPatch() {
-    this.midiPatches.push({ name: '' });
+    this.midiPatches.push({ name: '', port: '' });
   }
 
   savePatches() {

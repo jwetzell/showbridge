@@ -1,20 +1,18 @@
-import { Action } from './action.model';
-import { Transform } from './transform.model';
-import { Trigger } from './trigger.model';
+import { ActionObj, ActionParams, TransformObj, TransformParams, TriggerObj, TriggerParams } from '@showbridge/types';
 
 export type TriggerCopyObject = {
   type: 'Trigger';
-  object: Trigger | Trigger[];
+  object: TriggerObj<TriggerParams> | TriggerObj<TriggerParams>[];
 };
 
 export type ActionCopyObject = {
   type: 'Action';
-  object: Action | Action[];
+  object: ActionObj<ActionParams> | ActionObj<ActionParams>[];
 };
 
 export type TransformCopyObject = {
   type: 'Transform';
-  object: Transform | Transform[];
+  object: TransformObj<TransformParams> | TransformObj<TransformParams>[];
 };
 
 export type CopyObject = TriggerCopyObject | TransformCopyObject | ActionCopyObject;
