@@ -1,4 +1,5 @@
 import { ActionObj } from './action';
+
 export type TriggerObj<T> = {
   type: string;
   params: T;
