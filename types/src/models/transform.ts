@@ -1,6 +1,6 @@
 export type TransformObj<T> = {
   type: string;
-  params: T;
+  params?: T;
   enabled: boolean;
-  comment: string;
+  comment?: string;
 };
