@@ -1,0 +1,26 @@
+name: Publish @showbridge/types to npmjs
+on:
+  push:
+    tags:
+      - 'types/**'
+jobs:
+  publish-types:
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: 'types/package-lock.json'
+      - name: Install Node.js dependencies
+        run: npm ci
+        working-directory: ./types
+      - name: Publish to NPM
+        run: npm publish --provenance --access=public
+        working-directory: ./types
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
