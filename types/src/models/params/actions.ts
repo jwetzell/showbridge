@@ -14,19 +14,17 @@ export type ContentType =
   | 'video/mpeg'
   | 'video/webm';
 
-export type HTTPResponseActionParams = FileBodyParams | StringBodyParams;
-
-type FileBodyParams = {
+type HTTPFileBodyParams = {
   contentType?: ContentType;
   path?: string;
 };
 
-type StringBodyParams = {
+type HTTPStringBodyParams = {
   contentType?: ContentType;
   path?: string;
 };
 
-export type UDPOutputActionParams = UDPBytesParams | UDPHexParams | UDPStringParams;
+export type HTTPResponseActionParams = HTTPFileBodyParams | HTTPStringBodyParams;
 
 type UDPBytesParams = {
   host?: string;
@@ -49,7 +47,7 @@ type UDPStringParams = {
   string?: string;
 };
 
-export type TCPOutputActionParams = TCPBytesParams | TCPHexParams | TCPStringParams;
+export type UDPOutputActionParams = UDPBytesParams | UDPHexParams | UDPStringParams;
 
 type TCPBytesParams = {
   host?: string;
@@ -72,19 +70,7 @@ type TCPStringParams = {
   string?: string;
 };
 
-export type MIDIOutputActionParams =
-  | MIDIBytesParams
-  | MIDINoteOffMessageParams
-  | MIDINoteOnMessageParams
-  | MIDIPolyphonicAftertouchParams
-  | MIDIControlChangeParams
-  | MIDIProgramChangeParams
-  | MIDIChannelAftertouchParams
-  | MIDIPitchBendParams
-  | MIDIStartParams
-  | MIDIContinueParams
-  | MIDIStopParams
-  | MIDIResetParams;
+export type TCPOutputActionParams = TCPBytesParams | TCPHexParams | TCPStringParams;
 
 type MIDIBytesParams = {
   port?: string;
@@ -163,6 +149,20 @@ type MIDIResetParams = {
   port?: string;
   status: 'reset';
 };
+
+export type MIDIOutputActionParams =
+  | MIDIBytesParams
+  | MIDINoteOffMessageParams
+  | MIDINoteOnMessageParams
+  | MIDIPolyphonicAftertouchParams
+  | MIDIControlChangeParams
+  | MIDIProgramChangeParams
+  | MIDIChannelAftertouchParams
+  | MIDIPitchBendParams
+  | MIDIStartParams
+  | MIDIContinueParams
+  | MIDIStopParams
+  | MIDIResetParams;
 
 export type HTTPRequestActionParams = {
   method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
