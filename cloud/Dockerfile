@@ -1,4 +1,4 @@
-FROM node:20.12.2-slim
+FROM node:20.14.0-slim
 RUN apt-get update && apt-get install tini
 WORKDIR /app
 COPY package*.json ./
