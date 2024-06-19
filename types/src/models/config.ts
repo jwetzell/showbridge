@@ -1,8 +1,9 @@
+import { TriggerParams } from './params';
 import { TriggerObj } from './trigger';
 
 export type ProtocolObj = {
   params: { [key: string]: any };
-  triggers: TriggerObj<unknown>[];
+  triggers: TriggerObj<TriggerParams>[];
 };
 
 export type ConfigObj = {

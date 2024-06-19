@@ -1,4 +1,4 @@
-export type AnyTriggerParams = {};
+export type AnyTriggerParams = undefined;
 
 export type BytesEqualTriggerParams = {
   bytes: number[];
@@ -58,3 +58,17 @@ export type RegexTriggerParams = {
 export type SenderTriggerParams = {
   address: string;
 };
+
+export type TriggerParams =
+  | AnyTriggerParams
+  | BytesEqualTriggerParams
+  | HTTPRequestTriggerParams
+  | MIDIControlChangeTriggerParams
+  | MIDINoteOffTriggerParams
+  | MIDINoteOnTriggerParams
+  | MIDIPitchBendTriggerParams
+  | MIDIProgramChangeTriggerParams
+  | MQTTTopicTriggerParams
+  | OSCAddressTriggerParams
+  | RegexTriggerParams
+  | SenderTriggerParams;

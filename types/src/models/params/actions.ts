@@ -179,7 +179,7 @@ export type ForwardActionParms = {
 
 export type DelayActionParams = {
   duration?: number;
-  actions: ActionObj<unknown>[];
+  actions: ActionObj<ActionParams>[];
 };
 
 export type CloudOutputActionParams = {
@@ -203,7 +203,7 @@ export type OSCOutputActionParams = {
 };
 
 export type RandomActionParams = {
-  actions: ActionObj<unknown>[];
+  actions: ActionObj<ActionParams>[];
 };
 
 export type ShellActionParams = {

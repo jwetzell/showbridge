@@ -33,3 +33,12 @@ export type TemplateTransformParams = {
   property: string;
   template: string;
 };
+
+export type TransformParams =
+  | FloorTransformParams
+  | LogTransformParams
+  | MapTransformParams
+  | PowerTransformParams
+  | RoundTransformParams
+  | ScaleTransformParams
+  | TemplateTransformParams;
