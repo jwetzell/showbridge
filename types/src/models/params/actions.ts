@@ -187,7 +187,7 @@ export type CloudOutputActionParams = {
   rooms?: string[];
 };
 
-export type LogActionParams = {};
+export type LogActionParams = undefined;
 
 export type MQTTOutputActionParams = {
   topic?: string;
@@ -214,3 +214,19 @@ export type StoreActionParams = {
   key: string;
   value: string;
 };
+
+export type ActionParams =
+  | CloudOutputActionParams
+  | DelayActionParams
+  | ForwardActionParms
+  | HTTPRequestActionParams
+  | HTTPResponseActionParams
+  | LogActionParams
+  | MIDIOutputActionParams
+  | MQTTOutputActionParams
+  | OSCOutputActionParams
+  | RandomActionParams
+  | ShellActionParams
+  | StoreActionParams
+  | TCPOutputActionParams
+  | UDPOutputActionParams;
