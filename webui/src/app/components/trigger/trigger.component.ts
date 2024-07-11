@@ -7,6 +7,7 @@ import { ActionObj, ActionParams, TriggerObj, TriggerParams } from '@showbridge/
 import { cloneDeep, merge } from 'lodash-es';
 import { debounceTime, tap } from 'rxjs';
 import { CopyObject } from 'src/app/models/copy-object.model';
+import { ObjectInfo } from 'src/app/models/form.model';
 import { CopyService } from 'src/app/services/copy.service';
 import { EventService } from 'src/app/services/event.service';
 import { ListsService } from 'src/app/services/lists.service';
@@ -26,6 +27,8 @@ export class TriggerComponent implements OnInit {
   @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
 
   schema: any;
+
+  subTriggerTypes?: ObjectInfo[];
 
   indicatorColor: string = 'gray';
 
@@ -66,6 +69,8 @@ export class TriggerComponent implements OnInit {
       if (this.trigger && this.formGroup) {
         this.formGroup.patchValue(this.trigger);
       }
+
+      this.subTriggerTypes = this.schemaService.getSubTriggerTypesForTriggerType(this.trigger.type);
       this.formGroup.valueChanges.subscribe((value) => {
         this.formUpdated();
       });
@@ -185,6 +190,7 @@ export class TriggerComponent implements OnInit {
   }
 
   addSubTrigger(triggerType: string) {
+    console.log(triggerType);
     if (this.trigger && this.trigger?.subTriggers === undefined) {
       this.trigger.subTriggers = [];
     }
