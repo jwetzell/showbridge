@@ -9,6 +9,7 @@ const projectFolders = [
   path.resolve(import.meta.dirname, '../launcher'),
   path.resolve(import.meta.dirname, '../lib'),
   path.resolve(import.meta.dirname, '../site'),
+  path.resolve(import.meta.dirname, '../types'),
   path.resolve(import.meta.dirname, '../webui'),
 ];
 
