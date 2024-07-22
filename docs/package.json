@@ -17,7 +17,7 @@
     "@astrojs/starlight": "0.25.0",
     "astro": "4.12.2",
     "sharp": "0.33.4",
-    "@astrojs/check": "0.7.0",
+    "@astrojs/check": "0.8.2",
     "typescript": "5.5.3"
   }
 }
