@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@electron/notarize": "2.3.2",
-    "electron": "31.1.0",
+    "electron": "31.2.0",
     "electron-builder": "24.13.3",
     "tailwindcss": "3.4.4"
   },
