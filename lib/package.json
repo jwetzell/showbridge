@@ -33,7 +33,7 @@
   "license": "GPL-3.0-only",
   "dependencies": {
     "@julusian/midi": "3.4.0",
-    "ajv": "8.16.0",
+    "ajv": "8.17.1",
     "cors": "2.8.5",
     "express": "4.19.2",
     "lodash-es": "4.17.21",
