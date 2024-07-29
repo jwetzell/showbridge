@@ -39,7 +39,7 @@
     "lodash-es": "4.17.21",
     "mqtt": "5.9.0",
     "osc-min": "1.1.2",
-    "pino": "9.3.1",
+    "pino": "9.3.2",
     "slip": "1.0.2",
     "socket.io-client": "4.7.5",
     "superagent": "9.0.2",
