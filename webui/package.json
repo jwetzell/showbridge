@@ -45,7 +45,7 @@
     "@showbridge/types": "0.3.0",
     "@types/lodash-es": "4.17.12",
     "autoprefixer": "10.4.19",
-    "postcss": "8.4.39",
+    "postcss": "8.4.40",
     "tailwindcss": "3.4.7",
     "typescript": "5.4.5"
   }
