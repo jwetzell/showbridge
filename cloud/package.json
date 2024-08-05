@@ -42,7 +42,7 @@
     "express": "4.19.2",
     "ioredis": "5.4.1",
     "pino": "9.3.2",
-    "redis": "4.6.15",
+    "redis": "4.7.0",
     "socket.io": "4.7.5"
   },
   "devDependencies": {
