@@ -10,9 +10,9 @@ jobs:
   build-docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: build docs
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f #v5.1.1
         with:
           python-version: '3.10'
       - run: pip install json-schema-for-humans==0.47
@@ -20,7 +20,7 @@ jobs:
       - run: generate-schema-doc --config expand_buttons=true schema/config.schema.json html/docs/schema/config/index.html
       - run: ls html/docs/schema/config
       - name: publish docs
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
         with:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.DOCS_FTP_USERNAME}}
