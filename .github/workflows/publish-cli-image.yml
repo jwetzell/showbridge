@@ -49,7 +49,7 @@ jobs:
             type=match,pattern=cli/v(\d+.\d+.\d+),group=1
 
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@5176d81f87c23d6fc96624dfdbcd9f3830bbe445 # v6.5.0
         with:
           push: true
           context: ./cli
