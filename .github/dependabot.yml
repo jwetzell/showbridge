@@ -1,5 +1,6 @@
 version: 2
 updates:
+  # labels
   - package-ecosystem: 'npm'
     directory: '/cli'
     schedule:
@@ -45,3 +46,16 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+  # groups
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    groups:
+      angular:
+        applies-to: version-updates
+        patterns:
+          - '@angular*'
+        update-types:
+          - 'minor'
+          - 'patch'
