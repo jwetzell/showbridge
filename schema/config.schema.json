@@ -1966,7 +1966,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "const": "midi-note-off"
+          "const": "midi"
         },
         "comment": {
           "type": "string"
