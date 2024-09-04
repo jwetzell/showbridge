@@ -1980,6 +1980,7 @@
               "type": "string"
             },
             "_port": {
+              "title": "port",
               "description": "template for the name of the MIDI port to match against incoming messages",
               "type": "string"
             }
