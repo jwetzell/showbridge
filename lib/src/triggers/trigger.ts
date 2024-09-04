@@ -1,4 +1,4 @@
-import { TriggerObj } from '@showbridge/types';
+import { RouterVars, TriggerObj } from '@showbridge/types';
 import { has } from 'lodash-es';
 import Action from '../actions/action.js';
 import { ActionTypeClassMap } from '../actions/index.js';
@@ -40,15 +40,15 @@ class Trigger<T extends Object> {
   }
 
   // eslint-disable-next-line no-unused-vars
-  test(msg: Message) {
+  test(msg: Message, vars: RouterVars) {
     return true;
   }
 
-  shouldFire(msg: Message) {
+  shouldFire(msg: Message, vars: RouterVars) {
     if (!this.enabled) {
       return false;
     }
-    return this.test(msg);
+    return this.test(msg, vars);
   }
 
   get type() {

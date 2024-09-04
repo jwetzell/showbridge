@@ -191,7 +191,7 @@ class Router extends EventEmitter {
 
   processTrigger(trigger: Trigger<unknown>, triggerPath: string, msg: Message) {
     try {
-      const triggerShouldFire = trigger.shouldFire(msg);
+      const triggerShouldFire = trigger.shouldFire(msg, this.vars);
 
       const triggerEventObj = {
         path: triggerPath,
