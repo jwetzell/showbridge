@@ -6,6 +6,7 @@ import MIDINoteOffTrigger from './midi-note-off-trigger.js';
 import MIDINoteOnTrigger from './midi-note-on-trigger.js';
 import MIDIPitchBendTrigger from './midi-pitch-bend-trigger.js';
 import MIDIProgramChangeTrigger from './midi-program-change-trigger.js';
+import MIDITrigger from './midi-trigger.js';
 import MQTTTopicTrigger from './mqtt-topic-trigger.js';
 import OSCAddressTrigger from './osc-address-trigger.js';
 import RegexTrigger from './regex-trigger.js';
@@ -21,6 +22,7 @@ export {
   MIDINoteOnTrigger,
   MIDIPitchBendTrigger,
   MIDIProgramChangeTrigger,
+  MIDITrigger,
   MQTTTopicTrigger,
   OSCAddressTrigger,
   RegexTrigger,
@@ -35,6 +37,7 @@ export const TriggerTypeClassMap = {
   'midi-control-change': MIDIControlChangeTrigger,
   'midi-note-off': MIDINoteOffTrigger,
   'midi-note-on': MIDINoteOnTrigger,
+  midi: MIDITrigger,
   'midi-pitch-bend': MIDIPitchBendTrigger,
   'midi-program-change': MIDIProgramChangeTrigger,
   'osc-address': OSCAddressTrigger,
