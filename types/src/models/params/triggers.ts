@@ -9,6 +9,10 @@ export type HTTPRequestTriggerParams = {
   method?: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 };
 
+export type MIDITriggerParams = {
+  port?: string;
+};
+
 export type MIDIControlChangeTriggerParams = {
   port?: string;
   channel?: number;
@@ -63,6 +67,7 @@ export type TriggerParams =
   | AnyTriggerParams
   | BytesEqualTriggerParams
   | HTTPRequestTriggerParams
+  | MIDITriggerParams
   | MIDIControlChangeTriggerParams
   | MIDINoteOffTriggerParams
   | MIDINoteOnTriggerParams
