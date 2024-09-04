@@ -200,6 +200,7 @@
             "oneOf": [
               { "$ref": "#/definitions/TriggerRegex" },
               { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerMIDI" },
               { "$ref": "#/definitions/TriggerMIDINoteOff" },
               { "$ref": "#/definitions/TriggerMIDINoteOn" },
               { "$ref": "#/definitions/TriggerMIDIControlChange" },
@@ -1674,6 +1675,7 @@
           { "$ref": "#/definitions/TriggerSender" },
           { "$ref": "#/definitions/TriggerBytesEqual" },
           { "$ref": "#/definitions/TriggerHTTPRequest" },
+          { "$ref": "#/definitions/TriggerMIDI" },
           { "$ref": "#/definitions/TriggerMIDINoteOff" },
           { "$ref": "#/definitions/TriggerMIDINoteOn" },
           { "$ref": "#/definitions/TriggerMIDIControlChange" },
@@ -1947,6 +1949,64 @@
         },
         "subTriggers": {
           "$ref": "#/definitions/TriggerList"
+        },
+        "enabled": {
+          "description": "Whether this trigger is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "TriggerMIDI": {
+      "title": "MIDI",
+      "description": "The trigger will match incoming MIDI events",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "midi-note-off"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "description": "MIDI trigger params",
+          "type": "object",
+          "properties": {
+            "port": {
+              "description": "name of the MIDI port to match against incoming messages",
+              "type": "string"
+            },
+            "_port": {
+              "description": "template for the name of the MIDI port to match against incoming messages",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "actions": {
+          "$ref": "#/definitions/ActionList"
+        },
+        "subTriggers": {
+          "description": "List of triggers",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [
+              { "$ref": "#/definitions/TriggerAny" },
+              { "$ref": "#/definitions/TriggerRegex" },
+              { "$ref": "#/definitions/TriggerSender" },
+              { "$ref": "#/definitions/TriggerBytesEqual" },
+              { "$ref": "#/definitions/TriggerMIDI" },
+              { "$ref": "#/definitions/TriggerMIDINoteOff" },
+              { "$ref": "#/definitions/TriggerMIDINoteOn" },
+              { "$ref": "#/definitions/TriggerMIDIControlChange" },
+              { "$ref": "#/definitions/TriggerMIDIPitchBend" },
+              { "$ref": "#/definitions/TriggerMIDIProgramChange" }
+            ]
+          }
         },
         "enabled": {
           "description": "Whether this trigger is enabled",
