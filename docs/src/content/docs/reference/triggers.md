@@ -10,6 +10,8 @@ sidebar:
 ## **http-request**
     - path: the path to match the incoming HTTP requst agains i.e `index.html`, `/api/v1/test`, etc.
     - method: the HTTP method to match against the incoming HTTP request i.e GET, POST, DELETE, etc.
+## **midi**
+    - port\*: optional name of the MIDI device to match the incoming message to
 ## **midi-control-change**
     - port: optional name of the MIDI device to match the incoming message to
     - channel: optional MIDI channel number 1-16 to match the incoming message to
