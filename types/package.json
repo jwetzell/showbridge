@@ -23,7 +23,7 @@
   },
   "license": "GPL-3.0-only",
   "devDependencies": {
-    "@types/node": "20.14.11",
+    "@types/node": "22.5.4",
     "rimraf": "6.0.1",
     "typescript": "5.5.4"
   }
