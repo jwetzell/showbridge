@@ -22,8 +22,12 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'cli/package-lock.json'
 
+      - name: install Node.js dependencies
+        run: npm ci
+        working-directory: ./cli
+
       - name: setup cli folder
-        run: node bundle.js
+        run: npm run build
         working-directory: ./cli
 
       - name: Set up QEMU
