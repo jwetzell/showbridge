@@ -13,6 +13,7 @@
   "scripts": {
     "build": "ng build --configuration production",
     "build:demo": "ng build --configuration demo",
+    "build:dev": "ng build --configuration development --stats-json",
     "dev": "ng build --watch --configuration development --stats-json",
     "prepack": "npm run build"
   },

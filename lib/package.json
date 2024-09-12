@@ -12,7 +12,8 @@
     "test": "node --test --experimental-test-coverage",
     "prebuild": "rimraf dist/lib",
     "prepack": "npm run test",
-    "build": "tsc"
+    "build": "tsc",
+    "build:dev": "tsc"
   },
   "author": {
     "name": "Joel Wetzell",

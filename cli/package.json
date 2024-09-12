@@ -8,16 +8,16 @@
     "showbridge": "main.js"
   },
   "files": [
-    "sample/config/default.json",
-    "sample/vars/default.json",
+    "sample/*/default.json",
     "schema"
   ],
   "scripts": {
-    "predev": "node ../scripts/setup_dev.js && node bundle.js",
+    "predev": "node ../scripts/setup_dev.js cli",
     "dev": "nodemon --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui ../webui/dist/webui | pino-pretty'",
+    "build": "rimraf sample schema && cp -R ../sample ./ && cp -R ../schema ./",
+    "build:dev": "node setup_dev.js",
     "start": "node main.js | pino-pretty",
-    "install:all": "node scripts/install_all.js",
-    "prepack": "cp -R ../sample ./ && cp -R ../schema ./"
+    "prepack": "npm run build"
   },
   "author": {
     "name": "Joel Wetzell",
@@ -37,13 +37,14 @@
   ],
   "license": "GPL-3.0-only",
   "dependencies": {
-    "commander": "12.1.0",
     "@showbridge/lib": "0.15.3",
-    "@showbridge/webui": "0.8.0"
+    "@showbridge/webui": "0.8.0",
+    "commander": "12.1.0"
   },
   "devDependencies": {
     "nodemon": "3.1.4",
-    "pino-pretty": "11.2.2"
+    "pino-pretty": "11.2.2",
+    "rimraf": "6.0.1"
   },
   "nodemonConfig": {
     "ignoreRoot": [
