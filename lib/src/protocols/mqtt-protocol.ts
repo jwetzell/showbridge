@@ -1,8 +1,8 @@
-import { Router } from 'express';
 import { has } from 'lodash-es';
 import mqtt, { IClientOptions, MqttClient } from 'mqtt';
 import { EventEmitter } from 'node:events';
 import { MQTTMessage } from '../messages/index.js';
+import Router from '../router.js';
 import { disabled, logger } from '../utils/index.js';
 
 class MQTTProtocol extends EventEmitter {
