@@ -1,8 +1,8 @@
-import { Router } from 'express';
 import { has } from 'lodash-es';
 import { EventEmitter } from 'node:events';
 import { io, Socket } from 'socket.io-client';
 import { Message, MessageTypeClassMap } from '../messages/index.js';
+import Router from '../router.js';
 import { logger } from '../utils/index.js';
 
 class CloudProtocol extends EventEmitter {

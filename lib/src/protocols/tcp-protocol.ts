@@ -1,9 +1,9 @@
-import { Router } from 'express';
 import { AddressInfo, Server, Socket, createServer } from 'net';
 import { EventEmitter } from 'node:events';
 import osc from 'osc-min';
 import slip from 'slip';
 import { OSCMessage, TCPMessage } from '../messages/index.js';
+import Router from '../router.js';
 import { disabled, logger } from '../utils/index.js';
 
 class TCPProtocol extends EventEmitter {

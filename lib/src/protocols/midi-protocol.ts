@@ -1,9 +1,9 @@
-import { Router } from 'express';
 import { EventEmitter } from 'node:events';
 import { MIDIMessage } from '../messages/index.js';
 import { disabled, logger } from '../utils/index.js';
 
 import { Input, Output } from '@julusian/midi';
+import Router from '../router.js';
 
 type MIDIOutput = {
   name: string;
