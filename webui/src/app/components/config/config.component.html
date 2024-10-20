@@ -1,36 +1,38 @@
 <ng-container *ngIf="config">
-  <div class="fixed z-50 flex justify-around w-full top-16">
-    <ng-container *ngFor="let protocol of schemaService.protocolTypes">
-      <ng-container *ngIf="enabledProtocols.includes(protocol.type) || settingsService.isDummySite">
-        <ng-container *ngIf="selectedProtocol.type === protocol.type; else notSelectedProtocol">
-          <div
-            (click)="selectProtocolType(protocol)"
-            class="flex items-center justify-center flex-auto h-12 border border-b-2 border-black border-solid cursor-pointer hover:bg-gray-700 bg-slate-800 border-b-blue-500">
-            <div class="items-center justify-center flex-auto text-center">
-              <span class="text-gray-100">
-                {{ protocol.name }}
-              </span>
+  <div class="flex h-full flex-col">
+    <div class="flex justify-around w-full">
+      <ng-container *ngFor="let protocol of schemaService.protocolTypes">
+        <ng-container *ngIf="enabledProtocols.includes(protocol.type) || settingsService.isDummySite">
+          <ng-container *ngIf="selectedProtocol.type === protocol.type; else notSelectedProtocol">
+            <div
+              (click)="selectProtocolType(protocol)"
+              class="flex items-center justify-center flex-auto h-12 border border-b-2 border-black border-solid cursor-pointer hover:bg-gray-700 bg-slate-800 border-b-blue-500">
+              <div class="items-center justify-center flex-auto text-center">
+                <span class="text-gray-100">
+                  {{ protocol.name }}
+                </span>
+              </div>
             </div>
-          </div>
+          </ng-container>
+          <ng-template #notSelectedProtocol>
+            <div
+              (click)="selectProtocolType(protocol)"
+              class="flex items-center justify-center flex-auto h-12 border border-black border-solid cursor-pointer hover:bg-gray-700 bg-slate-800">
+              <div class="items-center justify-center flex-auto text-center">
+                <span class="text-gray-100">
+                  {{ protocol.name }}
+                </span>
+              </div>
+            </div>
+          </ng-template>
         </ng-container>
-        <ng-template #notSelectedProtocol>
-          <div
-            (click)="selectProtocolType(protocol)"
-            class="flex items-center justify-center flex-auto h-12 border border-black border-solid cursor-pointer hover:bg-gray-700 bg-slate-800">
-            <div class="items-center justify-center flex-auto text-center">
-              <span class="text-gray-100">
-                {{ protocol.name }}
-              </span>
-            </div>
-          </div>
-        </ng-template>
       </ng-container>
-    </ng-container>
-  </div>
-  <div *ngIf="selectedProtocol" class="mb-16 mt-28">
-    <app-protocol
-      [protocolType]="selectedProtocol.type"
-      [protocol]="config[selectedProtocol.type]"
-      (updated)="protocolUpdate(selectedProtocol.type)"></app-protocol>
+    </div>
+    <div *ngIf="selectedProtocol" class="flex-grow">
+      <app-protocol
+        [protocolType]="selectedProtocol.type"
+        [protocol]="config[selectedProtocol.type]"
+        (updated)="protocolUpdate(selectedProtocol.type)"></app-protocol>
+    </div>
   </div>
 </ng-container>
