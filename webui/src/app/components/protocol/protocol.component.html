@@ -1,5 +1,5 @@
 <ng-container *ngIf="protocolType">
-  <div class="flex flex-col h-full">
+  <div class="flex flex-col h-full" [cdkContextMenuTriggerFor]="protocolContextMennu">
     <div class="flex">
       <ng-container *ngIf="hasSettings && schema">
         <div class="flex-grow"></div>
@@ -62,4 +62,34 @@
       </ng-container>
     </div>
   </div>
+
+  <!-- Context menus -->
+  <ng-template #protocolContextMennu>
+    <div cdkMenu class="context-menu">
+      <button cdkMenuItem class="context-menu-item" (click)="openSettingsDialog()">Settings</button>
+      <button cdkMenuItem class="flex pr-0 context-menu-item" [cdkMenuTriggerFor]="addTriggerMenu">
+        <div class="flex-grow">Add Trigger</div>
+        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+      </button>
+      <button
+        cdkMenuItem
+        class="context-menu-item"
+        *ngIf="copyService.getClipboardForType('Trigger') | async as copyObject"
+        (click)="pasteTrigger(copyObject)">
+        Paste Trigger
+      </button>
+    </div>
+  </ng-template>
+
+  <ng-template #addTriggerMenu>
+    <div cdkMenu class="context-menu" *ngIf="triggerTypes">
+      <button
+        cdkMenuItem
+        class="context-menu-item"
+        *ngFor="let triggerType of triggerTypes"
+        (click)="addTrigger(triggerType.type)">
+        <span>{{ triggerType.name }}</span>
+      </button>
+    </div>
+  </ng-template>
 </ng-container>
