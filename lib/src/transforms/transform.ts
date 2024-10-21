@@ -1,5 +1,4 @@
 import { RouterVars, TransformObj } from '@showbridge/types';
-import { noop } from 'lodash-es';
 import { Message } from '../messages/index.js';
 import { disabled, Templating } from '../utils/index.js';
 
@@ -11,9 +10,7 @@ class Transform<T extends Object> {
   }
 
   // eslint-disable-next-line no-underscore-dangle, no-unused-vars
-  _transform(msg: Message, vars: RouterVars) {
-    noop();
-  }
+  _transform(msg: Message, vars: RouterVars) {}
 
   transform(msg: Message, vars: RouterVars) {
     if (!this.enabled) {
