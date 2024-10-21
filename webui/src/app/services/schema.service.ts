@@ -4,7 +4,7 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn,
 import { ActionObj, ActionParams, TransformObj, TransformParams, TriggerObj, TriggerParams } from '@showbridge/types';
 import Ajv, { JSONSchemaType } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema';
-import { noop, sortBy } from 'lodash-es';
+import { sortBy } from 'lodash-es';
 import { ConfigFile } from '../models/config.models';
 import { ObjectInfo, ParamsFormInfo } from '../models/form.model';
 import { SettingsService } from './settings.service';
@@ -447,11 +447,11 @@ export class SchemaService {
               try {
                 params[paramKey] = JSON.parse(params[paramKey]);
               } catch (error) {
-                noop();
+                console.error('object param is not JSON');
               }
               break;
             case 'string':
-              noop();
+              // string is default so nothing needs to happen to clean it's value
               break;
             default:
               console.log(`schema-service: unhandled param schema type: ${paramSchema.type}`);
@@ -492,7 +492,7 @@ export class SchemaService {
           try {
             return JSON.parse(`[${paramValue}]`);
           } catch (error) {
-            noop();
+            console.error('sub action list is not JSON');
           }
         } else {
           // NOTE(jwetzell): default to comma-separated strings

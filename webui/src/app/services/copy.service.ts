@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { has, isEqual, noop } from 'lodash-es';
+import { has, isEqual } from 'lodash-es';
 import { BehaviorSubject, Observable, distinctUntilChanged, filter } from 'rxjs';
 import { CopyObject } from '../models/copy-object.model';
 import { SchemaService } from './schema.service';
@@ -73,7 +73,7 @@ export class CopyService {
               this.setSnippet(parsedClipboard);
             }
           } catch (error) {
-            noop();
+            console.error('value in clipboard is not a known object');
           }
         }
       })

@@ -1,5 +1,5 @@
 import { ActionObj, RouterVars } from '@showbridge/types';
-import { cloneDeep, has, noop } from 'lodash-es';
+import { cloneDeep, has } from 'lodash-es';
 import { EventEmitter } from 'node:events';
 import { Message } from '../messages/index.js';
 import { RouterProtocols } from '../router.js';
@@ -63,9 +63,7 @@ class Action<T extends Object> extends EventEmitter {
   }
 
   // eslint-disable-next-line no-underscore-dangle, no-unused-vars
-  _run(msg: Message, vars: RouterVars, protocols: RouterProtocols) {
-    noop();
-  }
+  _run(msg: Message, vars: RouterVars, protocols: RouterProtocols) {}
 
   run(msg: Message, vars: RouterVars, protocols: RouterProtocols) {
     if (!this.enabled) {
