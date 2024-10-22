@@ -180,7 +180,7 @@
   },
   "cloud": {
     "params": {
-      "url": "https://cloud-dev.showbridge.io",
+      "url": "https://cloud.showbridge.io",
       "rooms": [
         "dev"
       ]
