@@ -23,7 +23,7 @@
     "router",
     "theatre"
   ],
-  "license": "GPL-3.0-only",
+  "license": "MIT",
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
     "eslint": "8.57.0",

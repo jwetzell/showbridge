@@ -32,7 +32,7 @@
     "type": "git",
     "url": "git+https://github.com/jwetzell/showbridge.git"
   },
-  "license": "GPL-3.0-only",
+  "license": "MIT",
   "dependencies": {
     "@socket.io/admin-ui": "0.5.1",
     "@socket.io/redis-streams-adapter": "0.2.2",

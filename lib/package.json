@@ -31,7 +31,7 @@
     "router",
     "theatre"
   ],
-  "license": "GPL-3.0-only",
+  "license": "MIT",
   "dependencies": {
     "@julusian/midi": "3.6.1",
     "ajv": "8.17.1",
