@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { map } from 'rxjs';
 import { ConfigFile } from 'src/app/models/config.models';
 import { ObjectInfo } from 'src/app/models/form.model';
 import { EventService } from 'src/app/services/event.service';
@@ -15,31 +14,15 @@ export class ConfigComponent {
   @Input() config!: ConfigFile;
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   pendingUpdate?: ConfigFile;
-  selectedProtocol: ObjectInfo = this.schemaService.protocolTypes[0];
+  selectedMessageType: ObjectInfo = this.schemaService.messageTypes[0];
 
-  enabledProtocols: string[];
+  messageTypes: string[];
   constructor(
     public schemaService: SchemaService,
     public eventService: EventService,
     public settingsService: SettingsService
   ) {
-    this.enabledProtocols = this.schemaService.protocolTypes.map((protocolInfo) => protocolInfo.type);
-
-    this.eventService.protocolStatus$
-      .pipe(
-        map((protocolStatus) => {
-          return Object.entries(protocolStatus.data)
-            .filter(([key, value]) => {
-              return value.enabled;
-            })
-            .map(([key, value]) => {
-              return key;
-            });
-        })
-      )
-      .subscribe((protocolTypes) => {
-        this.enabledProtocols = protocolTypes;
-      });
+    this.messageTypes = this.schemaService.messageTypes.map((protocolInfo) => protocolInfo.type);
   }
 
   protocolUpdate(type: string) {
@@ -51,7 +34,7 @@ export class ConfigComponent {
     this.updated.emit(true);
   }
 
-  selectProtocolType(protocol: ObjectInfo) {
-    this.selectedProtocol = protocol;
+  selectMessageType(messageType: ObjectInfo) {
+    this.selectedMessageType = messageType;
   }
 }

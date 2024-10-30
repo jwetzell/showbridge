@@ -12,13 +12,13 @@ import { ListsService } from 'src/app/services/lists.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
-  selector: 'app-protocol',
-  templateUrl: './protocol.component.html',
-  styleUrls: ['./protocol.component.css'],
+  selector: 'app-message-type',
+  templateUrl: './message-type.component.html',
+  styleUrls: ['./message-type.component.css'],
 })
-export class ProtocolComponent {
-  @Input() protocolType?: string;
-  @Input() protocol?: ProtocolConfiguration;
+export class MessageTypeComponent {
+  @Input() messageType?: string;
+  @Input() messageTypeConfig?: ProtocolConfiguration;
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
@@ -36,23 +36,23 @@ export class ProtocolComponent {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.protocolType) {
-      this.triggerTypes = this.schemaService.getTriggerTypesForProtocol(this.protocolType);
+    if (this.messageType) {
+      this.triggerTypes = this.schemaService.getTriggerTypesForMessageType(this.messageType);
 
-      this.schema = this.schemaService.getSchemaForProtocol(this.protocolType);
+      this.schema = this.schemaService.getSchemaForMessageType(this.messageType);
       this.hasSettings = this.schema.properties.params !== undefined;
     }
   }
 
   protocolParamsUpdated(params: any) {
-    if (this.protocol) {
-      this.protocol.params = params;
+    if (this.messageTypeConfig) {
+      this.messageTypeConfig.params = params;
     }
     this.updated.emit(true);
   }
 
   deleteTrigger(index: number) {
-    this.protocol?.triggers?.splice(index, 1);
+    this.messageTypeConfig?.triggers?.splice(index, 1);
     this.updated.emit(true);
     this.snackBar.open('Trigger Removed', 'Dismiss', {
       duration: 3000,
@@ -64,18 +64,18 @@ export class ProtocolComponent {
   }
 
   addTrigger(triggerType: string) {
-    if (this.protocol && this.protocol?.triggers === undefined) {
-      this.protocol.triggers = [];
+    if (this.messageTypeConfig && this.messageTypeConfig?.triggers === undefined) {
+      this.messageTypeConfig.triggers = [];
     }
     const triggerTemplate = this.schemaService.getSkeletonForTrigger(triggerType);
-    this.protocol?.triggers?.push(triggerTemplate);
+    this.messageTypeConfig?.triggers?.push(triggerTemplate);
     this.updated.emit(true);
   }
 
   dropTrigger(event: CdkDragDrop<TriggerObj<TriggerParams>[] | undefined>) {
     if (event.previousContainer === event.container) {
-      if (this.protocol?.triggers !== undefined) {
-        moveItemInArray(this.protocol?.triggers, event.previousIndex, event.currentIndex);
+      if (this.messageTypeConfig?.triggers !== undefined) {
+        moveItemInArray(this.messageTypeConfig?.triggers, event.previousIndex, event.currentIndex);
         this.updated.emit(true);
       }
     } else if (event.previousContainer.data && event.container.data) {
@@ -95,13 +95,13 @@ export class ProtocolComponent {
       return;
     }
 
-    if (this.protocol && this.protocol?.triggers === undefined) {
-      this.protocol.triggers = [];
+    if (this.messageTypeConfig && this.messageTypeConfig?.triggers === undefined) {
+      this.messageTypeConfig.triggers = [];
     }
     if (Array.isArray(copyObject.object)) {
-      this.protocol?.triggers?.push(...cloneDeep(copyObject.object));
+      this.messageTypeConfig?.triggers?.push(...cloneDeep(copyObject.object));
     } else {
-      this.protocol?.triggers?.push(cloneDeep(copyObject.object));
+      this.messageTypeConfig?.triggers?.push(cloneDeep(copyObject.object));
     }
     this.updated.emit(true);
   }

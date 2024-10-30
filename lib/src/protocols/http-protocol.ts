@@ -3,11 +3,14 @@ import { EventEmitter } from 'node:events';
 import cors from 'cors';
 import express, { Application } from 'express';
 import http, { IncomingMessage, Server, ServerResponse } from 'http';
+import { WebSocket, WebSocketServer } from 'ws';
+
 import { get, has, set } from 'lodash-es';
 import { AddressInfo } from 'net';
 import superagent from 'superagent';
 import Config from '../config.js';
-import { HTTPMessage } from '../messages/index.js';
+import { HTTPMessage, WebSocketMessage } from '../messages/index.js';
+import { WebUIPayload } from '../messages/websocket-message.js';
 import Router from '../router.js';
 import { disabled, logger } from '../utils/index.js';
 
@@ -15,6 +18,9 @@ class HTTPProtocol extends EventEmitter {
   router: Router;
   app: Application;
   httpServer: Server<typeof IncomingMessage, typeof ServerResponse>;
+  wsServer: WebSocketServer;
+  webUISockets: WebSocket[];
+  openWebSockets: WebSocket[];
   server: Server<typeof IncomingMessage, typeof ServerResponse>;
 
   constructor(router) {
@@ -25,9 +31,7 @@ class HTTPProtocol extends EventEmitter {
     this.app = express();
     this.httpServer = http.createServer(this.app);
 
-    this.httpServer.on('upgrade', (req, socket, head) => {
-      this.emit('httpUpgrade', req, socket, head);
-    });
+    this.setupWebSocket();
 
     // Express Server
     this.app.use(cors());
@@ -130,6 +134,72 @@ class HTTPProtocol extends EventEmitter {
     });
   }
 
+  setupWebSocket() {
+    this.webUISockets = [];
+    this.openWebSockets = [];
+    this.wsServer = new WebSocketServer({
+      noServer: true,
+    });
+
+    this.wsServer.on('connection', (ws, req) => {
+      if (ws.protocol === 'webui') {
+        const webUISocket = ws;
+        // NOTE(jwetzell): this setups the websocket protocol for the webui
+        // storing the socket for later reference and not setting the usual message listener
+        this.webUISockets.push(webUISocket);
+        webUISocket.onclose = () => {
+          const socketIndex = this.webUISockets.indexOf(webUISocket);
+          if (socketIndex > -1) {
+            this.webUISockets.splice(socketIndex, 1);
+          }
+        };
+        webUISocket.on('message', (msgBuffer) => {
+          const wsMsg = new WebSocketMessage(msgBuffer, {
+            protocol: 'tcp',
+            address: req.socket?.remoteAddress,
+            port: req.socket?.remotePort,
+          });
+
+          if (wsMsg.payload !== undefined && typeof wsMsg.payload === 'object') {
+            const webUIPayload = wsMsg.payload as WebUIPayload;
+            if (webUIPayload.eventName === 'getProtocolStatus') {
+              this.emit('getProtocolStatus', webUISocket);
+            } else if (webUIPayload.eventName === 'runAction') {
+              if (webUIPayload.data) {
+                // TODO(jwetzell) error handling here?
+                this.emit('runAction', webUIPayload.data.action, webUIPayload.data.msg, webUIPayload.data.vars);
+              }
+            }
+          }
+        });
+      } else {
+        const webSocketConnection = ws;
+        this.openWebSockets.push(webSocketConnection);
+        webSocketConnection.onclose = () => {
+          const socketIndex = this.openWebSockets.indexOf(ws);
+          if (socketIndex > -1) {
+            this.openWebSockets.splice(socketIndex, 1);
+          }
+        };
+        webSocketConnection.on('message', (msgBuffer) => {
+          // NOTE(jwetzell): extract some key request properties
+          const wsMsg = new WebSocketMessage(msgBuffer, {
+            protocol: 'tcp',
+            address: req.socket?.remoteAddress,
+            port: req.socket?.remotePort,
+          });
+          this.emit('messageIn', wsMsg);
+        });
+      }
+    });
+
+    this.httpServer.on('upgrade', (req, socket, head) => {
+      this.wsServer.handleUpgrade(req, socket, head, (ws) => {
+        this.wsServer.emit('connection', ws, req);
+      });
+    });
+  }
+
   servePath(filePath) {
     this.app.use('/', express.static(filePath));
     // NOTE(jwetzell): move the static paths up in priority
@@ -155,6 +225,13 @@ class HTTPProtocol extends EventEmitter {
       });
       return;
     }
+
+    if (this.webUISockets.length > 0) {
+      this.webUISockets.forEach((webUISocket) => {
+        webUISocket.close();
+      });
+    }
+
     try {
       this.server = this.httpServer.listen(params.port, params.address ? params.address : '0.0.0.0', () => {
         logger.debug(
@@ -169,6 +246,17 @@ class HTTPProtocol extends EventEmitter {
     } catch (error) {
       logger.error(`http: problem launching server - ${error}`);
     }
+  }
+
+  sendToWebUISockets(eventName: string, data) {
+    this.webUISockets.forEach((socket) => {
+      socket.send(
+        JSON.stringify({
+          eventName,
+          data,
+        })
+      );
+    });
   }
 
   send(url: string, method: string, body, contentType: string) {
@@ -189,6 +277,16 @@ class HTTPProtocol extends EventEmitter {
   }
 
   stop() {
+    // NOTE(jwetzell): close all web sockets
+    this.webUISockets.forEach((socket) => {
+      socket.close();
+    });
+
+    this.openWebSockets.forEach((socket) => {
+      socket.close();
+    });
+
+    // NOTE(jwetzell): close http server
     if (this.server) {
       if (this.server.listening) {
         this.server.close();
