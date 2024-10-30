@@ -21,7 +21,7 @@ export class SchemaService {
   actionTypes: ObjectInfo[] = [];
   transformTypes: ObjectInfo[] = [];
   triggerTypes: ObjectInfo[] = [];
-  protocolTypes: ObjectInfo[] = [];
+  messageTypes: ObjectInfo[] = [];
 
   errorPaths: string[] = [];
 
@@ -123,26 +123,26 @@ export class SchemaService {
     this.actionTypes = [];
     this.transformTypes = [];
     this.triggerTypes = [];
-    this.protocolTypes = [];
+    this.messageTypes = [];
 
     this.ajv.addSchema(schema);
 
     this.populateActionTypes();
     this.populateTransformTypes();
     this.populateTriggerTypes();
-    this.populateProtocolTypes();
+    this.populateMessageTypes();
   }
 
-  populateProtocolTypes() {
+  populateMessageTypes() {
     if (this.schema?.properties) {
-      const protocolKeys = Object.keys(this.schema.properties);
-      protocolKeys.forEach((protocolKey) => {
-        const protocolSchema = this.schema?.properties[protocolKey];
-        if (protocolSchema) {
-          this.protocolTypes.push({
-            name: protocolSchema.title,
-            type: protocolKey,
-            schema: this.schema?.properties[protocolKey],
+      const messageTypeKeys = Object.keys(this.schema.properties);
+      messageTypeKeys.forEach((messageTypeKey) => {
+        const messageTypeSchema = this.schema?.properties[messageTypeKey];
+        if (messageTypeSchema) {
+          this.messageTypes.push({
+            name: messageTypeSchema.title,
+            type: messageTypeKey,
+            schema: this.schema?.properties[messageTypeKey],
           });
         }
       });
@@ -233,13 +233,13 @@ export class SchemaService {
     return undefined;
   }
 
-  getSchemaForProtocol(protocolType: string) {
+  getSchemaForMessageType(messageType: string) {
     if (this.schema) {
       const schemaProperties = this.schema.properties;
       if (schemaProperties) {
-        const protocolSchema = schemaProperties[protocolType];
+        const messageTypeSchema = schemaProperties[messageType];
 
-        return protocolSchema;
+        return messageTypeSchema;
       }
     } else {
       console.error('schema is null');
@@ -523,16 +523,16 @@ export class SchemaService {
     return undefined;
   }
 
-  getTriggerTypesForProtocol(protocolType: string): ObjectInfo[] {
+  getTriggerTypesForMessageType(messageType: string): ObjectInfo[] {
     const types: ObjectInfo[] = [];
     if (!this.schema) {
       return types;
     }
 
-    if (this.schema.properties[protocolType]) {
-      const protocolTypeSchema = this.schema.properties[protocolType];
-      if (protocolTypeSchema?.properties?.triggers?.items?.oneOf) {
-        const validTriggerRefs = protocolTypeSchema.properties.triggers.items.oneOf;
+    if (this.schema.properties[messageType]) {
+      const messageTypeSchema = this.getSchemaForMessageType(messageType);
+      if (messageTypeSchema?.properties?.triggers?.items?.oneOf) {
+        const validTriggerRefs = messageTypeSchema.properties.triggers.items.oneOf;
         validTriggerRefs
           .map((triggerRef: any) => triggerRef['$ref'])
           .forEach((triggerRef: string) => {

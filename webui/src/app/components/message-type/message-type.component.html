@@ -1,4 +1,4 @@
-<ng-container *ngIf="protocolType">
+<ng-container *ngIf="messageType">
   <div class="flex flex-col h-full" [cdkContextMenuTriggerFor]="protocolContextMennu">
     <div class="flex">
       <ng-container *ngIf="hasSettings && schema">
@@ -16,7 +16,7 @@
             </div>
             <app-params-form
               [paramsSchema]="schema?.properties?.params"
-              [data]="protocol?.params"
+              [data]="messageTypeConfig?.params"
               (updated)="protocolParamsUpdated($event)"></app-params-form>
           </div>
         </ng-template>
@@ -25,13 +25,13 @@
     <div
       class="flex-auto mb-8"
       cdkDropList
-      [id]="listsService.registerTriggerList(protocolType + '/triggers')"
+      [id]="listsService.registerTriggerList(messageType + '/triggers')"
       (cdkDropListDropped)="dropTrigger($event)"
       [cdkDropListConnectedTo]="listsService.triggerListIds"
-      [cdkDropListData]="protocol?.triggers">
-      <div cdkDrag *ngFor="let trigger of protocol?.triggers; let i = index">
+      [cdkDropListData]="messageTypeConfig?.triggers">
+      <div cdkDrag *ngFor="let trigger of messageTypeConfig?.triggers; let i = index">
         <app-trigger
-          [path]="protocolType + '/triggers/' + i"
+          [path]="messageType + '/triggers/' + i"
           [trigger]="trigger"
           (delete)="deleteTrigger(i)"
           (updated)="triggerUpdated()"></app-trigger>

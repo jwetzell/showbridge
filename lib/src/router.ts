@@ -15,7 +15,6 @@ import {
   MQTTProtocol,
   TCPProtocol,
   UDPProtocol,
-  WebSocketProtocol,
 } from './protocols/index.js';
 import Trigger from './triggers/trigger.js';
 
@@ -26,7 +25,6 @@ export type RouterProtocols = {
   midi: MIDIProtocol;
   mqtt: MQTTProtocol;
   cloud: CloudProtocol;
-  ws: WebSocketProtocol;
 };
 
 class Router extends EventEmitter {
@@ -48,7 +46,6 @@ class Router extends EventEmitter {
       midi: new MIDIProtocol(this),
       mqtt: new MQTTProtocol(this),
       cloud: new CloudProtocol(this),
-      ws: new WebSocketProtocol(this),
     };
 
     // NOTE(jwetzell): listen for all messages on all protocols
@@ -56,11 +53,6 @@ class Router extends EventEmitter {
       this.protocols[protocol].on('messageIn', (msg) => {
         this.processMessage(msg);
       });
-    });
-
-    // NOTE(jwetzell): websocket server needs the http server instance to load
-    this.protocols.http.on('httpUpgrade', (req, socket, head) => {
-      this.protocols.ws.handleUpgrade(req, socket, head);
     });
 
     this.protocols.http.on('configUploaded', (updatedConfig) => {
@@ -74,11 +66,11 @@ class Router extends EventEmitter {
       }
     });
 
-    this.protocols.ws.on('runAction', (action: Action<unknown>, msg: Message, vars: RouterVars) => {
+    this.protocols.http.on('runAction', (action: Action<unknown>, msg: Message, vars: RouterVars) => {
       this.runAction(action, msg, vars);
     });
 
-    this.protocols.ws.on('getProtocolStatus', (webSocket) => {
+    this.protocols.http.on('getProtocolStatus', (webSocket) => {
       const protocolStatusEvent: any = {
         eventName: 'protocolStatus',
         data: {},
@@ -87,13 +79,6 @@ class Router extends EventEmitter {
         Object.keys(this.protocols).forEach((protocol) => {
           protocolStatusEvent.data[protocol] = this.protocols[protocol].status;
         });
-
-        // NOTE(jwetzell): osc is a "shadow" protocol so need to insert the status manually
-        protocolStatusEvent.data.osc = {
-          enabled: protocolStatusEvent.data.tcp.enabled || protocolStatusEvent.data.udp.enabled,
-          udp: protocolStatusEvent.data.udp,
-          tcp: protocolStatusEvent.data.tcp,
-        };
 
         if (webSocket.readyState === WebSocket.OPEN) {
           webSocket.send(JSON.stringify(protocolStatusEvent));
@@ -105,7 +90,7 @@ class Router extends EventEmitter {
     });
 
     this.on('trigger', (triggerEvent) => {
-      this.protocols.ws.sendToWebUISockets('trigger', triggerEvent);
+      this.protocols.http.sendToWebUISockets('trigger', triggerEvent);
     });
 
     this.on('action', (actionEvent) => {
@@ -113,11 +98,11 @@ class Router extends EventEmitter {
         this.emit('varsUpdated', this.vars);
       }
 
-      this.protocols.ws.sendToWebUISockets('action', actionEvent);
+      this.protocols.http.sendToWebUISockets('action', actionEvent);
     });
 
     this.on('transform', (transformEvent) => {
-      this.protocols.ws.sendToWebUISockets('transform', transformEvent);
+      this.protocols.http.sendToWebUISockets('transform', transformEvent);
     });
   }
 

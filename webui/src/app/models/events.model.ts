@@ -38,7 +38,6 @@ export type ProtocolStatusEventData = {
     mqtt?: MQTTStatus;
     tcp?: TCPStatus;
     udp?: UDPStatus;
-    ws?: WebSocketStatus;
   };
 };
 
@@ -93,9 +92,4 @@ export type UDPStatus = {
     family: string;
     address: string;
   };
-};
-
-export type WebSocketStatus = {
-  enabled: boolean;
-  listening: boolean;
 };

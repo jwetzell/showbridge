@@ -25,10 +25,10 @@ import { ArrayFormComponent } from './components/array-form/array-form.component
 import { ClipboardDialogComponent } from './components/clipboard-dialog/clipboard-dialog.component';
 import { ConfigComponent } from './components/config/config.component';
 import { ImportConfigComponent } from './components/import-config/import-config.component';
+import { MessageTypeComponent } from './components/message-type/message-type.component';
 import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
 import { ParamsFormComponent } from './components/params-form/params-form.component';
 import { PatchEditorComponent } from './components/patch-editor/patch-editor.component';
-import { ProtocolComponent } from './components/protocol/protocol.component';
 import { TransformComponent } from './components/transform/transform.component';
 import { TriggerComponent } from './components/trigger/trigger.component';
 @NgModule({
@@ -38,7 +38,7 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     TransformComponent,
     ActionComponent,
     TriggerComponent,
-    ProtocolComponent,
+    MessageTypeComponent,
     ParamsFormComponent,
     ArrayFormComponent,
     ImportConfigComponent,

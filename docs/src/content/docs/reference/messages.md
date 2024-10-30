@@ -10,6 +10,8 @@ For templating purposes (any param starting with an underscore `_`) the incoming
     - baseUrl: express.js req.baseUrl
     - path: express.js req.path
     - body: express.js req.body
+## **websocket**
+    - payload: ws message content (if this is JSON it will be parsed into an object)
 ## **midi**
     - port: the name of the midi port that the message came in on
     - status: midi status i.e. note_on, note_off, program_change, control_change, etc.
@@ -38,5 +40,3 @@ For templating purposes (any param starting with an underscore `_`) the incoming
 ## **udp**
     - bytes: UInt8Array of the UDP packet
     - string: string representation of the UDP packet
-## **websocket**
-    - payload: ws message content (if this is JSON it will be parsed into an object)

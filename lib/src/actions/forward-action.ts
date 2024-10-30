@@ -19,6 +19,7 @@ class ForwardAction extends Action<ForwardActionParms> {
       if (resolvedParams.protocol === 'udp') {
         protocols.udp.send(Buffer.from(msgToForward), resolvedParams.port, resolvedParams.host);
       } else if (resolvedParams.protocol === 'tcp') {
+        // TODO(jwetzell): osc messages are always slip encoded?
         protocols.tcp.send(
           Buffer.from(msgToForward),
           resolvedParams.port,
