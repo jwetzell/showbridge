@@ -7,8 +7,7 @@ sidebar:
 showbridge is a kind of re-imagining of [OSCulator](https://osculator.net/) taken way too far.
 
 ### Supported Protocols
-- HTTP
-- WebSocket
+- HTTP & WebSocket
     - incoming websocket connections only
 - OSC (via UDP and TCP)
 - UDP

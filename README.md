@@ -20,8 +20,7 @@ Simple protocol router _/s_
 </div>
 
 ### Supported Protocols
-- HTTP
-- WebSocket
+- HTTP & WebSocket
 - OSC (via UDP and TCP)
 - UDP
 - TCP
