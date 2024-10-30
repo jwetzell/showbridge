@@ -24,7 +24,7 @@ import { ActionComponent } from './components/action/action.component';
 import { ArrayFormComponent } from './components/array-form/array-form.component';
 import { ClipboardDialogComponent } from './components/clipboard-dialog/clipboard-dialog.component';
 import { ConfigComponent } from './components/config/config.component';
-import { ImportConfigComponent } from './components/import-config/import-config.component';
+import { ImportJSONComponent } from './components/import-json/import-json.component';
 import { MessageTypeComponent } from './components/message-type/message-type.component';
 import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
 import { ParamsFormComponent } from './components/params-form/params-form.component';
@@ -41,7 +41,7 @@ import { TriggerComponent } from './components/trigger/trigger.component';
     MessageTypeComponent,
     ParamsFormComponent,
     ArrayFormComponent,
-    ImportConfigComponent,
+    ImportJSONComponent,
     MIDIInfoDialogComponent,
     ClipboardDialogComponent,
     PatchEditorComponent,

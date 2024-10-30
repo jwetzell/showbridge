@@ -617,16 +617,17 @@ export class SchemaService {
     }
   }
 
-  configValidator(validateSchema: JSONSchemaType<ConfigFile>) {
+  jsonValidator(validateSchema: SomeJSONSchema) {
     return (control: AbstractControl): ValidationErrors | null => {
       try {
-        const configObj = JSON.parse(control.value);
-        if (this.ajv.validate(validateSchema, configObj)) {
+        const jsonObj = JSON.parse(control.value);
+        if (this.ajv.validate(validateSchema, jsonObj)) {
           return null;
         } else {
-          return { config: this.ajv.errors };
+          return { json: this.ajv.errors };
         }
       } catch (error) {
+        console.error(error);
         return { json: true };
       }
     };
