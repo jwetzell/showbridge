@@ -7,6 +7,18 @@
           (click)="addMIDIPatch()">
           Add MIDI Patch
         </button>
+        <button
+          class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
+          (click)="copyMIDIDevices()">
+          Copy Device List
+        </button>
+
+        <button
+          *ngIf="settingsService.isDummySite"
+          class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
+          (click)="importMIDIDevices()">
+          Import Device List
+        </button>
       </div>
       <table class="w-full">
         <thead>

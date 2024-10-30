@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CopyService } from 'src/app/services/copy.service';
-import { ImportConfigComponent } from '../import-config/import-config.component';
 
 @Component({
   selector: 'app-clipboard-dialog',
@@ -14,7 +13,7 @@ export class ClipboardDialogComponent {
 
   constructor(
     private copyService: CopyService,
-    public dialogRef: MatDialogRef<ImportConfigComponent>
+    public dialogRef: MatDialogRef<ClipboardDialogComponent>
   ) {
     this.formGroup = new FormGroup({
       clipboard: new FormControl(null, [Validators.required, this.jsonValidator()]),

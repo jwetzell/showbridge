@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { get } from 'lodash-es';
 import { filter } from 'rxjs';
 import { ClipboardDialogComponent } from './components/clipboard-dialog/clipboard-dialog.component';
-import { ImportConfigComponent } from './components/import-config/import-config.component';
+import { ImportJSONComponent } from './components/import-json/import-json.component';
 import { MIDIInfoDialogComponent } from './components/midi-info-dialog/midi-info-dialog.component';
 import { PatchEditorComponent } from './components/patch-editor/patch-editor.component';
 import { ConfigState } from './models/config.models';
@@ -123,9 +123,13 @@ export class AppComponent {
   }
 
   importConfig() {
-    const dialogRef = this.dialog.open(ImportConfigComponent, {
+    const dialogRef = this.dialog.open(ImportJSONComponent, {
       width: '400px',
       height: '400px',
+      data: {
+        schema: this.schemaService.schema,
+        title: 'Import Config',
+      },
     });
 
     dialogRef
