@@ -1,5 +1,7 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MIDIPatch, NetworkPatch } from '@showbridge/types';
 import { combineLatest, filter, take } from 'rxjs';
@@ -7,6 +9,7 @@ import { MIDIDeviceInfo } from 'src/app/models/events.model';
 import { EventService } from 'src/app/services/event.service';
 import { SettingsService } from 'src/app/services/settings.service';
 import { VarsService } from 'src/app/services/vars.service';
+import { ImportJSONComponent } from '../import-json/import-json.component';
 
 @Component({
   selector: 'app-patch-editor',
@@ -24,7 +27,9 @@ export class PatchEditorComponent {
     public varsService: VarsService,
     private eventService: EventService,
     private snackbar: MatSnackBar,
-    public settingsService: SettingsService
+    public settingsService: SettingsService,
+    private clipboard: Clipboard,
+    private dialog: MatDialog
   ) {
     eventService.protocolStatus$
       .pipe(
@@ -63,6 +68,28 @@ export class PatchEditorComponent {
 
   addMIDIPatch() {
     this.midiPatches.push({ name: '', port: '' });
+  }
+
+  copyMIDIDevices() {
+    this.clipboard.copy(JSON.stringify(this.midiPorts));
+    this.snackbar.open('Device list copied....', undefined, { duration: 3000 });
+  }
+
+  importMIDIDevices() {
+    const dialogRef = this.dialog.open(ImportJSONComponent, {
+      width: '400px',
+      height: '400px',
+      data: {
+        title: 'Import Device List',
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter((result) => !!result && result !== ''))
+      .subscribe((result) => {
+        this.midiPorts = result;
+      });
   }
 
   savePatches() {
