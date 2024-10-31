@@ -25,28 +25,6 @@ jobs:
       - run: npm run release
         working-directory: ./launcher
 
-      - name: extract version
-        id: extract-version
-        run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
-        working-directory: ./launcher
-
-      - name: publish to ftp
-        uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
-        with:
-          server: ${{secrets.FTP_URL}}
-          username: ${{secrets.BUILDS_FTP_USERNAME}}
-          password: ${{secrets.BUILDS_FTP_PASSWORD}}
-          local-dir: ./launcher/dist/electron-output/
-          server-dir: launcher/${{steps.extract-version.outputs.launcher-version}}/
-          state-name: .linux-sync-state.json
-          port: 21
-          protocol: ftps
-          exclude: |
-            .*/**
-            *-unpacked/**
-            mac*/**
-            builder-*.yml
-
   build-windows:
     runs-on: windows-latest
     steps:
@@ -63,29 +41,6 @@ jobs:
 
       - run: npm run release
         working-directory: ./launcher
-
-      - name: extract version
-        id: extract-version
-        run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
-        working-directory: ./launcher
-        shell: bash
-
-      - name: publish to ftp
-        uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
-        with:
-          server: ${{secrets.FTP_URL}}
-          username: ${{secrets.BUILDS_FTP_USERNAME}}
-          password: ${{secrets.BUILDS_FTP_PASSWORD}}
-          local-dir: ./launcher/dist/electron-output/
-          server-dir: launcher/${{steps.extract-version.outputs.launcher-version}}/
-          state-name: .windows-sync-state.json
-          port: 21
-          protocol: ftps
-          exclude: |
-            .*/**
-            *-unpacked/**
-            mac*/**
-            builder-*.yml
 
   build-macos:
     runs-on: macos-latest
@@ -109,25 +64,3 @@ jobs:
 
       - run: npm run release
         working-directory: ./launcher
-
-      - name: extract version
-        id: extract-version
-        run: node -e "console.log('launcher-version='+require('./package.json').version)" >> $GITHUB_OUTPUT
-        working-directory: ./launcher
-
-      - name: publish to ftp
-        uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
-        with:
-          server: ${{secrets.FTP_URL}}
-          username: ${{secrets.BUILDS_FTP_USERNAME}}
-          password: ${{secrets.BUILDS_FTP_PASSWORD}}
-          local-dir: ./launcher/dist/electron-output/
-          server-dir: launcher/${{steps.extract-version.outputs.launcher-version}}/
-          state-name: .macos-sync-state.json
-          port: 21
-          protocol: ftps
-          exclude: |
-            .*/**
-            *-unpacked/**
-            mac*/**
-            builder-*.yml
