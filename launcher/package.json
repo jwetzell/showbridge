@@ -72,9 +72,6 @@
         "LSUIElement": 1
       },
       "hardenedRuntime": true,
-      "notarize": {
-        "teamId": "JHA7H7P56J"
-      },
       "publish": [
         "github"
       ]
