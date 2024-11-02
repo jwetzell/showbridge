@@ -1,7 +1,7 @@
 import { UDPSender } from '@showbridge/types';
 import { createSocket, Socket } from 'dgram';
 import { EventEmitter } from 'node:events';
-import osc from 'osc-min';
+import { fromBuffer } from 'osc-min';
 import { OSCMessage, UDPMessage } from '../messages/index.js';
 import Router from '../router.js';
 import { disabled, logger } from '../utils/index.js';
@@ -43,7 +43,7 @@ class UDPProtocol extends EventEmitter {
           // NOTE(jwetzell): starts with a '/' or #bundle
           if (msg[0] === 0x2f || msg.includes(this.oscBundleTag)) {
             try {
-              message = new OSCMessage(osc.fromBuffer(msg, true), sender);
+              message = new OSCMessage(fromBuffer(msg, true), sender);
             } catch (error) {
               message = new UDPMessage(msg, sender);
             }

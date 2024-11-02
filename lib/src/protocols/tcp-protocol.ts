@@ -1,6 +1,6 @@
 import { AddressInfo, Server, Socket, createServer } from 'net';
 import { EventEmitter } from 'node:events';
-import osc from 'osc-min';
+import { fromBuffer } from 'osc-min';
 import slip from 'slip';
 import { OSCMessage, TCPMessage } from '../messages/index.js';
 import Router from '../router.js';
@@ -28,7 +28,7 @@ class TCPProtocol extends EventEmitter {
     let message;
     if (msg[0] === 0x2f || msg.includes(this.oscBundleTag)) {
       try {
-        message = new OSCMessage(osc.fromBuffer(msg, true), sender);
+        message = new OSCMessage(fromBuffer(msg, true), sender);
       } catch (error) {
         message = new TCPMessage(msg, sender);
       }
@@ -162,7 +162,7 @@ class TCPProtocol extends EventEmitter {
     let message;
     if (buffer[0] === 0x2f || buffer.includes(this.oscBundleTag)) {
       try {
-        message = new OSCMessage(osc.fromBuffer(buffer, true), { protocol: 'tcp', address: host, port });
+        message = new OSCMessage(fromBuffer(buffer, true), { protocol: 'tcp', address: host, port });
       } catch (error) {
         message = new TCPMessage(buffer, { protocol: 'tcp', address: host, port });
       }

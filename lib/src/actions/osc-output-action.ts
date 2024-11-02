@@ -1,5 +1,5 @@
 import { OSCOutputActionParams, RouterVars } from '@showbridge/types';
-import osc, { OscArgument } from 'osc-min';
+import { OscArgument, toBuffer } from 'osc-min';
 import { Message } from '../messages/index.js';
 import { RouterProtocols } from '../router.js';
 import { logger } from '../utils/index.js';
@@ -45,7 +45,7 @@ class OSCOutputAction extends Action<OSCOutputActionParams> {
         return typedArg;
       });
 
-      const outBuff = osc.toBuffer({
+      const outBuff = toBuffer({
         address: resolvedParams.address,
         args: typedArgs,
         oscType: 'message',

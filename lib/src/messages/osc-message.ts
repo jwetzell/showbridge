@@ -1,6 +1,6 @@
 import { OSCSender } from '@showbridge/types';
 import { has } from 'lodash-es';
-import osc, { OscMessageOrBundle } from 'osc-min';
+import { OscMessageOrBundle, toBuffer } from 'osc-min';
 
 class OSCMessage {
   private msg: any;
@@ -45,7 +45,7 @@ class OSCMessage {
   }
 
   get bytes() {
-    return Uint8Array.from(osc.toBuffer(this.msg));
+    return Uint8Array.from(toBuffer(this.msg));
   }
 
   toString() {
