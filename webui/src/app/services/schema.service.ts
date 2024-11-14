@@ -109,8 +109,21 @@ export class SchemaService {
   }
 
   getSkeletonForParamsSchema(paramsSchema: SomeJSONSchema): TransformParams | ActionParams | TriggerParams {
-    const paramsTemplate = {};
-    // TODO(jwetzell): make a smart version of this populating fields with defaults
+    const paramsTemplate: any = {};
+    if (paramsSchema.properties) {
+      Object.entries(paramsSchema.properties).forEach(([paramKey, paramSchema]) => {
+        const schema = paramSchema as SomeJSONSchema;
+        if (schema.type === 'array') {
+          if (paramsSchema.required?.includes(paramKey)) {
+            paramsTemplate[paramKey] = [];
+          }
+        } else {
+          // TODO: add other param types
+          console.log(`schema-service: unhandled param skeleton type = ${schema.type}`);
+        }
+      });
+    }
+
     return paramsTemplate;
   }
 
