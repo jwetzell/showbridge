@@ -21,7 +21,7 @@
     "dist"
   ],
   "dependencies": {
-    "@angular/animations": "18.2.10",
+    "@angular/animations": "19.0.1",
     "@angular/cdk": "18.2.10",
     "@angular/common": "18.2.10",
     "@angular/compiler": "18.2.10",
