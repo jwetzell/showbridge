@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "predev": "node ../scripts/setup_dev.js cli",
-    "dev": "nodemon --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui ../webui/dist/webui | pino-pretty'",
+    "dev": "nodemon --exec 'node --inspect main.js -l debug -c sample/config/dev.json -v sample/vars/dev.json --webui ../webui/dist/webui/browser | pino-pretty'",
     "build": "rimraf sample schema && cp -R ../sample ./ && cp -R ../schema ./",
     "build:dev": "node setup_dev.js",
     "start": "node main.js | pino-pretty",

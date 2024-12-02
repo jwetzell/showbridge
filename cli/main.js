@@ -19,7 +19,7 @@ export const packageInfo = readJSON('./package.json');
 
 // TODO(jwetzell): would be nice to get rid of this require
 const require = createRequire(import.meta.url);
-const defaultWebUIPath = path.dirname(require.resolve('@showbridge/webui/dist/webui/index.html'));
+const defaultWebUIPath = path.dirname(require.resolve('@showbridge/webui/dist/webui/browser/index.html'));
 
 program.name(packageInfo.name);
 program.version(packageInfo.version);
