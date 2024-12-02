@@ -12,9 +12,10 @@ import { ListsService } from 'src/app/services/lists.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
-  selector: 'app-message-type',
-  templateUrl: './message-type.component.html',
-  styleUrls: ['./message-type.component.css'],
+    selector: 'app-message-type',
+    templateUrl: './message-type.component.html',
+    styleUrls: ['./message-type.component.css'],
+    standalone: false
 })
 export class MessageTypeComponent {
   @Input() messageType?: string;

@@ -5,9 +5,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MIDIStatus } from 'src/app/models/events.model';
 
 @Component({
-  selector: 'app-midi-info-dialog',
-  templateUrl: './midi-info-dialog.component.html',
-  styleUrls: ['./midi-info-dialog.component.css'],
+    selector: 'app-midi-info-dialog',
+    templateUrl: './midi-info-dialog.component.html',
+    styleUrls: ['./midi-info-dialog.component.css'],
+    standalone: false
 })
 export class MIDIInfoDialogComponent {
   constructor(

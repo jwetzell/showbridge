@@ -12,9 +12,10 @@ import { VarsService } from 'src/app/services/vars.service';
 import { ImportJSONComponent } from '../import-json/import-json.component';
 
 @Component({
-  selector: 'app-patch-editor',
-  templateUrl: './patch-editor.component.html',
-  styleUrls: ['./patch-editor.component.css'],
+    selector: 'app-patch-editor',
+    templateUrl: './patch-editor.component.html',
+    styleUrls: ['./patch-editor.component.css'],
+    standalone: false
 })
 export class PatchEditorComponent {
   midiPorts: MIDIDeviceInfo[] = [];

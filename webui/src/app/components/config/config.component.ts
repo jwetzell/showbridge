@@ -6,9 +6,10 @@ import { SchemaService } from 'src/app/services/schema.service';
 import { SettingsService } from 'src/app/services/settings.service';
 
 @Component({
-  selector: 'app-config',
-  templateUrl: './config.component.html',
-  styleUrls: ['./config.component.css'],
+    selector: 'app-config',
+    templateUrl: './config.component.html',
+    styleUrls: ['./config.component.css'],
+    standalone: false
 })
 export class ConfigComponent {
   @Input() config!: ConfigFile;

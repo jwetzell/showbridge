@@ -11,16 +11,18 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "./dist/webui",
+            "outputPath": {
+              "base": "./dist/webui"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/assets"],
             "styles": ["theme.scss", "src/assets/css/fonts.css", "src/assets/css/styles.css", "tailwind.css"],
-            "scripts": []
+            "scripts": [],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {

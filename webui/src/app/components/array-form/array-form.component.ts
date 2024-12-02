@@ -5,9 +5,10 @@ import { ListsService } from 'src/app/services/lists.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
-  selector: 'app-array-form',
-  templateUrl: './array-form.component.html',
-  styleUrl: './array-form.component.css',
+    selector: 'app-array-form',
+    templateUrl: './array-form.component.html',
+    styleUrl: './array-form.component.css',
+    standalone: false
 })
 export class ArrayFormComponent implements OnInit {
   @Input() paramFormControl?: any;
