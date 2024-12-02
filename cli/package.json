@@ -38,7 +38,7 @@
   "license": "MIT",
   "dependencies": {
     "@showbridge/lib": "0.16.3",
-    "@showbridge/webui": "0.9.1",
+    "@showbridge/webui": "0.9.2",
     "commander": "12.1.0"
   },
   "devDependencies": {
