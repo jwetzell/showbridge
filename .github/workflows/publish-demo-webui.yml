@@ -31,10 +31,10 @@ jobs:
         working-directory: ./webui
 
       - name: copy default config
-        run: cp sample/config/default.json ./webui/dist/webui/config.json
+        run: cp sample/config/default.json ./webui/dist/webui/browser/config.json
 
       - name: copy schema
-        run: cp schema/config.schema.json ./webui/dist/webui/config.schema.json
+        run: cp schema/config.schema.json ./webui/dist/webui/browser/config.schema.json
 
       - name: Publish demo webui
         uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
@@ -42,7 +42,7 @@ jobs:
           server: ${{secrets.FTP_URL}}
           username: ${{secrets.DEMO_FTP_USERNAME}}
           password: ${{secrets.DEMO_FTP_PASSWORD}}
-          local-dir: ./webui/dist/webui/
+          local-dir: ./webui/dist/webui/browser/
           server-dir: /
           port: 21
           protocol: ftps
