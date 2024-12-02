@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 // NOTE(jwetzell): Color Palettes
 $showbridge-primary-palette: (
