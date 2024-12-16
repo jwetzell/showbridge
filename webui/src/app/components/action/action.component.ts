@@ -13,10 +13,10 @@ import { ListsService } from 'src/app/services/lists.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
-    selector: 'app-action',
-    templateUrl: './action.component.html',
-    styleUrls: ['./action.component.css'],
-    standalone: false
+  selector: 'app-action',
+  templateUrl: './action.component.html',
+  styleUrls: ['./action.component.css'],
+  standalone: false,
 })
 export class ActionComponent implements OnInit {
   @Input() path?: string;

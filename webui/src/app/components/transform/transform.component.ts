@@ -9,10 +9,10 @@ import { EventService } from 'src/app/services/event.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
-    selector: 'app-transform',
-    templateUrl: './transform.component.html',
-    styleUrls: ['./transform.component.css'],
-    standalone: false
+  selector: 'app-transform',
+  templateUrl: './transform.component.html',
+  styleUrls: ['./transform.component.css'],
+  standalone: false,
 })
 export class TransformComponent implements OnInit {
   @Input() transform?: TransformObj<TransformParams>;

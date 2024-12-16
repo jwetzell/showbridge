@@ -4,10 +4,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { CopyService } from 'src/app/services/copy.service';
 
 @Component({
-    selector: 'app-clipboard-dialog',
-    templateUrl: './clipboard-dialog.component.html',
-    styleUrl: './clipboard-dialog.component.css',
-    standalone: false
+  selector: 'app-clipboard-dialog',
+  templateUrl: './clipboard-dialog.component.html',
+  styleUrl: './clipboard-dialog.component.css',
+  standalone: false,
 })
 export class ClipboardDialogComponent {
   formGroup?: FormGroup;

@@ -9,10 +9,10 @@ import { SchemaService } from 'src/app/services/schema.service';
 import { VarsService } from 'src/app/services/vars.service';
 
 @Component({
-    selector: 'app-params-form',
-    templateUrl: './params-form.component.html',
-    styleUrls: ['./params-form.component.css'],
-    standalone: false
+  selector: 'app-params-form',
+  templateUrl: './params-form.component.html',
+  styleUrls: ['./params-form.component.css'],
+  standalone: false,
 })
 export class ParamsFormComponent implements OnInit {
   @Input() paramsSchema?: SomeJSONSchema;

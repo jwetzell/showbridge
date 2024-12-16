@@ -10,10 +10,10 @@ type ImportJSONComponentData = {
 };
 
 @Component({
-    selector: 'app-import-json',
-    templateUrl: './import-json.component.html',
-    styleUrls: ['./import-json.component.css'],
-    standalone: false
+  selector: 'app-import-json',
+  templateUrl: './import-json.component.html',
+  styleUrls: ['./import-json.component.css'],
+  standalone: false,
 })
 export class ImportJSONComponent {
   readonly data = inject<ImportJSONComponentData>(MAT_DIALOG_DATA);

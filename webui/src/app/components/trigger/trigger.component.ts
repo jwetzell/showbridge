@@ -13,10 +13,10 @@ import { EventService } from 'src/app/services/event.service';
 import { ListsService } from 'src/app/services/lists.service';
 import { SchemaService } from 'src/app/services/schema.service';
 @Component({
-    selector: 'app-trigger',
-    templateUrl: './trigger.component.html',
-    styleUrls: ['./trigger.component.css'],
-    standalone: false
+  selector: 'app-trigger',
+  templateUrl: './trigger.component.html',
+  styleUrls: ['./trigger.component.css'],
+  standalone: false,
 })
 export class TriggerComponent implements OnInit {
   @Input() path?: string;
