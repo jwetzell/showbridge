@@ -5,7 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "install:all": "node scripts/install_all.js"
+    "install:all": "node scripts/install_all.js",
+    "format:write": "prettier ./ --write"
   },
   "author": {
     "name": "Joel Wetzell",
