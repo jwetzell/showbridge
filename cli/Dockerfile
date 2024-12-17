@@ -1,4 +1,4 @@
-FROM node:20.15.0-slim
+FROM node:22.12.0-slim
 ENV NODE_ENV production
 RUN apt-get update && apt-get install -y tini libasound2
 WORKDIR /app
