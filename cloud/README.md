@@ -27,5 +27,5 @@ add and configure a `.env` file if you would like to provide any of the environm
 
 
 ## Info
-- admin ui available at `/ui`
+- connect to admin ui using [socket.io hosted version](https://admin.socket.io) or [host the admin UI yourself](https://github.com/socketio/socket.io-admin-ui/) 
 - server ready endpoint at `/ready` return 200 when server is up and running, 503 while starting up for use in things like k8s readinessProbe
