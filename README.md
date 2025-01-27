@@ -7,6 +7,7 @@
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/jwetzell/showbridge?label=launcher)
 ![npm](https://img.shields.io/npm/v/%40showbridge/cloud?label=cloud)
 ![npm](https://img.shields.io/npm/v/%40showbridge/webui?label=webui)
+![npm](https://img.shields.io/npm/v/%40showbridge/types?label=types)
 
 
 
