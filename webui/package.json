@@ -29,7 +29,7 @@
     "@angular/forms": "19.1.2",
     "@angular/material": "19.1.2",
     "@angular/platform-browser": "19.1.2",
-    "@angular/platform-browser-dynamic": "19.1.2",
+    "@angular/platform-browser-dynamic": "19.1.5",
     "@angular/router": "19.1.2",
     "ajv": "8.17.1",
     "lodash-es": "4.17.21",
