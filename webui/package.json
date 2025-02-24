@@ -39,7 +39,7 @@
     "zone.js": "0.15.0"
   },
   "devDependencies": {
-    "@angular/build": "19.1.4",
+    "@angular/build": "19.1.8",
     "@angular/cli": "19.1.4",
     "@angular/compiler-cli": "19.1.4",
     "@showbridge/types": "0.4.0",
