@@ -1,4 +1,11 @@
-version: 2
+groups:
+      angular:
+        applies-to: version-updates
+        patterns:
+          - '@angular*'
+        update-types:
+          - 'minor'
+          - 'patch'version: 2
 updates:
   # labels
   - package-ecosystem: 'npm'
@@ -30,6 +37,14 @@ updates:
       interval: 'weekly'
     ignore:
       - dependency-name: '@showbridge/types'
+    groups:
+      angular:
+        applies-to: version-updates
+        patterns:
+          - '@angular*'
+        update-types:
+          - 'minor'
+          - 'patch'
   - package-ecosystem: 'npm'
     directory: '/cloud'
     schedule:
@@ -46,16 +61,3 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
-  # groups
-  - package-ecosystem: 'npm'
-    directory: '/'
-    schedule:
-      interval: 'weekly'
-    groups:
-      angular:
-        applies-to: version-updates
-        patterns:
-          - '@angular*'
-        update-types:
-          - 'minor'
-          - 'patch'
