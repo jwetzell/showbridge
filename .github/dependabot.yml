@@ -1,11 +1,3 @@
-groups:
-      angular:
-        applies-to: version-updates
-        patterns:
-          - '@angular*'
-        update-types:
-          - 'minor'
-          - 'patch'version: 2
 updates:
   # labels
   - package-ecosystem: 'npm'
