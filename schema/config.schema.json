@@ -5,30 +5,26 @@
   "description": "config JSON layout",
   "type": "object",
   "properties": {
+    "protocols": {
+      "description": "array of protocols",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          { "$ref": "#/definitions/ProtocolCloud" },
+          { "$ref": "#/definitions/ProtocolHTTP" },
+          { "$ref": "#/definitions/ProtocolMIDI" },
+          { "$ref": "#/definitions/ProtocolMQTT" },
+          { "$ref": "#/definitions/ProtocolTCP" },
+          { "$ref": "#/definitions/ProtocolUDP" },
+          { "$ref": "#/definitions/ProtocolCloud" }
+        ]
+      }
+    },
     "http": {
       "title": "HTTP",
       "type": "object",
       "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "address": {
-              "description": "Address to listen on defaults to 0.0.0.0",
-              "type": "string",
-              "default": "0.0.0.0"
-            },
-            "port": {
-              "description": "TCP port to listen on (this will be the same port used for websocket connections",
-              "type": "number",
-              "minimum": 1,
-              "maximum": 65535,
-              "default": 3000,
-              "examples": ["8000"]
-            }
-          },
-          "required": ["port"],
-          "additionalProperties": false
-        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",
@@ -43,7 +39,7 @@
           }
         }
       },
-      "required": ["triggers", "params"],
+      "required": ["triggers"],
       "additionalProperties": false
     },
     "ws": {
@@ -92,27 +88,6 @@
       "title": "TCP",
       "type": "object",
       "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "address": {
-              "description": "Address to listen on defaults to 0.0.0.0",
-              "type": "string",
-              "default": "0.0.0.0",
-              "examples": ["127.0.0.1"]
-            },
-            "port": {
-              "description": "TCP port to listen on",
-              "type": "number",
-              "minimum": 1,
-              "maximum": 65535,
-              "default": 3000,
-              "examples": ["8000"]
-            }
-          },
-          "required": ["port"],
-          "additionalProperties": false
-        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",
@@ -134,26 +109,6 @@
       "title": "UDP",
       "type": "object",
       "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "address": {
-              "description": "Address to listen on defaults to 0.0.0.0",
-              "type": "string",
-              "default": "0.0.0.0"
-            },
-            "port": {
-              "description": "UDP port to listen on",
-              "type": "number",
-              "minimum": 1,
-              "maximum": 65535,
-              "default": 3000,
-              "examples": ["8000"]
-            }
-          },
-          "required": ["port"],
-          "additionalProperties": false
-        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",
@@ -175,23 +130,6 @@
       "title": "MIDI",
       "type": "object",
       "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "virtualInputName": {
-              "title": "Virtual Input Name",
-              "description": "Name of the virtual MIDI Input port",
-              "type": "string"
-            },
-            "virtualOutputName": {
-              "title": "Virtual Output Name",
-              "description": "Name of the virtual MIDI Output port",
-              "type": "string"
-            }
-          },
-          "required": [],
-          "additionalProperties": false
-        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",
@@ -218,33 +156,6 @@
       "title": "MQTT",
       "type": "object",
       "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "broker": {
-              "description": "mqtt broker url",
-              "type": "string"
-            },
-            "username": {
-              "description": "username for mqtt broker",
-              "type": "string"
-            },
-            "password": {
-              "description": "password for mqtt broker",
-              "type": "string"
-            },
-            "topics": {
-              "description": "list of topics to subscribe to",
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "default": []
-            }
-          },
-          "required": ["broker", "topics"],
-          "additionalProperties": false
-        },
         "triggers": {
           "description": "array of triggers",
           "type": "array",
@@ -259,31 +170,6 @@
         }
       },
       "required": ["triggers", "params"],
-      "additionalProperties": false
-    },
-    "cloud": {
-      "title": "Cloud",
-      "type": "object",
-      "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "url": {
-              "description": "cloud url",
-              "type": "string"
-            },
-            "rooms": {
-              "description": "list of rooms to join",
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "additionalProperties": false
-        }
-      },
-      "required": ["params"],
       "additionalProperties": false
     }
   },
@@ -2710,6 +2596,254 @@
             }
           },
           "required": ["property", "template"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this transform is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "ProtocolCloud": {
+      "title": "Cloud Protocol",
+      "description": "This protocol will connect to a showbridge cloud instance and relay messages",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "template"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "description": "cloud url",
+              "type": "string"
+            },
+            "rooms": {
+              "description": "list of rooms to join",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this transform is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "ProtocolHTTP": {
+      "title": "HTTP Protocol",
+      "description": "This protocol will host an HTTP webserver",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "template"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "description": "Address to listen on defaults to 0.0.0.0",
+              "type": "string",
+              "default": "0.0.0.0"
+            },
+            "port": {
+              "description": "TCP port to listen on (this will be the same port used for websocket connections",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 3000,
+              "examples": ["8000"]
+            }
+          },
+          "required": ["port"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this transform is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "ProtocolMIDI": {
+      "title": "MIDI Protocol",
+      "description": "This protocol will create virtual midi input and output",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "template"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "virtualInputName": {
+              "title": "Virtual Input Name",
+              "description": "Name of the virtual MIDI Input port",
+              "type": "string"
+            },
+            "virtualOutputName": {
+              "title": "Virtual Output Name",
+              "description": "Name of the virtual MIDI Output port",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this transform is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "ProtocolMQTT": {
+      "title": "MQTT Protocol",
+      "description": "This protocol will connect to an MQTT server",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "template"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "broker": {
+              "description": "mqtt broker url",
+              "type": "string"
+            },
+            "username": {
+              "description": "username for mqtt broker",
+              "type": "string"
+            },
+            "password": {
+              "description": "password for mqtt broker",
+              "type": "string"
+            },
+            "topics": {
+              "description": "list of topics to subscribe to",
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            }
+          },
+          "required": ["broker", "topics"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this transform is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "ProtocolTCP": {
+      "title": "TCP Protocol",
+      "description": "This protocol will host an TCP server",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "template"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "description": "Address to listen on defaults to 0.0.0.0",
+              "type": "string",
+              "default": "0.0.0.0",
+              "examples": ["127.0.0.1"]
+            },
+            "port": {
+              "description": "TCP port to listen on",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 3000,
+              "examples": ["8000"]
+            }
+          },
+          "required": ["port"],
+          "additionalProperties": false
+        },
+        "enabled": {
+          "description": "Whether this transform is enabled",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["type", "enabled", "params"],
+      "additionalProperties": false
+    },
+    "ProtocolUDP": {
+      "title": "UDP Protocol",
+      "description": "This protocol will host an UDP server",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "template"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "description": "Address to listen on defaults to 0.0.0.0",
+              "type": "string",
+              "default": "0.0.0.0"
+            },
+            "port": {
+              "description": "UDP port to listen on",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 3000,
+              "examples": ["8000"]
+            }
+          },
+          "required": ["port"],
           "additionalProperties": false
         },
         "enabled": {
