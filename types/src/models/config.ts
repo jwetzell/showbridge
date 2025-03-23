@@ -1,19 +1,21 @@
 import { TriggerParams } from './params';
+import { ProtocolParams } from './params/protocols';
+import { ProtocolObj } from './protocol';
 import { TriggerObj } from './trigger';
 
-export type ProtocolObj = {
-  params: { [key: string]: any };
+export type MessageTypeObj = {
   triggers: TriggerObj<TriggerParams>[];
 };
 
 export type ConfigObj = {
   $schema?: string;
-  http: ProtocolObj;
-  ws: ProtocolObj;
-  osc: ProtocolObj;
-  tcp: ProtocolObj;
-  udp: ProtocolObj;
-  midi: ProtocolObj;
-  mqtt: ProtocolObj;
-  cloud: ProtocolObj;
+  protocols: ProtocolObj<ProtocolParams>[];
+  http: MessageTypeObj;
+  ws: MessageTypeObj;
+  osc: MessageTypeObj;
+  tcp: MessageTypeObj;
+  udp: MessageTypeObj;
+  midi: MessageTypeObj;
+  mqtt: MessageTypeObj;
+  cloud: MessageTypeObj;
 };
