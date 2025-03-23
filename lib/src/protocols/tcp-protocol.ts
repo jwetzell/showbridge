@@ -1,22 +1,20 @@
+import { TCPProtocolParams } from '@showbridge/types/dist/models/params/protocols.js';
 import { AddressInfo, Server, Socket, createServer } from 'net';
-import { EventEmitter } from 'node:events';
 import { fromBuffer } from 'osc-min';
 import slip from 'slip';
 import { OSCMessage, TCPMessage } from '../messages/index.js';
-import Router from '../router.js';
 import { disabled, logger } from '../utils/index.js';
+import Protocol from './protocol.js';
 
-class TCPProtocol extends EventEmitter {
-  router: Router;
+class TCPProtocol extends Protocol<TCPProtocolParams> {
   oscBundleTag = Buffer.from('#bundle');
   sockets: { [key: string]: { [key: string]: Socket } };
   incomingSLIPDecoders: { [key: string]: { [key: string]: slip.Decoder } };
   outgoingSLIPDecoders: { [key: string]: { [key: string]: slip.Decoder } };
   server: Server;
 
-  constructor(router) {
-    super();
-    this.router = router;
+  constructor(protocolObj, router) {
+    super(protocolObj, router);
 
     this.sockets = {};
 

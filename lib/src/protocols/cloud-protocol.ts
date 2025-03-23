@@ -1,18 +1,16 @@
+import { CloudProtocolParams } from '@showbridge/types/dist/models/params/protocols.js';
 import { has } from 'lodash-es';
-import { EventEmitter } from 'node:events';
 import { io, Socket } from 'socket.io-client';
 import { Message, MessageTypeClassMap } from '../messages/index.js';
-import Router from '../router.js';
 import { logger } from '../utils/index.js';
+import Protocol from './protocol.js';
 
-class CloudProtocol extends EventEmitter {
-  router: Router;
+class CloudProtocol extends Protocol<CloudProtocolParams> {
   socket: Socket;
   roundtripMs: number;
 
-  constructor(router) {
-    super();
-    this.router = router;
+  constructor(protocolObj, router) {
+    super(protocolObj, router);
     setInterval(() => {
       if (this.socket) {
         const timeSent = Date.now();

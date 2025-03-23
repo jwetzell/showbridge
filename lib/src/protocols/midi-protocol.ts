@@ -1,9 +1,9 @@
-import { EventEmitter } from 'node:events';
 import { MIDIMessage } from '../messages/index.js';
 import { disabled, logger } from '../utils/index.js';
 
 import { Input, Output } from '@julusian/midi';
-import Router from '../router.js';
+import { MIDIProtocolParams } from '@showbridge/types/dist/models/params/protocols.js';
+import Protocol from './protocol.js';
 
 type MIDIOutput = {
   name: string;
@@ -11,8 +11,7 @@ type MIDIOutput = {
   output: Output;
 };
 
-class MIDIProtocol extends EventEmitter {
-  router: Router;
+class MIDIProtocol extends Protocol<MIDIProtocolParams> {
   inputs: Input[];
   outputs: MIDIOutput[];
 
@@ -24,9 +23,8 @@ class MIDIProtocol extends EventEmitter {
 
   stopped: boolean;
 
-  constructor(router) {
-    super();
-    this.router = router;
+  constructor(protocolObj, router) {
+    super(protocolObj, router);
 
     this.inputs = [];
     this.outputs = [];
