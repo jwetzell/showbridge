@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TriggerObj, TriggerParams } from '@showbridge/types';
 import { cloneDeep } from 'lodash-es';
-import { ProtocolConfiguration } from 'src/app/models/config.models';
+import { HandlerConfiguration } from 'src/app/models/config.models';
 import { CopyObject } from 'src/app/models/copy-object.model';
 import { ObjectInfo } from 'src/app/models/form.model';
 import { CopyService } from 'src/app/services/copy.service';
@@ -19,13 +19,15 @@ import { SchemaService } from 'src/app/services/schema.service';
 })
 export class MessageTypeComponent {
   @Input() messageType?: string;
-  @Input() messageTypeConfig?: ProtocolConfiguration;
+  @Input() messageTypeHandlerConfig?: HandlerConfiguration;
+  @Input() messageTypeProtocolConfig?: HandlerConfiguration;
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   @ViewChild('settingsDialogRef') dialogRef?: TemplateRef<any>;
   triggerTypes: ObjectInfo[] = [];
 
-  schema?: any;
+  protocolSchema?: any;
+  handlerSchema?: any;
 
   hasSettings: boolean = false;
   constructor(
@@ -40,20 +42,21 @@ export class MessageTypeComponent {
     if (this.messageType) {
       this.triggerTypes = this.schemaService.getTriggerTypesForMessageType(this.messageType);
 
-      this.schema = this.schemaService.getSchemaForMessageType(this.messageType);
-      this.hasSettings = this.schema.properties.params !== undefined;
+      this.handlerSchema = this.schemaService.getSchemaForHandlerType(this.messageType);
+      this.protocolSchema = this.schemaService.getSchemaForProtocolType(this.messageType);
+      this.hasSettings = this.protocolSchema?.properties?.params !== undefined;
     }
   }
 
   protocolParamsUpdated(params: any) {
-    if (this.messageTypeConfig) {
-      this.messageTypeConfig.params = params;
+    if (this.messageTypeProtocolConfig) {
+      this.messageTypeProtocolConfig.params = params;
     }
     this.updated.emit(true);
   }
 
   deleteTrigger(index: number) {
-    this.messageTypeConfig?.triggers?.splice(index, 1);
+    this.messageTypeHandlerConfig?.triggers?.splice(index, 1);
     this.updated.emit(true);
     this.snackBar.open('Trigger Removed', 'Dismiss', {
       duration: 3000,
@@ -65,18 +68,18 @@ export class MessageTypeComponent {
   }
 
   addTrigger(triggerType: string) {
-    if (this.messageTypeConfig && this.messageTypeConfig?.triggers === undefined) {
-      this.messageTypeConfig.triggers = [];
+    if (this.messageTypeHandlerConfig && this.messageTypeHandlerConfig?.triggers === undefined) {
+      this.messageTypeHandlerConfig.triggers = [];
     }
     const triggerTemplate = this.schemaService.getSkeletonForTrigger(triggerType);
-    this.messageTypeConfig?.triggers?.push(triggerTemplate);
+    this.messageTypeHandlerConfig?.triggers?.push(triggerTemplate);
     this.updated.emit(true);
   }
 
   dropTrigger(event: CdkDragDrop<TriggerObj<TriggerParams>[] | undefined>) {
     if (event.previousContainer === event.container) {
-      if (this.messageTypeConfig?.triggers !== undefined) {
-        moveItemInArray(this.messageTypeConfig?.triggers, event.previousIndex, event.currentIndex);
+      if (this.messageTypeHandlerConfig?.triggers !== undefined) {
+        moveItemInArray(this.messageTypeHandlerConfig?.triggers, event.previousIndex, event.currentIndex);
         this.updated.emit(true);
       }
     } else if (event.previousContainer.data && event.container.data) {
@@ -96,13 +99,13 @@ export class MessageTypeComponent {
       return;
     }
 
-    if (this.messageTypeConfig && this.messageTypeConfig?.triggers === undefined) {
-      this.messageTypeConfig.triggers = [];
+    if (this.messageTypeHandlerConfig && this.messageTypeHandlerConfig?.triggers === undefined) {
+      this.messageTypeHandlerConfig.triggers = [];
     }
     if (Array.isArray(copyObject.object)) {
-      this.messageTypeConfig?.triggers?.push(...cloneDeep(copyObject.object));
+      this.messageTypeHandlerConfig?.triggers?.push(...cloneDeep(copyObject.object));
     } else {
-      this.messageTypeConfig?.triggers?.push(cloneDeep(copyObject.object));
+      this.messageTypeHandlerConfig?.triggers?.push(cloneDeep(copyObject.object));
     }
     this.updated.emit(true);
   }

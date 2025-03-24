@@ -1,10 +1,10 @@
 <ng-container *ngIf="messageType">
   <div class="flex flex-col h-full" [cdkContextMenuTriggerFor]="protocolContextMennu">
     <div class="flex">
-      <ng-container *ngIf="hasSettings && schema">
+      <ng-container *ngIf="hasSettings && protocolSchema">
         <div class="flex-grow"></div>
         <div
-          matTooltip="{{ schema?.title }} Settings"
+          matTooltip="{{ protocolSchema?.title }} Settings"
           class="flex items-center justify-center w-10 h-10 mx-5 my-2 rounded-full bg-gray-200 hover:cursor-pointer hover:bg-gray-300"
           (click)="openSettingsDialog()">
           <mat-icon>settings</mat-icon>
@@ -12,11 +12,11 @@
         <ng-template #settingsDialogRef>
           <div class="p-2">
             <div class="flex justify-around w-full mb-2 text-gray-200">
-              {{ schema?.title }}
+              {{ protocolSchema?.title }}
             </div>
             <app-params-form
-              [paramsSchema]="schema?.properties?.params"
-              [data]="messageTypeConfig?.params"
+              [paramsSchema]="protocolSchema?.properties?.params"
+              [data]="messageTypeProtocolConfig?.params"
               (updated)="protocolParamsUpdated($event)"></app-params-form>
           </div>
         </ng-template>
@@ -28,8 +28,8 @@
       [id]="listsService.registerTriggerList(messageType + '/triggers')"
       (cdkDropListDropped)="dropTrigger($event)"
       [cdkDropListConnectedTo]="listsService.triggerListIds"
-      [cdkDropListData]="messageTypeConfig?.triggers">
-      <div cdkDrag *ngFor="let trigger of messageTypeConfig?.triggers; let i = index">
+      [cdkDropListData]="messageTypeHandlerConfig?.triggers">
+      <div cdkDrag *ngFor="let trigger of messageTypeHandlerConfig?.triggers; let i = index">
         <app-trigger
           [path]="messageType + '/triggers/' + i"
           [trigger]="trigger"

@@ -1,7 +1,7 @@
 <ng-container *ngIf="config">
   <div class="flex h-full flex-col">
     <div class="flex justify-around w-full">
-      <ng-container *ngFor="let messageType of schemaService.messageTypes">
+      <ng-container *ngFor="let messageType of messageAndProtocolTypes">
         <ng-container *ngIf="selectedMessageType.type === messageType.type; else notSelectedProtocol">
           <div
             (click)="selectMessageType(messageType)"
@@ -29,8 +29,10 @@
     <div *ngIf="selectedMessageType" class="flex-grow">
       <app-message-type
         [messageType]="selectedMessageType.type"
-        [messageTypeConfig]="config[selectedMessageType.type]"
-        (updated)="protocolUpdate(selectedMessageType.type)"></app-message-type>
+        [messageTypeHandlerConfig]="config.handlers[selectedMessageType.type]"
+        [messageTypeProtocolConfig]="config.protocols[selectedMessageType.type]"
+        (handlerUpdated)="handlerUpdate(selectedMessageType.type)"
+        (protocolUpdated)="protocolUpdate(selectedMessageType.type)"></app-message-type>
     </div>
   </div>
 </ng-container>
