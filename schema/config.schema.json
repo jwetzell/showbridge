@@ -6,174 +6,188 @@
   "type": "object",
   "properties": {
     "protocols": {
-      "description": "array of protocols",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "oneOf": [
-          { "$ref": "#/definitions/ProtocolCloud" },
-          { "$ref": "#/definitions/ProtocolHTTP" },
-          { "$ref": "#/definitions/ProtocolMIDI" },
-          { "$ref": "#/definitions/ProtocolMQTT" },
-          { "$ref": "#/definitions/ProtocolTCP" },
-          { "$ref": "#/definitions/ProtocolUDP" },
-          { "$ref": "#/definitions/ProtocolCloud" }
-        ]
+      "description": "protocol config section",
+      "type": "object",
+      "properties": {
+        "cloud": {
+          "$ref": "#/definitions/ProtocolCloud"
+        },
+        "http": {
+          "$ref": "#/definitions/ProtocolHTTP"
+        },
+        "midi": {
+          "$ref": "#/definitions/ProtocolMIDI"
+        },
+        "mqtt": {
+          "$ref": "#/definitions/ProtocolMQTT"
+        },
+        "tcp": {
+          "$ref": "#/definitions/ProtocolTCP"
+        },
+        "udp": {
+          "$ref": "#/definitions/ProtocolUDP"
+        }
       }
     },
-    "http": {
-      "title": "HTTP",
+    "handlers": {
+      "description": "message type handler config section",
       "type": "object",
       "properties": {
-        "triggers": {
-          "description": "array of triggers",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/TriggerHTTPRequest" },
-              { "$ref": "#/definitions/TriggerSender" },
-              { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerAny" }
-            ]
-          }
+        "http": {
+          "title": "HTTP",
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "description": "array of triggers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "oneOf": [
+                  { "$ref": "#/definitions/TriggerHTTPRequest" },
+                  { "$ref": "#/definitions/TriggerSender" },
+                  { "$ref": "#/definitions/TriggerRegex" },
+                  { "$ref": "#/definitions/TriggerAny" }
+                ]
+              }
+            }
+          },
+          "required": ["triggers"],
+          "additionalProperties": false
+        },
+        "ws": {
+          "title": "WebSocket",
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "description": "array of triggers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "oneOf": [
+                  { "$ref": "#/definitions/TriggerSender" },
+                  { "$ref": "#/definitions/TriggerRegex" },
+                  { "$ref": "#/definitions/TriggerAny" }
+                ]
+              }
+            }
+          },
+          "required": ["triggers"],
+          "additionalProperties": false
+        },
+        "osc": {
+          "title": "OSC",
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "description": "array of triggers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "oneOf": [
+                  { "$ref": "#/definitions/TriggerSender" },
+                  { "$ref": "#/definitions/TriggerRegex" },
+                  { "$ref": "#/definitions/TriggerBytesEqual" },
+                  { "$ref": "#/definitions/TriggerOSCAddress" },
+                  { "$ref": "#/definitions/TriggerAny" }
+                ]
+              }
+            }
+          },
+          "required": ["triggers"],
+          "additionalProperties": false
+        },
+        "tcp": {
+          "title": "TCP",
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "description": "array of triggers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "oneOf": [
+                  { "$ref": "#/definitions/TriggerRegex" },
+                  { "$ref": "#/definitions/TriggerSender" },
+                  { "$ref": "#/definitions/TriggerBytesEqual" },
+                  { "$ref": "#/definitions/TriggerAny" }
+                ]
+              }
+            }
+          },
+          "required": ["triggers"],
+          "additionalProperties": false
+        },
+        "udp": {
+          "title": "UDP",
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "description": "array of triggers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "oneOf": [
+                  { "$ref": "#/definitions/TriggerRegex" },
+                  { "$ref": "#/definitions/TriggerSender" },
+                  { "$ref": "#/definitions/TriggerBytesEqual" },
+                  { "$ref": "#/definitions/TriggerAny" }
+                ]
+              }
+            }
+          },
+          "required": ["triggers"],
+          "additionalProperties": false
+        },
+        "midi": {
+          "title": "MIDI",
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "description": "array of triggers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "oneOf": [
+                  { "$ref": "#/definitions/TriggerRegex" },
+                  { "$ref": "#/definitions/TriggerBytesEqual" },
+                  { "$ref": "#/definitions/TriggerMIDI" },
+                  { "$ref": "#/definitions/TriggerMIDINoteOff" },
+                  { "$ref": "#/definitions/TriggerMIDINoteOn" },
+                  { "$ref": "#/definitions/TriggerMIDIControlChange" },
+                  { "$ref": "#/definitions/TriggerMIDIPitchBend" },
+                  { "$ref": "#/definitions/TriggerMIDIProgramChange" },
+                  { "$ref": "#/definitions/TriggerAny" }
+                ]
+              }
+            }
+          },
+          "required": ["triggers"],
+          "additionalProperties": false
+        },
+        "mqtt": {
+          "title": "MQTT",
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "description": "array of triggers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "oneOf": [
+                  { "$ref": "#/definitions/TriggerRegex" },
+                  { "$ref": "#/definitions/TriggerMQTTTopiic" },
+                  { "$ref": "#/definitions/TriggerAny" }
+                ]
+              }
+            }
+          },
+          "required": ["triggers"],
+          "additionalProperties": false
         }
-      },
-      "required": ["triggers"],
-      "additionalProperties": false
-    },
-    "ws": {
-      "title": "WebSocket",
-      "type": "object",
-      "properties": {
-        "triggers": {
-          "description": "array of triggers",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/TriggerSender" },
-              { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerAny" }
-            ]
-          }
-        }
-      },
-      "required": ["triggers"],
-      "additionalProperties": false
-    },
-    "osc": {
-      "title": "OSC",
-      "type": "object",
-      "properties": {
-        "triggers": {
-          "description": "array of triggers",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/TriggerSender" },
-              { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerBytesEqual" },
-              { "$ref": "#/definitions/TriggerOSCAddress" },
-              { "$ref": "#/definitions/TriggerAny" }
-            ]
-          }
-        }
-      },
-      "required": ["triggers"],
-      "additionalProperties": false
-    },
-    "tcp": {
-      "title": "TCP",
-      "type": "object",
-      "properties": {
-        "triggers": {
-          "description": "array of triggers",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerSender" },
-              { "$ref": "#/definitions/TriggerBytesEqual" },
-              { "$ref": "#/definitions/TriggerAny" }
-            ]
-          }
-        }
-      },
-      "required": ["triggers", "params"],
-      "additionalProperties": false
-    },
-    "udp": {
-      "title": "UDP",
-      "type": "object",
-      "properties": {
-        "triggers": {
-          "description": "array of triggers",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerSender" },
-              { "$ref": "#/definitions/TriggerBytesEqual" },
-              { "$ref": "#/definitions/TriggerAny" }
-            ]
-          }
-        }
-      },
-      "required": ["triggers", "params"],
-      "additionalProperties": false
-    },
-    "midi": {
-      "title": "MIDI",
-      "type": "object",
-      "properties": {
-        "triggers": {
-          "description": "array of triggers",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerBytesEqual" },
-              { "$ref": "#/definitions/TriggerMIDI" },
-              { "$ref": "#/definitions/TriggerMIDINoteOff" },
-              { "$ref": "#/definitions/TriggerMIDINoteOn" },
-              { "$ref": "#/definitions/TriggerMIDIControlChange" },
-              { "$ref": "#/definitions/TriggerMIDIPitchBend" },
-              { "$ref": "#/definitions/TriggerMIDIProgramChange" },
-              { "$ref": "#/definitions/TriggerAny" }
-            ]
-          }
-        }
-      },
-      "required": ["triggers"],
-      "additionalProperties": false
-    },
-    "mqtt": {
-      "title": "MQTT",
-      "type": "object",
-      "properties": {
-        "triggers": {
-          "description": "array of triggers",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              { "$ref": "#/definitions/TriggerRegex" },
-              { "$ref": "#/definitions/TriggerMQTTTopiic" },
-              { "$ref": "#/definitions/TriggerAny" }
-            ]
-          }
-        }
-      },
-      "required": ["triggers", "params"],
-      "additionalProperties": false
+      }
     }
   },
-  "required": ["http", "ws", "osc", "midi", "tcp", "udp", "mqtt"],
+  "required": ["handlers", "protocols"],
   "definitions": {
     "ActionList": {
       "description": "Actions to be performed if this trigger is fired",
@@ -2608,17 +2622,10 @@
       "additionalProperties": false
     },
     "ProtocolCloud": {
-      "title": "Cloud Protocol",
+      "title": "Cloud",
       "description": "This protocol will connect to a showbridge cloud instance and relay messages",
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string",
-          "const": "template"
-        },
-        "comment": {
-          "type": "string"
-        },
         "params": {
           "type": "object",
           "properties": {
@@ -2635,28 +2642,16 @@
             }
           },
           "additionalProperties": false
-        },
-        "enabled": {
-          "description": "Whether this transform is enabled",
-          "type": "boolean",
-          "default": true
         }
       },
-      "required": ["type", "enabled", "params"],
+      "required": ["params"],
       "additionalProperties": false
     },
     "ProtocolHTTP": {
-      "title": "HTTP Protocol",
+      "title": "HTTP",
       "description": "This protocol will host an HTTP webserver",
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string",
-          "const": "template"
-        },
-        "comment": {
-          "type": "string"
-        },
         "params": {
           "type": "object",
           "properties": {
@@ -2676,28 +2671,16 @@
           },
           "required": ["port"],
           "additionalProperties": false
-        },
-        "enabled": {
-          "description": "Whether this transform is enabled",
-          "type": "boolean",
-          "default": true
         }
       },
-      "required": ["type", "enabled", "params"],
+      "required": ["params"],
       "additionalProperties": false
     },
     "ProtocolMIDI": {
-      "title": "MIDI Protocol",
+      "title": "MIDI",
       "description": "This protocol will create virtual midi input and output",
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string",
-          "const": "template"
-        },
-        "comment": {
-          "type": "string"
-        },
         "params": {
           "type": "object",
           "properties": {
@@ -2714,28 +2697,16 @@
           },
           "required": [],
           "additionalProperties": false
-        },
-        "enabled": {
-          "description": "Whether this transform is enabled",
-          "type": "boolean",
-          "default": true
         }
       },
-      "required": ["type", "enabled", "params"],
+      "required": ["params"],
       "additionalProperties": false
     },
     "ProtocolMQTT": {
-      "title": "MQTT Protocol",
+      "title": "MQTT",
       "description": "This protocol will connect to an MQTT server",
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string",
-          "const": "template"
-        },
-        "comment": {
-          "type": "string"
-        },
         "params": {
           "type": "object",
           "properties": {
@@ -2762,28 +2733,16 @@
           },
           "required": ["broker", "topics"],
           "additionalProperties": false
-        },
-        "enabled": {
-          "description": "Whether this transform is enabled",
-          "type": "boolean",
-          "default": true
         }
       },
-      "required": ["type", "enabled", "params"],
+      "required": ["params"],
       "additionalProperties": false
     },
     "ProtocolTCP": {
-      "title": "TCP Protocol",
+      "title": "TCP",
       "description": "This protocol will host an TCP server",
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string",
-          "const": "template"
-        },
-        "comment": {
-          "type": "string"
-        },
         "params": {
           "type": "object",
           "properties": {
@@ -2804,28 +2763,16 @@
           },
           "required": ["port"],
           "additionalProperties": false
-        },
-        "enabled": {
-          "description": "Whether this transform is enabled",
-          "type": "boolean",
-          "default": true
         }
       },
-      "required": ["type", "enabled", "params"],
+      "required": ["params"],
       "additionalProperties": false
     },
     "ProtocolUDP": {
-      "title": "UDP Protocol",
+      "title": "UDP",
       "description": "This protocol will host an UDP server",
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string",
-          "const": "template"
-        },
-        "comment": {
-          "type": "string"
-        },
         "params": {
           "type": "object",
           "properties": {
@@ -2845,14 +2792,9 @@
           },
           "required": ["port"],
           "additionalProperties": false
-        },
-        "enabled": {
-          "description": "Whether this transform is enabled",
-          "type": "boolean",
-          "default": true
         }
       },
-      "required": ["type", "enabled", "params"],
+      "required": ["params"],
       "additionalProperties": false
     }
   }
