@@ -40,12 +40,12 @@ class Router extends EventEmitter {
     this.vars = {};
     this._config = config;
     this.protocols = {
-      http: new HTTPProtocol(this),
-      udp: new UDPProtocol(this),
-      tcp: new TCPProtocol(this),
-      midi: new MIDIProtocol(this),
-      mqtt: new MQTTProtocol(this),
-      cloud: new CloudProtocol(this),
+      http: new HTTPProtocol(this.config.protocols.http, this),
+      udp: new UDPProtocol(this.config.protocols.udp, this),
+      tcp: new TCPProtocol(this.config.protocols.tcp, this),
+      midi: new MIDIProtocol(this.config.protocols.midi, this),
+      mqtt: new MQTTProtocol(this.config.protocols.mqtt, this),
+      cloud: new CloudProtocol(this.config.protocols.cloud, this),
     };
 
     // NOTE(jwetzell): listen for all messages on all protocols
@@ -110,8 +110,8 @@ class Router extends EventEmitter {
     const protocolsToReload = [];
 
     Object.keys(this.protocols).forEach((protocol) => {
-      if (value[protocol].params) {
-        if (!isEqual(value[protocol].params, this.config[protocol].params)) {
+      if (value.protocols[protocol].params) {
+        if (!isEqual(value.protocols[protocol].params, this.config.protocols[protocol].params)) {
           logger.debug(`router: ${protocol} config has changed and marked for reload`);
           protocolsToReload.push(protocol);
         }
@@ -272,9 +272,9 @@ class Router extends EventEmitter {
 
   reloadProtocol(type: string) {
     logger.trace(`router: reloading ${type} protocol`);
-    if (this.config[type] && !disabled.protocols.has(type)) {
-      if (this.config[type].params) {
-        this.protocols[type].reload(this.config[type].params);
+    if (this.config.protocols[type] && !disabled.protocols.has(type)) {
+      if (this.config.protocols[type].params) {
+        this.protocols[type].reload(this.config.protocols[type].params);
       } else {
         this.protocols[type].reload();
       }

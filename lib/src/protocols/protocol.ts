@@ -1,7 +1,7 @@
 import { ProtocolObj } from '@showbridge/types/dist/models/protocol.js';
 import EventEmitter from 'node:events';
 import Router from '../router.js';
-import { disabled, Templating } from '../utils/index.js';
+import { Templating } from '../utils/index.js';
 
 class Protocol<T extends Object> extends EventEmitter {
   router: Router;
@@ -13,23 +13,8 @@ class Protocol<T extends Object> extends EventEmitter {
     this.obj = protocolObj;
   }
 
-  get type() {
-    return this.obj.type;
-  }
-
   get params() {
     return this.obj.params;
-  }
-
-  get enabled() {
-    return this.obj.enabled && !disabled.protocols.has(this.type);
-  }
-
-  get comment() {
-    return this.obj.comment;
-  }
-  get status() {
-    return {};
   }
 
   resolveTemplatedParams(data) {
@@ -38,10 +23,7 @@ class Protocol<T extends Object> extends EventEmitter {
 
   toJSON() {
     return {
-      type: this.type,
       params: this.params,
-      enabled: this.enabled,
-      comment: this.comment,
     };
   }
 }
