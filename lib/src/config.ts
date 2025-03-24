@@ -1,15 +1,68 @@
 import { ConfigObj } from '@showbridge/types';
+import {
+  CloudProtocolParams,
+  HTTPProtocolParams,
+  MIDIProtocolParams,
+  MQTTProtocolParams,
+  TCPProtocolParams,
+  UDPProtocolParams,
+} from '@showbridge/types/dist/models/params/protocols.js';
 import { Ajv, ValidateFunction } from 'ajv';
 import { SomeJSONSchema } from 'ajv/dist/types/json-schema.js';
 import { cloneDeep, has } from 'lodash-es';
-import { MessageTypeClassMap } from './messages/index.js';
 import { Trigger, TriggerTypeClassMap } from './triggers/index.js';
 import getConfigMigrations from './utils/migrations.js';
 
+type ConfigProtocols = {
+  cloud: {
+    params: CloudProtocolParams;
+  };
+  http: {
+    params: HTTPProtocolParams;
+  };
+  midi: {
+    params: MIDIProtocolParams;
+  };
+  mqtt: {
+    params: MQTTProtocolParams;
+  };
+  tcp: {
+    params: TCPProtocolParams;
+  };
+  udp: {
+    params: UDPProtocolParams;
+  };
+};
+
+type ConfigHandlers = {
+  http: {
+    triggers: Trigger<unknown>[];
+  };
+  midi: {
+    triggers: Trigger<unknown>[];
+  };
+  mqtt: {
+    triggers: Trigger<unknown>[];
+  };
+  osc: {
+    triggers: Trigger<unknown>[];
+  };
+  tcp: {
+    triggers: Trigger<unknown>[];
+  };
+  udp: {
+    triggers: Trigger<unknown>[];
+  };
+  ws: {
+    triggers: Trigger<unknown>[];
+  };
+};
 class Config {
   schema: SomeJSONSchema;
   validate: ValidateFunction<unknown>;
-  config: ConfigObj;
+  obj: ConfigObj;
+  handlers: ConfigHandlers;
+  protocols: ConfigProtocols;
 
   constructor(configObj: any, schema: SomeJSONSchema) {
     this.schema = schema;
@@ -21,19 +74,80 @@ class Config {
       throw this.validate.errors;
     }
 
-    this.config = migratedConfig;
-    this.loadTriggers();
+    this.obj = migratedConfig;
+    this.loadHandlers();
+    this.loadProtocols();
   }
 
-  loadTriggers() {
-    Object.keys(MessageTypeClassMap).forEach((messageType) => {
-      if (this.config[messageType]) {
-        this[messageType] = this.config[messageType];
+  loadHandlers() {
+    this.handlers = {
+      http: {
+        triggers: [],
+      },
+      midi: {
+        triggers: [],
+      },
+      mqtt: {
+        triggers: [],
+      },
+      osc: {
+        triggers: [],
+      },
+      tcp: {
+        triggers: [],
+      },
+      udp: {
+        triggers: [],
+      },
+      ws: {
+        triggers: [],
+      },
+    };
+    Object.keys(this.obj.handlers).forEach((handlerType) => {
+      if (this.obj.handlers) {
+        this.handlers[handlerType] = this.obj.handlers[handlerType];
 
         // NOTE(jwetzell): turn trigger JSON into class instances
-        this[messageType].triggers = this[messageType]?.triggers
+        this.handlers[handlerType].triggers = this.handlers[handlerType]?.triggers
           ?.filter((trigger) => has(TriggerTypeClassMap, trigger.type))
           .map((trigger) => new TriggerTypeClassMap[trigger.type](trigger));
+      }
+    });
+  }
+
+  loadProtocols() {
+    this.protocols = {
+      cloud: {
+        params: {},
+      },
+      http: {
+        params: {
+          port: 3000,
+        },
+      },
+      midi: {
+        params: {},
+      },
+      mqtt: {
+        params: {
+          broker: '',
+          topics: [],
+        },
+      },
+      tcp: {
+        params: {
+          port: 8000,
+        },
+      },
+      udp: {
+        params: {
+          port: 8000,
+        },
+      },
+    };
+    Object.keys(this.obj.protocols).forEach((protocolType) => {
+      if (this.obj.protocols) {
+        this.protocols[protocolType] = this.obj.protocols[protocolType];
       }
     });
   }
@@ -48,18 +162,14 @@ class Config {
   }
 
   getTriggers(messageType: string): Trigger<unknown>[] {
-    if (this[messageType] && this[messageType].triggers) {
-      return this[messageType].triggers;
+    if (this.handlers[messageType] && this.handlers[messageType].triggers) {
+      return this.handlers[messageType].triggers;
     }
     return [];
   }
 
-  get cloud() {
-    return this.config.cloud;
-  }
-
   toJSON() {
-    const config = cloneDeep(this.config);
+    const config = cloneDeep(this.obj);
     if (config.$schema) {
       delete config.$schema;
     }

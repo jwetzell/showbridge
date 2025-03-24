@@ -1,18 +1,12 @@
+import { MQTTProtocolParams } from '@showbridge/types/dist/models/params/protocols.js';
 import { has } from 'lodash-es';
 import mqtt, { IClientOptions, MqttClient } from 'mqtt';
-import { EventEmitter } from 'node:events';
 import { MQTTMessage } from '../messages/index.js';
-import Router from '../router.js';
 import { disabled, logger } from '../utils/index.js';
+import Protocol from './protocol.js';
 
-class MQTTProtocol extends EventEmitter {
-  router: Router;
+class MQTTProtocol extends Protocol<MQTTProtocolParams> {
   client: MqttClient;
-
-  constructor(router) {
-    super();
-    this.router = router;
-  }
 
   reload(params) {
     if (!has(params, 'broker') || params.broker === '') {

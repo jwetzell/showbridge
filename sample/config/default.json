@@ -1,88 +1,102 @@
 {
-  "http": {
-    "params": {
-      "port": 3000
+  "protocols": {
+    "cloud": {
+      "params": {
+        "url": "",
+        "rooms": []
+      }
     },
-    "triggers": [
-      {
-        "type": "any",
-        "enabled": true,
-        "actions": [{ "type": "log", "enabled": true }]
+    "http": {
+      "params": {
+        "port": 3000
       }
-    ]
-  },
-  "ws": {
-    "triggers": [
-      {
-        "type": "any",
-        "enabled": true,
-        "actions": [{ "type": "log", "enabled": true }]
-      }
-    ]
-  },
-  "osc": {
-    "triggers": [
-      {
-        "type": "any",
-        "enabled": true,
-        "actions": [{ "type": "log", "enabled": true }]
-      }
-    ]
-  },
-  "midi": {
-    "params": {
-      "virtualInputName": "showbridge Input",
-      "virtualOutputName": "showbridge Output"
     },
-    "triggers": [
-      {
-        "type": "any",
-        "enabled": true,
-        "actions": [{ "type": "log", "enabled": true }]
+    "midi": {
+      "params": {
+        "virtualInputName": "showbridge Input",
+        "virtualOutputName": "showbridge Output"
       }
-    ]
-  },
-  "udp": {
-    "params": {
-      "port": 8000
     },
-    "triggers": [
-      {
-        "type": "any",
-        "enabled": true,
-        "actions": [{ "type": "log", "enabled": true }]
+    "mqtt": {
+      "params": {
+        "broker": "",
+        "topics": []
       }
-    ]
-  },
-  "tcp": {
-    "params": {
-      "port": 8000
     },
-    "triggers": [
-      {
-        "type": "any",
-        "enabled": true,
-        "actions": [{ "type": "log", "enabled": true }]
+    "tcp": {
+      "params": {
+        "port": 8000
       }
-    ]
-  },
-  "mqtt": {
-    "params": {
-      "broker": "",
-      "topics": []
     },
-    "triggers": [
-      {
-        "type": "any",
-        "enabled": true,
-        "actions": [{ "type": "log", "enabled": true }]
+    "udp": {
+      "params": {
+        "port": 8000
       }
-    ]
+    }
   },
-  "cloud": {
-    "params": {
-      "url": "",
-      "rooms": []
+  "handlers": {
+    "http": {
+      "triggers": [
+        {
+          "type": "any",
+          "enabled": true,
+          "actions": [{ "type": "log", "enabled": true }]
+        }
+      ]
+    },
+    "ws": {
+      "triggers": [
+        {
+          "type": "any",
+          "enabled": true,
+          "actions": [{ "type": "log", "enabled": true }]
+        }
+      ]
+    },
+    "midi": {
+      "triggers": [
+        {
+          "type": "any",
+          "enabled": true,
+          "actions": [{ "type": "log", "enabled": true }]
+        }
+      ]
+    },
+    "mqtt": {
+      "triggers": [
+        {
+          "type": "any",
+          "enabled": true,
+          "actions": [{ "type": "log", "enabled": true }]
+        }
+      ]
+    },
+    "osc": {
+      "triggers": [
+        {
+          "type": "any",
+          "enabled": true,
+          "actions": [{ "type": "log", "enabled": true }]
+        }
+      ]
+    },
+    "tcp": {
+      "triggers": [
+        {
+          "type": "any",
+          "enabled": true,
+          "actions": [{ "type": "log", "enabled": true }]
+        }
+      ]
+    },
+    "udp": {
+      "triggers": [
+        {
+          "type": "any",
+          "enabled": true,
+          "actions": [{ "type": "log", "enabled": true }]
+        }
+      ]
     }
   }
 }

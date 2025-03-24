@@ -1,21 +1,15 @@
 import { UDPSender } from '@showbridge/types';
+import { UDPProtocolParams } from '@showbridge/types/dist/models/params/protocols.js';
 import { createSocket, Socket } from 'dgram';
-import { EventEmitter } from 'node:events';
 import { fromBuffer } from 'osc-min';
 import { OSCMessage, UDPMessage } from '../messages/index.js';
-import Router from '../router.js';
 import { disabled, logger } from '../utils/index.js';
+import Protocol from './protocol.js';
 
-class UDPProtocol extends EventEmitter {
-  router: Router;
+class UDPProtocol extends Protocol<UDPProtocolParams> {
   oscBundleTag = Buffer.from('#bundle');
   server: Socket;
   stopped: boolean;
-
-  constructor(router) {
-    super();
-    this.router = router;
-  }
 
   reload(params) {
     if (this.server !== undefined) {

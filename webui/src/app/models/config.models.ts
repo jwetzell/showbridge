@@ -1,9 +1,19 @@
 import { TriggerObj, TriggerParams } from '@showbridge/types';
 
+export type HandlersConfiguration = { [key: string]: HandlerConfiguration };
+export type ProtocolsConfiguration = { [key: string]: ProtocolConfiguration };
+
 export type ConfigFile = {
-  [key: string]: ProtocolConfiguration;
+  protocols: ProtocolsConfiguration;
+  handlers: HandlersConfiguration;
 };
 
+export type HandlerConfiguration = {
+  params?: {
+    [k: string]: string | number;
+  };
+  triggers?: TriggerObj<TriggerParams>[];
+};
 export type ProtocolConfiguration = {
   params?: {
     [k: string]: string | number;

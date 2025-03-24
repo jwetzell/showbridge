@@ -15,21 +15,42 @@ export class ConfigComponent {
   @Input() config!: ConfigFile;
   @Output() updated: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   pendingUpdate?: ConfigFile;
-  selectedMessageType: ObjectInfo = this.schemaService.messageTypes[0];
+  selectedMessageType: ObjectInfo = this.schemaService.handlerTypes[0];
 
-  messageTypes: string[];
+  messageAndProtocolTypes: ObjectInfo[];
+
   constructor(
     public schemaService: SchemaService,
     public eventService: EventService,
     public settingsService: SettingsService
   ) {
-    this.messageTypes = this.schemaService.messageTypes.map((protocolInfo) => protocolInfo.type);
+    this.messageAndProtocolTypes = [];
+
+    this.schemaService.handlerTypes.forEach((handlerInfo) => {
+      if (this.messageAndProtocolTypes.find((objectInfo) => objectInfo.type === handlerInfo.type) === undefined) {
+        this.messageAndProtocolTypes.push(handlerInfo);
+      }
+    });
+    this.schemaService.protocolTypes.forEach((protocolInfo) => {
+      if (this.messageAndProtocolTypes.find((objectInfo) => objectInfo.type === protocolInfo.type) === undefined) {
+        this.messageAndProtocolTypes.push(protocolInfo);
+      }
+    });
+  }
+
+  handlerUpdate(type: string) {
+    if (this.config.handlers[type] === undefined) {
+      this.config.handlers[type] = {
+        triggers: [],
+      };
+    }
+    this.updated.emit(true);
   }
 
   protocolUpdate(type: string) {
-    if (this.config[type] === undefined) {
-      this.config[type] = {
-        triggers: [],
+    if (this.config.protocols[type] === undefined) {
+      this.config.protocols[type] = {
+        params: {},
       };
     }
     this.updated.emit(true);

@@ -84,7 +84,7 @@ export class AppComponent {
           this.configService.setCurrentlyLiveConfigState(this.currentlyShownConfigState);
 
           // NOTE(jwetzell): check for an updated HTTP port
-          const newHttpPort = get(this.currentlyShownConfigState.config, 'http.params.port');
+          const newHttpPort = get(this.currentlyShownConfigState.config, 'protocols.http.params.port');
 
           if (newHttpPort && newHttpPort !== parseInt(location.port)) {
             if (this.settingsService.baseUrl === window.location.href) {

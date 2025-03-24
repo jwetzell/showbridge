@@ -1,6 +1,6 @@
 {
   "name": "@showbridge/types",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "type library for showbridge",
   "main": "",
   "types": "dist/index.d.ts",

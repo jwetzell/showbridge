@@ -1,21 +1,19 @@
-import { EventEmitter } from 'node:events';
-
 import cors from 'cors';
 import express, { Application } from 'express';
 import http, { IncomingMessage, Server, ServerResponse } from 'http';
 import { WebSocket, WebSocketServer } from 'ws';
 
+import { HTTPProtocolParams } from '@showbridge/types/dist/models/params/protocols.js';
 import { get, has, set } from 'lodash-es';
 import { AddressInfo } from 'net';
 import superagent from 'superagent';
 import Config from '../config.js';
 import { HTTPMessage, WebSocketMessage } from '../messages/index.js';
 import { WebUIPayload } from '../messages/websocket-message.js';
-import Router from '../router.js';
 import { disabled, logger } from '../utils/index.js';
+import Protocol from './protocol.js';
 
-class HTTPProtocol extends EventEmitter {
-  router: Router;
+class HTTPProtocol extends Protocol<HTTPProtocolParams> {
   app: Application;
   httpServer: Server<typeof IncomingMessage, typeof ServerResponse>;
   wsServer: WebSocketServer;
@@ -23,10 +21,8 @@ class HTTPProtocol extends EventEmitter {
   openWebSockets: WebSocket[];
   server: Server<typeof IncomingMessage, typeof ServerResponse>;
 
-  constructor(router) {
-    super();
-
-    this.router = router;
+  constructor(protocolObj, router) {
+    super(protocolObj, router);
 
     this.app = express();
     this.httpServer = http.createServer(this.app);
