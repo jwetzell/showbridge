@@ -1,188 +1,221 @@
 {
-  "http": {
-    "params": {
-      "port": 3000
+  "protocols": {
+    "cloud": {
+      "params": {
+        "url": "https://cloud.showbridge.io",
+        "rooms": [
+          "dev"
+        ]
+      }
     },
-    "triggers": [
-      {
-        "type": "regex",
-        "params": {
-          "patterns": [
-            "/test.*"
-          ],
-          "properties": [
-            "originalUrl"
-          ]
-        },
-        "actions": [
-          {
-            "type": "log",
-            "transforms": [],
-            "enabled": true
-          }
-        ],
-        "subTriggers": [
-          {
-            "type": "regex",
-            "params": {
-              "patterns": [
-                "/testing"
-              ],
-              "properties": [
-                "originalUrl"
-              ]
-            },
-            "actions": [
-              {
-                "type": "log",
-                "transforms": [],
-                "enabled": true
-              },
-              {
-                "type": "midi-output",
-                "params": {
-                  "_port": "${vars.patches.midi[1].port}",
-                  "status": "note_on",
-                  "channel": 1,
-                  "note": 6,
-                  "velocity": 6
-                },
-                "transforms": [],
-                "enabled": true
-              },
-              {
-                "type": "osc-output",
-                "params": {
-                  "_host": "${vars.patches.network[0].host}",
-                  "_port": "${vars.patches.network[0].port}",
-                  "protocol": "udp",
-                  "address": "/test",
-                  "_args": [],
-                  "args": []
-                },
-                "transforms": [],
-                "enabled": true
-              }
+    "http": {
+      "params": {
+        "address": "0.0.0.0",
+        "port": 3000
+      }
+    },
+    "midi": {
+      "params": {
+        "virtualInputName": "showbridge dev Input",
+        "virtualOutputName": "showbridge dev Output"
+      }
+    },
+    "mqtt": {
+      "params": {
+        "broker": "",
+        "topics": [
+          "#"
+        ]
+      }
+    },
+    "tcp": {
+      "params": {
+        "port": 8001
+      }
+    },
+    "udp": {
+      "params": {
+        "port": 8001
+      }
+    }
+  },
+  "handlers": {
+    "http": {
+      "triggers": [
+        {
+          "type": "regex",
+          "params": {
+            "patterns": [
+              "/test.*"
             ],
-            "subTriggers": [],
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      }
-    ]
-  },
-  "ws": {
-    "triggers": [
-      {
-        "type": "any",
-        "actions": [
-          {
-            "type": "log",
-            "transforms": [],
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      }
-    ]
-  },
-  "osc": {
-    "triggers": [
-      {
-        "type": "any",
-        "actions": [
-          {
-            "type": "log",
-            "transforms": [],
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      }
-    ]
-  },
-  "midi": {
-    "params": {
-      "virtualInputName": "showbridge dev Input",
-      "virtualOutputName": "showbridge dev Output"
-    },
-    "triggers": [
-      {
-        "type": "any",
-        "actions": [
-          {
-            "type": "log",
-            "transforms": [],
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      }
-    ]
-  },
-  "tcp": {
-    "params": {
-      "port": 8001
-    },
-    "triggers": [
-      {
-        "type": "any",
-        "actions": [
-          {
-            "type": "log",
-            "transforms": [],
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      }
-    ]
-  },
-  "udp": {
-    "params": {
-      "port": 8001
-    },
-    "triggers": [
-      {
-        "type": "any",
-        "actions": [
-          {
-            "type": "log",
-            "transforms": [],
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      }
-    ]
-  },
-  "mqtt": {
-    "params": {
-      "broker": "",
-      "topics": [
-        "#"
+            "properties": [
+              "originalUrl"
+            ]
+          },
+          "actions": [
+            {
+              "type": "log",
+              "transforms": [],
+              "enabled": true
+            }
+          ],
+          "subTriggers": [
+            {
+              "type": "regex",
+              "params": {
+                "patterns": [
+                  "/testing"
+                ],
+                "properties": [
+                  "originalUrl"
+                ]
+              },
+              "actions": [
+                {
+                  "type": "log",
+                  "transforms": [],
+                  "enabled": true
+                },
+                {
+                  "type": "midi-output",
+                  "params": {
+                    "_port": "${vars.patches.midi[1].port}",
+                    "status": "note_on",
+                    "channel": 1,
+                    "note": 6,
+                    "velocity": 6
+                  },
+                  "transforms": [],
+                  "enabled": true
+                },
+                {
+                  "type": "osc-output",
+                  "params": {
+                    "_host": "${vars.patches.network[0].host}",
+                    "_port": "${vars.patches.network[0].port}",
+                    "protocol": "udp",
+                    "address": "/test",
+                    "_args": [],
+                    "args": []
+                  },
+                  "transforms": [],
+                  "enabled": true
+                }
+              ],
+              "subTriggers": [],
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+        {
+          "type": "any",
+          "actions": [
+            {
+              "type": "log",
+              "transforms": [],
+              "enabled": true
+            }
+          ],
+          "subTriggers": [],
+          "enabled": true
+        }
       ]
     },
-    "triggers": [
-      {
-        "type": "any",
-        "actions": [
-          {
-            "type": "log",
-            "transforms": [],
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      }
-    ]
-  },
-  "cloud": {
-    "params": {
-      "url": "https://cloud.showbridge.io",
-      "rooms": [
-        "dev"
+    "midi": {
+      "triggers": [
+        {
+          "type": "any",
+          "actions": [
+            {
+              "type": "log",
+              "transforms": [],
+              "enabled": true
+            }
+          ],
+          "subTriggers": [],
+          "enabled": true
+        }
+      ]
+    },
+    "mqtt": {
+      "triggers": [
+        {
+          "type": "any",
+          "actions": [
+            {
+              "type": "log",
+              "transforms": [],
+              "enabled": true
+            }
+          ],
+          "subTriggers": [],
+          "enabled": true
+        }
+      ]
+    },
+    "osc": {
+      "triggers": [
+        {
+          "type": "any",
+          "actions": [
+            {
+              "type": "log",
+              "transforms": [],
+              "enabled": true
+            }
+          ],
+          "subTriggers": [],
+          "enabled": true
+        }
+      ]
+    },
+    "tcp": {
+      "triggers": [
+        {
+          "type": "any",
+          "actions": [
+            {
+              "type": "log",
+              "transforms": [],
+              "enabled": true
+            }
+          ],
+          "subTriggers": [],
+          "enabled": true
+        }
+      ]
+    },
+    "udp": {
+      "triggers": [
+        {
+          "type": "any",
+          "actions": [
+            {
+              "type": "log",
+              "transforms": [],
+              "enabled": true
+            }
+          ],
+          "subTriggers": [],
+          "enabled": true
+        }
+      ]
+    },
+    "ws": {
+      "triggers": [
+        {
+          "type": "any",
+          "actions": [
+            {
+              "type": "log",
+              "transforms": [],
+              "enabled": true
+            }
+          ],
+          "subTriggers": [],
+          "enabled": true
+        }
       ]
     }
   }
