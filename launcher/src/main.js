@@ -608,16 +608,20 @@ if (!lock) {
     ipcMain.on('showUI', () => {
       try {
         const config = readJSONSync(configFilePath);
-        if (config.http.params.port) {
+        if (config.protocols.http.params.port) {
           let addressToOpen = 'localhost';
-          if (config.http.params.address !== undefined && config.http.params.address !== '0.0.0.0') {
-            addressToOpen = config.http.params.address;
+          if (
+            config.protocols.http.params.address !== undefined &&
+            config.protocols.http.params.address !== '0.0.0.0'
+          ) {
+            addressToOpen = config.protocols.http.params.address;
           }
-          shell.openExternal(`http://${addressToOpen}:${config.http.params.port}`);
+          shell.openExternal(`http://${addressToOpen}:${config.protocols.http.params.port}`);
         } else {
           dialog.showErrorBox('Error', 'HTTP server does not seem to be setup right.');
         }
       } catch (error) {
+        console.error(error);
         dialog.showErrorBox('Error', 'Problem determining current router settings');
       }
     });
