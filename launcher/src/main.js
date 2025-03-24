@@ -607,6 +607,7 @@ if (!lock) {
 
     ipcMain.on('showUI', () => {
       try {
+        // TODO(jwetzell): get this value from the running config not just the file on disk
         const config = readJSONSync(configFilePath);
         if (config.protocols.http.params.port) {
           let addressToOpen = 'localhost';
