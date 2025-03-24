@@ -1,280 +1,295 @@
 {
   "$schema": "../../schema/config.schema.json",
-  "http": {
-    "params": {
-      "port": 3000
-    },
-    "triggers": []
-  },
-  "ws": {
-    "triggers": []
-  },
-  "osc": {
-    "triggers": []
-  },
-  "midi": {
-    "triggers": [
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 0,
-          "velocity": 0
-        },
-        "actions": [
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 06 00 00 00 00 88 01 04 07 00 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 0,
-          "velocity": 127
-        },
-        "actions": [
-          { "type": "log", "enabled": true },
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 06 00 00 00 00 88 01 04 07 03 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 2,
-          "velocity": 0
-        },
-        "actions": [
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 06 00 00 00 00 88 01 04 07 00 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 2,
-          "velocity": 127
-        },
-        "actions": [
-          { "type": "log", "enabled": true },
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 06 00 00 00 00 88 01 04 07 02 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 16,
-          "velocity": 0
-        },
-        "actions": [
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 03 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 16,
-          "velocity": 127
-        },
-        "actions": [
-          { "type": "log", "enabled": true },
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 01 03 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 1,
-          "velocity": 0
-        },
-        "actions": [
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 03 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 1,
-          "velocity": 127
-        },
-        "actions": [
-          { "type": "log", "enabled": true },
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 01 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 18,
-          "velocity": 0
-        },
-        "actions": [
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 03 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 18,
-          "velocity": 127
-        },
-        "actions": [
-          { "type": "log", "enabled": true },
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 02 03 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 33,
-          "velocity": 0
-        },
-        "actions": [
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 03 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
-      },
-      {
-        "type": "midi-note-on",
-        "params": {
-          "note": 33,
-          "velocity": 127
-        },
-        "actions": [
-          { "type": "log", "enabled": true },
-          {
-            "type": "udp-output",
-            "params": {
-              "host": "10.0.0.58",
-              "port": 52381,
-              "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 02 ff"
-            },
-            "enabled": true
-          }
-        ],
-        "enabled": true
+  "protocols": {
+    "http": {
+      "params": {
+        "port": 3000
       }
-    ]
-  },
-  "tcp": {
-    "params": {
-      "address": "0.0.0.0",
-      "port": 8000
     },
-    "triggers": []
-  },
-  "udp": {
-    "params": {
-      "address": "0.0.0.0",
-      "port": 8000
+    "midi": {
+      "params": {}
     },
-    "triggers": []
-  },
-  "mqtt": {
-    "params": {
-      "broker": "",
-      "topics": []
+    "tcp": {
+      "params": {
+        "address": "0.0.0.0",
+        "port": 8000
+      }
     },
-    "triggers": []
+    "udp": {
+      "params": {
+        "address": "0.0.0.0",
+        "port": 8000
+      }
+    },
+    "mqtt": {
+      "params": {
+        "broker": "",
+        "topics": []
+      }
+    }
+  },
+  "handlers": {
+    "http": {
+      "triggers": []
+    },
+    "ws": {
+      "triggers": []
+    },
+    "osc": {
+      "triggers": []
+    },
+    "midi": {
+      "triggers": [
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 0,
+            "velocity": 0
+          },
+          "actions": [
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 06 00 00 00 00 88 01 04 07 00 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 0,
+            "velocity": 127
+          },
+          "actions": [
+            { "type": "log", "enabled": true },
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 06 00 00 00 00 88 01 04 07 03 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 2,
+            "velocity": 0
+          },
+          "actions": [
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 06 00 00 00 00 88 01 04 07 00 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 2,
+            "velocity": 127
+          },
+          "actions": [
+            { "type": "log", "enabled": true },
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 06 00 00 00 00 88 01 04 07 02 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 16,
+            "velocity": 0
+          },
+          "actions": [
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 03 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 16,
+            "velocity": 127
+          },
+          "actions": [
+            { "type": "log", "enabled": true },
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 01 03 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 1,
+            "velocity": 0
+          },
+          "actions": [
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 03 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 1,
+            "velocity": 127
+          },
+          "actions": [
+            { "type": "log", "enabled": true },
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 01 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 18,
+            "velocity": 0
+          },
+          "actions": [
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 03 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 18,
+            "velocity": 127
+          },
+          "actions": [
+            { "type": "log", "enabled": true },
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 02 03 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 33,
+            "velocity": 0
+          },
+          "actions": [
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 03 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        },
+        {
+          "type": "midi-note-on",
+          "params": {
+            "note": 33,
+            "velocity": 127
+          },
+          "actions": [
+            { "type": "log", "enabled": true },
+            {
+              "type": "udp-output",
+              "params": {
+                "host": "10.0.0.58",
+                "port": 52381,
+                "hex": "01 00 00 09 00 00 00 00 88 01 06 01 0c 0c 03 02 ff"
+              },
+              "enabled": true
+            }
+          ],
+          "enabled": true
+        }
+      ]
+    },
+    "tcp": {
+      "triggers": []
+    },
+    "udp": {
+      "triggers": []
+    },
+    "mqtt": {
+      "triggers": []
+    }
   }
 }
