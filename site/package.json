@@ -4,7 +4,7 @@
   "description": "www.showbrigde.io",
   "main": "index.js",
   "scripts": {
-    "tailwind": "tailwindcss build -i tailwind.css -o src/assets/css/tailwind.css",
+    "tailwind": "tailwindcss -i tailwind.css -o src/assets/css/tailwind.css",
     "dev": "http-server src/"
   },
   "author": {
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/jwetzell/showbridge#readme",
   "devDependencies": {
     "http-server": "14.1.1",
-    "tailwindcss": "4.0.14"
+    "tailwindcss": "4.0.14",
+    "@tailwindcss/cli": "4.0.14"
   }
 }
