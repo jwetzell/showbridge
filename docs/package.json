@@ -18,6 +18,6 @@
     "astro": "5.7.4",
     "sharp": "0.33.5",
     "@astrojs/check": "0.9.4",
-    "typescript": "5.8.2"
+    "typescript": "5.8.3"
   }
 }
