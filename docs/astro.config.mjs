@@ -7,9 +7,13 @@ export default defineConfig({
     starlight({
       title: 'showbridge',
       favicon: '/favicon.ico',
-      social: {
-        github: 'https://github.com/jwetzell/showbridge',
-      },
+      social: [
+        {
+          icon: 'github',
+          label: 'GitHub',
+          href: 'https://github.com/jwetzell/showbridge',
+        },
+      ],
       sidebar: [
         {
           label: 'showbridge',
