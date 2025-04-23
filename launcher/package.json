@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@electron/notarize": "3.0.1",
-    "@tailwindcss/cli": "^4.0.15",
+    "@tailwindcss/cli": "^4.1.4",
     "electron": "34.3.0",
     "electron-builder": "25.1.8",
     "tailwindcss": "^4.1.4"
