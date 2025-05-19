@@ -42,7 +42,7 @@
     "@tailwindcss/cli": "^4.1.6",
     "electron": "36.2.0",
     "electron-builder": "26.0.12",
-    "tailwindcss": "^4.1.6"
+    "tailwindcss": "^4.1.7"
   },
   "build": {
     "productName": "showbridge",
