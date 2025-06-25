@@ -1,119 +1,128 @@
 <div class="flex flex-col h-full">
-  <mat-tab-group *ngIf="varsService.currentVars | async as vars" class="flex-grow">
-    <mat-tab *ngIf="midiEnabled || settingsService.isDummySite" label="MIDI">
-      <div class="flex">
-        <button
-          class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
-          (click)="addMIDIPatch()">
-          Add MIDI Patch
-        </button>
-        <button
-          class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
-          (click)="copyMIDIDevices()">
-          Copy Device List
-        </button>
-
-        <button
-          *ngIf="settingsService.isDummySite"
-          class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
-          (click)="importMIDIDevices()">
-          Import Device List
-        </button>
-      </div>
-      <table class="w-full">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            <th scope="col" class="text-left text-gray-200">Name</th>
-            <th scope="col" class="text-left text-gray-200">MIDI Device</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody cdkDropList (cdkDropListDropped)="midiPatchDrop($event)">
-          <tr cdkDrag *ngFor="let midiPatch of midiPatches; index as i">
-            <td cdkDragHandle>
-              <div class="flex justify-center">
-                <mat-icon class="text-gray-200">drag_indicator</mat-icon>
-              </div>
-            </td>
-            <td>
-              <div class="pr-1">
-                <input placeholder="Patch Name" [(ngModel)]="midiPatch.name" />
-              </div>
-            </td>
-            <td>
-              <select *ngIf="midiPorts.length > 0" [(ngModel)]="midiPatch.port">
-                <option *ngFor="let midiPort of midiPorts" [value]="midiPort.name">{{ midiPort.name }}</option>
-              </select>
-            </td>
-            <td>
-              <button (click)="midiPatches.splice(i, 1)" class="flex">
-                <mat-icon class="text-red-500">delete</mat-icon>
+  @if (varsService.currentVars | async; as vars) {
+    <mat-tab-group class="flex-grow">
+      @if (midiEnabled || settingsService.isDummySite) {
+        <mat-tab label="MIDI">
+          <div class="flex">
+            <button
+              class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
+              (click)="addMIDIPatch()">
+              Add MIDI Patch
+            </button>
+            <button
+              class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
+              (click)="copyMIDIDevices()">
+              Copy Device List
+            </button>
+            @if (settingsService.isDummySite) {
+              <button
+                class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
+                (click)="importMIDIDevices()">
+                Import Device List
               </button>
-            </td>
-
-            <div *cdkDragPreview>
-              <mat-icon class="text-gray-200">drag_indicator</mat-icon>
-            </div>
-          </tr>
-        </tbody>
-      </table>
-    </mat-tab>
-
-    <mat-tab label="Network">
-      <div class="flex">
-        <button
-          class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
-          (click)="addNetworkPatch()">
-          Add Network Patch
-        </button>
-      </div>
-
-      <table class="w-full">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            <th scope="col" class="text-left text-gray-200">Name</th>
-            <th scope="col" class="text-left text-gray-200">Address</th>
-            <th scope="col" class="text-left text-gray-200">Port</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody cdkDropList (cdkDropListDropped)="networkPatchDrop($event)">
-          <tr cdkDrag *ngFor="let networkPatch of networkPatches; index as i">
-            <td cdkDragHandle>
-              <div class="flex justify-center">
-                <mat-icon class="text-gray-200">drag_indicator</mat-icon>
-              </div>
-            </td>
-            <td>
-              <div class="pr-1">
-                <input placeholder="Patch Name" [(ngModel)]="networkPatch.name" />
-              </div>
-            </td>
-            <td>
-              <div class="pr-1">
-                <input placeholder="127.0.0.1" [(ngModel)]="networkPatch.host" />
-              </div>
-            </td>
-            <td>
-              <div class="pr-1">
-                <input placeholder="53000" type="number" [(ngModel)]="networkPatch.port" />
-              </div>
-            </td>
-            <td>
-              <button (click)="networkPatches.splice(i, 1)" class="flex">
-                <mat-icon class="text-red-500">delete</mat-icon>
-              </button>
-            </td>
-            <div *cdkDragPreview>
-              <mat-icon class="text-gray-200">drag_indicator</mat-icon>
-            </div>
-          </tr>
-        </tbody>
-      </table>
-    </mat-tab>
-  </mat-tab-group>
+            }
+          </div>
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col" class="text-left text-gray-200">Name</th>
+                <th scope="col" class="text-left text-gray-200">MIDI Device</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody cdkDropList (cdkDropListDropped)="midiPatchDrop($event)">
+              @for (midiPatch of midiPatches; track midiPatch; let i = $index) {
+                <tr cdkDrag>
+                  <td cdkDragHandle>
+                    <div class="flex justify-center">
+                      <mat-icon class="text-gray-200">drag_indicator</mat-icon>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="pr-1">
+                      <input placeholder="Patch Name" [(ngModel)]="midiPatch.name" />
+                    </div>
+                  </td>
+                  <td>
+                    @if (midiPorts.length > 0) {
+                      <select [(ngModel)]="midiPatch.port">
+                        @for (midiPort of midiPorts; track midiPort) {
+                          <option [value]="midiPort.name">{{ midiPort.name }}</option>
+                        }
+                      </select>
+                    }
+                  </td>
+                  <td>
+                    <button (click)="midiPatches.splice(i, 1)" class="flex">
+                      <mat-icon class="text-red-500">delete</mat-icon>
+                    </button>
+                  </td>
+                  <div *cdkDragPreview>
+                    <mat-icon class="text-gray-200">drag_indicator</mat-icon>
+                  </div>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </mat-tab>
+      }
+      <mat-tab label="Network">
+        <div class="flex">
+          <button
+            class="px-8 py-1 my-2 ml-2 text-sm text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg"
+            (click)="addNetworkPatch()">
+            Add Network Patch
+          </button>
+        </div>
+        <table class="w-full">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col" class="text-left text-gray-200">Name</th>
+              <th scope="col" class="text-left text-gray-200">Address</th>
+              <th scope="col" class="text-left text-gray-200">Port</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody cdkDropList (cdkDropListDropped)="networkPatchDrop($event)">
+            @for (networkPatch of networkPatches; track networkPatch; let i = $index) {
+              <tr cdkDrag>
+                <td cdkDragHandle>
+                  <div class="flex justify-center">
+                    <mat-icon class="text-gray-200">drag_indicator</mat-icon>
+                  </div>
+                </td>
+                <td>
+                  <div class="pr-1">
+                    <input placeholder="Patch Name" [(ngModel)]="networkPatch.name" />
+                  </div>
+                </td>
+                <td>
+                  <div class="pr-1">
+                    <input placeholder="127.0.0.1" [(ngModel)]="networkPatch.host" />
+                  </div>
+                </td>
+                <td>
+                  <div class="pr-1">
+                    <input placeholder="53000" type="number" [(ngModel)]="networkPatch.port" />
+                  </div>
+                </td>
+                <td>
+                  <button (click)="networkPatches.splice(i, 1)" class="flex">
+                    <mat-icon class="text-red-500">delete</mat-icon>
+                  </button>
+                </td>
+                <div *cdkDragPreview>
+                  <mat-icon class="text-gray-200">drag_indicator</mat-icon>
+                </div>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </mat-tab>
+    </mat-tab-group>
+  }
   <button
     (click)="savePatches()"
     class="w-auto px-6 py-1 mx-2 my-5 text-gray-300 bg-gray-800 border border-gray-500 border-solid rounded-lg">

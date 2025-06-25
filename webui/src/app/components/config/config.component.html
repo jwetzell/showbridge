@@ -1,8 +1,8 @@
-<ng-container *ngIf="config">
+@if (config) {
   <div class="flex h-full flex-col">
     <div class="flex justify-around w-full">
-      <ng-container *ngFor="let messageType of messageAndProtocolTypes">
-        <ng-container *ngIf="selectedMessageType.type === messageType.type; else notSelectedProtocol">
+      @for (messageType of messageAndProtocolTypes; track messageType) {
+        @if (selectedMessageType.type === messageType.type) {
           <div
             (click)="selectMessageType(messageType)"
             class="flex items-center justify-center flex-auto h-12 border border-b-2 border-black border-solid cursor-pointer hover:bg-gray-700 bg-slate-800 border-b-blue-500">
@@ -12,8 +12,7 @@
               </span>
             </div>
           </div>
-        </ng-container>
-        <ng-template #notSelectedProtocol>
+        } @else {
           <div
             (click)="selectMessageType(messageType)"
             class="flex items-center justify-center flex-auto h-12 border border-black border-solid cursor-pointer hover:bg-gray-700 bg-slate-800">
@@ -23,16 +22,18 @@
               </span>
             </div>
           </div>
-        </ng-template>
-      </ng-container>
+        }
+      }
     </div>
-    <div *ngIf="selectedMessageType" class="flex-grow">
-      <app-message-type
-        [messageType]="selectedMessageType.type"
-        [messageTypeHandlerConfig]="config.handlers[selectedMessageType.type]"
-        [messageTypeProtocolConfig]="config.protocols[selectedMessageType.type]"
-        (handlerUpdated)="handlerUpdate(selectedMessageType.type)"
+    @if (selectedMessageType) {
+      <div class="flex-grow">
+        <app-message-type
+          [messageType]="selectedMessageType.type"
+          [messageTypeHandlerConfig]="config.handlers[selectedMessageType.type]"
+          [messageTypeProtocolConfig]="config.protocols[selectedMessageType.type]"
+          (handlerUpdated)="handlerUpdate(selectedMessageType.type)"
         (protocolUpdated)="protocolUpdate(selectedMessageType.type)"></app-message-type>
-    </div>
+      </div>
+    }
   </div>
-</ng-container>
+}

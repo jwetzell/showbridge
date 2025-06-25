@@ -21,16 +21,16 @@
     "dist"
   ],
   "dependencies": {
-    "@angular/animations": "19.2.11",
+    "@angular/animations": "20.0.4",
     "@angular/cdk": "19.2.16",
-    "@angular/common": "19.2.11",
-    "@angular/compiler": "19.2.11",
-    "@angular/core": "19.2.11",
-    "@angular/forms": "19.2.11",
+    "@angular/common": "20.0.4",
+    "@angular/compiler": "20.0.4",
+    "@angular/core": "20.0.4",
+    "@angular/forms": "20.0.4",
     "@angular/material": "19.2.16",
-    "@angular/platform-browser": "19.2.11",
-    "@angular/platform-browser-dynamic": "19.2.11",
-    "@angular/router": "19.2.11",
+    "@angular/platform-browser": "20.0.4",
+    "@angular/platform-browser-dynamic": "20.0.4",
+    "@angular/router": "20.0.4",
     "ajv": "8.17.1",
     "lodash-es": "4.17.21",
     "ngx-timeago": "3.0.0",
@@ -39,15 +39,15 @@
     "zone.js": "0.15.0"
   },
   "devDependencies": {
-    "@angular/build": "19.2.12",
-    "@angular/cli": "19.2.12",
-    "@angular/compiler-cli": "19.2.11",
+    "@angular/build": "^20.0.3",
+    "@angular/cli": "20.0.3",
+    "@angular/compiler-cli": "20.0.4",
     "@showbridge/types": "0.5.0",
+    "@tailwindcss/postcss": "4.1.6",
     "@types/lodash-es": "4.17.12",
     "autoprefixer": "10.4.21",
-    "postcss": "8.5.3",
+    "postcss": "^8.5.3",
     "tailwindcss": "4.1.6",
-    "@tailwindcss/postcss": "4.1.6",
     "typescript": "5.8.3"
   }
 }

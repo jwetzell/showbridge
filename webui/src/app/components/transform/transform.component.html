@@ -1,4 +1,4 @@
-<ng-container *ngIf="transform && schema">
+@if (transform && schema) {
   <div
     class="flex items-center m-2 transform bg-gray-800 border-2 {{
       isInError() ? 'border-red-500' : 'border-gray-200'
@@ -17,7 +17,6 @@
       </div>
     </div>
   </div>
-
   <!-- NOTE(jwetzell): Settings Dialog -->
   <ng-template #settingsDialogRef>
     <form [formGroup]="formGroup" class="h-full">
@@ -25,7 +24,7 @@
         <app-params-form
           [paramsSchema]="schema?.properties?.params"
           [data]="transform.params"
-          (updated)="paramsUpdated($event)"></app-params-form>
+        (updated)="paramsUpdated($event)"></app-params-form>
         <div class="flex items-center justify-center">
           <div class="flex-auto">
             <mat-form-field subscriptSizing="dynamic" class="w-full">
@@ -37,7 +36,6 @@
       </div>
     </form>
   </ng-template>
-
   <!-- NOTE(jwetzell): Context Menus -->
   <ng-template #transformContextMenu>
     <div cdkMenu class="context-menu">
@@ -49,4 +47,4 @@
       </button>
     </div>
   </ng-template>
-</ng-container>
+}

@@ -2,13 +2,13 @@
   <!-- TODO (jwetzell): Add info about what is currently in the clipboard "buffer" -->
   <!-- TODO (jwetzell): Add info about access to the actual clipboard" -->
   <h1 mat-dialog-title>Import to clipboard</h1>
-  <ng-container *ngIf="formGroup">
+  @if (formGroup) {
     <div class="flex-auto w-full h-full">
       <form [formGroup]="formGroup" class="w-full h-full p-2">
         <textarea
           formControlName="clipboard"
           placeholder="Paste snippet here"
-          class="w-full h-full pt-1 pl-1"></textarea>
+        class="w-full h-full pt-1 pl-1"></textarea>
       </form>
     </div>
     <div mat-dialog-actions>
@@ -16,5 +16,5 @@
       <span class="flex-auto"></span>
       <button mat-button (click)="importClipboard()" [disabled]="!formGroup.valid">Import</button>
     </div>
-  </ng-container>
+  }
 </div>

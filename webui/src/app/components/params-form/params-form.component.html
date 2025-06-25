@@ -1,135 +1,141 @@
-<ng-container *ngIf="paramsSchema && paramsFormInfo">
-  <ng-container *ngIf="paramsOptions.length > 1">
+@if (paramsSchema && paramsFormInfo) {
+  @if (paramsOptions.length > 1) {
     <mat-tab-group [selectedIndex]="paramsOptionsSelectedIndex" (selectedTabChange)="paramsOptionsTabSelected($event)">
-      <mat-tab *ngFor="let paramsOption of paramsOptions" [label]="paramsOption.display"></mat-tab>
+      @for (paramsOption of paramsOptions; track paramsOption) {
+        <mat-tab [label]="paramsOption.display"></mat-tab>
+      }
     </mat-tab-group>
-  </ng-container>
-
-  <ng-container *ngIf="patchable">
+  }
+  @if (patchable) {
     <label class="mr-2 text-gray-300" for="patch-select">patch:</label>
-    <ng-container *ngIf="patchType === 'midi'">
-      <select
-        id="patch-select"
-        *ngIf="midiPatches"
-        (change)="applyPatch($event)"
-        [(ngModel)]="patchIndex"
-        [ngModelOptions]="{ standalone: true }">
-        <option value="-1">Select Patch</option>
-        <option *ngFor="let patch of midiPatches; index as i" [value]="i">{{ patch.name }}</option>
-      </select>
-    </ng-container>
-
-    <ng-container *ngIf="patchType === 'network'">
-      <select
-        id="patch-select"
-        *ngIf="networkPatches"
-        (change)="applyPatch($event)"
-        [(ngModel)]="patchIndex"
-        [ngModelOptions]="{ standalone: true }">
-        <option value="-1">Select Patch</option>
-        <option *ngFor="let patch of networkPatches; index as i" [value]="i">{{ patch.name }}</option>
-      </select>
-    </ng-container>
-  </ng-container>
-
+    @if (patchType === 'midi') {
+      @if (midiPatches) {
+        <select
+          id="patch-select"
+          (change)="applyPatch($event)"
+          [(ngModel)]="patchIndex"
+          [ngModelOptions]="{ standalone: true }">
+          <option value="-1">Select Patch</option>
+          @for (patch of midiPatches; track patch; let i = $index) {
+            <option [value]="i">{{ patch.name }}</option>
+          }
+        </select>
+      }
+    }
+    @if (patchType === 'network') {
+      @if (networkPatches) {
+        <select
+          id="patch-select"
+          (change)="applyPatch($event)"
+          [(ngModel)]="patchIndex"
+          [ngModelOptions]="{ standalone: true }">
+          <option value="-1">Select Patch</option>
+          @for (patch of networkPatches; track patch; let i = $index) {
+            <option [value]="i">{{ patch.name }}</option>
+          }
+        </select>
+      }
+    }
+  }
   <form [formGroup]="paramsFormInfo.formGroup">
     <div class="flex flex-col">
-      <div *ngFor="let key of paramKeys()" class="flex items-center m-1">
-        <ng-container *ngIf="showParam(key) && getParamInfo(key) as paramInfo">
-          <label class="mr-2 text-gray-300"> {{ paramInfo.display }}: </label>
-
-          <ng-container [ngSwitch]="paramInfo.type">
-            <ng-container *ngSwitchCase="'boolean'">
-              <input type="checkbox" [formControlName]="paramInfo.key" />
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'number'">
-              <input
-                type="number"
-                *ngIf="!paramInfo.options; else numberSelectList"
-                [placeholder]="paramInfo.placeholder"
-                class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-                [formControlName]="paramInfo.key" />
-              <ng-template #numberSelectList>
-                <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key">
-                  <option *ngFor="let option of paramInfo.options" [value]="option">
-                    {{ option }}
-                  </option>
-                </select>
-              </ng-template>
-              <mat-icon class="text-gray-200">123</mat-icon>
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'integer'">
-              <input
-                type="number"
-                *ngIf="!paramInfo.options; else integerSelectList"
-                [placeholder]="paramInfo.placeholder"
-                class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-                [formControlName]="paramInfo.key" />
-              <mat-icon class="text-gray-200" matTooltip="Number">123</mat-icon>
-              <ng-template #integerSelectList>
-                <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key">
-                  <option *ngFor="let option of paramInfo.options" [value]="option">
-                    {{ option }}
-                  </option>
-                </select>
-              </ng-template>
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'string'">
-              <input
-                type="text"
-                *ngIf="!paramInfo.options; else stringSelectList"
-                class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-                [placeholder]="paramInfo.placeholder"
-                [formControlName]="paramInfo.key" />
-              <mat-icon class="text-gray-200" matTooltip="String">abc</mat-icon>
-
-              <ng-template #stringSelectList>
-                <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key">
-                  <option *ngFor="let option of paramInfo.options" [value]="option">
-                    {{ option }}
-                  </option>
-                </select>
-              </ng-template>
-            </ng-container>
-            <ng-container *ngSwitchCase="'array'">
-              <app-array-form
-                [paramFormControl]="paramsFormInfo.formGroup.get(paramInfo.key)"
+      @for (key of paramKeys(); track key) {
+        <div class="flex items-center m-1">
+          @if (showParam(key) && getParamInfo(key); as paramInfo) {
+            <label class="mr-2 text-gray-300"> {{ paramInfo.display }}: </label>
+            @switch (paramInfo.type) {
+              @case ('boolean') {
+                <input type="checkbox" [formControlName]="paramInfo.key" />
+              }
+              @case ('number') {
+                @if (!paramInfo.options) {
+                  <input
+                    type="number"
+                    [placeholder]="paramInfo.placeholder"
+                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    [formControlName]="paramInfo.key" />
+                } @else {
+                  <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key">
+                    @for (option of paramInfo.options; track option) {
+                      <option [value]="option">
+                        {{ option }}
+                      </option>
+                    }
+                  </select>
+                }
+                <mat-icon class="text-gray-200">123</mat-icon>
+              }
+              @case ('integer') {
+                @if (!paramInfo.options) {
+                  <input
+                    type="number"
+                    [placeholder]="paramInfo.placeholder"
+                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    [formControlName]="paramInfo.key" />
+                } @else {
+                  <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key">
+                    @for (option of paramInfo.options; track option) {
+                      <option [value]="option">
+                        {{ option }}
+                      </option>
+                    }
+                  </select>
+                }
+                <mat-icon class="text-gray-200" matTooltip="Number">123</mat-icon>
+              }
+              @case ('string') {
+                @if (!paramInfo.options) {
+                  <input
+                    type="text"
+                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    [placeholder]="paramInfo.placeholder"
+                    [formControlName]="paramInfo.key" />
+                } @else {
+                  <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key">
+                    @for (option of paramInfo.options; track option) {
+                      <option [value]="option">
+                        {{ option }}
+                      </option>
+                    }
+                  </select>
+                }
+                <mat-icon class="text-gray-200" matTooltip="String">abc</mat-icon>
+              }
+              @case ('array') {
+                <app-array-form
+                  [paramFormControl]="paramsFormInfo.formGroup.get(paramInfo.key)"
                 [paramInfo]="paramInfo"></app-array-form>
-              <mat-icon class="text-gray-200" matTooltip="Item list">data_array</mat-icon>
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'object'">
-              <!-- TODO(jwetzell): figure out how to display objects-->
-
-              <input
-                class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
-                [formControlName]="paramInfo.key"
-                [placeholder]="paramInfo.placeholder" />
-              <mat-icon class="text-gray-200" matTooltip="JSON">data_object</mat-icon>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key" />
-            </ng-container>
-          </ng-container>
-          <ng-container *ngIf="!paramsFormInfo.formGroup.controls[key].valid">
-            <!-- TODO(jwetzell): better error displaying -->
-            <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
-          </ng-container>
-          <div class="flex items-center justify-center">
-            <mat-icon [matTooltip]="paramInfo.hint" class="ml-2 text-gray-200"> help_outline </mat-icon>
-          </div>
-          <ng-container *ngIf="paramInfo.canTemplate || paramInfo.isTemplated">
-            <!-- TODO(jwetzell): better display of template toggle -->
-            <span class="ml-1 text-gray-300">
-              _
-              <input type="checkbox" [checked]="baseKeyIsTemplated(key)" (change)="toggleTemplate(key)" />
-            </span>
-          </ng-container>
-        </ng-container>
-      </div>
+                <mat-icon class="text-gray-200" matTooltip="Item list">data_array</mat-icon>
+              }
+              @case ('object') {
+                <!-- TODO(jwetzell): figure out how to display objects-->
+                <input
+                  class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                  [formControlName]="paramInfo.key"
+                  [placeholder]="paramInfo.placeholder" />
+                <mat-icon class="text-gray-200" matTooltip="JSON">data_object</mat-icon>
+              }
+              @default {
+                <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key" />
+              }
+            }
+            @if (!paramsFormInfo.formGroup.controls[key].valid) {
+              <!-- TODO(jwetzell): better error displaying -->
+              <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
+            }
+            <div class="flex items-center justify-center">
+              <mat-icon [matTooltip]="paramInfo.hint" class="ml-2 text-gray-200"> help_outline </mat-icon>
+            </div>
+            @if (paramInfo.canTemplate || paramInfo.isTemplated) {
+              <!-- TODO(jwetzell): better display of template toggle -->
+              <span class="ml-1 text-gray-300">
+                _
+                <input type="checkbox" [checked]="baseKeyIsTemplated(key)" (change)="toggleTemplate(key)" />
+              </span>
+            }
+          }
+        </div>
+      }
     </div>
   </form>
-</ng-container>
+}

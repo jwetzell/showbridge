@@ -1,7 +1,7 @@
-<ng-container *ngIf="messageType">
+@if (messageType) {
   <div class="flex flex-col h-full" [cdkContextMenuTriggerFor]="protocolContextMennu">
     <div class="flex">
-      <ng-container *ngIf="hasSettings && protocolSchema">
+      @if (hasSettings && protocolSchema) {
         <div class="flex-grow"></div>
         <div
           matTooltip="{{ protocolSchema?.title }} Settings"
@@ -17,10 +17,10 @@
             <app-params-form
               [paramsSchema]="protocolSchema?.properties?.params"
               [data]="messageTypeProtocolConfig?.params"
-              (updated)="protocolParamsUpdated($event)"></app-params-form>
+            (updated)="protocolParamsUpdated($event)"></app-params-form>
           </div>
         </ng-template>
-      </ng-container>
+      }
     </div>
     <div
       class="flex-auto mb-8"
@@ -29,17 +29,19 @@
       (cdkDropListDropped)="dropTrigger($event)"
       [cdkDropListConnectedTo]="listsService.triggerListIds"
       [cdkDropListData]="messageTypeHandlerConfig?.triggers">
-      <div cdkDrag *ngFor="let trigger of messageTypeHandlerConfig?.triggers; let i = index">
-        <app-trigger
-          [path]="messageType + '/triggers/' + i"
-          [trigger]="trigger"
-          (delete)="deleteTrigger(i)"
+      @for (trigger of messageTypeHandlerConfig?.triggers; track trigger; let i = $index) {
+        <div cdkDrag>
+          <app-trigger
+            [path]="messageType + '/triggers/' + i"
+            [trigger]="trigger"
+            (delete)="deleteTrigger(i)"
           (updated)="triggerUpdated()"></app-trigger>
-      </div>
+        </div>
+      }
     </div>
     <div class="flex mx-6 my-2">
       <div class="flex-grow"></div>
-      <ng-container *ngIf="triggerTypes.length > 0">
+      @if (triggerTypes.length > 0) {
         <div
           matTooltip="Add Trigger"
           class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:cursor-pointer hover:bg-gray-300"
@@ -47,22 +49,23 @@
           <mat-icon>add</mat-icon>
         </div>
         <mat-menu #addTriggerMenu="matMenu">
-          <button mat-menu-item *ngFor="let triggerType of triggerTypes" (click)="addTrigger(triggerType.type)">
-            <span>{{ triggerType.name }}</span>
-          </button>
+          @for (triggerType of triggerTypes; track triggerType) {
+            <button mat-menu-item (click)="addTrigger(triggerType.type)">
+              <span>{{ triggerType.name }}</span>
+            </button>
+          }
         </mat-menu>
-      </ng-container>
-      <ng-container *ngIf="copyService.getClipboardForType('Trigger') | async as copyObject">
+      }
+      @if (copyService.getClipboardForType('Trigger') | async; as copyObject) {
         <div
           (click)="pasteTrigger(copyObject)"
           matTooltip="Paste Trigger"
           class="flex items-center justify-center w-10 h-10 ml-2 rounded-full bg-green-500 item-center hover:cursor-pointer hover:bg-green-400">
           <mat-icon>content_paste</mat-icon>
         </div>
-      </ng-container>
+      }
     </div>
   </div>
-
   <!-- Context menus -->
   <ng-template #protocolContextMennu>
     <div cdkMenu class="context-menu">
@@ -71,25 +74,28 @@
         <div class="flex-grow">Add Trigger</div>
         <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
       </button>
-      <button
-        cdkMenuItem
-        class="context-menu-item"
-        *ngIf="copyService.getClipboardForType('Trigger') | async as copyObject"
-        (click)="pasteTrigger(copyObject)">
-        Paste Trigger
-      </button>
+      @if (copyService.getClipboardForType('Trigger') | async; as copyObject) {
+        <button
+          cdkMenuItem
+          class="context-menu-item"
+          (click)="pasteTrigger(copyObject)">
+          Paste Trigger
+        </button>
+      }
     </div>
   </ng-template>
-
   <ng-template #addTriggerMenu>
-    <div cdkMenu class="context-menu" *ngIf="triggerTypes">
-      <button
-        cdkMenuItem
-        class="context-menu-item"
-        *ngFor="let triggerType of triggerTypes"
-        (click)="addTrigger(triggerType.type)">
-        <span>{{ triggerType.name }}</span>
-      </button>
-    </div>
+    @if (triggerTypes) {
+      <div cdkMenu class="context-menu">
+        @for (triggerType of triggerTypes; track triggerType) {
+          <button
+            cdkMenuItem
+            class="context-menu-item"
+            (click)="addTrigger(triggerType.type)">
+            <span>{{ triggerType.name }}</span>
+          </button>
+        }
+      </div>
+    }
   </ng-template>
-</ng-container>
+}

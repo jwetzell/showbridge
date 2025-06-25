@@ -1,4 +1,4 @@
-<ng-container *ngIf="action && schema">
+@if (action && schema) {
   <div class="flex items-center mx-2 mb-2 w-fit" [style.opacity]="this.action.enabled ? '1.0' : '0.5'">
     <div
       class="flex flex-col bg-gray-800 border-2 {{ isInError() ? 'border-red-500' : 'border-gray-200' }} border-solid"
@@ -14,41 +14,45 @@
           <mat-icon class="text-gray-200">menu</mat-icon>
         </div>
       </div>
-
-      <div
-        *ngIf="action.transforms"
-        [id]="listsService.registerTransformList(path + '/transforms')"
-        cdkDropList
-        (cdkDropListDropped)="drop($event)"
-        [cdkDropListConnectedTo]="listsService.transformListIds"
-        [cdkDropListData]="action.transforms">
-        <div *ngIf="action.transforms.length === 0" class="w-full h-6"></div>
-        <div cdkDrag *ngFor="let transform of action.transforms; let i = index">
-          <app-transform
-            [path]="path + '/transforms/' + i"
-            [transform]="transform"
-            (delete)="deleteTransform(i)"
-            (updated)="transformUpdated()"></app-transform>
+      @if (action.transforms) {
+        <div
+          [id]="listsService.registerTransformList(path + '/transforms')"
+          cdkDropList
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListConnectedTo]="listsService.transformListIds"
+          [cdkDropListData]="action.transforms">
+          @if (action.transforms.length === 0) {
+            <div class="w-full h-6"></div>
+          }
+          @for (transform of action.transforms; track transform; let i = $index) {
+            <div cdkDrag>
+              <app-transform
+                [path]="path + '/transforms/' + i"
+                [transform]="transform"
+                (delete)="deleteTransform(i)"
+              (updated)="transformUpdated()"></app-transform>
+            </div>
+          }
         </div>
-      </div>
+      }
     </div>
-
-    <ng-container *ngIf="getSubActions() as subActions">
-      <ng-container *ngIf="subActions.length > 0">
+    @if (getSubActions(); as subActions) {
+      @if (subActions.length > 0) {
         <div class="flex flex-col items-center justify-center">
           <mat-icon class="text-gray-400 scale-150">arrow_right</mat-icon>
         </div>
-        <div *ngFor="let subAction of subActions; let i = index" class="mt-2">
-          <app-action
-            [action]="subAction"
-            [path]="this.path + '/actions/' + i"
-            (delete)="deleteSubAction(i)"
+        @for (subAction of subActions; track subAction; let i = $index) {
+          <div class="mt-2">
+            <app-action
+              [action]="subAction"
+              [path]="this.path + '/actions/' + i"
+              (delete)="deleteSubAction(i)"
             (updated)="subActionUpdated()"></app-action>
-        </div>
-      </ng-container>
-    </ng-container>
+          </div>
+        }
+      }
+    }
   </div>
-
   <!-- NOTE(jwetzell): settings dialog-->
   <ng-template #settingsDialogRef>
     <form [formGroup]="formGroup" class="h-full">
@@ -56,7 +60,7 @@
         <app-params-form
           [paramsSchema]="schema?.properties?.params"
           [data]="action.params"
-          (updated)="paramsUpdated($event)"></app-params-form>
+        (updated)="paramsUpdated($event)"></app-params-form>
         <div class="flex items-center justify-center">
           <div class="flex-auto">
             <mat-form-field subscriptSizing="dynamic" class="w-full">
@@ -68,7 +72,6 @@
       </div>
     </form>
   </ng-template>
-
   <!-- NOTE(jwetzell): Context Menus -->
   <ng-template #actionContextMenu>
     <div cdkMenu class="context-menu">
@@ -83,45 +86,52 @@
         <div class="flex-grow">Add Transform</div>
         <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
       </button>
-      <button
-        cdkMenuItem
-        class="flex pr-0 context-menu-item"
-        [cdkMenuTriggerFor]="addActionMenu"
-        *ngIf="action.type === 'delay' || action.type === 'random'">
-        <div class="flex-grow">Add Sub-Action</div>
-        <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
-      </button>
-      <button
-        cdkMenuItem
-        class="context-menu-item"
-        *ngIf="copyService.getClipboardForType('Transform') | async as copyObject"
-        (click)="pasteTransform(copyObject)">
-        Paste Transform
-      </button>
+      @if (action.type === 'delay' || action.type === 'random') {
+        <button
+          cdkMenuItem
+          class="flex pr-0 context-menu-item"
+          [cdkMenuTriggerFor]="addActionMenu"
+          >
+          <div class="flex-grow">Add Sub-Action</div>
+          <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
+        </button>
+      }
+      @if (copyService.getClipboardForType('Transform') | async; as copyObject) {
+        <button
+          cdkMenuItem
+          class="context-menu-item"
+          (click)="pasteTransform(copyObject)">
+          Paste Transform
+        </button>
+      }
     </div>
   </ng-template>
-
   <ng-template #addTransformMenu>
-    <div cdkMenu class="context-menu" *ngIf="schemaService.transformTypes.length > 0">
-      <button
-        cdkMenuItem
-        class="context-menu-item"
-        *ngFor="let transformType of schemaService.transformTypes"
-        (click)="addTransform(transformType.type)">
-        <span>{{ transformType.name }}</span>
-      </button>
-    </div>
+    @if (schemaService.transformTypes.length > 0) {
+      <div cdkMenu class="context-menu">
+        @for (transformType of schemaService.transformTypes; track transformType) {
+          <button
+            cdkMenuItem
+            class="context-menu-item"
+            (click)="addTransform(transformType.type)">
+            <span>{{ transformType.name }}</span>
+          </button>
+        }
+      </div>
+    }
   </ng-template>
-
   <ng-template #addActionMenu>
-    <div cdkMenu class="context-menu" *ngIf="schemaService.actionTypes.length > 0">
-      <button
-        cdkMenuItem
-        class="context-menu-item"
-        *ngFor="let actionType of schemaService.actionTypes"
-        (click)="addSubAction(actionType.type)">
-        <span>{{ actionType.name }}</span>
-      </button>
-    </div>
+    @if (schemaService.actionTypes.length > 0) {
+      <div cdkMenu class="context-menu">
+        @for (actionType of schemaService.actionTypes; track actionType) {
+          <button
+            cdkMenuItem
+            class="context-menu-item"
+            (click)="addSubAction(actionType.type)">
+            <span>{{ actionType.name }}</span>
+          </button>
+        }
+      </div>
+    }
   </ng-template>
-</ng-container>
+}
