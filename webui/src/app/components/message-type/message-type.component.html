@@ -17,7 +17,7 @@
             <app-params-form
               [paramsSchema]="protocolSchema?.properties?.params"
               [data]="messageTypeProtocolConfig?.params"
-            (updated)="protocolParamsUpdated($event)"></app-params-form>
+              (updated)="protocolParamsUpdated($event)"></app-params-form>
           </div>
         </ng-template>
       }
@@ -35,7 +35,7 @@
             [path]="messageType + '/triggers/' + i"
             [trigger]="trigger"
             (delete)="deleteTrigger(i)"
-          (updated)="triggerUpdated()"></app-trigger>
+            (updated)="triggerUpdated()"></app-trigger>
         </div>
       }
     </div>
@@ -75,12 +75,7 @@
         <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
       </button>
       @if (copyService.getClipboardForType('Trigger') | async; as copyObject) {
-        <button
-          cdkMenuItem
-          class="context-menu-item"
-          (click)="pasteTrigger(copyObject)">
-          Paste Trigger
-        </button>
+        <button cdkMenuItem class="context-menu-item" (click)="pasteTrigger(copyObject)">Paste Trigger</button>
       }
     </div>
   </ng-template>
@@ -88,10 +83,7 @@
     @if (triggerTypes) {
       <div cdkMenu class="context-menu">
         @for (triggerType of triggerTypes; track triggerType) {
-          <button
-            cdkMenuItem
-            class="context-menu-item"
-            (click)="addTrigger(triggerType.type)">
+          <button cdkMenuItem class="context-menu-item" (click)="addTrigger(triggerType.type)">
             <span>{{ triggerType.name }}</span>
           </button>
         }

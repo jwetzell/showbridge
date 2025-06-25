@@ -25,9 +25,7 @@
         </div>
       }
       @if (protocolStatus.data.mqtt?.connected) {
-        <div
-          class="flex items-center justify-center ml-2"
-          matTooltip="MQTT Connected">
+        <div class="flex items-center justify-center ml-2" matTooltip="MQTT Connected">
           <mat-icon fontSet="material-icons-outlined">rss_feed</mat-icon>
         </div>
       }
@@ -54,37 +52,32 @@
       </button>
       <mat-menu #historyMenu="matMenu">
         @for (configState of configService.configStateHistory; track configState) {
-          <button
-            mat-menu-item
-            (click)="loadConfigState(configState)">
+          <button mat-menu-item (click)="loadConfigState(configState)">
             <span
               >{{ configState.timestamp | timeago }} {{ configState.isLive ? '(live)' : '' }}
               {{ configState.isCurrent ? '(current)' : '' }}</span
-              >
-            </button>
-          }
-        </mat-menu>
-      }
-      @if (configService.pendingConfigIsValid) {
-        <button
-          mat-icon-button
-          matTooltip="Apply Config"
-          (click)="applyConfig()">
-          <mat-icon>save</mat-icon>
-        </button>
-      } @else {
-        <div class="flex items-center justify-center text-red-500 hover:cursor-pointer" matTooltip="Config Errors">
-          <mat-icon>error</mat-icon>
-        </div>
-      }
-    </mat-toolbar>
-    <div class="flex-grow">
-      @if (currentlyShownConfigState && currentlyShownConfigState.config && schemaService.schema) {
-        <app-config [config]="currentlyShownConfigState.config" (updated)="configUpdated()"></app-config>
-      } @else {
-        <div class="flex items-center justify-center mt-28">
-          <mat-spinner></mat-spinner>
-        </div>
-      }
-    </div>
+            >
+          </button>
+        }
+      </mat-menu>
+    }
+    @if (configService.pendingConfigIsValid) {
+      <button mat-icon-button matTooltip="Apply Config" (click)="applyConfig()">
+        <mat-icon>save</mat-icon>
+      </button>
+    } @else {
+      <div class="flex items-center justify-center text-red-500 hover:cursor-pointer" matTooltip="Config Errors">
+        <mat-icon>error</mat-icon>
+      </div>
+    }
+  </mat-toolbar>
+  <div class="flex-grow">
+    @if (currentlyShownConfigState && currentlyShownConfigState.config && schemaService.schema) {
+      <app-config [config]="currentlyShownConfigState.config" (updated)="configUpdated()"></app-config>
+    } @else {
+      <div class="flex items-center justify-center mt-28">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
   </div>
+</div>

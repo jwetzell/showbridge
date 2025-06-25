@@ -30,7 +30,7 @@
                 [path]="this.path + '/subTriggers/' + i"
                 [showActions]="true"
                 (delete)="deleteSubTrigger(i)"
-              (updated)="subTriggerUpdated()"></app-trigger>
+                (updated)="subTriggerUpdated()"></app-trigger>
             </div>
           }
         </div>
@@ -58,7 +58,7 @@
                   [path]="path + '/actions/' + i"
                   [action]="action"
                   (delete)="deleteAction(i)"
-                (updated)="actionUpdated()"></app-action>
+                  (updated)="actionUpdated()"></app-action>
               </div>
             }
           </div>
@@ -73,7 +73,7 @@
         <app-params-form
           [paramsSchema]="schema?.properties?.params"
           [data]="trigger.params"
-        (updated)="paramsUpdated($event)"></app-params-form>
+          (updated)="paramsUpdated($event)"></app-params-form>
         <div class="flex items-center justify-center">
           <div class="flex-auto">
             <mat-form-field subscriptSizing="dynamic" class="w-full">
@@ -116,10 +116,7 @@
     @if (schemaService.actionTypes.length > 0) {
       <div cdkMenu class="context-menu">
         @for (actionType of schemaService.actionTypes; track actionType) {
-          <button
-            cdkMenuItem
-            class="context-menu-item"
-            (click)="addAction(actionType.type)">
+          <button cdkMenuItem class="context-menu-item" (click)="addAction(actionType.type)">
             <span>{{ actionType.name }}</span>
           </button>
         }
@@ -130,10 +127,7 @@
     @if (subTriggerTypes) {
       <div cdkMenu class="context-menu">
         @for (triggerType of subTriggerTypes; track triggerType) {
-          <button
-            cdkMenuItem
-            class="context-menu-item"
-            (click)="addSubTrigger(triggerType.type)">
+          <button cdkMenuItem class="context-menu-item" (click)="addSubTrigger(triggerType.type)">
             <span>{{ triggerType.name }}</span>
           </button>
         }

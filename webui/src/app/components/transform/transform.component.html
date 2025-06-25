@@ -24,7 +24,7 @@
         <app-params-form
           [paramsSchema]="schema?.properties?.params"
           [data]="transform.params"
-        (updated)="paramsUpdated($event)"></app-params-form>
+          (updated)="paramsUpdated($event)"></app-params-form>
         <div class="flex items-center justify-center">
           <div class="flex-auto">
             <mat-form-field subscriptSizing="dynamic" class="w-full">

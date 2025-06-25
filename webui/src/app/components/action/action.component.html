@@ -30,7 +30,7 @@
                 [path]="path + '/transforms/' + i"
                 [transform]="transform"
                 (delete)="deleteTransform(i)"
-              (updated)="transformUpdated()"></app-transform>
+                (updated)="transformUpdated()"></app-transform>
             </div>
           }
         </div>
@@ -47,7 +47,7 @@
               [action]="subAction"
               [path]="this.path + '/actions/' + i"
               (delete)="deleteSubAction(i)"
-            (updated)="subActionUpdated()"></app-action>
+              (updated)="subActionUpdated()"></app-action>
           </div>
         }
       }
@@ -60,7 +60,7 @@
         <app-params-form
           [paramsSchema]="schema?.properties?.params"
           [data]="action.params"
-        (updated)="paramsUpdated($event)"></app-params-form>
+          (updated)="paramsUpdated($event)"></app-params-form>
         <div class="flex items-center justify-center">
           <div class="flex-auto">
             <mat-form-field subscriptSizing="dynamic" class="w-full">
@@ -87,22 +87,13 @@
         <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
       </button>
       @if (action.type === 'delay' || action.type === 'random') {
-        <button
-          cdkMenuItem
-          class="flex pr-0 context-menu-item"
-          [cdkMenuTriggerFor]="addActionMenu"
-          >
+        <button cdkMenuItem class="flex pr-0 context-menu-item" [cdkMenuTriggerFor]="addActionMenu">
           <div class="flex-grow">Add Sub-Action</div>
           <div class="flex items-center justify-end"><mat-icon>arrow_right</mat-icon></div>
         </button>
       }
       @if (copyService.getClipboardForType('Transform') | async; as copyObject) {
-        <button
-          cdkMenuItem
-          class="context-menu-item"
-          (click)="pasteTransform(copyObject)">
-          Paste Transform
-        </button>
+        <button cdkMenuItem class="context-menu-item" (click)="pasteTransform(copyObject)">Paste Transform</button>
       }
     </div>
   </ng-template>
@@ -110,10 +101,7 @@
     @if (schemaService.transformTypes.length > 0) {
       <div cdkMenu class="context-menu">
         @for (transformType of schemaService.transformTypes; track transformType) {
-          <button
-            cdkMenuItem
-            class="context-menu-item"
-            (click)="addTransform(transformType.type)">
+          <button cdkMenuItem class="context-menu-item" (click)="addTransform(transformType.type)">
             <span>{{ transformType.name }}</span>
           </button>
         }
@@ -124,10 +112,7 @@
     @if (schemaService.actionTypes.length > 0) {
       <div cdkMenu class="context-menu">
         @for (actionType of schemaService.actionTypes; track actionType) {
-          <button
-            cdkMenuItem
-            class="context-menu-item"
-            (click)="addSubAction(actionType.type)">
+          <button cdkMenuItem class="context-menu-item" (click)="addSubAction(actionType.type)">
             <span>{{ actionType.name }}</span>
           </button>
         }

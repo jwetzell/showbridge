@@ -55,7 +55,9 @@
                     class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
                     [formControlName]="paramInfo.key" />
                 } @else {
-                  <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key">
+                  <select
+                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    [formControlName]="paramInfo.key">
                     @for (option of paramInfo.options; track option) {
                       <option [value]="option">
                         {{ option }}
@@ -73,7 +75,9 @@
                     class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
                     [formControlName]="paramInfo.key" />
                 } @else {
-                  <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key">
+                  <select
+                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    [formControlName]="paramInfo.key">
                     @for (option of paramInfo.options; track option) {
                       <option [value]="option">
                         {{ option }}
@@ -91,7 +95,9 @@
                     [placeholder]="paramInfo.placeholder"
                     [formControlName]="paramInfo.key" />
                 } @else {
-                  <select class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key">
+                  <select
+                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    [formControlName]="paramInfo.key">
                     @for (option of paramInfo.options; track option) {
                       <option [value]="option">
                         {{ option }}
@@ -104,7 +110,7 @@
               @case ('array') {
                 <app-array-form
                   [paramFormControl]="paramsFormInfo.formGroup.get(paramInfo.key)"
-                [paramInfo]="paramInfo"></app-array-form>
+                  [paramInfo]="paramInfo"></app-array-form>
                 <mat-icon class="text-gray-200" matTooltip="Item list">data_array</mat-icon>
               }
               @case ('object') {
@@ -116,7 +122,9 @@
                 <mat-icon class="text-gray-200" matTooltip="JSON">data_object</mat-icon>
               }
               @default {
-                <input class="pl-1 border-2 border-gray-200 border-solid rounded-sm" [formControlName]="paramInfo.key" />
+                <input
+                  class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                  [formControlName]="paramInfo.key" />
               }
             }
             @if (!paramsFormInfo.formGroup.controls[key].valid) {

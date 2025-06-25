@@ -3,15 +3,13 @@
     <div cdkDropList (cdkDropListDropped)="dropItem($event)" [cdkDropListData]="arrayValue">
       <!-- <div *ngIf="arrayValue.length === 0" class="w-full h-6"></div> -->
       @for (item of arrayValue; track trackByIndex(i, item); let i = $index) {
-        <div
-          cdkDrag
-          class="flex my-2 mr-2 items-center">
+        <div cdkDrag class="flex my-2 mr-2 items-center">
           <label for="item-{{ i }}" class="text-gray-300 mr-1 hover:cursor-move" cdkDragHandle>{{ i }}:</label>
           @if (paramInfo?.schema.items.type === 'object') {
             <app-params-form
               [paramsSchema]="paramInfo?.schema.items"
               [data]="item"
-            (updated)="updateItem(i, $event)"></app-params-form>
+              (updated)="updateItem(i, $event)"></app-params-form>
           } @else {
             <!-- TODO(jwetzell): add input validation using info from schema -->
             <input
@@ -35,17 +33,16 @@
           [showActions]="true"
           (delete)="deleteSubTrigger(i)"
         (updated)="subTriggerUpdated()"></app-trigger> -->
-      </div>
-    }
-  </div>
-}
-@if (!arrayIsMaxed()) {
-  <div
-    class="w-full bg-gray-400 flex items-center justify-center rounded-sm hover:cursor-pointer hover:bg-gray-300"
-    (click)="addItem()"
-    matTooltip="Add Item"
-    >
-    <mat-icon class="scale-100">add</mat-icon>
-  </div>
-}
+        </div>
+      }
+    </div>
+  }
+  @if (!arrayIsMaxed()) {
+    <div
+      class="w-full bg-gray-400 flex items-center justify-center rounded-sm hover:cursor-pointer hover:bg-gray-300"
+      (click)="addItem()"
+      matTooltip="Add Item">
+      <mat-icon class="scale-100">add</mat-icon>
+    </div>
+  }
 }
