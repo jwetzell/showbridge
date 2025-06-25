@@ -23,7 +23,7 @@
   "homepage": "https://github.com/jwetzell/showbridge#readme",
   "devDependencies": {
     "http-server": "14.1.1",
-    "tailwindcss": "4.1.7",
+    "tailwindcss": "4.1.10",
     "@tailwindcss/cli": "4.1.7"
   }
 }
