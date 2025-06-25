@@ -34,7 +34,7 @@ jobs:
         run: npm install -g eslint@8.57.0
 
       - name: Install prettier
-        run: npm install -g prettier@3.2.5
+        run: npm install -g prettier@3.5.2
 
       - name: Run check script
         run: node scripts/check_format_lint.js
