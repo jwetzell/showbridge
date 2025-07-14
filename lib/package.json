@@ -43,7 +43,7 @@
     "pino": "9.7.0",
     "slip": "1.0.2",
     "socket.io-client": "4.8.1",
-    "superagent": "10.2.1",
+    "superagent": "10.2.2",
     "ws": "8.18.3"
   },
   "devDependencies": {
