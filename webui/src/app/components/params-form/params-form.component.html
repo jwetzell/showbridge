@@ -12,6 +12,7 @@
       @if (midiPatches) {
         <select
           id="patch-select"
+          class="text-gray-200"
           (change)="applyPatch($event)"
           [(ngModel)]="patchIndex"
           [ngModelOptions]="{ standalone: true }">
@@ -26,6 +27,7 @@
       @if (networkPatches) {
         <select
           id="patch-select"
+          class="text-gray-200"
           (change)="applyPatch($event)"
           [(ngModel)]="patchIndex"
           [ngModelOptions]="{ standalone: true }">
@@ -52,11 +54,11 @@
                   <input
                     type="number"
                     [placeholder]="paramInfo.placeholder"
-                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    class="pl-1 border-2 border-gray-200 text-gray-200 border-solid rounded-sm"
                     [formControlName]="paramInfo.key" />
                 } @else {
                   <select
-                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    class="pl-1 border-2 border-gray-200 text-gray-200 border-solid rounded-sm"
                     [formControlName]="paramInfo.key">
                     @for (option of paramInfo.options; track option) {
                       <option [value]="option">
@@ -72,11 +74,11 @@
                   <input
                     type="number"
                     [placeholder]="paramInfo.placeholder"
-                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    class="pl-1 border-2 border-gray-200 text-gray-200 border-solid rounded-sm"
                     [formControlName]="paramInfo.key" />
                 } @else {
                   <select
-                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    class="pl-1 border-2 border-gray-200 text-gray-200 border-solid rounded-sm"
                     [formControlName]="paramInfo.key">
                     @for (option of paramInfo.options; track option) {
                       <option [value]="option">
@@ -91,12 +93,12 @@
                 @if (!paramInfo.options) {
                   <input
                     type="text"
-                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    class="pl-1 border-2 border-gray-200 text-gray-200 border-solid rounded-sm"
                     [placeholder]="paramInfo.placeholder"
                     [formControlName]="paramInfo.key" />
                 } @else {
                   <select
-                    class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                    class="pl-1 border-2 border-gray-200 text-gray-200 border-solid rounded-sm"
                     [formControlName]="paramInfo.key">
                     @for (option of paramInfo.options; track option) {
                       <option [value]="option">
@@ -116,14 +118,14 @@
               @case ('object') {
                 <!-- TODO(jwetzell): figure out how to display objects-->
                 <input
-                  class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                  class="pl-1 border-2 border-gray-200 text-gray-200 border-solid rounded-sm"
                   [formControlName]="paramInfo.key"
                   [placeholder]="paramInfo.placeholder" />
                 <mat-icon class="!text-gray-200" matTooltip="JSON">data_object</mat-icon>
               }
               @default {
                 <input
-                  class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
+                  class="pl-1 border-2 border-gray-200 text-gray-200 border-solid rounded-sm"
                   [formControlName]="paramInfo.key" />
               }
             }

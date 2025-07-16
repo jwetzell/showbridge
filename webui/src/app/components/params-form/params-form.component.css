@@ -1,0 +1,8 @@
+input::placeholder {
+  color: #d2d2d2;
+  opacity: 0.5;
+}
+
+select {
+  background-color: #424242;
+}
