@@ -26,8 +26,8 @@ class RandomAction extends Action<RandomActionParams> {
 
       logger.trace(`random-action: ${subActionIndex}: ${subAction.enabled ? 'fired' : 'skipped'}`);
 
-      subAction.on('action', (actionPath, fired) => {
-        this.emit('action', subAction, `actions/${subActionIndex}/${actionPath}`, fired);
+      subAction.on('action', (nestedAction, actionPath, fired) => {
+        this.emit('action', nestedAction, `actions/${subActionIndex}/${actionPath}`, fired);
       });
       subAction.on('transform', (transformPath, enabled) => {
         this.emit('transform', `actions/${subActionIndex}/${transformPath}`, enabled);
