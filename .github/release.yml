@@ -2,6 +2,8 @@ changelog:
   exclude:
     authors:
       - dependabot
+    labels:
+      - dependencies
   categories:
     - title: Cloud ☁️
       labels:
