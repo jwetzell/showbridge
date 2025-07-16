@@ -36,7 +36,7 @@
                 <tr cdkDrag>
                   <td cdkDragHandle>
                     <div class="flex justify-center">
-                      <mat-icon class="text-gray-200">drag_indicator</mat-icon>
+                      <mat-icon class="!text-gray-200">drag_indicator</mat-icon>
                     </div>
                   </td>
                   <td>
@@ -55,11 +55,11 @@
                   </td>
                   <td>
                     <button (click)="midiPatches.splice(i, 1)" class="flex">
-                      <mat-icon class="text-red-500">delete</mat-icon>
+                      <mat-icon class="!text-red-500">delete</mat-icon>
                     </button>
                   </td>
                   <div *cdkDragPreview>
-                    <mat-icon class="text-gray-200">drag_indicator</mat-icon>
+                    <mat-icon class="!text-gray-200">drag_indicator</mat-icon>
                   </div>
                 </tr>
               }
@@ -90,7 +90,7 @@
               <tr cdkDrag>
                 <td cdkDragHandle>
                   <div class="flex justify-center">
-                    <mat-icon class="text-gray-200">drag_indicator</mat-icon>
+                    <mat-icon class="!text-gray-200">drag_indicator</mat-icon>
                   </div>
                 </td>
                 <td>
@@ -110,11 +110,11 @@
                 </td>
                 <td>
                   <button (click)="networkPatches.splice(i, 1)" class="flex">
-                    <mat-icon class="text-red-500">delete</mat-icon>
+                    <mat-icon class="!text-red-500">delete</mat-icon>
                   </button>
                 </td>
                 <div *cdkDragPreview>
-                  <mat-icon class="text-gray-200">drag_indicator</mat-icon>
+                  <mat-icon class="!text-gray-200">drag_indicator</mat-icon>
                 </div>
               </tr>
             }

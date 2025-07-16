@@ -65,7 +65,7 @@
                     }
                   </select>
                 }
-                <mat-icon class="text-gray-200">123</mat-icon>
+                <mat-icon class="!text-gray-200">123</mat-icon>
               }
               @case ('integer') {
                 @if (!paramInfo.options) {
@@ -85,7 +85,7 @@
                     }
                   </select>
                 }
-                <mat-icon class="text-gray-200" matTooltip="Number">123</mat-icon>
+                <mat-icon class="!text-gray-200" matTooltip="Number">123</mat-icon>
               }
               @case ('string') {
                 @if (!paramInfo.options) {
@@ -105,13 +105,13 @@
                     }
                   </select>
                 }
-                <mat-icon class="text-gray-200" matTooltip="String">abc</mat-icon>
+                <mat-icon class="!text-gray-200" matTooltip="String">abc</mat-icon>
               }
               @case ('array') {
                 <app-array-form
                   [paramFormControl]="paramsFormInfo.formGroup.get(paramInfo.key)"
                   [paramInfo]="paramInfo"></app-array-form>
-                <mat-icon class="text-gray-200" matTooltip="Item list">data_array</mat-icon>
+                <mat-icon class="!text-gray-200" matTooltip="Item list">data_array</mat-icon>
               }
               @case ('object') {
                 <!-- TODO(jwetzell): figure out how to display objects-->
@@ -119,7 +119,7 @@
                   class="pl-1 border-2 border-gray-200 border-solid rounded-sm"
                   [formControlName]="paramInfo.key"
                   [placeholder]="paramInfo.placeholder" />
-                <mat-icon class="text-gray-200" matTooltip="JSON">data_object</mat-icon>
+                <mat-icon class="!text-gray-200" matTooltip="JSON">data_object</mat-icon>
               }
               @default {
                 <input
@@ -132,7 +132,7 @@
               <div class="ml-2 text-red-500">{{ paramsFormInfo.formGroup.controls[key].errors | json }}</div>
             }
             <div class="flex items-center justify-center">
-              <mat-icon [matTooltip]="paramInfo.hint" class="ml-2 text-gray-200"> help_outline </mat-icon>
+              <mat-icon [matTooltip]="paramInfo.hint" class="ml-2 !text-gray-200"> help_outline </mat-icon>
             </div>
             @if (paramInfo.canTemplate || paramInfo.isTemplated) {
               <!-- TODO(jwetzell): better display of template toggle -->
