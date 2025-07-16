@@ -11,3 +11,8 @@ select {
 .cdk-drag-placeholder {
   opacity: 0;
 }
+
+input::placeholder {
+  color: #d2d2d2;
+  opacity: 0.5;
+}
