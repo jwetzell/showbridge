@@ -609,7 +609,13 @@ if (!lock) {
       try {
         // TODO(jwetzell): get this value from the running config not just the file on disk
         const config = readJSONSync(configFilePath);
-        if (config.protocols.http.params.port) {
+        if (config.http?.params?.port) {
+          let addressToOpen = 'localhost';
+          if (config.http.params.address !== undefined && config.http.params.address !== '0.0.0.0') {
+            addressToOpen = config.http.params.address;
+          }
+          shell.openExternal(`http://${addressToOpen}:${config.http.params.port}`);
+        } else if (config.protocols?.http?.params?.port) {
           let addressToOpen = 'localhost';
           if (
             config.protocols.http.params.address !== undefined &&
