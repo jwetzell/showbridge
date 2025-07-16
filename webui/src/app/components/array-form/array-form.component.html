@@ -14,7 +14,7 @@
             <!-- TODO(jwetzell): add input validation using info from schema -->
             <input
               id="item-{{ i }}"
-              class="pl-1"
+              class="pl-1 border-2 border-gray-200 border-solid rounded-sm text-gray-200"
               [(ngModel)]="arrayValue[i]"
               [placeholder]="paramInfo?.placeholder"
               [ngModelOptions]="{ standalone: true }"
