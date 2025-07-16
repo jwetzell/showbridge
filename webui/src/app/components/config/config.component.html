@@ -31,7 +31,7 @@
           [messageType]="selectedMessageType.type"
           [messageTypeHandlerConfig]="config.handlers[selectedMessageType.type]"
           [messageTypeProtocolConfig]="config.protocols[selectedMessageType.type]"
-          (handlerUpdated)="handlerUpdate(selectedMessageType.type)"
+          (updated)="handlerUpdate(selectedMessageType.type)"
           (protocolUpdated)="protocolUpdate(selectedMessageType.type)"></app-message-type>
       </div>
     }
