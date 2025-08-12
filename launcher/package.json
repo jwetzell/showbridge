@@ -38,7 +38,7 @@
     "xterm-addon-fit": "0.8.0"
   },
   "devDependencies": {
-    "@electron/notarize": "3.0.1",
+    "@electron/notarize": "3.0.2",
     "@tailwindcss/cli": "^4.1.11",
     "electron": "37.2.3",
     "electron-builder": "26.0.12",
