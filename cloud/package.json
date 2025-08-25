@@ -37,7 +37,7 @@
     "@socket.io/admin-ui": "0.5.1",
     "@socket.io/redis-streams-adapter": "0.2.2",
     "bcryptjs": "3.0.2",
-    "discord.js": "14.21.0",
+    "discord.js": "14.22.1",
     "dotenv": "17.2.1",
     "express": "5.1.0",
     "ioredis": "5.7.0",
