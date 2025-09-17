@@ -4,6 +4,7 @@ import {
   HTTPProtocolParams,
   MIDIProtocolParams,
   MQTTProtocolParams,
+  PSNProtocolParams,
   TCPProtocolParams,
   UDPProtocolParams,
 } from '@showbridge/types/dist/models/params/protocols.js';
@@ -31,6 +32,9 @@ type ConfigProtocols = {
   };
   udp: {
     params: UDPProtocolParams;
+  };
+  psn: {
+    params: PSNProtocolParams;
   };
 };
 
@@ -142,6 +146,11 @@ class Config {
       udp: {
         params: {
           port: 8000,
+        },
+      },
+      psn: {
+        params: {
+          port: 56565,
         },
       },
     };

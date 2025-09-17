@@ -13,6 +13,7 @@ import {
   HTTPProtocol,
   MIDIProtocol,
   MQTTProtocol,
+  PSNProtocol,
   TCPProtocol,
   UDPProtocol,
 } from './protocols/index.js';
@@ -25,6 +26,7 @@ export type RouterProtocols = {
   midi: MIDIProtocol;
   mqtt: MQTTProtocol;
   cloud: CloudProtocol;
+  psn: PSNProtocol;
 };
 
 class Router extends EventEmitter {
@@ -46,6 +48,7 @@ class Router extends EventEmitter {
       midi: new MIDIProtocol(this.config.protocols.midi, this),
       mqtt: new MQTTProtocol(this.config.protocols.mqtt, this),
       cloud: new CloudProtocol(this.config.protocols.cloud, this),
+      psn: new PSNProtocol(this.config.protocols.psn, this),
     };
 
     // NOTE(jwetzell): listen for all messages on all protocols
