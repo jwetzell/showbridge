@@ -30,10 +30,16 @@ export type UDPProtocolParams = {
   port: number;
 };
 
+export type PSNProtocolParams = {
+  address?: string;
+  port?: number;
+};
+
 export type ProtocolParams =
   | CloudProtocolParams
   | HTTPProtocolParams
   | MIDIProtocolParams
   | MQTTProtocolParams
   | TCPProtocolParams
-  | UDPProtocolParams;
+  | UDPProtocolParams
+  | PSNProtocolParams;
