@@ -38,6 +38,12 @@
         "port": 8001
       }
     }
+    ,
+    "psn": {
+      "params": {
+        "port": 56565
+      }
+    }
   },
   "handlers": {
     "http": {
@@ -203,6 +209,22 @@
       ]
     },
     "ws": {
+      "triggers": [
+        {
+          "type": "any",
+          "actions": [
+            {
+              "type": "log",
+              "transforms": [],
+              "enabled": true
+            }
+          ],
+          "subTriggers": [],
+          "enabled": true
+        }
+      ]
+    },
+    "psn": {
       "triggers": [
         {
           "type": "any",

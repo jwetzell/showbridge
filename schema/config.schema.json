@@ -26,6 +26,9 @@
         },
         "udp": {
           "$ref": "#/definitions/ProtocolUDP"
+        },
+        "psn": {
+          "$ref": "#/definitions/ProtocolPSN"
         }
       }
     },
@@ -2791,6 +2794,35 @@
             }
           },
           "required": ["port"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["params"],
+      "additionalProperties": false
+    },
+    "ProtocolPSN": {
+      "title": "PSN",
+      "description": "This protocol will host an PSN server",
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "description": "Address to listen on defaults to 0.0.0.0",
+              "type": "string",
+              "default": "0.0.0.0"
+            },
+            "port": {
+              "description": "UDP port to listen on",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 56565,
+              "examples": ["56565"]
+            }
+          },
+          "required": [],
           "additionalProperties": false
         }
       },
