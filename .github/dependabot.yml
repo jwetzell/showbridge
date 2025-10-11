@@ -14,14 +14,8 @@ updates:
       interval: 'weekly'
     ignore:
       - dependency-name: '@showbridge/types'
-    groups:
-      types:
-        applies-to: version-updates
-        patterns:
-          - '@types*'
-        update-types:
-          - 'minor'
-          - 'patch'
+      - dependency-name: "@types*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: 'npm'
     directory: '/launcher'
     schedule:
@@ -58,14 +52,9 @@ updates:
     directory: '/types'
     schedule:
       interval: 'weekly'
-    groups:
-      types:
-        applies-to: version-updates
-        patterns:
-          - '@types*'
-        update-types:
-          - 'minor'
-          - 'patch'
+    ignore:
+      - dependency-name: "@types*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
