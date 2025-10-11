@@ -38,7 +38,7 @@
     "@socket.io/redis-streams-adapter": "0.2.2",
     "bcryptjs": "3.0.2",
     "discord.js": "14.21.0",
-    "dotenv": "17.2.1",
+    "dotenv": "17.2.3",
     "express": "5.1.0",
     "ioredis": "5.7.0",
     "pino": "10.0.0",
