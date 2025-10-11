@@ -14,6 +14,14 @@ updates:
       interval: 'weekly'
     ignore:
       - dependency-name: '@showbridge/types'
+    groups:
+      types:
+        applies-to: version-updates
+        pattersn:
+          - '@types*'
+        update-types:
+          - 'minor'
+          - 'patch'
   - package-ecosystem: 'npm'
     directory: '/launcher'
     schedule:
@@ -50,6 +58,14 @@ updates:
     directory: '/types'
     schedule:
       interval: 'weekly'
+    groups:
+      types:
+        applies-to: version-updates
+        pattersn:
+          - '@types*'
+        update-types:
+          - 'minor'
+          - 'patch'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
