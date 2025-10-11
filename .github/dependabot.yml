@@ -17,7 +17,7 @@ updates:
     groups:
       types:
         applies-to: version-updates
-        pattersn:
+        patterns:
           - '@types*'
         update-types:
           - 'minor'
@@ -61,7 +61,7 @@ updates:
     groups:
       types:
         applies-to: version-updates
-        pattersn:
+        patterns:
           - '@types*'
         update-types:
           - 'minor'
