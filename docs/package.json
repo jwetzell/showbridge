@@ -16,7 +16,7 @@
   "devDependencies": {
     "@astrojs/starlight": "0.36.2",
     "astro": "5.15.6",
-    "sharp": "0.34.4",
+    "sharp": "0.34.5",
     "@astrojs/check": "0.9.5",
     "typescript": "5.9.3"
   }
