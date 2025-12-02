@@ -44,7 +44,7 @@
   "devDependencies": {
     "nodemon": "3.1.11",
     "pino-pretty": "13.1.2",
-    "rimraf": "6.1.0"
+    "rimraf": "6.1.2"
   },
   "nodemonConfig": {
     "ignoreRoot": [
