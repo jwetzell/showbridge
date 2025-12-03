@@ -1,3 +1,4 @@
+**NOTE:** I have been working on a re-imagining of this kind of project in Go over at [jwetzell/showbridge-go](https://github.com/jwetzell/showbridge-go).
 <div align="center">
 
 # showbridge
