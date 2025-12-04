@@ -76,4 +76,3 @@ The showbridge router's config is entirely controlled by a JSON config file. Thi
 Resources
 - good idea to start with [default.json](sample/config/default.json)
 - [random examples](sample/config/)
-- the [demo](https://demo.showbridge.io) site can be used to import/edit/create configs that can be downloaded
