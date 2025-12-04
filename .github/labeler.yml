@@ -6,10 +6,6 @@ cloud:
   - changed-files:
       - any-glob-to-any-file: 'cloud/**'
 
-docs:
-  - changed-files:
-      - any-glob-to-any-file: 'docs/**'
-
 launcher:
   - changed-files:
       - any-glob-to-any-file: 'launcher/**'

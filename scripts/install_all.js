@@ -5,7 +5,6 @@ import path from 'node:path';
 const projectFolders = [
   path.resolve(import.meta.dirname, '../cli'),
   path.resolve(import.meta.dirname, '../cloud'),
-  path.resolve(import.meta.dirname, '../docs'),
   path.resolve(import.meta.dirname, '../launcher'),
   path.resolve(import.meta.dirname, '../lib'),
   path.resolve(import.meta.dirname, '../site'),

@@ -23,9 +23,6 @@ changelog:
     - title: Web UI 🌐
       labels:
         - webui
-    - title: Docs 📄
-      labels:
-        - docs
     - title: Other Changes
       labels:
         - '*'

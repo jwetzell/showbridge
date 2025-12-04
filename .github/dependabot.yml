@@ -45,10 +45,6 @@ updates:
     schedule:
       interval: 'weekly'
   - package-ecosystem: 'npm'
-    directory: '/docs'
-    schedule:
-      interval: 'weekly'
-  - package-ecosystem: 'npm'
     directory: '/types'
     schedule:
       interval: 'weekly'
