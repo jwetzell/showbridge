@@ -18,10 +18,6 @@ schema:
   - changed-files:
       - any-glob-to-any-file: 'schema/**'
 
-site:
-  - changed-files:
-      - any-glob-to-any-file: 'site/**'
-
 types:
   - changed-files:
       - any-glob-to-any-file: 'types/**'

@@ -23,10 +23,6 @@ updates:
     ignore:
       - dependency-name: '@showbridge/cli'
   - package-ecosystem: 'npm'
-    directory: '/site'
-    schedule:
-      interval: 'weekly'
-  - package-ecosystem: 'npm'
     directory: '/webui'
     schedule:
       interval: 'weekly'
